@@ -10,6 +10,7 @@ import {Grid, Row, Col, Button} from "react-bootstrap";
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import InstagramLogin from "react-instagram-login";
+import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 
 class Login extends React.Component {
 
@@ -73,7 +74,7 @@ class Login extends React.Component {
         console.log(response)
         console.log("checking data",response.data)
           if(response.data['0']['Response'] == 1){
-            console.log("I am also called")
+            //console.log("I am also called")
             console.log(response)
             this.props.history.push("dashboard" )
           } else {
@@ -175,12 +176,12 @@ class Login extends React.Component {
                         </label>
                       </div>
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
-                      
+                      <p className="helper-text m-b-10 bottom">Or Login Using:</p>
                       <Row>
                         <Col>
                         <GoogleLogin as={Col}
                         render={renderProps => (
-                          <button onClick={renderProps.onClick} disabled={renderProps.disabled}>Login with Google</button>
+                          <button className="btn btn-signin-social" onClick={renderProps.onClick} disabled={renderProps.disabled}><FaGoogle style = {{ color: "#EA4335 ", fontSize: "1.5em", paddingRight: "4px"}}/>Google</button>
                         )}
                           clientId="256115085565-b3k2c8gsuqc40vstp06r4cu0sb7kc5qs.apps.googleusercontent.com"
                           buttonText="Google"
@@ -188,6 +189,31 @@ class Login extends React.Component {
                           onFailure={this.responseGoogle}
                           cookiePolicy={'single_host_origin'}
   />
+                        </Col>
+
+                        <Col>
+                        <FacebookLogin
+                        appId="284158963537717"
+                        fields="name,email,picture, first_name, about"
+                        height='10'
+                        textButton='Facebook'
+                        size= 'medium'
+                        icon = {<FaFacebook style = {{ color: "#1877f2 ", fontSize: "1.5em", paddingRight: "4px"}}/>}
+                        callback={this.responseFacebook}
+                        cssClass = "btn btn-signin-social" />
+                        </Col>
+
+                        <Col>
+                        <InstagramLogin
+                        clientId="552332679301004"
+                        buttonText="Instagram"
+                        width = '10px'
+                        onSuccess={this.responseInstagram}
+                        onFailure={this.responseInstagram}
+                        cssClass= "btn btn-signin-social"
+                        >
+                          <FaInstagram style = {{ color: "#cd486b", fontSize: "1.5em", paddingRight: "4px"}}/> Instagram
+                          </InstagramLogin>
                         </Col>
                       </Row>
 
