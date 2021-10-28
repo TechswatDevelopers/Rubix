@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
 
-class Registration extends React.Component {
+class PersonalInformation extends React.Component {
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");
@@ -53,13 +53,13 @@ class Registration extends React.Component {
                           type="password"
                         />
                       </div>
-                      <button className="btn btn-primary btn-lg btn-block" onClick={() => { this.props.history.push("/logInformatiom") }}>
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={() => { this.props.history.push("login") }}>
                         Continue
                         </button>
                       <div className="bottom">
                         <span className="helper-text">
                           Already have an account?{" "}
-                          <a href="/studentInfo">Login</a>
+                          <a href="login">Login</a>
                         </span>
                       </div>
                     </form>
@@ -85,12 +85,12 @@ class Registration extends React.Component {
   }
 }
 
-/* Registration.propTypes = {
+/* PersonalInformation.propTypes = {
 };
 
 const mapStateToProps = ({ loginReducer }) => ({
   email: loginReducer.email,
   password: loginReducer.password
-}); */
-
-export default Registration;
+});
+ */
+export default PersonalInformation;

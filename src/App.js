@@ -60,6 +60,7 @@ import basicelements from "./screens/Forms/BasicElements";
 import tablenormal from "./screens/Tables/TableNormal";
 import echart from "./screens/Charts/Echart";
 import leafletmap from "./screens/Maps/GoogleMaps";
+import PersonalInformation from "./screens/Auth/PersonalInformation";
 
 window.__DEV__ = true;
 
@@ -129,6 +130,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/page503`}
                 component={page503}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/logInformatiom`}
+                component={PersonalInformation}
               />
               <Route
                 exact

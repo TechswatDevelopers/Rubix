@@ -148,7 +148,7 @@ class Login extends React.Component {
                       <div className="form-group">
                         <label className="control-label sr-only">Email</label>
                         <input
-                          className="UserEmail"
+                          className="form-control"
                           id="UserEmail"
                           placeholder="UserEmail"
                           type="email"
@@ -161,7 +161,7 @@ class Login extends React.Component {
                           Password
                         </label>
                         <input
-                          className="UserPass"
+                          className="form-control"
                           id="UserPass"
                           placeholder="Password"
                           type="password"
@@ -177,9 +177,8 @@ class Login extends React.Component {
                       </div>
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
                       <p className="helper-text m-b-10 bottom">Or Login Using:</p>
-                      <Row>
-                        <Col>
-                        <GoogleLogin as={Col}
+
+                      <GoogleLogin as={Col}
                         render={renderProps => (
                           <button className="btn btn-signin-social" onClick={renderProps.onClick} disabled={renderProps.disabled}><FaGoogle style = {{ color: "#EA4335 ", fontSize: "1.5em", paddingRight: "4px"}}/>Google</button>
                         )}
@@ -187,12 +186,8 @@ class Login extends React.Component {
                           buttonText="Google"
                           onSuccess={this.responseGoogle}
                           onFailure={this.responseGoogle}
-                          cookiePolicy={'single_host_origin'}
-  />
-                        </Col>
-
-                        <Col>
-                        <FacebookLogin
+                          cookiePolicy={'single_host_origin'}/>
+                          <FacebookLogin
                         appId="284158963537717"
                         fields="name,email,picture, first_name, about"
                         height='10'
@@ -201,9 +196,7 @@ class Login extends React.Component {
                         icon = {<FaFacebook style = {{ color: "#1877f2 ", fontSize: "1.5em", paddingRight: "4px"}}/>}
                         callback={this.responseFacebook}
                         cssClass = "btn btn-signin-social" />
-                        </Col>
 
-                        <Col>
                         <InstagramLogin
                         clientId="552332679301004"
                         buttonText="Instagram"
@@ -214,8 +207,6 @@ class Login extends React.Component {
                         >
                           <FaInstagram style = {{ color: "#cd486b", fontSize: "1.5em", paddingRight: "4px"}}/> Instagram
                           </InstagramLogin>
-                        </Col>
-                      </Row>
 
                       <div className="bottom">
                         <span className="helper-text m-b-10">
