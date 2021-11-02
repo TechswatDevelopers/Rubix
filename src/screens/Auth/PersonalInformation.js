@@ -2,8 +2,121 @@ import React from "react";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css';
+import axios from "axios";
 
 class PersonalInformation extends React.Component {
+    
+ Validate() {
+    
+    var idNumber = document.getElementById("IDNumber").value;
+
+    // store the error div, to save typing
+    var error = document.getElementById('error');
+    //console.log("ID number is ",idNumber);
+
+    // assume everything is correct and if it later turns out not to be, just set this to false
+    var correct = true;
+
+    //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
+    // SA ID Number have to be 13 digits, so check the length
+    if (idNumber.length != 13 ) {
+        error.append('ID number does not appear to be authentic - input not a valid number.');
+        correct = false;
+    }
+
+    //Extract first 6 digits
+    var year = idNumber.substring(0, 2);
+    var month = idNumber.substring(2, 4);
+    var day = idNumber.substring(4, 6);
+    console.log(year, month, day)
+
+    // get first 6 digits as a valid date
+    var tempDate = new Date(year, month - 1, day);
+
+    var id_date = tempDate.getDate();
+    var id_month = tempDate.getMonth();
+    var id_year = tempDate.getFullYear();
+    var right_month = id_month + 1;
+    console.log(id_date, id_month, id_year)
+
+    var fullDate = id_date + "-" + right_month + "-" + id_year;
+
+    if (!((tempDate.getYear() == idNumber.substring(0, 2)) && (id_month == idNumber.substring(2, 4) - 1) && (id_date == idNumber.substring(4, 6)))) {
+        error.append('ID number does not appear to be authentic - date part not valid. ');
+        correct = false;
+    }
+
+    // get the gender
+    var genderCode = idNumber.substring(6, 10);
+    var gender = parseInt(genderCode) < 5000 ? "Female" : "Male";
+    //setGender(gender)
+
+    // get country ID for citzenship
+    var citzenship = parseInt(idNumber.substring(10, 11)) == 0 ? "Yes" : "No";
+
+    // apply Luhn formula for check-digits
+    var tempTotal = 0;
+    var checkSum = 0;
+    var multiplier = 1;
+    for (var i = 0; i < 13; ++i) {
+        tempTotal = parseInt(idNumber.charAt(i)) * multiplier;
+        if (tempTotal > 9) {
+            tempTotal = parseInt(tempTotal.toString().charAt(0)) + parseInt(tempTotal.toString().charAt(1));
+        }
+        checkSum = checkSum + tempTotal;
+        multiplier = (multiplier % 2 == 0) ? 1 : 2;
+    }
+    if ((checkSum % 10) != 0) {
+        error.append('ID number does not appear to be authentic - check digit is not valid');
+        correct = false;
+    }
+    if (correct) {
+        // and put together a result message
+        //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
+    }
+    return correct
+}
+//final submit check
+ Submit(e){
+    e.preventDefault();
+    const form = document.getElementById('register');
+    const data = {
+        'RegisterStatus': 'Pending',
+        'ClientID': '1',
+        'PlatformID': '1',
+        'RubixUserPlatformID': '1',
+        'Gender': 'Male',
+        
+    };
+    for (let i=0; i < form.elements.length; i++) {
+        const elem = form.elements[i];
+        data[elem.name] = elem.value
+    }
+    
+    const requestOptions = {
+        title: 'Student Personal Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: data
+    };
+    console.log(data)
+    const postData = async()=>{
+        if (this.Validate() /* && userGender != null && document.getElementById('register').checkValidity() == true */){
+            await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
+            .then(response => {
+                console.log(response)
+                this.props.history.push("/dashboard" + response.data['PostRubixUserData'][0]['RubixRegisterUserID'])
+            })
+                
+        } else{
+            console.log("Validate results are ", this.Validate())
+            console.log("checkValidity ", document.getElementById('register').checkValidity())
+        }
+    }
+    postData()
+}
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");
@@ -12,67 +125,141 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
   }
+  constructor(props) {
+    super(props);
+    this.state = {
+        value: 0
+    };
+  }
   render() {
     return (
-      <div className="theme-cyan">
+      <div className="theme-green">
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
-                <div className="top">
-                  <img src={Logo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
-                </div>
                 <div className="card">
+                <div className="top">
+                  <img src="CJ-Logo.png" alt="Logo" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                </div>
                   <div className="header">
-                    <p className="lead">Registration</p>
+                    <p className="lead">Student User Details</p>
                   </div>
+                  
                   <div className="body">
-                    <form
-                      className="form-auth-small ng-untouched ng-pristine ng-valid"
-                      
-                    >
+                    <form id='register'>
                       <div className="form-group">
                         <label className="control-label sr-only" >
-                          Email
+                          First Name
                             </label>
                         <input
                           className="form-control"
-                          id="signup-email"
-                          placeholder="Your email"
-                          type="email"
+                          name="Name"
+                          id="Name"
+                          placeholder="Enter your full name"
+                          type="text"
                         />
                       </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          Middle Name
+                            </label>
+                        <input
+                          className="form-control"
+                          name="MiddleName"
+                          id="middle-name"
+                          placeholder="Enter your middle name"
+                          type="text"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          Last Name
+                            </label>
+                        <input
+                          className="form-control"
+                          name="Surname"
+                          id="last-name"
+                          placeholder="Enter your surname"
+                          type="text"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          ID Number
+                            </label>
+                            <input type='number' name="IDNumber" className="form-control" id='IDNumber' 
+                    required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
+                    <br></br>
+                    <div id="error"></div>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                         Your Email
+                            </label>
+                        <input
+                          className="form-control"
+                          name="UserEmail"
+                          id="middle-name"
+                          placeholder="Enter your email"
+                          type="email"/>
+                      </div>
+
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           Password
                             </label>
                         <input
                           className="form-control"
+                          name="Password"
                           id="signup-password"
                           placeholder="Password"
                           type="password"
                         />
                       </div>
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={() => { this.props.history.push("login") }}>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          Phone Number
+                            </label>
+                            <PhoneInput id = 'register-page-phone-number' placeholder="+27 123 15348" name="PhoneNumber"  required='' 
+                    value={this.state.value}
+                    onChange={()=> this.setState({value: this.state.value})} />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          Your Student Number
+                            </label>
+                        <input
+                          className="form-control"
+                          name="StudentNumber"
+                          id="middle-name"
+                          placeholder="Enter your Student Number"
+                          type="text"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          Medical Conditions:
+                            </label>
+                        <input
+                          className="form-control"
+                          name="MedicalConditions"
+                          id="middle-name"
+                          placeholder="Select your Medical Condition"
+                          type="text"
+                          defaultValue='none'
+                        />
+                      </div>
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         Continue
                         </button>
-                      <div className="bottom">
-                        <span className="helper-text">
-                          Already have an account?{" "}
-                          <a href="login">Login</a>
-                        </span>
-                      </div>
                     </form>
-                    <div className="separator-linethrough">
-                      <span>OR</span>
-                    </div>
-                    <button className="btn btn-signin-social">
-                      <i className="fa fa-facebook-official facebook-color"></i> Sign in with
-                        Facebook
-                        </button>
-                    <button className="btn btn-signin-social">
-                      <i className="fa fa-twitter twitter-color"></i> Sign in with Twitter
-                        </button>
                   </div>
                 </div>
 

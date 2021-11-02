@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component, createContext, useState} from "react";
 import { connect } from "react-redux";
 import { Route, Switch ,withRouter} from "react-router-dom";
 import Login from "./screens/Login";
@@ -61,6 +61,29 @@ import tablenormal from "./screens/Tables/TableNormal";
 import echart from "./screens/Charts/Echart";
 import leafletmap from "./screens/Maps/GoogleMaps";
 import PersonalInformation from "./screens/Auth/PersonalInformation";
+import Registration from "./screens/Auth/Registration";
+import Addresses from "./screens/Auth/addresses";
+import VarsityDetails from "./screens/Auth/varsityDetails";
+
+export const MContext = React.createContext();  //exporting context object
+class MyProvider extends Component {
+state = {email: ""}
+render() {
+  const [email, setEmail] = useState("");
+  const [userID, setID] = useState("");
+        return (
+            <MContext.Provider value={
+              {
+                email,
+                userID,
+                setEmail,
+                setID
+              }
+            }>
+            {this.props.children}
+            </MContext.Provider>)
+    }
+}
 
 window.__DEV__ = true;
 
@@ -82,13 +105,20 @@ class App extends React.Component {
     const activeKey1 = res;
 
     return (
+      <div>
+        <div>
+        
+               </div>
       <div id="wrapper">
         {activeKey1 === "" ||
         activeKey1 === "/" ||
         activeKey1 === "login" ||
         activeKey1 === "registration" ||
         activeKey1 === "lockscreen" ||
+        activeKey1 === "logInformation" ||
         activeKey1 === "forgotpassword" ||
+        activeKey1 === "varsityDetails" ||
+        activeKey1 === "addresses" ||
         activeKey1 === "page404" ||
         activeKey1 === "page403" ||
         activeKey1 === "page500" ||
@@ -133,7 +163,22 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path={`${process.env.PUBLIC_URL}/logInformatiom`}
+                path={`${process.env.PUBLIC_URL}/logInformation`}
+                component={PersonalInformation}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/addresses`}
+                component={Addresses}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/varsityDetails`}
+                component={VarsityDetails}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/logInformation`}
                 component={PersonalInformation}
               />
               <Route
@@ -407,6 +452,9 @@ class App extends React.Component {
               </div>
           </>
         )}
+        
+      </div>
+        
       </div>
     );
   }

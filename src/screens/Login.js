@@ -169,12 +169,12 @@ class Login extends React.Component {
                           required = ''
                         />
                       </div>
-                      <div className="form-group clearfix">
+                      {/* <div className="form-group clearfix">
                         <label className="fancy-checkbox element-left">
                           <input type="checkbox" />
                           <span>Remember me</span>
                         </label>
-                      </div>
+                      </div> */}
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
                       <p className="helper-text m-b-10 bottom">Or Login Using:</p>
 
@@ -185,7 +185,6 @@ class Login extends React.Component {
                           clientId="256115085565-b3k2c8gsuqc40vstp06r4cu0sb7kc5qs.apps.googleusercontent.com"
                           buttonText="Google"
                           onSuccess={this.responseGoogle}
-                          onFailure={this.responseGoogle}
                           cookiePolicy={'single_host_origin'}/>
                           <FacebookLogin
                         appId="284158963537717"
@@ -202,7 +201,6 @@ class Login extends React.Component {
                         buttonText="Instagram"
                         width = '10px'
                         onSuccess={this.responseInstagram}
-                        onFailure={this.responseInstagram}
                         cssClass= "btn btn-signin-social"
                         >
                           <FaInstagram style = {{ color: "#cd486b", fontSize: "1.5em", paddingRight: "4px"}}/> Instagram

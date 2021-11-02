@@ -12,6 +12,7 @@ import "../node_modules/bootstrap/scss/bootstrap.scss";
 import "./assets/assets/scss/main.scss";
 import "./assets/assets/scss/color_skins.scss";
 import "../node_modules/font-awesome/scss/font-awesome.scss";
+import MyProvider from "./App";
 
 
 const store = createStore(reducers, applyMiddleware(thunk));
