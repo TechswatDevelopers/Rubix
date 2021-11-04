@@ -64,6 +64,7 @@ import PersonalInformation from "./screens/Auth/PersonalInformation";
 import Registration from "./screens/Auth/Registration";
 import Addresses from "./screens/Auth/addresses";
 import VarsityDetails from "./screens/Auth/varsityDetails";
+import NextOfKin from "./screens/Auth/nextOfKin";
 
 export const MContext = React.createContext();  //exporting context object
 class MyProvider extends Component {
@@ -118,6 +119,7 @@ class App extends React.Component {
         activeKey1 === "logInformation" ||
         activeKey1 === "forgotpassword" ||
         activeKey1 === "varsityDetails" ||
+        activeKey1 === "nextofkin" ||
         activeKey1 === "addresses" ||
         activeKey1 === "page404" ||
         activeKey1 === "page403" ||
@@ -175,6 +177,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/varsityDetails`}
                 component={VarsityDetails}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/nextofkin`}
+                component={NextOfKin}
               />
               <Route
                 exact

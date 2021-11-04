@@ -7,7 +7,14 @@ import 'react-phone-number-input/style.css';
 import axios from "axios";
 
 class PersonalInformation extends React.Component {
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+        userGender: 'Male',
+        value: 0
+
+    };
+  }
  Validate() {
     
     var idNumber = document.getElementById("IDNumber").value;
@@ -51,6 +58,7 @@ class PersonalInformation extends React.Component {
     // get the gender
     var genderCode = idNumber.substring(6, 10);
     var gender = parseInt(genderCode) < 5000 ? "Female" : "Male";
+    this.setState({userGender: gender})
     //setGender(gender)
 
     // get country ID for citzenship
@@ -87,7 +95,7 @@ class PersonalInformation extends React.Component {
         'ClientID': '1',
         'PlatformID': '1',
         'RubixUserPlatformID': '1',
-        'Gender': 'Male',
+        'Gender': this.state.userGender,
         
     };
     for (let i=0; i < form.elements.length; i++) {
@@ -103,11 +111,11 @@ class PersonalInformation extends React.Component {
     };
     console.log(data)
     const postData = async()=>{
-        if (this.Validate() /* && userGender != null && document.getElementById('register').checkValidity() == true */){
+        if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
             await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 console.log(response)
-                this.props.history.push("/dashboard" + response.data['PostRubixUserData'][0]['RubixRegisterUserID'])
+                this.props.history.push("/addresses")
             })
                 
         } else{
@@ -125,12 +133,7 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-        value: 0
-    };
-  }
+
   render() {
     return (
       <div className="theme-green">

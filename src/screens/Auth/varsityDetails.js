@@ -17,7 +17,7 @@ class VarsityDetails extends React.Component {
             courseList: [],
             yearList: [],
             res: '',
-            prov: "Gauteng",
+            prov: 0,
             uni: '',
             course: '',
             year: '',
@@ -57,7 +57,7 @@ class VarsityDetails extends React.Component {
                 await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
-                    this.props.history.push("/nof/" + 71)
+                    this.props.history.push("/nextofkin")
                 })
                     
             } else{
@@ -152,7 +152,7 @@ async componentDidMount(){
         <select className="form-control" onChange={(e)=>this.setState({prov: e.target.value})} value={this.state.prov}>
         {
          this.state.provList.map((province, index)=> (
-            <option key={index} name='RegisterUserProvince' value = {province.Province}>{province.Province}</option>
+            <option key={index} name='RegisterUserProvince' value = {province.RubixProvinceID}>{province.Province}</option>
         ))  
         }
         </select> }

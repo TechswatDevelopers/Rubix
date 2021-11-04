@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Logo from "../../assets/images/logo-white.svg";
-import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
@@ -13,7 +11,7 @@ class Addresses extends React.Component {
         this.state = {
             provList:[],
             countryList: [],
-            location: '',
+            location: {},
             prov: "Gauteng",
             country: '',
             value: 0
@@ -25,8 +23,10 @@ class Addresses extends React.Component {
     e.preventDefault();
     //console.log(location['value']['structured_formatting']['secondary_text'])
     const form = document.getElementById('addresses');
+    const locations = document.getElementById('location');
+    //console.log("location:",this.state.location)
     const street_address = this.state.location['value']['structured_formatting']['main_text']
-    const city = this.state.location['value']['structured_formatting']['secondary_text']
+    //const city = this.state.location['value']['structured_formatting']['secondary_text']
     const data = {
         'RubixRegisterUserID': '78',
         'RegisterUserStreetNameAndNumer': street_address,
@@ -51,7 +51,7 @@ class Addresses extends React.Component {
             await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
                 console.log(response)
-                this.props.history.push("/unidetails/" + '78')
+                this.props.history.push("/varsityDetails")
             })
                 
         } else{
@@ -118,9 +118,10 @@ async componentDidMount(){
                           Home Address
                             </label>
                             <GooglePlacesAutocomplete
-apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' selectProps={{
+apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange = {(e)=>this.setState({location: e.target.value})}
+selectProps={{
 location: this.state.location,
-onChange: this.state.setLocation,
+onChange: (e)=>this.setState({location: e}),
 placeholder: "Enter your home Address"
 }}
 />
@@ -169,7 +170,7 @@ placeholder: "Enter your home Address"
                         Province:
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>this.state.prov= e.target.value} value={this.state.prov}>
+        <select className="form-control" onChange={(e)=>this.setState({prov: e.target.value})} value={this.state.prov}>
         {
          this.state.provList.map((province, index)=> (
             <option key={index} name='RegisterUserProvince' value = {province.Province}>{province.Province}</option>
@@ -182,7 +183,7 @@ placeholder: "Enter your home Address"
                         <label className="control-label sr-only" >
                         Country:
                             </label>
-                            <select className="form-control" onChange={(e)=>this.state.country= e.target.value} value={this.state.country}>
+                            <select className="form-control" onChange={(e)=>this.setState({country: e.target.value})} value={this.state.country}>
         {
          this.state.countryList.map((country, index)=> (
             <option key={index} name='RegisterUserCountry' value = {country.Country_Name}>{country.Country_Name}</option>
@@ -191,7 +192,7 @@ placeholder: "Enter your home Address"
         </select> 
                       </div>
                      
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.AddressSubmit(e) }>
                         NEXT
                         </button>
                     </form>
