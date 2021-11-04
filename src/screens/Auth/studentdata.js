@@ -5,12 +5,15 @@ import Logo from "../../assets/images/logo-white.svg";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
-import {updateEmail, updatePassword, updateUserID, updatePlatformID } from "../../actions";
+import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateClientID, onPressThemeColor } from "../../actions";
 
-class PersonalInformation extends React.Component {
+class StudentInformation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        profile: {},
+        profiles: [],
+        clients: [],
         userGender: 'Male',
         value: 0
 
@@ -90,13 +93,12 @@ class PersonalInformation extends React.Component {
 //final submit check
  Submit(e){
     e.preventDefault();
-    console.log("User email:", this.props.email)
     const form = document.getElementById('register');
     const data = {
         'RegisterStatus': 'Pending',
         'ClientID': '1',
-        'PlatformID': this.props.rubixUserID,
-        'RubixUserPlatformID': this.props.rubixUserID,
+        'PlatformID': this.props.PlatformID,
+        'RubixUserPlatformID': this.props.userID,
         'RubixRegisterUserID': '',
         'Gender': this.state.userGender,
     };
@@ -133,11 +135,44 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+
+    
+    const fetchData = async() =>{
+      await fetch('http://197.242.69.18:3300/api/RubixRegisterUsers/2745')
+      .then(response => response.json())
+      .then(data => {
+          //console.log("data is ", data)
+          //this.state.provList = data.data
+          this.setState({profile: data})
+          //console.log("this is the provList:", this.state.provList)
+          //setProvList(data.data)
+          });
+      await fetch('http://197.242.69.18:3300/api/RubixRegisterUsers/')
+      .then(response => response.json())
+      .then(data => {
+          console.log("data is ", data)
+          //this.state.provList = data.data
+          this.setState({profiles: data})
+          //console.log("this is the provList:", this.state.provList)
+          //setProvList(data.data)
+          });
+      await fetch('http://197.242.69.18:3300/api/RubixClients')
+      .then(response => response.json())
+      .then(data => {
+          //console.log("data is ", data.data)
+          //this.state.provList = data.data
+          this.setState({clients: data.data})
+          //console.log("this is the provList:", this.state.provList)
+          //setProvList(data.data)
+          });
+  
+  }
+  fetchData();
   }
 
   render() {
     return (
-      <div className="theme-green">
+      <div className={this.props.rubixThemeColor}>
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
@@ -147,9 +182,27 @@ class PersonalInformation extends React.Component {
                   <img src="CJ-Logo.png" alt="Logo" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Student User Details</p>
+                    <p className="lead">My Registration Details</p>
                   </div>
+
+                  <button onClick={()=>{this.props.onPressThemeColor("blue")}}>C-Ges</button>
+                  <br></br>
+                  <br></br>
+                  <button onClick={()=>{this.props.onPressThemeColor("cyan")}}>Opal</button>
                   
+                  {/* <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Province:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({profile: e.target.value})} value={this.state.profile}>
+        {
+         this.state.profiles.map((prof, index)=> (
+            <option key={index}  value = {prof.Name}>{prof.Name}</option>
+        ))  
+        }
+        </select> }
+                      </div> */}
                   <div className="body">
                     <form id='register'>
                       <div className="form-group">
@@ -160,6 +213,7 @@ class PersonalInformation extends React.Component {
                           className="form-control"
                           name="Name"
                           id="Name"
+                          defaultValue={this.state.profile.Name}
                           placeholder="Enter your full name"
                           type="text"
                         />
@@ -173,6 +227,7 @@ class PersonalInformation extends React.Component {
                           className="form-control"
                           name="MiddleName"
                           id="middle-name"
+                          defaultValue={this.state.profile.Surname}
                           placeholder="Enter your middle name"
                           type="text"
                         />
@@ -186,6 +241,7 @@ class PersonalInformation extends React.Component {
                           className="form-control"
                           name="Surname"
                           id="last-name"
+                          defaultValue={this.state.profile.Surname}
                           placeholder="Enter your surname"
                           type="text"
                         />
@@ -196,6 +252,7 @@ class PersonalInformation extends React.Component {
                           ID Number
                             </label>
                             <input type='number' name="IDNumber" className="form-control" id='IDNumber' 
+                          defaultValue={this.state.profile.IDNumber}
                     required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
                     <br></br>
                     <div id="error"></div>
@@ -208,32 +265,19 @@ class PersonalInformation extends React.Component {
                         <input
                           className="form-control"
                           name="UserEmail"
-                          id="email"
-                          value = {this.props.email}
-                          readOnly
+                          defaultValue={this.state.profile.UserEmail}
+                          id="middle-name"
                           placeholder="Enter your email"
                           type="email"/>
                       </div>
 
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Password
-                            </label>
-                        <input
-                          className="form-control"
-                          name="Password"
-                          id="signup-password"
-                          defaultValue = {this.props.password}
-                          placeholder="Password"
-                          type="password"
-                        />
-                      </div>
 
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           Phone Number
                             </label>
-                            <PhoneInput id = 'register-page-phone-number' placeholder="+27 123 15348" name="PhoneNumber"  required='' 
+                            <PhoneInput id = 'register-page-phone-number' placeholder="+27 123 15348"
+                          defaultValue={this.state.profile.PhoneNumber} name="PhoneNumber"  required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})} />
                       </div>
@@ -245,6 +289,7 @@ class PersonalInformation extends React.Component {
                         <input
                           className="form-control"
                           name="StudentNumber"
+                          defaultValue={this.state.profile.StudentNumber}
                           id="middle-name"
                           placeholder="Enter your Student Number"
                           type="text"
@@ -279,19 +324,23 @@ class PersonalInformation extends React.Component {
   }
 }
 
-PersonalInformation.propTypes = {
+StudentInformation.propTypes = {
 };
 
 const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   rubixUserID: navigationReducer.userID,
   rubixPlatformID: navigationReducer.rubixPlatformID,
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+  rubixClientID: navigationReducer.clientID,
+  rubixThemeColor: navigationReducer.themeColor
 });
  
 export default connect(mapStateToProps, {
   updateUserID,
   updatePlatformID,
+  updateClientID,
   updatePassword,
+  onPressThemeColor,
   updateEmail,
-})(PersonalInformation);
+})(StudentInformation);

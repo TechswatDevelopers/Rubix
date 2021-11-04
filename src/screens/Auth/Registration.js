@@ -10,51 +10,28 @@ import axios from "axios";
 import {Grid, Row, Col, Button} from "react-bootstrap";
 import MContext from "../../App";
 import MyProvider from "../../App";
+import navigationReducer from "../../reducers/navigationReducer";
+import {updateEmail, updatePassword, updateUserID, updatePlatformID } from "../../actions";
 
 class Registration extends React.Component {
-  //const [emailError, setEmailError] = useState();
-  //Login Using Social Media
-  SocialMediaLogin(userId){
-    const data = {
-      'RubixUserPlatformID': userId
-    };
-    const requestOptions = {
-      title: 'Login Form',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: data
-  };
-    const postData = async() => {
-      await axios.post('http://197.242.69.18:3300/api/RubixLogin', data, requestOptions)
-      .then(response => {
-        console.log(response)
-        console.log("checking data",response.data)
-          if(response.data['0']['Response'] == 1){
-            //console.log("I am also called")
-            console.log(response)
-            this.props.history.push("/logInformation" )
-          } else {
-            this.props.history.push("/" )
-          }
-          
-      })
-     
-    }
-    postData();
-  }
-
     //Google response for testing
  responseGoogle = (response) => {
-   console.log("I am called")
-  this.SocialMediaLogin(response['googleId'])
+  this.props.updateEmail(response.profileObj.email);
+  this.props.updatePlatformID("2");
+   this.props.updateUserID(response['googleId'])
+   this.props.history.push("/logInformation")
 }
   //Facebook response for testing
    responseFacebook = (response) => {
-    this.SocialMediaLogin(response['id'])
+    this.props.updatePlatformID("3");
+    this.props.updateUserID(response['id'])
+    this.props.history.push("/logInformation")
   }
   //Instagram response
  responseInstagram = (response) => {
-  this.SocialMediaLogin(response['id'])
+  this.props.updatePlatformID("4");
+  this.props.updateUserID(response['id'])
+  this.props.history.push("/logInformation")
 }
   //Submit Email
       Submit(e){
@@ -64,11 +41,11 @@ class Registration extends React.Component {
         const password = document.getElementById('password').value;
   
        if(email != null && password != null){
-         //this.MyProvider.setEmail(email)
-         //console.log("this is the email", this.context.email)
+         this.props.updateEmail(email);
+         this.props.updatePlatformID("1");
+         this.props.updatePassword(password);
         this.props.history.push("/logInformation")
         } else{
-          //setEmailError('Enter valid Email!')
       console.log('Email validation failed')
         }
       }
@@ -174,12 +151,18 @@ class Registration extends React.Component {
   }
 }
 
-/* Registration.propTypes = {
+ Registration.propTypes = {
 };
-
-const mapStateToProps = ({ loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
+  rubixUserID: navigationReducer.userID,
+  rubixPlatformID: navigationReducer.rubixPlatformID,
   email: loginReducer.email,
   password: loginReducer.password
-}); */
+});
 
-export default Registration;
+export default connect(mapStateToProps, {
+  updateUserID,
+  updatePlatformID,
+  updatePassword,
+  updateEmail,
+})(Registration);

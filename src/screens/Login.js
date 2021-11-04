@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../assets/images/logo-white.svg";
-import { updateEmail, updatePassword,onLoggedin } from "../actions";
+import { updateEmail, updatePassword,onLoggedin, updateUserID } from "../actions";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {Grid, Row, Col, Button} from "react-bootstrap";
@@ -21,6 +21,7 @@ class Login extends React.Component {
        console.log("I am called")
       e.preventDefault();
       const form = document.getElementById('login');
+      const error = document.getElementById('error');
       const data = {
       };
       for (let i=0; i < form.elements.length; i++) {
@@ -45,6 +46,7 @@ class Login extends React.Component {
                     this.props.history.push("dashboard")
                   } else {
                     this.props.history.push("/" )
+                    error.append("Login failed, email/password incorrect.")
                   }
               })
                   
@@ -118,6 +120,8 @@ class Login extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+
+    console.log("Component is mounted and the message from store is ", this.props.myMessage)
   }
   render() {
     const { navigation } = this.props;
@@ -142,7 +146,7 @@ class Login extends React.Component {
                 <div className="card">
                   <div className="header">
                     <p className="lead">Login to your CJ Students account</p>
-                  </div>
+                    </div>
                   <div className="body">
                     <div className="form-auth-small" action="index.html">
                       <div className="form-group">
@@ -175,6 +179,7 @@ class Login extends React.Component {
                           <span>Remember me</span>
                         </label>
                       </div> */}
+                      <p id="error"></p>
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
                       <p className="helper-text m-b-10 bottom">Or Login Using:</p>
 
@@ -232,16 +237,18 @@ class Login extends React.Component {
   }
 }
 
-/* Login.propTypes = {
-  updateEmail: PropTypes.func.isRequired,
-  updatePassword: PropTypes.func.isRequired,
-  email: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired
+Login.propTypes = {
+  // updateEmail: PropTypes.func.isRequired,
+  // updatePassword: PropTypes.func.isRequired,
+  // email: PropTypes.string.isRequired,
+  // password: PropTypes.string.isRequired
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
-  email: loginReducer.email,
-  password: loginReducer.password
-}); */
+const mapStateToProps = ({ loginReducer}) => ({
+  // email: loginReducer.email,
+  // password: loginReducer.password,
+  myMessage: loginReducer.customMessageOnLogin
+});
 
-export default Login;
+export default connect(mapStateToProps, {
+})(Login);

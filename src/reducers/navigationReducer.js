@@ -10,10 +10,16 @@ import {
   ON_PRESS_SIDE_MENU_TAB,
   TOGGLE_MENU_ARROW,
   TOAST_MESSAGE_LOAD,
+  UPDATE_USERID,
+  UPDATE_PLATFORM,
+  UPDATE_CLIENTID,
 } from "../actions/NavigationAction";
 
 const initialState = {
   isToastMessage: false,
+  userID: "",
+  platformID: "",
+  clientID: "theme-blue",
   addClassactive: [
     false,
     false,
@@ -433,6 +439,27 @@ export default (state = initialState, action) => {
         ...state,
         isToastMessage: !state.isToastMessage,
       };
+    }
+
+    case UPDATE_USERID: {
+      return{
+        ...state,
+        userID: action.payload,
+      }
+    }
+
+    case UPDATE_PLATFORM: {
+      return{
+        ...state,
+        platformID: action.payload,
+      }
+    }
+
+    case UPDATE_CLIENTID: {
+      return{
+        ...state,
+        client: action.payload,
+      }
     }
 
     default:

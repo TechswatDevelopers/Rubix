@@ -2,12 +2,14 @@ import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD,
   ON_LOGGEDIN,
+  UPDATE_MESSAGE
 } from "../actions/LoginAction";
 
 const initialState = {
   email: "",
   password: "",
   isLoggedin: false,
+  customMessageOnLogin: "I am custom message initial state",
 };
 
 const loginReducer = (state = initialState, action) => {
@@ -31,6 +33,13 @@ const loginReducer = (state = initialState, action) => {
         ...state,
         isLoggedin: action.payload,
       };
+    }
+
+    case UPDATE_MESSAGE: {
+      return{
+        ...state,
+        customMessageOnLogin: action.payload,
+      }
     }
 
     default:

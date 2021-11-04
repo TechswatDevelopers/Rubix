@@ -1,6 +1,7 @@
 export const UPDATE_EMAIL = "loginReducer/UPDATE_EMAIL";
 export const UPDATE_PASSWORD = "loginReducer/UPDATE_PASSWORD";
 export const ON_LOGGEDIN = "loginReducer/ON_LOGGEDIN";
+export const UPDATE_MESSAGE = "loginReducer/UPDATE_MESSAGE";
 
 export const updateEmail = (val) => (disptch) => {
   disptch({
@@ -22,3 +23,12 @@ export const onLoggedin = (val) => (disptch) => {
     payload: val,
   });
 };
+
+export const updateMessage = (val)=>(disptch) =>{
+  // console.log("Dispatch action is called with value ", val);
+  // alert("Hello Monkey");
+  disptch({
+    type:UPDATE_MESSAGE,
+    payload: val,
+  })
+}
