@@ -117,7 +117,7 @@ class NextOfKin extends React.Component {
   console.log(data)
   const postData = async() => {
 
-      if (this.Validate() && document.getElementById('nof').checkValidity() == true){
+      if (this.Validate()){
           await axios.post('http://197.242.69.18:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)

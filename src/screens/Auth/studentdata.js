@@ -147,25 +147,6 @@ class StudentInformation extends React.Component {
           //console.log("this is the provList:", this.state.provList)
           //setProvList(data.data)
           });
-      await fetch('http://197.242.69.18:3300/api/RubixRegisterUsers/')
-      .then(response => response.json())
-      .then(data => {
-          console.log("data is ", data)
-          //this.state.provList = data.data
-          this.setState({profiles: data})
-          //console.log("this is the provList:", this.state.provList)
-          //setProvList(data.data)
-          });
-      await fetch('http://197.242.69.18:3300/api/RubixClients')
-      .then(response => response.json())
-      .then(data => {
-          //console.log("data is ", data.data)
-          //this.state.provList = data.data
-          this.setState({clients: data.data})
-          //console.log("this is the provList:", this.state.provList)
-          //setProvList(data.data)
-          });
-  
   }
   fetchData();
   }

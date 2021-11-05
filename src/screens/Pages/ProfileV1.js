@@ -19,7 +19,7 @@ class ProfileV1Page extends React.Component {
         <div>
           <div className="container-fluid">
             <PageHeader
-              HeaderText="User Profile v1"
+              HeaderText="Rubix User Profile"
               Breadcrumb={[
                 { name: "Page", navigate: "" },
                 { name: "Profile V1", navigate: "" },
@@ -296,7 +296,8 @@ class ProfileV1Page extends React.Component {
   }
 }
 
-const mapStateToProps = ({ ioTReducer }) => ({
+const mapStateToProps = ({ navigationReducer, ioTReducer }) => ({
+  rubixUserID: navigationReducer.userID,
   isSecuritySystem: ioTReducer.isSecuritySystem,
 });
 

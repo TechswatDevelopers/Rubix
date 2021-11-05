@@ -43,6 +43,7 @@ class Login extends React.Component {
               .then(response => {
                   console.log(response)
                   if(response.data['0']['Response'] == 1){
+                    this.props.updateUserID(response.data['0']['RubixRegisterUserID'])
                     this.props.history.push("dashboard")
                   } else {
                     this.props.history.push("/" )
@@ -76,8 +77,7 @@ class Login extends React.Component {
         console.log(response)
         console.log("checking data",response.data)
           if(response.data['0']['Response'] == 1){
-            //console.log("I am also called")
-            console.log(response)
+            console.log("This is the data:", response.data)
             this.props.history.push("dashboard" )
           } else {
             this.props.history.push("/" )
@@ -244,11 +244,11 @@ Login.propTypes = {
   // password: PropTypes.string.isRequired
 };
 
-const mapStateToProps = ({ loginReducer}) => ({
-  // email: loginReducer.email,
-  // password: loginReducer.password,
+const mapStateToProps = ({navigationReducer, loginReducer}) => ({
+  rubixUserID: navigationReducer.userID,
   myMessage: loginReducer.customMessageOnLogin
 });
 
 export default connect(mapStateToProps, {
+  updateUserID,
 })(Login);

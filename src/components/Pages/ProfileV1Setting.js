@@ -1,8 +1,298 @@
 import React from "react";
 import { connect } from "react-redux";
 import imageuser from "../../assets/images/user.png";
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css';
+import axios from "axios";
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
+
+  //Reset password
+  updateAddressInformation(e){
+//const history = useHistory();
+const locations = document.getElementById('location');
+    console.log("location:",this.state.location)
+    const street_address = this.state.location['value']['structured_formatting']['main_text']
+e.preventDefault();
+const form = document.getElementById('addresses');
+const data = {
+    'RubixRegisterUserID': '2745',
+    'RegisterUserStreetNameAndNumer': street_address,
+    'RegisterUserProvince': this.state.prov,
+    'RegisterUserCountry': this.state.country,
+};
+for (let i=0; i < form.elements.length; i++) {
+    const elem = form.elements[i];
+    data[elem.name] = elem.value
+}
+
+const requestOptions = {
+    title: 'Update Address Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+console.log(data)
+const postData = async() => {
+        await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserAddesss', data, requestOptions)
+        .then(response => {
+            console.log(response)
+            //alert(response.data.PostRubixUserData[0].Response)
+        })
+}
+postData()
+
+  }
+  //Reset password
+  resetPassword(e){
+//const history = useHistory();
+e.preventDefault();
+const form = document.getElementById('password');
+const data = {
+    'RubixRegisterUserID': '2745'
+};
+for (let i=0; i < form.elements.length; i++) {
+    const elem = form.elements[i];
+    data[elem.name] = elem.value
+}
+
+const requestOptions = {
+    title: 'Reset Password Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+console.log(data)
+const postData = async() => {
+        await axios.post('http://197.242.69.18:3300/api/RubixResetPassword', data, requestOptions)
+        .then(response => {
+            console.log(response)
+            alert(response.data.PostRubixUserData[0].Response)
+        })
+}
+postData()
+
+  }
+
+  //Validate ID
+  Validate() {
+    
+    var idNumber = document.getElementById("IDNumber").value;
+
+    // store the error div, to save typing
+    var error = document.getElementById('error');
+    //console.log("ID number is ",idNumber);
+
+    // assume everything is correct and if it later turns out not to be, just set this to false
+    var correct = true;
+
+    //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
+    // SA ID Number have to be 13 digits, so check the length
+    if (idNumber.length != 13 ) {
+        error.append('ID number does not appear to be authentic - input not a valid number.');
+        correct = false;
+    }
+
+    //Extract first 6 digits
+    var year = idNumber.substring(0, 2);
+    var month = idNumber.substring(2, 4);
+    var day = idNumber.substring(4, 6);
+    console.log(year, month, day)
+
+    // get first 6 digits as a valid date
+    var tempDate = new Date(year, month - 1, day);
+
+    var id_date = tempDate.getDate();
+    var id_month = tempDate.getMonth();
+    var id_year = tempDate.getFullYear();
+    var right_month = id_month + 1;
+    console.log(id_date, id_month, id_year)
+
+    var fullDate = id_date + "-" + right_month + "-" + id_year;
+
+    if (!((tempDate.getYear() == idNumber.substring(0, 2)) && (id_month == idNumber.substring(2, 4) - 1) && (id_date == idNumber.substring(4, 6)))) {
+        error.append('ID number does not appear to be authentic - date part not valid. ');
+        correct = false;
+    }
+
+    // get the gender
+    var genderCode = idNumber.substring(6, 10);
+    var gender = parseInt(genderCode) < 5000 ? "Female" : "Male";
+    this.setState({userGender: gender})
+    //setGender(gender)
+
+    // get country ID for citzenship
+    var citzenship = parseInt(idNumber.substring(10, 11)) == 0 ? "Yes" : "No";
+
+    // apply Luhn formula for check-digits
+    var tempTotal = 0;
+    var checkSum = 0;
+    var multiplier = 1;
+    for (var i = 0; i < 13; ++i) {
+        tempTotal = parseInt(idNumber.charAt(i)) * multiplier;
+        if (tempTotal > 9) {
+            tempTotal = parseInt(tempTotal.toString().charAt(0)) + parseInt(tempTotal.toString().charAt(1));
+        }
+        checkSum = checkSum + tempTotal;
+        multiplier = (multiplier % 2 == 0) ? 1 : 2;
+    }
+    if ((checkSum % 10) != 0) {
+        error.append('ID number does not appear to be authentic - check digit is not valid');
+        correct = false;
+    }
+    if (correct) {
+        // and put together a result message
+        //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
+    }
+    return correct
+}
+
+  //Update personal information
+  updateUserInformation(e){
+e.preventDefault();
+const form = document.getElementById('personalInfo');
+const data = {
+    'RubixRegisterUserID': '2745',
+    'ClientID': 1
+};
+for (let i=0; i < form.elements.length; i++) {
+    const elem = form.elements[i];
+    data[elem.name] = elem.value
+}
+
+const requestOptions = {
+    title: 'Update Personal Information Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+console.log(data)
+const postData = async() => {
+        if(this.Validate)
+        {
+          await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
+        .then(response => {
+            console.log(response)
+            alert(response.data.PostRubixUserData[0].ResponceMessage)
+        })}else {
+          alert("ID Number Invalid")
+        }
+}
+postData()
+
+  }
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        profile: {},
+        profiles: [],
+        clients: [],
+        addressProv: 'Gauteng',
+        resProv: 'Gauteng',
+        addressCountry: '',
+        provList:[],
+        resList:[],
+        uniList: [],
+        courseList: [],
+        yearList: [],
+        countryList: [],
+        payment: '',
+        address: {},
+        university: {},
+        location: {},
+        payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+        value: 0
+
+    };
+  }
+  componentDidMount(){
+    const fetchData = async() =>{
+
+      //Get Rubix User Details
+      await fetch('http://197.242.69.18:3300/api/RubixRegisterUsers/2745')
+      .then(response => response.json())
+      .then(data => {
+          this.setState({profile: data})
+          });
+
+          //Get Rubix User University Details
+      await fetch('http://197.242.69.18:3300/api/RubixRegisterUserUniversityDetails/71')
+      .then(response => response.json())
+      .then(data => {
+          console.log("my uni data is ", data)
+          this.setState({university: data})
+          });
+
+
+          //Get Rubix User Address Details
+      await fetch('http://197.242.69.18:3300/api/RubixRegisterUserAddesss/2745')
+      .then(response => response.json())
+      .then(data => {
+          console.log("data is ", data)
+          this.setState({address: data})
+          this.setState({addressProv: data.RegisterUserProvince})
+          this.setState({addressCountry: data.RegisterUserCountry})
+          });
+
+          //Get Rubix Provices
+          await fetch('http://197.242.69.18:3300/api/RubixProvinces')
+        .then(response => response.json())
+        .then(data => {
+            //console.log("data is ", data.data)
+            //this.state.provList = data.data
+            this.setState({provList: data.data})
+            //console.log("this is the provList:", this.state.provList)
+            //setProvList(data.data)
+            });
+            //Fetch Countries List
+                    await fetch('http://197.242.69.18:3300/api/RubixCountries')
+                .then(response => response.json())
+                .then(data => {
+                    //console.log("data is ", data.data)
+                    this.setState({countryList: data.data})
+                    //console.log("this is the countryList:", this.state.countryList)
+                    //setCountryList(data.data)
+                    });
+
+                    //Populate university list
+        await fetch('http://197.242.69.18:3300/api/RubixUniversities')
+        .then(response => response.json())
+        .then(data => {
+            //console.log("data is ", data.data)
+            this.setState({uniList: data.data})
+            });
+
+            //Populate Residence list
+            await fetch('http://197.242.69.18:3300/api/RubixResidences')
+        .then(response => response.json())
+        .then(data => {
+            //console.log("data is ", data.data)
+            this.setState({resList: data.data})
+            });
+              //Populate Courses list
+              await fetch('http://197.242.69.18:3300/api/RubixCourses')
+              .then(response => response.json())
+              .then(data => {
+                  //console.log("data is ", data.data)
+                  this.setState({courseList: data.data})
+                  });
+
+                  //Populate Year of Study list
+            await fetch('http://197.242.69.18:3300/api/RubixStudentYearofStudies')
+            .then(response => response.json())
+            .then(data => {
+                //console.log("data is ", data.data)
+                this.setState({yearList: data.data})
+                });
+
+  }
+  fetchData();
+  }
+
+
   render() {
     return (
       <div>
@@ -32,14 +322,28 @@ class ProfileV1Setting extends React.Component {
             </div>
           </div>
         </div>
+
+
         <div className="body">
-          <h6>Basic Information</h6>
+          <form id="personalInfo">
+          <h6>Personal Information</h6>
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
               <div className="form-group">
                 <input
                   className="form-control"
                   placeholder="First Name"
+                  name="Name"
+                  defaultValue={this.state.profile.Name}
+                  type="text"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  placeholder="Middle Name"
+                  name="MiddleName"
+                  defaultValue={this.state.profile.MiddleName}
                   type="text"
                 />
               </div>
@@ -47,6 +351,8 @@ class ProfileV1Setting extends React.Component {
                 <input
                   className="form-control"
                   placeholder="Last Name"
+                  name="Surname"
+                  defaultValue={this.state.profile.Surname}
                   type="text"
                 />
               </div>
@@ -76,371 +382,81 @@ class ProfileV1Setting extends React.Component {
                   </label>
                 </div>
               </div>
-              <div className="form-group">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i className="icon-calendar"></i>
-                    </span>
-                  </div>
-                  <input
-                    className="form-control"
-                    data-date-autoclose="true"
-                    data-provide="datepicker"
-                    placeholder="Birthdate"
-                  />
-                </div>
-              </div>
+              
               <div className="form-group">
                 <input
                   className="form-control"
-                  placeholder="http://"
-                  type="text"
+                  id='IDNumber'
+                  placeholder="ID Number"
+                  name="IDNumber"
+                  required='' 
+                  maxLength = '13' 
+                  minLength='13' 
+                  placeholder='Enter your ID Number'
+                  defaultValue={this.state.profile.IDNumber}
+                  type='number'
                 />
+                <br></br>
+                    <div id="error"></div>
               </div>
             </div>
             <div className="col-lg-6 col-md-12">
               <div className="form-group">
                 <input
                   className="form-control"
-                  placeholder="Address Line 1"
+                  placeholder="Email"
+                  name="UserEmail"
+                  defaultValue={this.state.profile.UserEmail}
+                  type="text"
+                />
+              </div>
+              <div className="form-group">
+              <PhoneInput id = 'register-page-phone-number' placeholder="+27 123 15348"
+                          defaultValue={this.state.profile.PhoneNumber} name="PhoneNumber"  required='' 
+                    value={this.state.profile.PhoneNumber}
+                    onChange={()=> this.setState({value: this.state.value})} />
+              </div>
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  defaultValue={this.state.profile.StudentNumber}
+                  name="StudentNumber"
+                  placeholder="Student Number"
                   type="text"
                 />
               </div>
               <div className="form-group">
                 <input
                   className="form-control"
-                  placeholder="Address Line 2"
+                  name="MedicalConditions"
+                  defaultValue={this.state.profile.MedicalConditions}
+                  placeholder="MedicalConditions"
                   type="text"
                 />
               </div>
-              <div className="form-group">
-                <input
-                  className="form-control"
-                  placeholder="City"
-                  type="text"
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  className="form-control"
-                  placeholder="State/Province"
-                  type="text"
-                />
-              </div>
-              <div className="form-group">
-                <select className="form-control">
-                  <option value="">-- Select Country --</option>
-                  <option value="AF">Afghanistan</option>
-                  <option value="AX">Åland Islands</option>
-                  <option value="AL">Albania</option>
-                  <option value="DZ">Algeria</option>
-                  <option value="AS">American Samoa</option>
-                  <option value="AD">Andorra</option>
-                  <option value="AO">Angola</option>
-                  <option value="AI">Anguilla</option>
-                  <option value="AQ">Antarctica</option>
-                  <option value="AG">Antigua and Barbuda</option>
-                  <option value="AR">Argentina</option>
-                  <option value="AM">Armenia</option>
-                  <option value="AW">Aruba</option>
-                  <option value="AU">Australia</option>
-                  <option value="AT">Austria</option>
-                  <option value="AZ">Azerbaijan</option>
-                  <option value="BS">Bahamas</option>
-                  <option value="BH">Bahrain</option>
-                  <option value="BD">Bangladesh</option>
-                  <option value="BB">Barbados</option>
-                  <option value="BY">Belarus</option>
-                  <option value="BE">Belgium</option>
-                  <option value="BZ">Belize</option>
-                  <option value="BJ">Benin</option>
-                  <option value="BM">Bermuda</option>
-                  <option value="BT">Bhutan</option>
-                  <option value="BO">Bolivia, Plurinational State of</option>
-                  <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
-                  <option value="BA">Bosnia and Herzegovina</option>
-                  <option value="BW">Botswana</option>
-                  <option value="BV">Bouvet Island</option>
-                  <option value="BR">Brazil</option>
-                  <option value="IO">British Indian Ocean Territory</option>
-                  <option value="BN">Brunei Darussalam</option>
-                  <option value="BG">Bulgaria</option>
-                  <option value="BF">Burkina Faso</option>
-                  <option value="BI">Burundi</option>
-                  <option value="KH">Cambodia</option>
-                  <option value="CM">Cameroon</option>
-                  <option value="CA">Canada</option>
-                  <option value="CV">Cape Verde</option>
-                  <option value="KY">Cayman Islands</option>
-                  <option value="CF">Central African Republic</option>
-                  <option value="TD">Chad</option>
-                  <option value="CL">Chile</option>
-                  <option value="CN">China</option>
-                  <option value="CX">Christmas Island</option>
-                  <option value="CC">Cocos (Keeling) Islands</option>
-                  <option value="CO">Colombia</option>
-                  <option value="KM">Comoros</option>
-                  <option value="CG">Congo</option>
-                  <option value="CD">
-                    Congo, the Democratic Republic of the
-                  </option>
-                  <option value="CK">Cook Islands</option>
-                  <option value="CR">Costa Rica</option>
-                  <option value="CI">Côte d'Ivoire</option>
-                  <option value="HR">Croatia</option>
-                  <option value="CU">Cuba</option>
-                  <option value="CW">Curaçao</option>
-                  <option value="CY">Cyprus</option>
-                  <option value="CZ">Czech Republic</option>
-                  <option value="DK">Denmark</option>
-                  <option value="DJ">Djibouti</option>
-                  <option value="DM">Dominica</option>
-                  <option value="DO">Dominican Republic</option>
-                  <option value="EC">Ecuador</option>
-                  <option value="EG">Egypt</option>
-                  <option value="SV">El Salvador</option>
-                  <option value="GQ">Equatorial Guinea</option>
-                  <option value="ER">Eritrea</option>
-                  <option value="EE">Estonia</option>
-                  <option value="ET">Ethiopia</option>
-                  <option value="FK">Falkland Islands (Malvinas)</option>
-                  <option value="FO">Faroe Islands</option>
-                  <option value="FJ">Fiji</option>
-                  <option value="FI">Finland</option>
-                  <option value="FR">France</option>
-                  <option value="GF">French Guiana</option>
-                  <option value="PF">French Polynesia</option>
-                  <option value="TF">French Southern Territories</option>
-                  <option value="GA">Gabon</option>
-                  <option value="GM">Gambia</option>
-                  <option value="GE">Georgia</option>
-                  <option value="DE">Germany</option>
-                  <option value="GH">Ghana</option>
-                  <option value="GI">Gibraltar</option>
-                  <option value="GR">Greece</option>
-                  <option value="GL">Greenland</option>
-                  <option value="GD">Grenada</option>
-                  <option value="GP">Guadeloupe</option>
-                  <option value="GU">Guam</option>
-                  <option value="GT">Guatemala</option>
-                  <option value="GG">Guernsey</option>
-                  <option value="GN">Guinea</option>
-                  <option value="GW">Guinea-Bissau</option>
-                  <option value="GY">Guyana</option>
-                  <option value="HT">Haiti</option>
-                  <option value="HM">Heard Island and McDonald Islands</option>
-                  <option value="VA">Holy See (Vatican City State)</option>
-                  <option value="HN">Honduras</option>
-                  <option value="HK">Hong Kong</option>
-                  <option value="HU">Hungary</option>
-                  <option value="IS">Iceland</option>
-                  <option value="IN">India</option>
-                  <option value="ID">Indonesia</option>
-                  <option value="IR">Iran, Islamic Republic of</option>
-                  <option value="IQ">Iraq</option>
-                  <option value="IE">Ireland</option>
-                  <option value="IM">Isle of Man</option>
-                  <option value="IL">Israel</option>
-                  <option value="IT">Italy</option>
-                  <option value="JM">Jamaica</option>
-                  <option value="JP">Japan</option>
-                  <option value="JE">Jersey</option>
-                  <option value="JO">Jordan</option>
-                  <option value="KZ">Kazakhstan</option>
-                  <option value="KE">Kenya</option>
-                  <option value="KI">Kiribati</option>
-                  <option value="KP">
-                    Korea, Democratic People's Republic of
-                  </option>
-                  <option value="KR">Korea, Republic of</option>
-                  <option value="KW">Kuwait</option>
-                  <option value="KG">Kyrgyzstan</option>
-                  <option value="LA">Lao People's Democratic Republic</option>
-                  <option value="LV">Latvia</option>
-                  <option value="LB">Lebanon</option>
-                  <option value="LS">Lesotho</option>
-                  <option value="LR">Liberia</option>
-                  <option value="LY">Libya</option>
-                  <option value="LI">Liechtenstein</option>
-                  <option value="LT">Lithuania</option>
-                  <option value="LU">Luxembourg</option>
-                  <option value="MO">Macao</option>
-                  <option value="MK">
-                    Macedonia, the former Yugoslav Republic of
-                  </option>
-                  <option value="MG">Madagascar</option>
-                  <option value="MW">Malawi</option>
-                  <option value="MY">Malaysia</option>
-                  <option value="MV">Maldives</option>
-                  <option value="ML">Mali</option>
-                  <option value="MT">Malta</option>
-                  <option value="MH">Marshall Islands</option>
-                  <option value="MQ">Martinique</option>
-                  <option value="MR">Mauritania</option>
-                  <option value="MU">Mauritius</option>
-                  <option value="YT">Mayotte</option>
-                  <option value="MX">Mexico</option>
-                  <option value="FM">Micronesia, Federated States of</option>
-                  <option value="MD">Moldova, Republic of</option>
-                  <option value="MC">Monaco</option>
-                  <option value="MN">Mongolia</option>
-                  <option value="ME">Montenegro</option>
-                  <option value="MS">Montserrat</option>
-                  <option value="MA">Morocco</option>
-                  <option value="MZ">Mozambique</option>
-                  <option value="MM">Myanmar</option>
-                  <option value="NA">Namibia</option>
-                  <option value="NR">Nauru</option>
-                  <option value="NP">Nepal</option>
-                  <option value="NL">Netherlands</option>
-                  <option value="NC">New Caledonia</option>
-                  <option value="NZ">New Zealand</option>
-                  <option value="NI">Nicaragua</option>
-                  <option value="NE">Niger</option>
-                  <option value="NG">Nigeria</option>
-                  <option value="NU">Niue</option>
-                  <option value="NF">Norfolk Island</option>
-                  <option value="MP">Northern Mariana Islands</option>
-                  <option value="NO">Norway</option>
-                  <option value="OM">Oman</option>
-                  <option value="PK">Pakistan</option>
-                  <option value="PW">Palau</option>
-                  <option value="PS">Palestinian Territory, Occupied</option>
-                  <option value="PA">Panama</option>
-                  <option value="PG">Papua New Guinea</option>
-                  <option value="PY">Paraguay</option>
-                  <option value="PE">Peru</option>
-                  <option value="PH">Philippines</option>
-                  <option value="PN">Pitcairn</option>
-                  <option value="PL">Poland</option>
-                  <option value="PT">Portugal</option>
-                  <option value="PR">Puerto Rico</option>
-                  <option value="QA">Qatar</option>
-                  <option value="RE">Réunion</option>
-                  <option value="RO">Romania</option>
-                  <option value="RU">Russian Federation</option>
-                  <option value="RW">Rwanda</option>
-                  <option value="BL">Saint Barthélemy</option>
-                  <option value="SH">
-                    Saint Helena, Ascension and Tristan da Cunha
-                  </option>
-                  <option value="KN">Saint Kitts and Nevis</option>
-                  <option value="LC">Saint Lucia</option>
-                  <option value="MF">Saint Martin (French part)</option>
-                  <option value="PM">Saint Pierre and Miquelon</option>
-                  <option value="VC">Saint Vincent and the Grenadines</option>
-                  <option value="WS">Samoa</option>
-                  <option value="SM">San Marino</option>
-                  <option value="ST">Sao Tome and Principe</option>
-                  <option value="SA">Saudi Arabia</option>
-                  <option value="SN">Senegal</option>
-                  <option value="RS">Serbia</option>
-                  <option value="SC">Seychelles</option>
-                  <option value="SL">Sierra Leone</option>
-                  <option value="SG">Singapore</option>
-                  <option value="SX">Sint Maarten (Dutch part)</option>
-                  <option value="SK">Slovakia</option>
-                  <option value="SI">Slovenia</option>
-                  <option value="SB">Solomon Islands</option>
-                  <option value="SO">Somalia</option>
-                  <option value="ZA">South Africa</option>
-                  <option value="GS">
-                    South Georgia and the South Sandwich Islands
-                  </option>
-                  <option value="SS">South Sudan</option>
-                  <option value="ES">Spain</option>
-                  <option value="LK">Sri Lanka</option>
-                  <option value="SD">Sudan</option>
-                  <option value="SR">Suriname</option>
-                  <option value="SJ">Svalbard and Jan Mayen</option>
-                  <option value="SZ">Swaziland</option>
-                  <option value="SE">Sweden</option>
-                  <option value="CH">Switzerland</option>
-                  <option value="SY">Syrian Arab Republic</option>
-                  <option value="TW">Taiwan, Province of China</option>
-                  <option value="TJ">Tajikistan</option>
-                  <option value="TZ">Tanzania, United Republic of</option>
-                  <option value="TH">Thailand</option>
-                  <option value="TL">Timor-Leste</option>
-                  <option value="TG">Togo</option>
-                  <option value="TK">Tokelau</option>
-                  <option value="TO">Tonga</option>
-                  <option value="TT">Trinidad and Tobago</option>
-                  <option value="TN">Tunisia</option>
-                  <option value="TR">Turkey</option>
-                  <option value="TM">Turkmenistan</option>
-                  <option value="TC">Turks and Caicos Islands</option>
-                  <option value="TV">Tuvalu</option>
-                  <option value="UG">Uganda</option>
-                  <option value="UA">Ukraine</option>
-                  <option value="AE">United Arab Emirates</option>
-                  <option value="GB">United Kingdom</option>
-                  <option value="US">United States</option>
-                  <option value="UM">
-                    United States Minor Outlying Islands
-                  </option>
-                  <option value="UY">Uruguay</option>
-                  <option value="UZ">Uzbekistan</option>
-                  <option value="VU">Vanuatu</option>
-                  <option value="VE">Venezuela, Bolivarian Republic of</option>
-                  <option value="VN">Viet Nam</option>
-                  <option value="VG">Virgin Islands, British</option>
-                  <option value="VI">Virgin Islands, U.S.</option>
-                  <option value="WF">Wallis and Futuna</option>
-                  <option value="EH">Western Sahara</option>
-                  <option value="YE">Yemen</option>
-                  <option value="ZM">Zambia</option>
-                  <option value="ZW">Zimbabwe</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <button className="btn btn-primary" type="button">
+              <button className="btn btn-primary" type="button" onClick={(e)=>{this.updateUserInformation(e)}}>
             Update
           </button>{" "}
           &nbsp;&nbsp;
           <button className="btn btn-default" type="button">
             Cancel
           </button>
+            </div>
+          </div>
+          </form>
         </div>
+
+        
         <div className="body">
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
-              <h6>Account Data</h6>
-              <div className="form-group">
-                <input
-                  className="form-control"
-                  disabled=""
-                  placeholder="Username"
-                  type="text"
-                  value="alizeethomas"
-                  onChange={() => {}}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  className="form-control"
-                  placeholder="Email"
-                  type="email"
-                  value="alizee.info@yourdomain.com"
-                  onChange={() => {}}
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  className="form-control"
-                  placeholder="Phone Number"
-                  type="text"
-                  onChange={() => {}}
-                />
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-12">
+              <form id="password">
               <h6>Change Password</h6>
               <div className="form-group">
                 <input
                   className="form-control"
+                  autoComplete="off"
+                  name="UserPass"
                   placeholder="Current Password"
                   type="password"
                 />
@@ -449,6 +465,7 @@ class ProfileV1Setting extends React.Component {
                 <input
                   className="form-control"
                   placeholder="New Password"
+                  name="UserNewPass"
                   type="password"
                 />
               </div>
@@ -459,6 +476,163 @@ class ProfileV1Setting extends React.Component {
                   type="password"
                 />
               </div>
+              </form>
+            </div>
+          </div>
+          <button className="btn btn-primary" type="button" onClick={(e)=>{this.resetPassword(e)}}>
+            Change Password
+          </button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default">Cancel</button>
+        </div>
+
+
+        <div className="body">
+          <form id="addresses">
+          <div className="row clearfix">
+             <div className="col-lg-6 col-md-12">
+              <h6>Address Information</h6>
+              <p>Current Address: {this.state.address.RegisterUserStreetNameAndNumer}</p>
+              <div className="form-group">
+              <GooglePlacesAutocomplete
+apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange = {(e)=>this.setState({location: e.target.value})}
+selectProps={{
+location: this.state.location,
+onChange: (e)=>this.setState({location: e}),
+placeholder: "Update home address"
+}}
+/>
+              </div>
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  placeholder="Complex/Appartment Number"
+                  defaultValue={this.state.address.RegisterUserComplexorBuildingNumber}
+                  type="email"
+                  onChange={() => {}}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  placeholder="Complex/Appartment Name"
+                  defaultValue={this.state.address.RegisterUserComplexorBuildingName}
+                  type="text"
+                  onChange={() => {}}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-12">
+              <h6>.</h6>
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  placeholder="Postal Code"
+                  defaultValue={this.state.address.PostCode}
+                  type="text"
+                />
+              </div>
+              <div className="form-group">
+              {  
+        <select className="form-control" onChange={(e)=>this.setState({addressProv: e.target.value})} value={this.state.addressProv}>
+        {
+         this.state.provList.map((province, index)=> (
+            <option key={index} name='RegisterUserProvince' value = {province.Province}>{province.Province}</option>
+        ))  
+        }
+        </select> }
+              </div>
+              <div className="form-group">
+              <select className="form-control" onChange={(e)=>this.setState({country: e.target.value})} value={this.state.addressCountry}>
+        {
+         this.state.countryList.map((country, index)=> (
+            <option key={index} name='RegisterUserCountry' value = {country.Country_Name}>{country.Country_Name}</option>
+        ))   
+        }
+        </select> 
+              </div>
+            </div>
+          </div>
+          <button className="btn btn-primary" type="button" onClick={(e)=>{this.updateAddressInformation(e)}}>
+            Update
+          </button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default">Cancel</button>
+          </form>
+        </div>
+
+
+        <div className="body">
+          <div className="row clearfix">
+             <div className="col-lg-6 col-md-12">
+              <h6>University Information</h6>
+              <div className="form-group">
+              {  
+        <select className="form-control" onChange={(e)=>this.setState({resProv: e.target.value})} value={this.state.resProv}>
+        {
+         this.state.provList.map((province, index)=> (
+            <option key={index} name='RegisterUserProvince' value = {this.state.university.RegisterUserUniversityProvinceID}>{province.Province}</option>
+        ))  
+        }
+        </select> }
+              </div>
+              <div className="form-group">
+              {  
+        <select className="form-control" onChange={(e)=>this.setState({uni: e.target.value})} value={this.state.uni}>
+        {
+            
+         this.state.uniList.map((university, index)=> (
+            <option key={index} name='UniversityID' value = {university.RubixUniversityID}>{university.UniversityName}</option>
+        ))   
+        }
+    </select> }
+              </div>
+              <div className="form-group">
+              {  
+        <select className="form-control" onChange={(e)=>this.setState({course: e.target.value})} value={this.state.course}>
+        {
+            
+            this.state.courseList.map((course, index)=> (
+            <option key={index} name='CourseID' value = {course.RubixCourseID}>{course.CourseName}</option>
+        ))   
+        }
+    </select> }
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-12">
+              <h6>.</h6>
+              <div className="form-group">
+              {  
+        <select className="form-control" onChange={(e)=>this.setState({res: e.target.value})} value={this.state.res}>
+        {
+            
+            this.state.resList.map((res, index)=> (
+            <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
+        ))   
+        }
+    </select> }
+              </div>
+              <div className="form-group">
+              {  
+        <select className="form-control" onChange={(e)=>this.setState({year: e.target.value})} value={this.state.year}>
+        {
+            
+            this.state.yearList.map((year, index)=> (
+            <option key={index} name='StudentYearofStudyID' value = {year.RubixStudentYearofStudyID}>{year.YearofStudy}</option>
+        ))   
+        }
+    </select> }
+              </div>
+              <div className="form-group">{  
+        <select className="form-control" onChange={(e)=>this.setState({payment: e.target.value})} value={this.state.payment}>
+        {
+            
+            this.state.payMethods.map((payment, index)=> (
+            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+        ))   
+        }
+    </select> }
+              </div>
             </div>
           </div>
           <button className="btn btn-primary" type="button">
@@ -467,6 +641,76 @@ class ProfileV1Setting extends React.Component {
           &nbsp;&nbsp;
           <button className="btn btn-default">Cancel</button>
         </div>
+
+
+<div className="body">
+  <div className="row clearfix">
+     <div className="col-lg-6 col-md-12">
+      <h6>Next of Kin Information</h6>
+      <div className="form-group">
+        <input
+          className="form-control"
+          disabled=""
+          placeholder="First Name"
+          type="text"
+          onChange={() => {}}
+        />
+      </div>
+      <div className="form-group">
+        <input
+          className="form-control"
+          placeholder="Last Name"
+          type="email"
+          onChange={() => {}}
+        />
+      </div>
+      <div className="form-group">
+      <input
+                  className="form-control"
+                  placeholder="ID Number"
+                  defaultValue={this.state.profile.IDNumber}
+                  type="text"
+                />
+      </div>
+    </div>
+    <div className="col-lg-6 col-md-12">
+      <h6>.</h6>
+      <div className="form-group">
+        <input
+          className="form-control"
+          placeholder="Postal Code"
+          type="text"
+        />
+      </div>
+      <div className="form-group">
+      {  
+<select className="form-control" onChange={(e)=>this.setState({prov: e.target.value})} value={this.state.prov}>
+{
+ this.state.provList.map((province, index)=> (
+    <option key={index} name='RegisterUserProvince' value = {province.Province}>{province.Province}</option>
+))  
+}
+</select> }
+      </div>
+      <div className="form-group">
+      <select className="form-control" onChange={(e)=>this.setState({country: e.target.value})} value={this.state.country}>
+{
+ this.state.countryList.map((country, index)=> (
+    <option key={index} name='RegisterUserCountry' value = {country.Country_Name}>{country.Country_Name}</option>
+))   
+}
+</select> 
+      </div>
+    </div>
+  </div>
+  <button className="btn btn-primary" type="button">
+    Update
+  </button>{" "}
+  &nbsp;&nbsp;
+  <button className="btn btn-default">Cancel</button>
+</div>
+
+{/* 
         <div className="body">
           <h6>General Information</h6>
           <div className="row">
@@ -831,12 +1075,14 @@ class ProfileV1Setting extends React.Component {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ mailInboxReducer }) => ({});
+const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
+  rubixUserID: navigationReducer.userID,
+});
 
 export default connect(mapStateToProps, {})(ProfileV1Setting);
