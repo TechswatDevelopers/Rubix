@@ -190,19 +190,6 @@ class StudentInformation extends React.Component {
                   <br></br>
                   <button onClick={()=>{this.props.onPressThemeColor("cyan")}}>Opal</button>
                   
-                  {/* <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Province:
-                            </label>
-                            {  
-        <select className="form-control" onChange={(e)=>this.setState({profile: e.target.value})} value={this.state.profile}>
-        {
-         this.state.profiles.map((prof, index)=> (
-            <option key={index}  value = {prof.Name}>{prof.Name}</option>
-        ))  
-        }
-        </select> }
-                      </div> */}
                   <div className="body">
                     <form id='register'>
                       <div className="form-group">
