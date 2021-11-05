@@ -165,11 +165,6 @@ class StudentInformation extends React.Component {
                   <div className="header">
                     <p className="lead">My Registration Details</p>
                   </div>
-
-                  <button onClick={()=>{this.props.onPressThemeColor("blue")}}>C-Ges</button>
-                  <br></br>
-                  <br></br>
-                  <button onClick={()=>{this.props.onPressThemeColor("cyan")}}>Opal</button>
                   
                   <div className="body">
                     <form id='register'>

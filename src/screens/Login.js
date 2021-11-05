@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../assets/images/logo-white.svg";
-import { updateEmail, updatePassword,onLoggedin, updateUserID } from "../actions";
+import { updateEmail, updatePassword,onLoggedin, updateUserID, 
+  updateClientID,onPressThemeColor } from "../actions";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {Grid, Row, Col, Button} from "react-bootstrap";
@@ -219,10 +220,15 @@ class Login extends React.Component {
                             Forgot password?
                           </a>
                         </span>
+                        
                         <span>
                           Don't have an account?{" "}
                           <a href="registration" >Register</a>
                         </span>
+
+                        <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>
+                        <br></br>
+                  <button type="button" onClick={()=>{this.props.onPressThemeColor("orange"); this.props.history.push("/registration")}}>Login with Opal</button>
                       </div>
                     </div>
                   </div>
@@ -251,4 +257,6 @@ const mapStateToProps = ({navigationReducer, loginReducer}) => ({
 
 export default connect(mapStateToProps, {
   updateUserID,
+  updateClientID,
+  onPressThemeColor,
 })(Login);

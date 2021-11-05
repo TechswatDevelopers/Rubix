@@ -11,7 +11,7 @@ import {Grid, Row, Col, Button} from "react-bootstrap";
 import MContext from "../../App";
 import MyProvider from "../../App";
 import navigationReducer from "../../reducers/navigationReducer";
-import {updateEmail, updatePassword, updateUserID, updatePlatformID } from "../../actions";
+import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateClientID } from "../../actions";
 
 class Registration extends React.Component {
     //Google response for testing
@@ -60,7 +60,7 @@ class Registration extends React.Component {
   render() {
     //const user = useContext(MyProvider);
     return (
-      <div className="theme-purple">
+      <div className={this.props.rubixThemeColor}>
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
@@ -100,6 +100,7 @@ class Registration extends React.Component {
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue
                         </button>
+                  <br></br>
                       <div className="bottom">
                         <span className="helper-text">
                           Already have an account?{" "}
@@ -157,7 +158,9 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   rubixUserID: navigationReducer.userID,
   rubixPlatformID: navigationReducer.rubixPlatformID,
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+  rubixClientID: navigationReducer.clientID,
+  rubixThemeColor: navigationReducer.themeColor
 });
 
 export default connect(mapStateToProps, {
