@@ -62,7 +62,7 @@ class VarsityDetails extends React.Component {
                     
             } else{
                 
-                console.log("checkValidity ", document.getElementById('register').checkValidity())
+                console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
         postData()

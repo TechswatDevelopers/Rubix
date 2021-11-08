@@ -21,12 +21,9 @@ class Addresses extends React.Component {
      //final submit check
  AddressSubmit(e){
     e.preventDefault();
-    //console.log(location['value']['structured_formatting']['secondary_text'])
     const form = document.getElementById('addresses');
     const locations = document.getElementById('location');
-    //console.log("location:",this.state.location)
     const street_address = this.state.location['value']['structured_formatting']['main_text']
-    //const city = this.state.location['value']['structured_formatting']['secondary_text']
     const data = {
         'RubixRegisterUserID': '78',
         'RegisterUserStreetNameAndNumer': street_address,
@@ -47,7 +44,7 @@ class Addresses extends React.Component {
     console.log(data)
     const postData = async() => {
 
-        if (this.state.location !=null && document.getElementById('addresses').checkValidity() == true){
+        if (this.state.location !=null /* && document.getElementById('addresses').checkValidity() == true */){
             await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
                 console.log(response)
@@ -56,7 +53,7 @@ class Addresses extends React.Component {
                 
         } else{
             
-            console.log("checkValidity ", document.getElementById('nof').checkValidity())
+            console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
     }
     postData()

@@ -30,7 +30,7 @@ class PersonalInformation extends React.Component {
     //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
     // SA ID Number have to be 13 digits, so check the length
     if (idNumber.length != 13 ) {
-        error.append('ID number does not appear to be authentic - input not a valid number.');
+        //error.append('ID number does not appear to be authentic - input not a valid number.');
         correct = false;
     }
 
@@ -52,7 +52,7 @@ class PersonalInformation extends React.Component {
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
     if (!((tempDate.getYear() == idNumber.substring(0, 2)) && (id_month == idNumber.substring(2, 4) - 1) && (id_date == idNumber.substring(4, 6)))) {
-        error.append('ID number does not appear to be authentic - date part not valid. ');
+        //error.append('ID number does not appear to be authentic - date part not valid. ');
         correct = false;
     }
 
@@ -78,12 +78,15 @@ class PersonalInformation extends React.Component {
         multiplier = (multiplier % 2 == 0) ? 1 : 2;
     }
     if ((checkSum % 10) != 0) {
-        error.append('ID number does not appear to be authentic - check digit is not valid');
+     
         correct = false;
     }
     if (correct) {
         // and put together a result message
         //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
+    } else {
+      alert("Invalid ID Number, please correct ID Number and try again")
+      error.append("Invalid ID Number, please enter a valid ID Number")
     }
     return correct
 }
@@ -120,8 +123,7 @@ class PersonalInformation extends React.Component {
             })
                 
         } else{
-            console.log("Validate results are ", this.Validate())
-            console.log("checkValidity ", document.getElementById('register').checkValidity())
+          alert("Please ensure that you entered all required information")
         }
     }
     postData()
@@ -198,7 +200,7 @@ class PersonalInformation extends React.Component {
                             <input type='number' name="IDNumber" className="form-control" id='IDNumber' 
                     required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
                     <br></br>
-                    <div id="error"></div>
+                    <p id="error" style={{color: 'red'}}></p>
                       </div>
 
                       <div className="form-group">

@@ -7,7 +7,6 @@ import axios from "axios";
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
-
   //Reset password
   updateAddressInformation(e){
 //const history = useHistory();
@@ -151,9 +150,11 @@ postData()
   //Update personal information
   updateUserInformation(e){
 e.preventDefault();
+console.log(this.state.selectedFile)
 const form = document.getElementById('personalInfo');
 const data = {
-    'RubixRegisterUserID': '2745',
+    'RubixRegisterUserID': '2745', //Buffer.from(this.state.selectedFile.value).toString('base64')
+    'UserProfileImage': this.state.imgUpload,
     'ClientID': 1
 };
 for (let i=0; i < form.elements.length; i++) {
@@ -203,11 +204,48 @@ postData()
         address: {},
         university: {},
         location: {},
+        selectedFile: null,
+        newPic: false,
+        base64Image: null,
+        imgUpload: null,
         payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
         value: 0
 
     };
   }
+  getBase64(e) {
+    //console.log("I am called")
+    var file = e.target.files[0]
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      this.setState({
+        imgUpload: reader.result
+      })
+      //console.log("This is the img:", this.state.imgUpload)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    }
+  }
+  
+  // On file select (from the pop up)
+  onFileChange = event => {
+  
+    // Update the state
+    this.setState({ selectedFile: event.target.files[0] });
+    this.setState({ newPic: true });
+
+    if(this.state.selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = this.handleReaderLoaded.bind(this);
+
+      //reader.readAsBinaryString(this.state.selectedFile)
+    }
+  
+  };
+
   componentDidMount(){
     const fetchData = async() =>{
 
@@ -216,6 +254,7 @@ postData()
       .then(response => response.json())
       .then(data => {
           this.setState({profile: data})
+          console.log("image url", data.UserProfileImage)
           });
 
           //Get Rubix User University Details
@@ -301,9 +340,10 @@ postData()
           <div className="media">
             <div className="media-left m-r-15">
               <img
-                alt="User"
+                 alt="cannot display"
+                 accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
-                src={imageuser}
+                src= {this.state.profile.UserProfileImage}  // this.state.profile.UserProfileImage {this.state.newPic ? this.state.selectedFile.name : imageuser}
               />
             </div>
             <div className="media-body">
@@ -311,13 +351,10 @@ postData()
                 Upload your photo. <br />
                 <em>Image should be at least 140px x 140px</em>
               </p>
-              <button
-                className="btn btn-default-dark"
-                id="btn-upload-photo"
-                type="button"
-              >
-                Upload Photo
-              </button>
+              <div>
+                <input type="file" onChange={(e)=>{this.getBase64(e)}} />
+                
+            </div>
               <input className="sr-only" id="filePhoto" type="file" />
             </div>
           </div>
@@ -360,7 +397,7 @@ postData()
                 <div>
                   <label className="fancy-radio">
                     <input
-                      name="gender2"
+                      name="Gender"
                       type="radio"
                       value="male"
                       onChange={() => {}}
@@ -371,7 +408,7 @@ postData()
                   </label>
                   <label className="fancy-radio">
                     <input
-                      name="gender2"
+                      name="Gender"
                       type="radio"
                       value="female"
                       onChange={() => {}}

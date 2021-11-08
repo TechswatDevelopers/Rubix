@@ -16,16 +16,16 @@ import Image15 from "../assets/images/image-gallery/15.jpg";
 
 export const fileFolderCardData = [
   {
-    Header: "Lucid Project",
+    Header: "ID Document",
   },
   {
-    Header: "Themeforest",
+    Header: "Proof of Residence",
   },
   {
-    Header: "New Website",
+    Header: "University Registration",
   },
   {
-    Header: "My Folder",
+    Header: "Next of Kin ID",
   },
 ];
 

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
 import { Tabs, Tab } from "react-bootstrap";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
+import DocumentManager from "../../components/Pages/documentsSetting";
 
 class ProfileV1Page extends React.Component {
   componentDidMount() {
@@ -33,7 +34,7 @@ class ProfileV1Page extends React.Component {
                       defaultActiveKey="settings"
                       id="uncontrolled-tab-example"
                     >
-                      <Tab eventKey="settings" title="settings">
+                      <Tab eventKey="settings" title="Personal Information">
                         <ProfileV1Setting />
                       </Tab>
                       <Tab eventKey="Billing" title="Billing">
@@ -134,7 +135,7 @@ class ProfileV1Page extends React.Component {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="Preferences" title="Preferences">
+                      <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
                           <div className="col-lg-6 col-md-12">
                             <div className="body">
@@ -283,6 +284,9 @@ class ProfileV1Page extends React.Component {
                             </div>
                           </div>
                         </div>
+                      </Tab>
+                      <Tab eventKey="documents" title="Documents">
+                        <DocumentManager />
                       </Tab>
                     </Tabs>
                   </div>
