@@ -54,7 +54,7 @@ class VarsityDetails extends React.Component {
         console.log(data)
         const postData = async()=>{
             if (this.state.prov !=null && this.state.uni !=null && this.state.course !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+                await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
                     this.props.history.push("/nextofkin")
@@ -80,7 +80,7 @@ async componentDidMount(){
     const fetchData = async() =>{
 
         //Populate university list
-        await fetch('http://197.242.69.18:3300/api/RubixUniversities')
+        await fetch('http://192.168.88.10:3300/api/RubixUniversities')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -88,7 +88,7 @@ async componentDidMount(){
             });
 
             //Populate Residence list
-            await fetch('http://197.242.69.18:3300/api/RubixResidences')
+            await fetch('http://192.168.88.10:3300/api/RubixResidences')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -96,7 +96,7 @@ async componentDidMount(){
             });
 
             //Populate Provinces list
-        await fetch('http://197.242.69.18:3300/api/RubixProvinces')
+        await fetch('http://192.168.88.10:3300/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -107,7 +107,7 @@ async componentDidMount(){
             });
 
             //Populate Courses list
-            await fetch('http://197.242.69.18:3300/api/RubixCourses')
+            await fetch('http://192.168.88.10:3300/api/RubixCourses')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -115,7 +115,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('http://197.242.69.18:3300/api/RubixStudentYearofStudies')
+            await fetch('http://192.168.88.10:3300/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)

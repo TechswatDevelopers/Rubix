@@ -34,7 +34,7 @@ const requestOptions = {
 };
 console.log(data)
 const postData = async() => {
-        await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserAddesss', data, requestOptions)
+        await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
             console.log(response)
             //alert(response.data.PostRubixUserData[0].Response)
@@ -64,7 +64,7 @@ const requestOptions = {
 };
 console.log(data)
 const postData = async() => {
-        await axios.post('http://197.242.69.18:3300/api/RubixResetPassword', data, requestOptions)
+        await axios.post('http://192.168.88.10:3300/api/RubixResetPassword', data, requestOptions)
         .then(response => {
             //console.log(response)
             alert(response.data.PostRubixUserData[0].Response)
@@ -175,7 +175,7 @@ console.log(data)
 const postData = async() => {
         if(this.Validate)
         {
-          await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
+          await axios.post('http://192.168.88.10:3300/api/RubixRegisterUsers', data, requestOptions)
         .then(response => {
             console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
@@ -254,7 +254,7 @@ postData()
     const fetchData = async() =>{
 
       //Get Rubix User Details
-      await fetch('http://197.242.69.18:3300/api/RubixRegisterUsers/2745')
+      await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/2745')
       .then(response => response.json())
       .then(data => {
           this.setState({profile: data})
@@ -262,7 +262,7 @@ postData()
           });
 
           //Get Rubix User University Details
-      await fetch('http://197.242.69.18:3300/api/RubixRegisterUserUniversityDetails/71')
+      await fetch('http://192.168.88.10:3300/api/RubixRegisterUserUniversityDetails/71')
       .then(response => response.json())
       .then(data => {
           console.log("my uni data is ", data)
@@ -271,7 +271,7 @@ postData()
 
 
           //Get Rubix User Address Details
-      await fetch('http://197.242.69.18:3300/api/RubixRegisterUserAddesss/2745')
+      await fetch('http://192.168.88.10:3300/api/RubixRegisterUserAddesss/2745')
       .then(response => response.json())
       .then(data => {
           console.log("data is ", data)
@@ -281,7 +281,7 @@ postData()
           });
 
           //Get Rubix Provices
-          await fetch('http://197.242.69.18:3300/api/RubixProvinces')
+          await fetch('http://192.168.88.10:3300/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -291,7 +291,7 @@ postData()
             //setProvList(data.data)
             });
             //Fetch Countries List
-                    await fetch('http://197.242.69.18:3300/api/RubixCountries')
+                    await fetch('http://192.168.88.10:3300/api/RubixCountries')
                 .then(response => response.json())
                 .then(data => {
                     //console.log("data is ", data.data)
@@ -301,7 +301,7 @@ postData()
                     });
 
                     //Populate university list
-        await fetch('http://197.242.69.18:3300/api/RubixUniversities')
+        await fetch('http://192.168.88.10:3300/api/RubixUniversities')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -309,14 +309,14 @@ postData()
             });
 
             //Populate Residence list
-            await fetch('http://197.242.69.18:3300/api/RubixResidences')
+            await fetch('http://192.168.88.10:3300/api/RubixResidences')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
             this.setState({resList: data.data})
             });
               //Populate Courses list
-              await fetch('http://197.242.69.18:3300/api/RubixCourses')
+              await fetch('http://192.168.88.10:3300/api/RubixCourses')
               .then(response => response.json())
               .then(data => {
                   //console.log("data is ", data.data)
@@ -324,7 +324,7 @@ postData()
                   });
 
                   //Populate Year of Study list
-            await fetch('http://197.242.69.18:3300/api/RubixStudentYearofStudies')
+            await fetch('http://192.168.88.10:3300/api/RubixStudentYearofStudies')
             .then(response => response.json())
             .then(data => {
                 //console.log("data is ", data.data)

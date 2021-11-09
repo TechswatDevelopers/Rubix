@@ -40,7 +40,7 @@ class Login extends React.Component {
       const postData = async() => {
 
           if (document.getElementById('login').checkValidity() == true){
-              await axios.post('http://197.242.69.18:3300/api//RubixLogin', data, requestOptions)
+              await axios.post('http://192.168.88.10:3300/api/RubixLogin', data, requestOptions)
               .then(response => {
                   console.log(response)
                   if(response.data['0']['Response'] == 1){
@@ -73,7 +73,7 @@ class Login extends React.Component {
       body: data
   };
     const postData = async() => {
-      await axios.post('http://197.242.69.18:3300/api/RubixLogin', data, requestOptions)
+      await axios.post('http://192.168.88.10:3300/api/RubixLogin', data, requestOptions)
       .then(response => {
         console.log(response)
         console.log("checking data",response.data)

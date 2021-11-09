@@ -120,7 +120,7 @@ class PersonalInformation extends React.Component {
     console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
-            await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
+            await axios.post('http://192.168.88.10:3300/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 console.log(response)
                 this.props.history.push("/addresses")

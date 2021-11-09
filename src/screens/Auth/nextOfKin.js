@@ -113,7 +113,7 @@ class NextOfKin extends React.Component {
   const postData = async() => {
 
       if (this.Validate() && idNumber != this.props.studentIDNo){
-          await axios.post('http://197.242.69.18:3300/api/RubixUserNextOfKins', data, requestOptions)
+          await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
               this.props.history.push("/" )
