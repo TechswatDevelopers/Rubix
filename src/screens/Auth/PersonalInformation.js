@@ -12,6 +12,8 @@ class PersonalInformation extends React.Component {
     super(props);
     this.state = {
         userGender: 'Male',
+        medicalConditions: 'None',
+        errorMessage: '',
         value: 0
 
     };
@@ -38,7 +40,7 @@ class PersonalInformation extends React.Component {
     var year = idNumber.substring(0, 2);
     var month = idNumber.substring(2, 4);
     var day = idNumber.substring(4, 6);
-    console.log(year, month, day)
+    //console.log(year, month, day)
 
     // get first 6 digits as a valid date
     var tempDate = new Date(year, month - 1, day);
@@ -47,7 +49,7 @@ class PersonalInformation extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    console.log(id_date, id_month, id_year)
+    //console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -86,7 +88,8 @@ class PersonalInformation extends React.Component {
         //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
     } else {
       alert("Invalid ID Number, please correct ID Number and try again")
-      error.append("Invalid ID Number, please enter a valid ID Number")
+      //error.append("Invalid ID Number, please enter a valid ID Number")
+      this.setState({errorMessage: "Invalid ID Number, please enter a valid ID Number"})
     }
     return correct
 }
@@ -101,6 +104,7 @@ class PersonalInformation extends React.Component {
         'PlatformID': this.props.rubixUserID,
         'RubixUserPlatformID': this.props.rubixUserID,
         'RubixRegisterUserID': '',
+        'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
     };
     for (let i=0; i < form.elements.length; i++) {
@@ -153,7 +157,7 @@ class PersonalInformation extends React.Component {
                   </div>
                   
                   <div className="body">
-                    <form id='register'>
+                    <form id='register' onSubmit={(e) => this.Submit(e) }>
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           First Name
@@ -164,6 +168,7 @@ class PersonalInformation extends React.Component {
                           id="Name"
                           placeholder="Enter your full name"
                           type="text"
+                          required
                         />
                       </div>
 
@@ -190,6 +195,7 @@ class PersonalInformation extends React.Component {
                           id="last-name"
                           placeholder="Enter your surname"
                           type="text"
+                          required
                         />
                       </div>
 
@@ -199,10 +205,8 @@ class PersonalInformation extends React.Component {
                             </label>
                             <input type='number' name="IDNumber" className="form-control" id='IDNumber' 
                     required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
-                    <br></br>
-                    <p id="error" style={{color: 'red'}}></p>
+                    <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
-
                       <div className="form-group">
                         <label className="control-label sr-only" >
                          Your Email
@@ -228,6 +232,7 @@ class PersonalInformation extends React.Component {
                           defaultValue = {this.props.password}
                           placeholder="Password"
                           type="password"
+                          required
                         />
                       </div>
 
@@ -250,6 +255,7 @@ class PersonalInformation extends React.Component {
                           id="middle-name"
                           placeholder="Enter your Student Number"
                           type="text"
+                          required
                         />
                       </div>
                       <div className="form-group">
@@ -258,11 +264,13 @@ class PersonalInformation extends React.Component {
                             </label>
                         <input
                           className="form-control"
-                          name="MedicalConditions"
+                          //name="MedicalConditions"
                           id="middle-name"
-                          placeholder="Select your Medical Condition"
+                          placeholder="Enter your Medical Condition"
                           type="text"
-                          defaultValue='none'
+                          //defaultValue='none'
+                          onChange ={(e)=>this.setState({medicalConditions: e.target.value})}
+                          required
                         />
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>

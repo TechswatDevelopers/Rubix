@@ -343,8 +343,7 @@ postData()
                  alt="cannot display"
                  accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
-                src= {this.state.profile.UserProfileImage}  // this.state.profile.UserProfileImage {this.state.newPic ? this.state.selectedFile.name : imageuser}
-              />
+                src= {this.state.profile.UserProfileImage} />
             </div>
             <div className="media-body">
               <p>

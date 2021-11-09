@@ -11,9 +11,9 @@ class Addresses extends React.Component {
         this.state = {
             provList:[],
             countryList: [],
-            location: {},
-            prov: "Gauteng",
-            country: '',
+            location: null,
+            prov: null,
+            country: null,
             value: 0
 
         };
@@ -22,7 +22,8 @@ class Addresses extends React.Component {
  AddressSubmit(e){
     e.preventDefault();
     const form = document.getElementById('addresses');
-    const locations = document.getElementById('location');
+    if(this.state.location !=null){
+      const locations = document.getElementById('location');
     const street_address = this.state.location['value']['structured_formatting']['main_text']
     const data = {
         'RubixRegisterUserID': '78',
@@ -44,7 +45,7 @@ class Addresses extends React.Component {
     console.log(data)
     const postData = async() => {
 
-        if (this.state.location !=null /* && document.getElementById('addresses').checkValidity() == true */){
+        if (this.state.location !=null && this.state.prov !=null && this.state.country !=null /* && document.getElementById('addresses').checkValidity() == true */){
             await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
                 console.log(response)
@@ -52,11 +53,15 @@ class Addresses extends React.Component {
             })
                 
         } else{
-            
+          alert("Please ensure that you entered all required information")
             console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
     }
     postData()
+    }else{
+      alert("Please a valid home address")
+    }
+    
 }
 
 
@@ -109,7 +114,7 @@ async componentDidMount(){
                   </div>
                   
                   <div className="body">
-                    <form id='addresses'>
+                    <form id='addresses' onSubmit={(e) => this.AddressSubmit(e) }>
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           Home Address
@@ -159,7 +164,8 @@ placeholder: "Enter your home Address"
                           name="PostCode"
                           id="post-code"
                           placeholder="Enter your post code"
-                          type="email"/>
+                          type="text"
+                          required/>
                       </div>
 
                       <div className="form-group">
@@ -170,7 +176,7 @@ placeholder: "Enter your home Address"
         <select className="form-control" onChange={(e)=>this.setState({prov: e.target.value})} value={this.state.prov}>
         {
          this.state.provList.map((province, index)=> (
-            <option key={index} name='RegisterUserProvince' value = {province.Province}>{province.Province}</option>
+            <option key={index} name='RegisterUserProvince' value = {province.Province} >{province.Province}</option>
         ))  
         }
         </select> }

@@ -13,6 +13,7 @@ import {
   UPDATE_USERID,
   UPDATE_PLATFORM,
   UPDATE_CLIENTID,
+  UPDATE_STUDENTID,
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   userID: "",
   platformID: "",
   clientID: "theme-blue",
+  studentIDNo: null,
   addClassactive: [
     false,
     false,
@@ -459,6 +461,13 @@ export default (state = initialState, action) => {
       return{
         ...state,
         client: action.payload,
+      }
+    }
+
+    case UPDATE_STUDENTID: {
+      return{
+        ...state,
+        studentIDNo: action.payload,
       }
     }
 

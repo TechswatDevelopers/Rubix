@@ -16,13 +16,13 @@ class VarsityDetails extends React.Component {
             provList: [],
             courseList: [],
             yearList: [],
-            res: '',
-            prov: 0,
-            uni: '',
-            course: '',
-            year: '',
-            payment: '',
-            payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+            res: null,
+            prov: null,
+            uni: null,
+            course: null,
+            year: null,
+            payment: null,
+            payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
             value: 0
 
         };
@@ -32,7 +32,7 @@ class VarsityDetails extends React.Component {
         e.preventDefault();
         const form = document.getElementById('uniDetails');
         const data = {
-            'RubixRegisterUserID': '71',
+            'RubixRegisterUserID': this.props.rubixUserID,
             'ProvinceID': this.state.prov,
             'UniversityID': this.state.uni,
             'CourseID': this.state.course,
@@ -53,7 +53,7 @@ class VarsityDetails extends React.Component {
         };
         console.log(data)
         const postData = async()=>{
-            if (document.getElementById('uniDetails').checkValidity() == true){
+            if (this.state.prov !=null && this.state.uni !=null && this.state.course !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
@@ -61,7 +61,7 @@ class VarsityDetails extends React.Component {
                 })
                     
             } else{
-                
+              alert("Please ensure that you entered all required information")
                 console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
@@ -251,12 +251,13 @@ async componentDidMount(){
   }
 }
 
-/* PersonalInformation.propTypes = {
+VarsityDetails.propTypes = {
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+  rubixUserID: navigationReducer.userID,
 });
- */
-export default VarsityDetails;
+
+export default connect(mapStateToProps, {})(VarsityDetails);

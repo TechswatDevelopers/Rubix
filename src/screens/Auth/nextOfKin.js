@@ -1,15 +1,7 @@
 import React, { useContext } from "react";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Logo from "../../assets/images/logo-white.svg";
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
-import InstagramLogin from "react-instagram-login";
-import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 import axios from "axios";
-import {Grid, Row, Col, Button} from "react-bootstrap";
-import MContext from "../../App";
-import MyProvider from "../../App";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 
@@ -18,6 +10,7 @@ class NextOfKin extends React.Component {
     super(props);
     this.state = {
         userGender: 'Male',
+        errorMessage: '',
         value: 0
 
     };
@@ -28,7 +21,6 @@ class NextOfKin extends React.Component {
 
   // store the error div, to save typing
   var error = document.getElementById('error');
-  //console.log("ID number is ",idNumber);
 
   // assume everything is correct and if it later turns out not to be, just set this to false
   var correct = true;
@@ -36,7 +28,7 @@ class NextOfKin extends React.Component {
   //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
   // SA ID Number have to be 13 digits, so check the length
   if (idNumber.length != 13 ) {
-      error.append('ID number does not appear to be authentic - input not a valid number.');
+      //error.append('ID number does not appear to be authentic - input not a valid number.');
       correct = false;
   }
 
@@ -58,7 +50,7 @@ class NextOfKin extends React.Component {
   var fullDate = id_date + "-" + right_month + "-" + id_year;
 
   if (!((tempDate.getYear() == idNumber.substring(0, 2)) && (id_month == idNumber.substring(2, 4) - 1) && (id_date == idNumber.substring(4, 6)))) {
-      error.append('ID number does not appear to be authentic - date part not valid. ');
+      //error.append('ID number does not appear to be authentic - date part not valid. ');
       correct = false;
   }
 
@@ -84,24 +76,27 @@ class NextOfKin extends React.Component {
       multiplier = (multiplier % 2 == 0) ? 1 : 2;
   }
   if ((checkSum % 10) != 0) {
-      error.append('ID number does not appear to be authentic - check digit is not valid');
+      //error.append('ID number does not appear to be authentic - check digit is not valid');
       correct = false;
   }
   if (correct) {
       // and put together a result message
       //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
+   } else {
+    alert("Invalid ID Number, please correct ID Number and try again")
+    this.setState({errorMessage: "Invalid ID Number, please enter a valid ID Number"})
   }
   return correct
 }
-
 
 //final submit check
  Submit(e){
   //const history = useHistory();
   e.preventDefault();
   const form = document.getElementById('nof');
+  var idNumber = document.getElementById("IDNumber").value;
   const data = {
-      'RubixRegisterUserID': '71'
+      'RubixRegisterUserID': this.props.rubixUserID,
   };
   for (let i=0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -117,7 +112,7 @@ class NextOfKin extends React.Component {
   console.log(data)
   const postData = async() => {
 
-      if (this.Validate()){
+      if (this.Validate() && idNumber != this.props.studentIDNo){
           await axios.post('http://197.242.69.18:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
@@ -125,8 +120,7 @@ class NextOfKin extends React.Component {
           })
               
       } else{
-          
-          console.log("checkValidity ", document.getElementById('nof').checkValidity())
+        alert("Please ensure that you entered all required information")
       }
   }
   postData()
@@ -151,7 +145,6 @@ class NextOfKin extends React.Component {
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
-                
                 <div className="card">
                 <div className="top">
                   <img src="CJ-Logo.png" alt="Lucid" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
@@ -160,7 +153,7 @@ class NextOfKin extends React.Component {
                     <p className="lead">Next of Kin Details</p>
                   </div>
                   <div className="body">
-                    <form id='nof'>
+                    <form id='nof' onSubmit={(e) => this.Submit(e)}>
                       <div className="form-group">
                         <label className="control-label sr-only" >
                         First Name(s):
@@ -171,6 +164,7 @@ class NextOfKin extends React.Component {
                           name='NextOfKinFirstName'
                           placeholder="Enter next of kin name"
                           type="text"
+                          required
                         />
                       </div>
                       <div className="form-group">
@@ -183,6 +177,7 @@ class NextOfKin extends React.Component {
                           name='NextOfKinLastName'
                           placeholder="Enter Next of kin surnme"
                           type="text"
+                          required
                         />
                       </div>
                       <div className="form-group">
@@ -191,8 +186,7 @@ class NextOfKin extends React.Component {
                             </label>
                             <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
                     required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
-                    <br></br>
-                    <div id="error"></div>
+                    <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
                       <div className="form-group">
                         <label className="control-label sr-only" >
@@ -204,6 +198,7 @@ class NextOfKin extends React.Component {
                           name='NextOfKinEmail'
                           placeholder="Enter Next of kin email"
                           type="email"
+                          required
                         />
                       </div>
                       <div className="form-group">
@@ -224,7 +219,8 @@ class NextOfKin extends React.Component {
                           id="NextOfKinEmail"
                           name='NextOfKiniRelationship'
                           placeholder="Enter Next of kin email"
-                          type="email"
+                          type="text"
+                          required
                         />
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
@@ -243,12 +239,14 @@ class NextOfKin extends React.Component {
   }
 }
 
-/* Registration.propTypes = {
+NextOfKin.propTypes = {
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer,  loginReducer }) => ({
+  rubixStudentIDNo: navigationReducer.studentIDNo,
+  rubixUserID: navigationReducer.userID,
   email: loginReducer.email,
   password: loginReducer.password
-}); */
+});
 
-export default NextOfKin;
+export default connect(mapStateToProps, {})(NextOfKin);

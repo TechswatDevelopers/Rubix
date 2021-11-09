@@ -15,8 +15,9 @@ export const ON_PRESS_SIDE_MENU_TAB =
 export const TOGGLE_MENU_ARROW = "navigationReducer/TOGGLE_MENU_ARROW";
 export const TOAST_MESSAGE_LOAD = "navigationReducer/TOAST_MESSAGE_LOAD";
 export const UPDATE_USERID = "navigationReducer/UPDATE_USERID";
-export const UPDATE_PLATFORM = "navigationReducer/UPDATE_USERID";
-export const UPDATE_CLIENTID = "navigationReducer/UPDATE_USERID";
+export const UPDATE_PLATFORM = "navigationReducer/UPDATE_PLATFORM";
+export const UPDATE_CLIENTID = "navigationReducer/UPDATE_CLIENTID";
+export const UPDATE_STUDENTID = "navigationReducer/UPDATE_STUDENTID";
 
 var toggle = false;
 var intervalId = "";
@@ -132,7 +133,16 @@ export const updateClientID = (val)=>(disptch) =>{
   //console.log("Dispatch action is called with value ", val);
   // alert("Hello Monkey");
   disptch({
-    type:UPDATE_PLATFORM,
+    type:UPDATE_CLIENTID,
+    payload: val,
+  })
+};
+
+export const updateStudentID = (val)=>(disptch) =>{
+  //console.log("Dispatch action is called with value ", val);
+  // alert("Hello Monkey");
+  disptch({
+    type:UPDATE_STUDENTID,
     payload: val,
   })
 };
