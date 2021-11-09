@@ -16,7 +16,7 @@ const locations = document.getElementById('location');
 e.preventDefault();
 const form = document.getElementById('addresses');
 const data = {
-    'RubixRegisterUserID': '2745',
+    'RubixRegisterUserID': this.props.rubixUserID,
     'RegisterUserStreetNameAndNumer': street_address,
     'RegisterUserProvince': this.state.prov,
     'RegisterUserCountry': this.state.country,
@@ -49,7 +49,7 @@ postData()
 e.preventDefault();
 const form = document.getElementById('password');
 const data = {
-    'RubixRegisterUserID': '2745'
+    'RubixRegisterUserID': this.props.rubixUserID
 };
 for (let i=0; i < form.elements.length; i++) {
     const elem = form.elements[i];
@@ -66,7 +66,7 @@ console.log(data)
 const postData = async() => {
         await axios.post('http://197.242.69.18:3300/api/RubixResetPassword', data, requestOptions)
         .then(response => {
-            console.log(response)
+            //console.log(response)
             alert(response.data.PostRubixUserData[0].Response)
         })
 }
@@ -89,7 +89,7 @@ postData()
     //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
     // SA ID Number have to be 13 digits, so check the length
     if (idNumber.length != 13 ) {
-        error.append('ID number does not appear to be authentic - input not a valid number.');
+        //error.append('ID number does not appear to be authentic - input not a valid number.');
         correct = false;
     }
 
@@ -111,7 +111,7 @@ postData()
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
     if (!((tempDate.getYear() == idNumber.substring(0, 2)) && (id_month == idNumber.substring(2, 4) - 1) && (id_date == idNumber.substring(4, 6)))) {
-        error.append('ID number does not appear to be authentic - date part not valid. ');
+        //error.append('ID number does not appear to be authentic - date part not valid. ');
         correct = false;
     }
 
@@ -137,12 +137,15 @@ postData()
         multiplier = (multiplier % 2 == 0) ? 1 : 2;
     }
     if ((checkSum % 10) != 0) {
-        error.append('ID number does not appear to be authentic - check digit is not valid');
+        //error.append('ID number does not appear to be authentic - check digit is not valid');
         correct = false;
     }
     if (correct) {
         // and put together a result message
         //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
+    } else {
+      alert("Invalid ID Number, please correct ID Number and try again")
+      this.setState({errorMessage: "Invalid ID Number, please enter a valid ID Number"})
     }
     return correct
 }
@@ -208,6 +211,7 @@ postData()
         newPic: false,
         base64Image: null,
         imgUpload: null,
+        errorMessage: null,
         payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
         value: 0
 
@@ -433,7 +437,7 @@ postData()
                   type='number'
                 />
                 <br></br>
-                    <div id="error"></div>
+                    <div id="error">{this.state.errorMessage}</div>
               </div>
             </div>
             <div className="col-lg-6 col-md-12">
