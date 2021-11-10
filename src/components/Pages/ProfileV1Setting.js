@@ -347,6 +347,7 @@ postData()
                  alt="cannot display"
                  accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
+                width='150px'
                 src= {this.state.profile.UserProfileImage} />
             </div>
             <div className="media-body">
