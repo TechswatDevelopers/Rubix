@@ -125,6 +125,7 @@ class PersonalInformation extends React.Component {
             .then(response => {
                 console.log(response)
                 this.props.updateStudentID(idNumber)
+                this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.history.push("/addresses")
             })
                 

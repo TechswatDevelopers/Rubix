@@ -218,7 +218,7 @@ class NextOfKin extends React.Component {
                           className="form-control"
                           id="NextOfKinEmail"
                           name='NextOfKiniRelationship'
-                          placeholder="Enter Next of kin email"
+                          placeholder="Enter Next of kin relation to you"
                           type="text"
                           required
                         />

@@ -26,7 +26,7 @@ class Addresses extends React.Component {
       const locations = document.getElementById('location');
     const street_address = this.state.location['value']['structured_formatting']['main_text']
     const data = {
-        'RubixRegisterUserID': '78',
+        'RubixRegisterUserID': this.props.rubixUserID,
         'RegisterUserStreetNameAndNumer': street_address,
         'RegisterUserProvince': this.state.prov,
         'RegisterUserCountry': this.state.country,
@@ -77,8 +77,6 @@ async componentDidMount(){
         await fetch('http://192.168.88.10:3300/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
-            //this.state.provList = data.data
             this.setState({provList: data.data})
             //console.log("this is the provList:", this.state.provList)
             //setProvList(data.data)
@@ -211,12 +209,14 @@ placeholder: "Enter your home Address"
   }
 }
 
-/* PersonalInformation.propTypes = {
+Addresses.propTypes = {
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
+const mapStateToProps = ({navigationReducer, loginReducer }) => ({
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+  rubixUserID: navigationReducer.userID,
 });
- */
-export default Addresses;
+
+export default connect(mapStateToProps, {
+})(Addresses);
