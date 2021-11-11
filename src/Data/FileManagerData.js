@@ -17,15 +17,19 @@ import Image15 from "../assets/images/image-gallery/15.jpg";
 export const fileFolderCardData = [
   {
     Header: "ID Document",
+    file: "test.pdf"
   },
   {
     Header: "Proof of Residence",
+    file: "test2.pdf"
   },
   {
     Header: "University Registration",
+    file: "test.pdf"
   },
   {
     Header: "Next of Kin ID",
+    file: "test2.pdf"
   },
 ];
 

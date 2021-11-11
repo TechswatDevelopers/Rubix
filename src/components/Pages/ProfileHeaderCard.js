@@ -12,7 +12,7 @@ class ProfileHeaderCard extends React.Component {
           </div>
           <div>
             <h4 className="m-b-0">
-              <strong>Alizee</strong> Thomas
+              <strong>Samkelo</strong> Zondi
             </h4>
             <span>Washington, d.c.</span>
           </div>

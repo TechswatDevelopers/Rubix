@@ -5,7 +5,7 @@ import Logo from "../../assets/images/logo-white.svg";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
-import {updateEmail, updatePassword, updateUserID, updatePlatformID } from "../../actions";
+import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateStudentID } from "../../actions";
 
 class PersonalInformation extends React.Component {
   constructor(props) {
@@ -96,7 +96,8 @@ class PersonalInformation extends React.Component {
 //final submit check
  Submit(e){
     e.preventDefault();
-    console.log("User email:", this.props.email)
+    //console.log("User email:", this.props.email)
+    var idNumber = document.getElementById("IDNumber").value;
     const form = document.getElementById('register');
     const data = {
         'RegisterStatus': 'Pending',
@@ -123,6 +124,7 @@ class PersonalInformation extends React.Component {
             await axios.post('http://192.168.88.10:3300/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 console.log(response)
+                this.props.updateStudentID(idNumber)
                 this.props.history.push("/addresses")
             })
                 
@@ -244,7 +246,6 @@ class PersonalInformation extends React.Component {
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})} />
                       </div>
-
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           Your Student Number
@@ -301,6 +302,7 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
  
 export default connect(mapStateToProps, {
   updateUserID,
+  updateStudentID,
   updatePlatformID,
   updatePassword,
   updateEmail,

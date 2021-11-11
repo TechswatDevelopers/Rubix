@@ -3,11 +3,84 @@ import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
 import { Tabs, Tab } from "react-bootstrap";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
+import ResidenceInformation from "../../components/Pages/ResInformation";
 import DocumentManager from "../../components/Pages/documentsSetting";
+import axios from "axios";
+import FileFolderCard from "../../components/FileManager/FileFolderCard";
+import FileStorageCard from "../../components/FileManager/FileStorageCard";
+import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
+import {
+  fileFolderCardData,
+  fileStorageStatusCardData,
+  areaChartFileReport,
+} from "../../Data/FileManagerData";
+import { Document, Page, pdfjs  } from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 class ProfileV1Page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      residence: {},
+      doc: '',
+    }
+  }
   componentDidMount() {
     window.scrollTo(0, 0);
+   /*  const fetchData = async() =>{
+      //Get Rubix User Residence Details
+            await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/2747')
+        .then(response => response.json())
+        .then(data => {
+            this.setState({residence: data})
+            fetchDocumentsData()
+            });
+        };
+        fetchData() */
+
+        const fetchDocumentsData = async() =>{
+          console.log("Residence data is:", this.state.residence)
+          const data2 = {
+            'RubixRegisterUserID': '111111',
+            'FileType' : "id-document"
+        }
+        const requestOptions2 = {
+          title: 'Student Residense Details',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: data2
+      };
+      
+             //Get Rubix User Documents Details
+     await axios.post('http://192.168.88.10:3300/api/RubixGetImages', data2, requestOptions2)
+     .then(response => {
+         console.log("Documents details:",response)
+         this.setState({doc: response.data.PostRubixUserData[0]})
+     }) 
+        };
+/* 
+        fetchDocumentsData()
+        const fetchResidenceData = async() =>{
+          const data2 = {
+            'RubixRegisterUserID': '2747',
+        }
+        const requestOptions2 = {
+          title: 'Student Residense Details',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: data2
+      };
+      
+             //Get Rubix User Documents Details
+     await axios.post('http://192.168.88.10:3300/api/RubixStudentResDetails', data2, requestOptions2)
+     .then(response => {
+         console.log("Residence details:",response)
+         //this.setState({doc: response.data.PostRubixUserData[0]})
+
+     }) 
+        }; */
+        //fetchDocumentsData()
   }
   render() {
     return (
@@ -139,74 +212,49 @@ class ProfileV1Page extends React.Component {
                         <div className="row clearfix">
                           <div className="col-lg-6 col-md-12">
                             <div className="body">
-                              <h6>Your Login Sessions</h6>
+                              <h6>My Residence Information</h6>
                               <ul className="list-unstyled list-login-session">
+                               
                                 <li>
                                   <div className="login-session">
-                                    <i className="fa fa-laptop device-icon"></i>
                                     <div className="login-info">
                                       <h3 className="login-title">
-                                        Mac - New York, United States
+                                        University - {this.state.residence.ResidenceUniversity}
                                       </h3>
-                                      <span className="login-detail">
-                                        Chrome -{" "}
-                                        <span className="text-success">
-                                          Active Now
-                                        </span>
-                                      </span>
+                                      
                                     </div>
+                                   
                                   </div>
                                 </li>
                                 <li>
                                   <div className="login-session">
-                                    <i className="fa fa-desktop device-icon"></i>
                                     <div className="login-info">
                                       <h3 className="login-title">
-                                        Windows 10 - New York, United States
+                                        Residence Name - {this.state.residence.ResidenceName}
                                       </h3>
                                       <span className="login-detail">
-                                        Firefox - about an hour ago
+                                      {this.state.residence.ResidenceLocation}
                                       </span>
-                                    </div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-link btn-logout"
-                                      data-container="body"
-                                      data-toggle="tooltip"
-                                      title=""
-                                      data-original-title="Close this login session"
-                                    >
-                                      <i className="fa fa-times-circle text-danger"></i>
-                                    </button>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="login-session">
-                                    <i className="fa fa-mobile fa-fw device-icon"></i>
-                                    <div className="login-info">
-                                      <h3 className="login-title">
-                                        Android - New York, United States
-                                      </h3>
+                                      <br></br>
                                       <span className="login-detail">
-                                        Android Browser - yesterday
+                                      Building number: {this.state.residence.BuildingNumber}
+                                      </span>
+                                      <br></br>
+                                      <span className="login-detail">
+                                      Floor: {this.state.residence.FloorNumber}
+                                      </span>
+                                      <br></br>
+                                      <span className="login-detail">
+                                      Room:{this.state.residence.RoomNumber}
                                       </span>
                                     </div>
-                                    <button
-                                      type="button"
-                                      className="btn btn-link btn-logout"
-                                      data-container="body"
-                                      data-toggle="tooltip"
-                                      title=""
-                                      data-original-title="Close this login session"
-                                    >
-                                      <i className="fa fa-times-circle text-danger"></i>
-                                    </button>
+                                   
                                   </div>
                                 </li>
                               </ul>
                             </div>
                           </div>
-                          <div className="col-lg-6 col-md-12">
+                          {/* <div className="col-lg-6 col-md-12">
                             <div className="body">
                               <h6>Connected Social Media</h6>
                               <ul className="list-unstyled list-connected-app">
@@ -282,11 +330,64 @@ class ProfileV1Page extends React.Component {
                                 </li>
                               </ul>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </Tab>
                       <Tab eventKey="documents" title="Documents">
-                        <DocumentManager />
+                        {/* <DocumentManager /> */}
+
+
+                        <div
+        style={{ flex: 1 }}
+        onClick={() => {
+          document.body.classList.remove("offcanvas-active");
+        }}
+      >
+        <div>
+          <div className="container-fluid">
+            <div className="row clearfix">
+              {fileFolderCardData.map((data, index) => {
+                return <FileFolderCard key={index} HeaderText={data.Header} onClick={()=>this.changeDocument(data.file)}/>;
+              })}
+            </div>
+            <div className="row clearfix">
+              <div className="col-lg-3 col-md-5 col-sm-12">
+                <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
+                {fileStorageStatusCardData.map((data, index) => {
+                  return (
+                    <FileStorageStatusCard
+                      key={index + "sidjpidj"}
+                      TotalSize={data.TotalSize}
+                      UsedSize={data.UsedSize}
+                      Type={data.Type}
+                      UsedPer={data.UsedPer}
+                      ProgressBarClass={`${data.ProgressBarClass}`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="col-lg-9 col-md-7 col-sm-12">
+                {/* <LineChartCard
+                  HeaderText="View File"
+                  ChartOption={areaChartFileReport}
+                /> */}
+                <div className="pdf-div">
+          <Document
+            file= {{url:"data:application/pdf;base64," + this.state.doc.Document}} //{this.state.document.file}
+            onLoadSuccess={this.onDocumentLoadSuccess}
+          >
+            <Page pageNumber={this.state.pageNumber} />
+          </Document>
+          <nav>
+          <button onClick={this.goToPrevPage}>Prev</button>
+          <button onClick={this.goToNextPage}>Next</button>
+        </nav>
+        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
                       </Tab>
                     </Tabs>
                   </div>

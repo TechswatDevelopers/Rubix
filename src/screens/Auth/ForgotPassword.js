@@ -25,7 +25,6 @@ class ForgotPassword extends React.Component {
     };
     console.log(data)
     const postData = async() => {
-          
               await axios.post('http://192.168.88.10:3300/api/RubixForgetPasswordEmail', data, requestOptions)
             .then(response => {
                 console.log(response)

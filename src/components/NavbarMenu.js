@@ -28,14 +28,27 @@ import Avatar3 from "../assets/images/xs/avatar3.jpg";
 class NavbarMenu extends React.Component {
   state = {
     linkupdate: false,
+    profile: {},
   };
   componentDidMount() {
-    this.props.tostMessageLoad(true);
+    this.props.tostMessageLoad(false);
     var res = window.location.pathname;
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
     this.activeMenutabwhenNavigate("/" + activeKey);
+
+    //Fetch data from DB
+    const fetchData = async() =>{
+    //Get Rubix User Details
+    await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/' + this.props.userID   /*  + this.props.rubixUserID */)
+    .then(response => response.json())
+    .then(data => {
+        this.setState({profile: data})
+        //console.log("image url", this.state.profile)
+        });
+      };
+      fetchData();
   }
 
   activeMenutabwhenNavigate(activeKey) {
@@ -190,19 +203,19 @@ class NavbarMenu extends React.Component {
             <div className="navbar-brand">
               <a href="dashboard">
                 <img
-                  src={
+                  src="CJ-Logo.png"/* {
                     document.body.classList.contains("full-dark")
                       ? LogoWhite
                       : Logo
-                  }
-                  alt="Lucid Logo"
+                  } */
+                  alt="CJ Students Logo"
                   className="img-responsive logo"
                 />
               </a>
             </div>
 
             <div className="navbar-right">
-              <form id="navbar-search" className="navbar-form search-form">
+              {/* <form id="navbar-search" className="navbar-form search-form">
                 <input
                   className="form-control"
                   placeholder="Search here..."
@@ -211,7 +224,7 @@ class NavbarMenu extends React.Component {
                 <button type="button" className="btn btn-default">
                   <i className="icon-magnifier"></i>
                 </button>
-              </form>
+              </form> */}
 
               <div id="navbar-menu">
                 <ul className="nav navbar-nav">
@@ -231,17 +244,17 @@ class NavbarMenu extends React.Component {
                       <i className="icon-calendar"></i>
                     </a>
                   </li>
-                  <li>
+                  {/* <li>
                     <a href="appchat" className="icon-menu d-none d-sm-block">
                       <i className="icon-bubbles"></i>
                     </a>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <a href="appinbox" className="icon-menu d-none d-sm-block">
                       <i className="icon-envelope"></i>
                       <span className="notification-dot"></span>
                     </a>
-                  </li>
+                  </li> */}
                   <li
                     className={
                       toggleNotification ? "show dropdown" : "dropdown"
@@ -411,11 +424,15 @@ class NavbarMenu extends React.Component {
           </div>
         </nav>
 
+
+
+{//Left Side Bar
+}
         <div id="left-sidebar" className="sidebar" style={{ zIndex: 9 }}>
           <div className="sidebar-scroll">
             <div className="user-account">
               <img
-                src={UserImage}
+                src={this.state.profile.UserProfileImage}
                 className="rounded-circle user-photo"
                 alt="User Profile Picture"
               />
@@ -427,11 +444,11 @@ class NavbarMenu extends React.Component {
                   id="dropdown-basic"
                   className="user-name"
                 >
-                  <strong>Alizee Thomas</strong>
+                  <strong>{this.state.profile.Name} {this.state.profile.Surname}</strong>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className="dropdown-menu-right account">
-                  <Dropdown.Item href="profilev2page">
+                  <Dropdown.Item href="profilev1page">
                     <i className="icon-user"></i>My Profile
                   </Dropdown.Item>
                   <Dropdown.Item href="appinbox">
@@ -450,7 +467,7 @@ class NavbarMenu extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
               <hr />
-              <ul className="row list-unstyled">
+              {/* <ul className="row list-unstyled">
                 <li className="col-4">
                   <small>Sales</small>
                   <h6>456</h6>
@@ -463,7 +480,7 @@ class NavbarMenu extends React.Component {
                   <small>Revenue</small>
                   <h6>$2.13B</h6>
                 </li>
-              </ul>
+              </ul> */}
             </div>
             <ul className="nav nav-tabs">
               <li className="nav-item">
@@ -1549,6 +1566,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     menuProfileDropdown,
     sideMenuTab,
     isToastMessage,
+    userID,
   } = navigationReducer;
   return {
     addClassactive,
@@ -1565,6 +1583,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     addClassactiveChildChart,
     addClassactiveChildMaps,
     themeColor,
+    userID,
     generalSetting,
     toggleNotification,
     toggleEqualizer,

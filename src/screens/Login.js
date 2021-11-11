@@ -43,9 +43,9 @@ class Login extends React.Component {
               await axios.post('http://192.168.88.10:3300/api/RubixLogin', data, requestOptions)
               .then(response => {
                   console.log(response)
-                  if(response.data['0']['Response'] == 1){
-                    this.props.updateUserID(response.data['0']['RubixRegisterUserID'])
-                    this.props.history.push("dashboard")
+                  if(response.data.PostRubixUserData['0']['Response'] == 1){
+                    this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    this.props.history.push("profilev1page")
                   } else {
                     this.props.history.push("/" )
                     error.append("Login failed, email/password incorrect.")
@@ -174,12 +174,6 @@ class Login extends React.Component {
                           required = ''
                         />
                       </div>
-                      {/* <div className="form-group clearfix">
-                        <label className="fancy-checkbox element-left">
-                          <input type="checkbox" />
-                          <span>Remember me</span>
-                        </label>
-                      </div> */}
                       <p id="error"></p>
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
                       <p className="helper-text m-b-10 bottom">Or Login Using:</p>
@@ -226,10 +220,10 @@ class Login extends React.Component {
                           <a href="registration" >Register</a>
                         </span>
 
-                        <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>
+                        {/* <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>
                         <br></br>
                   <button type="button" onClick={()=>{this.props.onPressThemeColor("orange"); this.props.history.push("/registration")}}>Login with Opal</button>
-                      </div>
+                       */}</div>
                     </div>
                   </div>
                 </div>

@@ -254,27 +254,27 @@ postData()
     const fetchData = async() =>{
 
       //Get Rubix User Details
-      await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/2745')
+      await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/' + this.props.rubixUserID)
       .then(response => response.json())
       .then(data => {
           this.setState({profile: data})
-          console.log("image url", data.UserProfileImage)
+          //console.log("image url", data.UserProfileImage)
           });
 
           //Get Rubix User University Details
-      await fetch('http://192.168.88.10:3300/api/RubixRegisterUserUniversityDetails/71')
+      await fetch('http://192.168.88.10:3300/api/RubixRegisterUserUniversityDetails/' + this.props.rubixUserID)
       .then(response => response.json())
       .then(data => {
-          console.log("my uni data is ", data)
+          //console.log("my uni data is ", data)
           this.setState({university: data})
           });
 
 
           //Get Rubix User Address Details
-      await fetch('http://192.168.88.10:3300/api/RubixRegisterUserAddesss/2745')
+      await fetch('http://192.168.88.10:3300/api/RubixRegisterUserAddesss/' + this.props.rubixUserID)
       .then(response => response.json())
       .then(data => {
-          console.log("data is ", data)
+          //console.log("data is ", data)
           this.setState({address: data})
           this.setState({addressProv: data.RegisterUserProvince})
           this.setState({addressCountry: data.RegisterUserCountry})
@@ -347,6 +347,7 @@ postData()
                  alt="cannot display"
                  accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
+                width="150px"
                 src= {this.state.profile.UserProfileImage} />
             </div>
             <div className="media-body">
