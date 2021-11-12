@@ -35,29 +35,29 @@ export const fileFolderCardData = [
 
 export const fileStorageStatusCardData = [
   {
-    UsedSize: "2gb",
+    UsedSize: "ID Document",
     Type: "Documents",
     TotalSize: "1tb",
-    UsedPer: 18,
+    UsedPer: 50,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
-  {
+  /* {
     UsedSize: "10gb",
     Type: "Media",
     TotalSize: "1tb",
     UsedPer: 25,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-purple mb-0",
-  },
-  {
+  }, */
+  /* {
     UsedSize: "20gb",
     Type: "Images",
     TotalSize: "1tb",
     UsedPer: 67,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
-  },
+  }, */
 ];
 
 export const areaChartFileReport = {

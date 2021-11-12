@@ -41,7 +41,7 @@ class NavbarMenu extends React.Component {
     //Fetch data from DB
     const fetchData = async() =>{
     //Get Rubix User Details
-    await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/' + this.props.userID   /*  + this.props.rubixUserID */)
+    await fetch(' http://197.242.69.18:3300/api/RubixRegisterUsers/2756' /*  + this.props.rubixUserID */)
     .then(response => response.json())
     .then(data => {
         this.setState({profile: data})
@@ -118,7 +118,7 @@ class NavbarMenu extends React.Component {
       activeKey === "/testimonials" ||
       activeKey === "/faqs"
     ) {
-      this.activeMenutabContainer("PagesContainer");
+    //  this.activeMenutabContainer("PagesContainer");
     } else if (
       activeKey === "/formvalidation" ||
       activeKey === "/basicelements"
@@ -139,7 +139,7 @@ class NavbarMenu extends React.Component {
   //   })
   // }
 
-  activeMenutabContainer(id) {
+  /* activeMenutabContainer(id) {
     var parents = document.getElementById("main-menu");
     var activeMenu = document.getElementById(id);
 
@@ -153,7 +153,7 @@ class NavbarMenu extends React.Component {
       activeMenu.classList.toggle("active");
       activeMenu.children[1].classList.toggle("in");
     }, 10);
-  }
+  } */
   render() {
     const {
       addClassactive,
@@ -215,17 +215,7 @@ class NavbarMenu extends React.Component {
             </div>
 
             <div className="navbar-right">
-              {/* <form id="navbar-search" className="navbar-form search-form">
-                <input
-                  className="form-control"
-                  placeholder="Search here..."
-                  type="text"
-                />
-                <button type="button" className="btn btn-default">
-                  <i className="icon-magnifier"></i>
-                </button>
-              </form> */}
-
+            
               <div id="navbar-menu">
                 <ul className="nav navbar-nav">
                   <li>
@@ -244,17 +234,6 @@ class NavbarMenu extends React.Component {
                       <i className="icon-calendar"></i>
                     </a>
                   </li>
-                  {/* <li>
-                    <a href="appchat" className="icon-menu d-none d-sm-block">
-                      <i className="icon-bubbles"></i>
-                    </a>
-                  </li> */}
-                  {/* <li>
-                    <a href="appinbox" className="icon-menu d-none d-sm-block">
-                      <i className="icon-envelope"></i>
-                      <span className="notification-dot"></span>
-                    </a>
-                  </li> */}
                   <li
                     className={
                       toggleNotification ? "show dropdown" : "dropdown"
@@ -482,7 +461,7 @@ class NavbarMenu extends React.Component {
                 </li>
               </ul> */}
             </div>
-            <ul className="nav nav-tabs">
+            {/* <ul className="nav nav-tabs">
               <li className="nav-item">
                 <a
                   className={sideMenuTab[0] ? "nav-link active" : "nav-link"}
@@ -527,7 +506,9 @@ class NavbarMenu extends React.Component {
                   <i className="icon-question"></i>
                 </a>
               </li>
-            </ul>
+            </ul> */}
+
+{/* 
             <div className="tab-content p-l-0 p-r-0">
               <div
                 className={sideMenuTab[0] ? "tab-pane active show" : "tab-pane"}
@@ -1516,7 +1497,7 @@ class NavbarMenu extends React.Component {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

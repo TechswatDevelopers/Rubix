@@ -23,26 +23,29 @@ class ProfileV1Page extends React.Component {
     super(props);
     this.state = {
       residence: {},
-      doc: '',
+      numPages: null,
+      pageNumber: 1,
+      imgUpload: null,
+      doc: {},
     }
   }
   componentDidMount() {
     window.scrollTo(0, 0);
-   /*  const fetchData = async() =>{
+    const fetchData = async() =>{
       //Get Rubix User Residence Details
-            await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/2747')
+            await fetch(' http://192.168.88.10:3300/api/RubixStudentResDetails/' + this.props.rubixUserID)
         .then(response => response.json())
         .then(data => {
             this.setState({residence: data})
             fetchDocumentsData()
             });
         };
-        fetchData() */
+        fetchData()
 
         const fetchDocumentsData = async() =>{
           console.log("Residence data is:", this.state.residence)
           const data2 = {
-            'RubixRegisterUserID': '111111',
+            'RubixRegisterUserID': this.props.rubixUserID, //'2356',
             'FileType' : "id-document"
         }
         const requestOptions2 = {
@@ -53,7 +56,7 @@ class ProfileV1Page extends React.Component {
       };
       
              //Get Rubix User Documents Details
-     await axios.post('http://192.168.88.10:3300/api/RubixGetImages', data2, requestOptions2)
+     await axios.post(' http://192.168.88.10:3300/api/RubixGetImages', data2, requestOptions2)
      .then(response => {
          console.log("Documents details:",response)
          this.setState({doc: response.data.PostRubixUserData[0]})
@@ -82,6 +85,60 @@ class ProfileV1Page extends React.Component {
         }; */
         //fetchDocumentsData()
   }
+
+   //Page navigation functions
+   goToPrevPage = () =>
+   this.setState(state => ({ pageNumber: state.pageNumber - 1 }));
+ goToNextPage = () =>
+   this.setState(state => ({ pageNumber: state.pageNumber + 1 }));
+
+ //Switch to different Document
+ changeDocument = (file) => {
+   this.setState(state => ({ document: {file: file}}));
+ }
+
+ postFile(e) {
+  //console.log("I am called")
+  var file = e.target.files[0]
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      this.setState({
+        imgUpload: reader.result
+      })
+      postDocument()
+      
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    }
+    console.log("This is the img:", reader.result)
+
+  const postDocument = async() =>{
+    const data = {
+      'RubixRegisterUserID': this.props.rubixUserID, //'2356',
+      'FileType': 'university-reg',
+      'image': this.state.imgUpload,
+      'imageUrl': 'sent from frontend',
+      'FileName': file.name,
+      'FileExtension': file.type,
+      'FileSize': file.size
+  };
+  const requestOptions = {
+    title: 'Student Document Upload',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept':  'application/json'},
+    body: data
+};
+//console.log('File being sent:', file)
+console.log('Information sent:', data)
+await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requestOptions)
+                .then(response => {
+                    console.log("Upload details:",response)
+                    //this.setState({residence: response.data.PostRubixUserData[0]})
+                }) 
+  };
+}
   render() {
     return (
       <div
@@ -334,9 +391,6 @@ class ProfileV1Page extends React.Component {
                         </div>
                       </Tab>
                       <Tab eventKey="documents" title="Documents">
-                        {/* <DocumentManager /> */}
-
-
                         <div
         style={{ flex: 1 }}
         onClick={() => {
@@ -355,7 +409,7 @@ class ProfileV1Page extends React.Component {
                 <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
                 {fileStorageStatusCardData.map((data, index) => {
                   return (
-                    <FileStorageStatusCard
+                   <div> <FileStorageStatusCard
                       key={index + "sidjpidj"}
                       TotalSize={data.TotalSize}
                       UsedSize={data.UsedSize}
@@ -363,8 +417,12 @@ class ProfileV1Page extends React.Component {
                       UsedPer={data.UsedPer}
                       ProgressBarClass={`${data.ProgressBarClass}`}
                     />
+                    </div>
                   );
                 })}
+                <div>
+                <input type="file" buttonText= "Upload Document" onChange={(e)=>{this.postFile(e)}} />
+            </div>
               </div>
               <div className="col-lg-9 col-md-7 col-sm-12">
                 {/* <LineChartCard
