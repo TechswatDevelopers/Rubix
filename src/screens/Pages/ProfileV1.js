@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
-import { Tabs, Tab } from "react-bootstrap";
+import { Tabs, Tab, Row, Col } from "react-bootstrap";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
 import ResidenceInformation from "../../components/Pages/ResInformation";
 import DocumentManager from "../../components/Pages/documentsSetting";
@@ -31,9 +31,10 @@ class ProfileV1Page extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+    const userID = localStorage.getItem('userID');
     const fetchData = async() =>{
       //Get Rubix User Residence Details
-            await fetch(' http://192.168.88.10:3300/api/RubixStudentResDetails/' + this.props.rubixUserID)
+            await fetch(' http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
         .then(response => response.json())
         .then(data => {
             this.setState({residence: data})
@@ -139,6 +140,30 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
                 }) 
   };
 }
+
+//Change displayed document
+changeDocument(keySTring){
+//Set Up Post Request Data
+  const data2 = {
+    'RubixRegisterUserID': this.props.rubixUserID, //'2356',
+    'FileType' : keySTring
+}
+const requestOptions2 = {
+  title: 'Student Residense Details',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: data2
+};
+const fetchData = async() =>{
+  //Get Rubix User Documents Details
+  await axios.post(' http://192.168.88.10:3300/api/RubixGetImages', data2, requestOptions2)
+  .then(response => {
+      console.log("Documents details:",response)
+      this.setState({doc: response.data.PostRubixUserData[0]})
+  })
+}
+fetchData()
+}
   render() {
     return (
       <div
@@ -156,6 +181,14 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
                 { name: "Profile V1", navigate: "" },
               ]}
             />
+            <div
+              className="progress-bar progress-bar-warning"
+              data-transitiongoal={`90`}
+              aria-valuenow={`90`}
+              style={{ width: `90%` }}
+            >
+              Profile is 90% complete
+            </div>
             <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
@@ -399,11 +432,26 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
       >
         <div>
           <div className="container-fluid">
-            <div className="row clearfix">
+          <Row>
+                  <Col>
+                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("id-document")}><i className="fa fa-folder m-r-10"></i>ID Document</button>
+                  </Col>
+                  <Col>
+                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("proof-of-res")}><i className="fa fa-folder m-r-10"></i>Proof of Residence</button>
+                  </Col>
+                  <Col>
+                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("proof-of-reg")}><i className="fa fa-folder m-r-10"></i>Proof of Registration</button>
+                  </Col>
+                  <Col>
+                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("next-of-kin")}><i className="fa fa-folder m-r-10"></i>Next of Kin ID</button>
+                  </Col>
+                </Row>
+                
+            {/* <div className="row clearfix">
               {fileFolderCardData.map((data, index) => {
                 return <FileFolderCard key={index} HeaderText={data.Header} onClick={()=>this.changeDocument(data.file)}/>;
               })}
-            </div>
+            </div> */}
             <div className="row clearfix">
               <div className="col-lg-3 col-md-5 col-sm-12">
                 <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
@@ -411,9 +459,8 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
                   return (
                    <div> <FileStorageStatusCard
                       key={index + "sidjpidj"}
-                      TotalSize={data.TotalSize}
                       UsedSize={data.UsedSize}
-                      Type={data.Type}
+                      Type={data.status}
                       UsedPer={data.UsedPer}
                       ProgressBarClass={`${data.ProgressBarClass}`}
                     />
@@ -421,7 +468,7 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
                   );
                 })}
                 <div>
-                <input type="file" buttonText= "Upload Document" onChange={(e)=>{this.postFile(e)}} />
+                <input type="file" onChange={(e)=>{this.postFile(e)}} />
             </div>
               </div>
               <div className="col-lg-9 col-md-7 col-sm-12">

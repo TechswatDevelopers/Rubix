@@ -33,6 +33,7 @@ class NavbarMenu extends React.Component {
   componentDidMount() {
     this.props.tostMessageLoad(false);
     var res = window.location.pathname;
+    const userID = localStorage.getItem('userID');
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
@@ -41,7 +42,7 @@ class NavbarMenu extends React.Component {
     //Fetch data from DB
     const fetchData = async() =>{
     //Get Rubix User Details
-    await fetch(' http://197.242.69.18:3300/api/RubixRegisterUsers/2756' /*  + this.props.rubixUserID */)
+    await fetch(' http://192.168.88.10:3300/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
         this.setState({profile: data})

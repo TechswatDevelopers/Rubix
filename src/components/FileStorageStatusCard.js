@@ -12,7 +12,7 @@ class FileStorageStatusCard extends React.Component {
           <h6>{UsedSize}</h6>
           <p className="mb-0">
             {Type}{" "}
-            <small className="text-muted float-right">of {TotalSize}</small>
+            <small className="text-muted float-right">{TotalSize}</small>
           </p>
         </div>
         <div className={ProgressBarClass}>

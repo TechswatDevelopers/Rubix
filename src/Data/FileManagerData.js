@@ -37,6 +37,7 @@ export const fileStorageStatusCardData = [
   {
     UsedSize: "ID Document",
     Type: "Documents",
+    status: "Pending",
     TotalSize: "1tb",
     UsedPer: 50,
     ProgressBarClass:

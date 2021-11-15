@@ -45,6 +45,7 @@ class Login extends React.Component {
                   console.log(response)
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     this.props.history.push("profilev1page")
                   } else {
                     this.props.history.push("/" )
@@ -79,6 +80,7 @@ class Login extends React.Component {
         console.log("checking data",response.data)
           if(response.data['0']['Response'] == 1){
             console.log("This is the data:", response.data)
+            localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
             this.props.history.push("dashboard" )
           } else {
             this.props.history.push("/" )
