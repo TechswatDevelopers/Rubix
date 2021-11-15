@@ -53,7 +53,7 @@ class VarsityDetails extends React.Component {
         };
         console.log(data)
         const postData = async()=>{
-            if (this.state.prov !=null && this.state.uni !=null && this.state.course !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
+            if (this.state.prov !=null && this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
@@ -178,15 +178,14 @@ async componentDidMount(){
                         <label className="control-label sr-only" >
                         Courses:
                             </label>
-                            {  
-        <select className="form-control" onChange={(e)=>this.setState({course: e.target.value})} value={this.state.course}>
-        {
-            
-            this.state.courseList.map((course, index)=> (
-            <option key={index} name='CourseID' value = {course.RubixCourseID}>{course.CourseName}</option>
-        ))   
-        }
-    </select> }
+                            <input
+                          className="form-control"
+                          id="CourseID"
+                          name='CourseID'
+                          placeholder="Enter your course name"
+                          type="text"
+                          required
+                        />
                       </div>
 
                       <div className="form-group">

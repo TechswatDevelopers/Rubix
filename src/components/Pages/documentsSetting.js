@@ -63,6 +63,7 @@ class DocumentManager extends React.Component {
   changeDocument = (file) => {
     this.setState(state => ({ document: {file: file}}));
   }
+  //
   render() {
     return (
       <div

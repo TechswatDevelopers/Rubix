@@ -125,6 +125,7 @@ class PersonalInformation extends React.Component {
             .then(response => {
                 console.log(response)
                 this.props.updateStudentID(idNumber)
+                localStorage.setItem('studentIDNo', idNumber)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.history.push("/addresses")
             })
@@ -272,7 +273,6 @@ class PersonalInformation extends React.Component {
                           type="text"
                           //defaultValue='none'
                           onChange ={(e)=>this.setState({medicalConditions: e.target.value})}
-                          required
                         />
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>

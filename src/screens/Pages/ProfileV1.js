@@ -9,6 +9,7 @@ import axios from "axios";
 import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
+import SignatureCanvas from 'react-signature-canvas'
 import {
   fileFolderCardData,
   fileStorageStatusCardData,
@@ -26,45 +27,38 @@ class ProfileV1Page extends React.Component {
       numPages: null,
       pageNumber: 1,
       imgUpload: null,
+      selectedFile: null,
+      keyString: 'id-document',
+      myUserID: null,
       doc: {},
     }
   }
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
+    
     const fetchData = async() =>{
+       //Get documents from DB
+       await fetch('http://192.168.88.10:3001/feed/post/' + userID)
+       .then(response => response.json())
+       .then(data => {
+         console.log("calleed")
+         console.log("documents data:", data)
+         this.setState({doc: data.post[0]})
+           });
+
       //Get Rubix User Residence Details
-            await fetch(' http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
+            await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
         .then(response => response.json())
         .then(data => {
             this.setState({residence: data})
-            fetchDocumentsData()
             });
+
+           
         };
         fetchData()
-
-        const fetchDocumentsData = async() =>{
-          console.log("Residence data is:", this.state.residence)
-          const data2 = {
-            'RubixRegisterUserID': this.props.rubixUserID, //'2356',
-            'FileType' : "id-document"
-        }
-        const requestOptions2 = {
-          title: 'Student Residense Details',
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: data2
-      };
-      
-             //Get Rubix User Documents Details
-     await axios.post(' http://192.168.88.10:3300/api/RubixGetImages', data2, requestOptions2)
-     .then(response => {
-         console.log("Documents details:",response)
-         this.setState({doc: response.data.PostRubixUserData[0]})
-     }) 
-        };
   }
-
    //Page navigation functions
    goToPrevPage = () =>
    this.setState(state => ({ pageNumber: state.pageNumber - 1 }));
@@ -76,6 +70,7 @@ class ProfileV1Page extends React.Component {
    this.setState(state => ({ document: {file: file}}));
  }
 
+ //Post file using SQL
  postFile(e) {
   //console.log("I am called")
   var file = e.target.files[0]
@@ -96,7 +91,7 @@ class ProfileV1Page extends React.Component {
   const postDocument = async() =>{
     const data = {
       'RubixRegisterUserID': this.props.rubixUserID, //'2356',
-      'FileType': 'university-reg',
+      'FileType': this.state.keyString,
       'image': this.state.imgUpload,
       'imageUrl': 'sent from frontend',
       'FileName': file.name,
@@ -119,11 +114,41 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
   };
 }
 
+//Post File Using Mongo
+onPressUpload(e) {
+  var file = e.target.files[0]
+  //console.log("selected file is:", file)
+  this.setState({selectedFile: file})
+  const postDocument = async() =>{
+    const data = new FormData()
+    data.append('image', file)
+    data.append('FileType', 'id-document')
+    data.append('RubixRegisterUserID', this.state.myUserID)
+    const requestOptions = {
+      title: 'Student Document Upload',
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data',},
+      body: data
+  };
+  for (var pair of data.entries()) {
+    console.log(pair[0], ', ',pair[1]); 
+}
+await axios.post(' http://192.168.88.10:3001/feed/post?image', data, requestOptions)
+                .then(response => {
+                    console.log("Upload details:",response)
+                    this.setState({mongoID: response.data.post._id})
+                }) 
+  }
+  postDocument()
+}
+
 //Change displayed document
 changeDocument(keySTring){
+  console.log("Fetching document")
+  this.setState({keyString: keySTring})
 //Set Up Post Request Data
   const data2 = {
-    'RubixRegisterUserID': this.props.rubixUserID,
+    'RubixRegisterUserID': this.state.myUserID,
     'FileType' : keySTring
 }
 const requestOptions2 = {
@@ -446,7 +471,7 @@ fetchData()
                   );
                 })}
                 <div>
-                <input type="file" onChange={(e)=>{this.postFile(e)}} />
+                <input type="file" onChange={(e)=>{this.onPressUpload(e)}} />
             </div>
               </div>
               <div className="col-lg-9 col-md-7 col-sm-12">
@@ -456,7 +481,7 @@ fetchData()
                 /> */}
                 <div className="pdf-div">
           <Document
-            file= {{url:"data:application/pdf;base64," + this.state.doc.Document}} //{this.state.document.file}
+            file= {{url: "data:application/pdf;base64," + this.state.doc.image}}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             <Page pageNumber={this.state.pageNumber} />
@@ -471,6 +496,20 @@ fetchData()
           </div>
         </div>
       </div>
+                      </Tab>
+                      <Tab eventKey="signing" title="Lease Agreement">
+                        <div>
+                        <Document
+            file= {{url: "data:application/pdf;base64," + this.state.doc.image}}
+            onLoadSuccess={this.onDocumentLoadSuccess}
+          >
+            <Page pageNumber={this.state.pageNumber} />
+          </Document>
+          <p>To agree to the above document, please enter your signature:</p>
+          <div><SignatureCanvas penColor='green'
+    canvasProps={{width: 500, height: 200, className: 'sigCanvas'}} /></div>,
+                        </div>
+
                       </Tab>
                     </Tabs>
                   </div>

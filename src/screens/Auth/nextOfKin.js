@@ -95,6 +95,7 @@ class NextOfKin extends React.Component {
   e.preventDefault();
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
+  const studentID =  localStorage.getItem('studentIDNo')
   const data = {
       'RubixRegisterUserID': this.props.rubixUserID,
   };
@@ -112,7 +113,7 @@ class NextOfKin extends React.Component {
   console.log(data)
   const postData = async() => {
 
-      if (this.Validate() && idNumber != this.props.studentIDNo){
+      if (this.Validate() && idNumber != studentID){
           await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
