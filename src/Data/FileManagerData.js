@@ -37,28 +37,39 @@ export const fileStorageStatusCardData = [
   {
     UsedSize: "ID Document",
     Type: "Documents",
+    status: "Approved",
+    TotalSize: "1tb",
+    UsedPer: 100,
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-blue mb-0",
+  },
+  {
+    UsedSize: "Proof of Residence",
+    Type: "Documents",
     status: "Pending",
     TotalSize: "1tb",
     UsedPer: 50,
     ProgressBarClass:
-      "progress progress-xs progress-transparent custom-color-blue mb-0",
-  },
-  /* {
-    UsedSize: "10gb",
-    Type: "Media",
-    TotalSize: "1tb",
-    UsedPer: 25,
-    ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-purple mb-0",
-  }, */
-  /* {
-    UsedSize: "20gb",
-    Type: "Images",
+  },
+   {
+    UsedSize: "Proof of Registration",
+    Type: "Documents",
+    status: "Pending",
     TotalSize: "1tb",
-    UsedPer: 67,
+    UsedPer: 50,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
-  }, */
+  },
+   {
+    UsedSize: "Next of Kin ID",
+    Type: "Documents",
+    status: "No Document",
+    TotalSize: "1tb",
+    UsedPer: 0,
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-yellow mb-0",
+  },
 ];
 
 export const areaChartFileReport = {

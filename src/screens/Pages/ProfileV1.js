@@ -63,28 +63,6 @@ class ProfileV1Page extends React.Component {
          this.setState({doc: response.data.PostRubixUserData[0]})
      }) 
         };
-/* 
-        fetchDocumentsData()
-        const fetchResidenceData = async() =>{
-          const data2 = {
-            'RubixRegisterUserID': '2747',
-        }
-        const requestOptions2 = {
-          title: 'Student Residense Details',
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: data2
-      };
-      
-             //Get Rubix User Documents Details
-     await axios.post('http://192.168.88.10:3300/api/RubixStudentResDetails', data2, requestOptions2)
-     .then(response => {
-         console.log("Residence details:",response)
-         //this.setState({doc: response.data.PostRubixUserData[0]})
-
-     }) 
-        }; */
-        //fetchDocumentsData()
   }
 
    //Page navigation functions
@@ -145,7 +123,7 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
 changeDocument(keySTring){
 //Set Up Post Request Data
   const data2 = {
-    'RubixRegisterUserID': this.props.rubixUserID, //'2356',
+    'RubixRegisterUserID': this.props.rubixUserID,
     'FileType' : keySTring
 }
 const requestOptions2 = {
@@ -178,16 +156,16 @@ fetchData()
               HeaderText="Rubix User Profile"
               Breadcrumb={[
                 { name: "Page", navigate: "" },
-                { name: "Profile V1", navigate: "" },
+                { name: "My Profile", navigate: "" },
               ]}
             />
             <div
               className="progress-bar progress-bar-warning"
-              data-transitiongoal={`90`}
-              aria-valuenow={`90`}
-              style={{ width: `90%` }}
+              data-transitiongoal={`44`}
+              aria-valuenow={`44`}
+              style={{ width: `44%` }}
             >
-              Profile is 90% complete
+              Profile is 44% complete
             </div>
             <div className="row clearfix">
               <div className="col-lg-12">
