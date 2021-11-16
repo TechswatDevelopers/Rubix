@@ -150,7 +150,7 @@ class Registration extends React.Component {
                       <div className="bottom">
                         <span className="helper-text">
                           Already have an account?{" "}
-                          <a href="/studentInfo">Login</a>
+                          <a href="/">Login</a>
                         </span>
                       </div>
                     </form>

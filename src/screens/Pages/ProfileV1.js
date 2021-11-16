@@ -31,6 +31,8 @@ class ProfileV1Page extends React.Component {
       keyString: 'id-document',
       myUserID: null,
       doc: {},
+      docs: [],
+      tempDoc:{},
     }
   }
   componentDidMount() {
@@ -45,7 +47,9 @@ class ProfileV1Page extends React.Component {
        .then(data => {
          console.log("calleed")
          console.log("documents data:", data)
-         this.setState({doc: data.post[0]})
+         this.setState({doc: data.post[1]})
+         this.setState({tempDoc: data.post[1]})
+         this.setState({docs: data.post})
            });
 
       //Get Rubix User Residence Details
@@ -67,7 +71,15 @@ class ProfileV1Page extends React.Component {
 
  //Switch to different Document
  changeDocument = (file) => {
-   this.setState(state => ({ document: {file: file}}));
+  const temp = this.state.docs.filter(doc => doc.FileType == file)
+  console.log("file type", file)
+  console.log("temp object", temp)
+  if(temp.length != 0){
+    this.setState({doc: temp[0]})
+  } else {
+    this.setState({doc: null})
+  }
+   //this.setState(state => ({ document: {file: file}}));
  }
 
  //Post file using SQL
@@ -122,7 +134,7 @@ onPressUpload(e) {
   const postDocument = async() =>{
     const data = new FormData()
     data.append('image', file)
-    data.append('FileType', 'id-document')
+    data.append('FileType', this.state.keyString,)
     data.append('RubixRegisterUserID', this.state.myUserID)
     const requestOptions = {
       title: 'Student Document Upload',
@@ -133,7 +145,7 @@ onPressUpload(e) {
   for (var pair of data.entries()) {
     console.log(pair[0], ', ',pair[1]); 
 }
-await axios.post(' http://192.168.88.10:3001/feed/post?image', data, requestOptions)
+await axios.post('http://192.168.88.10:3001/feed/post?image', data, requestOptions)
                 .then(response => {
                     console.log("Upload details:",response)
                     this.setState({mongoID: response.data.post._id})
@@ -168,6 +180,24 @@ const fetchData = async() =>{
 fetchData()
 }
   render() {
+    let myBody;
+    if(this.state.doc == null || this.state.doc == undefined){
+      myBody = <input type="file" onChange={(e)=>{this.onPressUpload(e)}} />
+    } else {
+      myBody = <>
+      <Document
+      file= {{url: "data:application/pdf;base64," + this.state.doc.image}}
+      onLoadSuccess={this.onDocumentLoadSuccess}
+    >
+      <Page pageNumber={this.state.pageNumber} />
+    </Document>
+    
+    <nav>
+          <button onClick={this.goToPrevPage}>Prev</button>
+          <button onClick={this.goToNextPage}>Next</button>
+        </nav>
+        </>
+    }
     return (
       <div
         style={{ flex: 1 }}
@@ -435,7 +465,7 @@ fetchData()
       >
         <div>
           <div className="container-fluid">
-          <Row>
+          {/* <Row>
                   <Col>
                   <button className="btn btn-signin-social" onClick={()=>this.changeDocument("id-document")}><i className="fa fa-folder m-r-10"></i>ID Document</button>
                   </Col>
@@ -448,7 +478,7 @@ fetchData()
                   <Col>
                   <button className="btn btn-signin-social" onClick={()=>this.changeDocument("next-of-kin")}><i className="fa fa-folder m-r-10"></i>Next of Kin ID</button>
                   </Col>
-                </Row>
+                </Row> */}
                 
             {/* <div className="row clearfix">
               {fileFolderCardData.map((data, index) => {
@@ -460,7 +490,7 @@ fetchData()
                 <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
                 {fileStorageStatusCardData.map((data, index) => {
                   return (
-                   <div> <FileStorageStatusCard
+                   <div onClick={()=>this.changeDocument(data.FileType)}> <FileStorageStatusCard
                       key={index + "sidjpidj"}
                       UsedSize={data.UsedSize}
                       Type={data.status}
@@ -471,7 +501,6 @@ fetchData()
                   );
                 })}
                 <div>
-                <input type="file" onChange={(e)=>{this.onPressUpload(e)}} />
             </div>
               </div>
               <div className="col-lg-9 col-md-7 col-sm-12">
@@ -480,16 +509,7 @@ fetchData()
                   ChartOption={areaChartFileReport}
                 /> */}
                 <div className="pdf-div">
-          <Document
-            file= {{url: "data:application/pdf;base64," + this.state.doc.image}}
-            onLoadSuccess={this.onDocumentLoadSuccess}
-          >
-            <Page pageNumber={this.state.pageNumber} />
-          </Document>
-          <nav>
-          <button onClick={this.goToPrevPage}>Prev</button>
-          <button onClick={this.goToNextPage}>Next</button>
-        </nav>
+                  {myBody}
         </div>
               </div>
             </div>
@@ -500,7 +520,7 @@ fetchData()
                       <Tab eventKey="signing" title="Lease Agreement">
                         <div>
                         <Document
-            file= {{url: "data:application/pdf;base64," + this.state.doc.image}}
+            file= {{url: "data:application/pdf;base64," + this.state.tempDoc.image}}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             <Page pageNumber={this.state.pageNumber} />

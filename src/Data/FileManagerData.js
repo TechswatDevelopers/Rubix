@@ -38,6 +38,7 @@ export const fileStorageStatusCardData = [
     UsedSize: "ID Document",
     Type: "Documents",
     status: "Approved",
+    FileType: "id-document",
     TotalSize: "1tb",
     UsedPer: 100,
     ProgressBarClass:
@@ -47,6 +48,7 @@ export const fileStorageStatusCardData = [
     UsedSize: "Proof of Residence",
     Type: "Documents",
     status: "Pending",
+    FileType: "proof-of-res",
     TotalSize: "1tb",
     UsedPer: 50,
     ProgressBarClass:
@@ -56,6 +58,7 @@ export const fileStorageStatusCardData = [
     UsedSize: "Proof of Registration",
     Type: "Documents",
     status: "Pending",
+    FileType: "proof-of-reg",
     TotalSize: "1tb",
     UsedPer: 50,
     ProgressBarClass:
@@ -65,6 +68,7 @@ export const fileStorageStatusCardData = [
     UsedSize: "Next of Kin ID",
     Type: "Documents",
     status: "No Document",
+    FileType: "next-of-kin",
     TotalSize: "1tb",
     UsedPer: 0,
     ProgressBarClass:
