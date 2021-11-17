@@ -7,6 +7,36 @@ import axios from "axios";
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        profile: {},
+        profiles: [],
+        clients: [],
+        addressProv: 'Gauteng',
+        resProv: 'Gauteng',
+        addressCountry: '',
+        provList:[],
+        resList:[],
+        uniList: [],
+        courseList: [],
+        yearList: [],
+        countryList: [],
+        payment: '',
+        address: {},
+        university: {},
+        location: {},
+        selectedFile: null,
+        isSelected: false,
+        newPic: false,
+        base64Image: null,
+        imgUpload: null,
+        errorMessage: null,
+        payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+        value: 0
+
+    };
+  }
   //Reset password
   updateAddressInformation(e){
 //const history = useHistory();
@@ -187,36 +217,21 @@ postData()
 
   }
 
-
-  constructor(props) {
-    super(props);
-    this.state = {
-        profile: {},
-        profiles: [],
-        clients: [],
-        addressProv: 'Gauteng',
-        resProv: 'Gauteng',
-        addressCountry: '',
-        provList:[],
-        resList:[],
-        uniList: [],
-        courseList: [],
-        yearList: [],
-        countryList: [],
-        payment: '',
-        address: {},
-        university: {},
-        location: {},
-        selectedFile: null,
-        newPic: false,
-        base64Image: null,
-        imgUpload: null,
-        errorMessage: null,
-        payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
-        value: 0
-
-    };
+  onPressCancel(){
+    this.setState({selectedFile: null})
+    this.setState({isSelected: false})
   }
+  changeHandler = (event) => {
+    this.setState({selectedFile: event.target.files[0]})
+    console.log("selcted file", event.target.files[0])
+    this.setState({isSelected: true})
+    this.getBase64(event)
+  }
+  handleUpdate(){
+    const inputFile = document.getElementById('upload-button')
+    inputFile.click()
+  }
+  
   getBase64(e) {
     //console.log("I am called")
     var file = e.target.files[0]
@@ -224,7 +239,7 @@ postData()
     reader.readAsDataURL(file)
     reader.onload = () => {
       this.setState({
-        imgUpload: reader.result
+        base64Image: reader.result
       })
       //console.log("This is the img:", this.state.imgUpload)
     };
@@ -334,8 +349,6 @@ postData()
   }
   fetchData();
   }
-
-
   render() {
     return (
       <div>
@@ -356,8 +369,9 @@ postData()
                 <em>Image should be at least 140px x 140px</em>
               </p>
               <div>
-                <input type="file" onChange={(e)=>{this.getBase64(e)}} />
-                
+               {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
+                <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
+                <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Change Profile Image</button>
             </div>
               <input className="sr-only" id="filePhoto" type="file" />
             </div>
@@ -398,7 +412,7 @@ postData()
                 />
               </div>
               <div className="form-group">
-                <div>
+                {/* <div>
                   <label className="fancy-radio">
                     <input
                       name="Gender"
@@ -421,7 +435,7 @@ postData()
                       <i></i>Female
                     </span>
                   </label>
-                </div>
+                </div> */}
               </div>
               
               <div className="form-group">

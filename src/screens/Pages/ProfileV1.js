@@ -20,6 +20,7 @@ import { Document, Page, pdfjs  } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 class ProfileV1Page extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +34,8 @@ class ProfileV1Page extends React.Component {
       doc: {},
       docs: [],
       tempDoc:{},
+      isSelected: false,
+      base64Pdf: null,
     }
   }
   componentDidMount() {
@@ -47,7 +50,7 @@ class ProfileV1Page extends React.Component {
        .then(data => {
          console.log("calleed")
          console.log("documents data:", data)
-         this.setState({doc: data.post[1]})
+         this.setState({doc: data.post[0]})
          this.setState({tempDoc: data.post[1]})
          this.setState({docs: data.post})
            });
@@ -72,8 +75,10 @@ class ProfileV1Page extends React.Component {
  //Switch to different Document
  changeDocument = (file) => {
   const temp = this.state.docs.filter(doc => doc.FileType == file)
-  console.log("file type", file)
+  //console.log("file type", file)
   console.log("temp object", temp)
+  this.setState({keyString: file})
+  console.log("current file type", this.state.keyString)
   if(temp.length != 0){
     this.setState({doc: temp[0]})
   } else {
@@ -126,14 +131,30 @@ await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requ
   };
 }
 
-//Post File Using Mongo
-onPressUpload(e) {
+//convert to base64
+getBase64(e) {
   var file = e.target.files[0]
+  let reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    this.setState({
+      base64Pdf: reader.result
+    })
+    //console.log("This is the img:", this.state.imgUpload)
+  };
+  reader.onerror = function (error) {
+    console.log('Error: ', error);
+  }
+}
+
+//Post File Using Mongo
+onPressUpload() {
+  //var file = e.target.files[0]
   //console.log("selected file is:", file)
-  this.setState({selectedFile: file})
+  //this.setState({selectedFile: file})
   const postDocument = async() =>{
     const data = new FormData()
-    data.append('image', file)
+    data.append('image', this.state.selectedFile)
     data.append('FileType', this.state.keyString,)
     data.append('RubixRegisterUserID', this.state.myUserID)
     const requestOptions = {
@@ -153,36 +174,64 @@ await axios.post('http://192.168.88.10:3001/feed/post?image', data, requestOptio
   }
   postDocument()
 }
+onPressCancel(){
+  this.setState({selectedFile: null})
+  this.setState({isSelected: false})
+}
+changeHandler = (event) => {
+  this.setState({selectedFile: event.target.files[0]})
+  console.log("selcted file", event.target.files[0])
+  this.setState({isSelected: true})
+  this.getBase64(event)
+}
+handleUpdate(){
+  const inputFile = document.getElementById('upload-button')
+  inputFile.click()
+}
 
-//Change displayed document
-changeDocument(keySTring){
-  console.log("Fetching document")
-  this.setState({keyString: keySTring})
-//Set Up Post Request Data
-  const data2 = {
-    'RubixRegisterUserID': this.state.myUserID,
-    'FileType' : keySTring
-}
-const requestOptions2 = {
-  title: 'Student Residense Details',
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: data2
-};
-const fetchData = async() =>{
-  //Get Rubix User Documents Details
-  await axios.post(' http://192.168.88.10:3300/api/RubixGetImages', data2, requestOptions2)
-  .then(response => {
-      console.log("Documents details:",response)
-      this.setState({doc: response.data.PostRubixUserData[0]})
-  })
-}
-fetchData()
-}
   render() {
     let myBody;
     if(this.state.doc == null || this.state.doc == undefined){
-      myBody = <input type="file" onChange={(e)=>{this.onPressUpload(e)}} />
+      myBody = <> {this.state.isSelected
+      ? <>
+      <button className="btn btn-primary" onClick={()=>this.onPressUpload()}>Confirm Upload</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default" type="button" onClick={()=>this.onPressCancel()}>
+            Cancel
+          </button>
+      <Document
+      file= {{url: this.state.base64Pdf}}
+      onLoadSuccess={this.onDocumentLoadSuccess}
+    >
+      <Page pageNumber={this.state.pageNumber} />
+    </Document>
+    
+    <div style= {{margin: 'auto', display: 'inline-block'}}>
+    <nav>
+          <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
+        </nav>
+        </div>
+        <br></br>
+        <button className="btn btn-primary" onClick={()=>this.onPressUpload()}>Confirm Upload</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default" type="button" onClick={()=>this.onPressCancel()}>
+            Cancel
+          </button>
+      </>
+        : <>
+        <div></div>
+        <div style={{margin: 'auto', width: '75%'}}>
+        <p style={{textAlign: 'center'}} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
+        <div style={{margin: 'auto', width: '25%'}}>
+        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload File</button>
+        </div>
+        </div>
+        </>
+      }
+      </>
     } else {
       myBody = <>
       <Document
@@ -193,9 +242,12 @@ fetchData()
     </Document>
     
     <nav>
-          <button onClick={this.goToPrevPage}>Prev</button>
-          <button onClick={this.goToNextPage}>Next</button>
+          <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
         </nav>
+        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload A New File</button>
         </>
     }
     return (
@@ -519,12 +571,12 @@ fetchData()
                       </Tab>
                       <Tab eventKey="signing" title="Lease Agreement">
                         <div>
-                        <Document
+                        {/* <Document
             file= {{url: "data:application/pdf;base64," + this.state.tempDoc.image}}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             <Page pageNumber={this.state.pageNumber} />
-          </Document>
+          </Document> */}
           <p>To agree to the above document, please enter your signature:</p>
           <div><SignatureCanvas penColor='green'
     canvasProps={{width: 500, height: 200, className: 'sigCanvas'}} /></div>,
