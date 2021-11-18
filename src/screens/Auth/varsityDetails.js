@@ -16,13 +16,19 @@ class VarsityDetails extends React.Component {
             provList: [],
             courseList: [],
             yearList: [],
+            myUserID: null,
             res: null,
             prov: null,
             uni: null,
             course: null,
             year: null,
             payment: null,
+            hearAbout: null,
+            selectedFile: null,
+            bankType: null,
             payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+            hearAboutUs: ['Where did you hear about us?', 'Social Media', 'Word of Mouth', 'School Campiegn', 'Other'],
+            bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             value: 0
 
         };
@@ -32,7 +38,7 @@ class VarsityDetails extends React.Component {
         e.preventDefault();
         const form = document.getElementById('uniDetails');
         const data = {
-            'RubixRegisterUserID': this.props.rubixUserID,
+            'RubixRegisterUserID': this.state.myUserID,
             'ProvinceID': this.state.prov,
             'UniversityID': this.state.uni,
             'CourseID': this.state.course,
@@ -76,6 +82,8 @@ async componentDidMount(){
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+    const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
 
     const fetchData = async() =>{
 
@@ -126,7 +134,136 @@ async componentDidMount(){
     fetchData();
   }
 
+  onPressCancel(){
+    this.setState({selectedFile: null})
+    this.setState({isSelected: false})
+  }
+  changeHandler = (event) => {
+    this.setState({selectedFile: event.target.files[0]})
+    console.log("selcted file", event.target.files[0])
+    this.setState({isSelected: true})
+    this.getBase64(event)
+  }
+  handleUpdate(){
+    const inputFile = document.getElementById('upload-button')
+    inputFile.click()
+  }
+  
+//Post File Using Mongo
+onPressUpload() {
+  //var file = e.target.files[0]
+  //console.log("selected file is:", file)
+  //this.setState({selectedFile: file})
+  const postDocument = async() =>{
+    const data = new FormData()
+    data.append('image', this.state.selectedFile)
+    data.append('FileType', this.state.payment,)
+    data.append('RubixRegisterUserID', this.state.myUserID)
+    const requestOptions = {
+      title: 'Student Document Upload',
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data',},
+      body: data
+  };
+  for (var pair of data.entries()) {
+    console.log(pair[0], ', ',pair[1]); 
+}
+await axios.post('http://192.168.88.10:3001/feed/post?image', data, requestOptions)
+                .then(response => {
+                    console.log("Upload details:",response)
+                    this.setState({mongoID: response.data.post._id})
+                }) 
+  }
+  postDocument()
+}
+
+
   render() {
+    let body;
+    if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
+      body = <>
+      <div style={{margin: 'auto', width: '25%'}}>
+        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload Proof of Funding</button>
+        </div>
+      </>
+    } else if(this.state.payment == 'Self Funded'){
+      body = <>
+      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Holder Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountHolderName"
+                          name='AccountHolderName'
+                          placeholder="Enter your bank account holder name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Bank Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BankName"
+                          name='BankName'
+                          placeholder="Enter your bank name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Branch Code:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BranchCode"
+                          name='BranchCode'
+                          placeholder="Enter your branch code"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Number:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountNumber"
+                          name='AccountNumber'
+                          placeholder="Enter your account number"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Type:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({bankType: e.target.value})} value={this.state.bankType}>
+        {
+         this.state.bankTypes.map((banktype, index)=> (
+            <option key={index} name='AccountType' value = {banktype}>{banktype}</option>
+        ))  
+        }
+        </select> }
+                      </div>
+
+      </>
+    } else {
+      body = null;
+    }
     return (
       <div className="theme-green">
         <div >
@@ -229,6 +366,22 @@ async componentDidMount(){
             
             this.state.payMethods.map((payment, index)=> (
             <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+                     {body}
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Hear About Us: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({hearAbout: e.target.value})} value={this.state.hearAbout}>
+        {
+            
+            this.state.hearAboutUs.map((options, index)=> (
+            <option key={index} name='HearAbout' value={options}>{options}</option>
         ))   
         }
     </select> }

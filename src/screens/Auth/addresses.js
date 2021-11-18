@@ -13,6 +13,7 @@ class Addresses extends React.Component {
             countryList: [],
             location: null,
             prov: null,
+            myUserID: null,
             country: null,
             value: 0
 
@@ -26,7 +27,7 @@ class Addresses extends React.Component {
       const locations = document.getElementById('location');
     const street_address = this.state.location['value']['structured_formatting']['main_text']
     const data = {
-        'RubixRegisterUserID': this.props.rubixUserID,
+        'RubixRegisterUserID': this.state.myUserID,
         'RegisterUserStreetNameAndNumer': street_address,
         'RegisterUserProvince': this.state.prov,
         'RegisterUserCountry': this.state.country,
@@ -72,6 +73,9 @@ async componentDidMount(){
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+    const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
+
 
     const fetchData = async() =>{
         await fetch('http://192.168.88.10:3300/api/RubixProvinces')

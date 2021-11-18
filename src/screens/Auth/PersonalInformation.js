@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Logo from "../../assets/images/logo-white.svg";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
@@ -14,6 +13,7 @@ class PersonalInformation extends React.Component {
         userGender: 'Male',
         medicalConditions: 'None',
         errorMessage: '',
+        countryList: [],
         value: 0
 
     };
@@ -143,6 +143,20 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+
+    //Fetch Data
+    const fetchData = async() =>{
+      //Fetch Countries List
+      await fetch('http://192.168.88.10:3300/api/RubixCountries')
+      .then(response => response.json())
+      .then(data => {
+          //console.log("data is ", data.data)
+          this.setState({countryList: data.data})
+          //console.log("this is the countryList:", this.state.countryList)
+          //setCountryList(data.data)
+          });
+        }
+        fetchData()
   }
 
   render() {
@@ -201,6 +215,19 @@ class PersonalInformation extends React.Component {
                           type="text"
                           required
                         />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Country:
+                            </label>
+                            <select className="form-control" onChange={(e)=>this.setState({country: e.target.value})} value={this.state.country}>
+        {
+         this.state.countryList.map((country, index)=> (
+            <option key={index} name='Nationality ' value = {country.Country_Name}>{country.Country_Name}</option>
+        ))   
+        }
+        </select> 
                       </div>
 
                       <div className="form-group">

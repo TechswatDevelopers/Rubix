@@ -36,6 +36,7 @@ class ProfileV1Page extends React.Component {
       tempDoc:{},
       isSelected: false,
       base64Pdf: null,
+      trimmedDataURL: null,
     }
   }
   componentDidMount() {
@@ -107,7 +108,7 @@ class ProfileV1Page extends React.Component {
 
   const postDocument = async() =>{
     const data = {
-      'RubixRegisterUserID': this.props.rubixUserID, //'2356',
+      'RubixRegisterUserID': this.state.myUserID, //'2356',
       'FileType': this.state.keyString,
       'image': this.state.imgUpload,
       'imageUrl': 'sent from frontend',
@@ -187,6 +188,42 @@ changeHandler = (event) => {
 handleUpdate(){
   const inputFile = document.getElementById('upload-button')
   inputFile.click()
+}
+ //Signature Pad array of lines
+ sigPad = {}
+ //Function for clearing signature pad
+ clear = () => {
+   this.sigPad.clear()
+ }
+ //Function for triming Signature Pad array and save as one png file
+ trim = () => {
+   this.setState({trimmedDataURL: this.sigPad.getTrimmedCanvas()
+     .toDataURL('image/png')})
+
+     console.log(this.sigPad.getTrimmedCanvas()
+     .toDataURL('image/png'))
+ }
+//Function to post signature to API
+postSignature(){
+  console.log('I am called ')
+  const postDocument = async() =>{
+    const data = {
+      'RubixRegisterUserID': this.state.myUserID,
+      'ClientId': 1,
+      'image': this.state.trimmedDataURL
+    }
+    const requestOptions = {
+      title: 'Student Signature Upload',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',},
+      body: data
+  };
+  await axios.post('http://192.168.88.10:3005/PDFSignature', data, requestOptions)
+                .then(response => {
+                    console.log("Signature upload details:",response)
+                }) 
+  }
+  postDocument()
 }
 
   render() {
@@ -578,8 +615,26 @@ handleUpdate(){
             <Page pageNumber={this.state.pageNumber} />
           </Document> */}
           <p>To agree to the above document, please enter your signature:</p>
-          <div><SignatureCanvas penColor='green'
-    canvasProps={{width: 500, height: 200, className: 'sigCanvas'}} /></div>,
+          <div><SignatureCanvas penColor='blue'
+    canvasProps={{width: 500, height: 200, className: 'sigCanvas'}} ref={(ref) => { this.sigPad = ref }}/></div>,
+    
+        
+
+        {this.state.trimmedDataURL
+        ? <><img 
+          src={this.state.trimmedDataURL} />
+          <button className="btn btn-primary"  onClick={()=>this.postSignature()}>
+          Submit Signature
+        </button>
+          </>
+        : <>
+        <button className="btn btn-primary"  onClick={this.trim}>
+          Save as Image
+        </button>
+        <button className="btn btn-default"  onClick={this.clear}>
+          Clear
+        </button>
+        </>}
                         </div>
 
                       </Tab>
