@@ -28,10 +28,12 @@ class ProfileV1Setting extends React.Component {
         location: {},
         selectedFile: null,
         isSelected: false,
+        picPresent: false,
         newPic: false,
         base64Image: null,
         imgUpload: null,
         errorMessage: null,
+        myUserID: null,
         payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
         value: 0
 
@@ -186,7 +188,7 @@ e.preventDefault();
 console.log(this.state.selectedFile)
 const form = document.getElementById('personalInfo');
 const data = {
-    'RubixRegisterUserID': '2745', //Buffer.from(this.state.selectedFile.value).toString('base64')
+    'RubixRegisterUserID': this.state.myUserID, //Buffer.from(this.state.selectedFile.value).toString('base64')
     'UserProfileImage': this.state.imgUpload,
     'ClientID': 1
 };
@@ -217,18 +219,50 @@ postData()
 
   }
 
-  onPressCancel(){
+  //Update Profile Picture
+  updateProfileData(e){
+e.preventDefault();
+console.log(this.state.selectedFile)
+const data = {
+    'RubixRegisterUserID': this.state.myUserID,
+    'ProfileImage': this.state.base64Image,
+};
+
+const requestOptions = {
+    title: 'Update Profile Image Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+console.log(data)
+const postData = async() => {
+        if(this.state.base64Image != null)
+        {
+          await axios.post('http://192.168.88.10:3300/api/RubixImageUpload', data, requestOptions)
+        .then(response => {
+            console.log(response)
+            alert(response.data.PostRubixUserData[0].ResponceMessage)
+        })}else {
+          alert("Please select a valid Image")
+        }
+}
+postData()
+
+  }
+
+  onPressImageCancel(){
     this.setState({selectedFile: null})
     this.setState({isSelected: false})
+    this.setState({base64Image: null})
   }
-  changeHandler = (event) => {
+  changeImageHandler = (event) => {
     this.setState({selectedFile: event.target.files[0]})
     console.log("selcted file", event.target.files[0])
     this.setState({isSelected: true})
     this.getBase64(event)
   }
-  handleUpdate(){
-    const inputFile = document.getElementById('upload-button')
+  handleImageUpdate(){
+    const inputFile = document.getElementById('upload-image-button')
     inputFile.click()
   }
   
@@ -267,6 +301,7 @@ postData()
 
   componentDidMount(){
     const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
     const fetchData = async() =>{
       //Get Rubix User Details
       await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/' + userID)
@@ -350,6 +385,39 @@ postData()
   fetchData();
   }
   render() {
+    let imageUrl, myButton;
+    //Select Image Url
+    if(this.state.profile.UserProfileImage != null || this.state.base64Image == null){
+      imageUrl = this.state.profile.UserProfileImage
+      myButton = <>
+      <div>
+               {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
+                <input style={{ display: 'none' }} id='upload-image-button' type="file" onChange={(e)=>{this.changeImageHandler(e)}} />
+                <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleImageUpdate()}>Change Profile Image</button>
+            </div>
+      </>
+    } else if(this.state.base64Image != null){
+      imageUrl = this.state.base64Image
+      myButton = <>
+      <button className="btn btn-primary" onClick={(e)=>this.updateProfileData(e)}>Confirm Upload</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default" type="button" onClick={()=>this.onPressImageCancel()}>
+            Cancel
+          </button>
+      </>
+    } else {
+      imageUrl = 'user.png'
+      myButton = <>
+      <button className="btn btn-primary" onClick={(e)=>this.updateProfileData(e)}>Confirm Upload</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default" type="button" onClick={()=>this.onPressImageCancel()}>
+            Cancel
+          </button>
+      </>
+    }
+
+    //Toggle image select button
+
     return (
       <div>
         <div className="body">
@@ -361,18 +429,14 @@ postData()
                  accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
                 width="150px"
-                src= {this.state.profile.UserProfileImage} />
+                src= {imageUrl} />
             </div>
             <div className="media-body">
-              <p>
+              {/* <p>
                 Upload your photo. <br />
                 <em>Image should be at least 140px x 140px</em>
-              </p>
-              <div>
-               {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
-                <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
-                <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Change Profile Image</button>
-            </div>
+              </p> */}
+              {myButton}
               <input className="sr-only" id="filePhoto" type="file" />
             </div>
           </div>

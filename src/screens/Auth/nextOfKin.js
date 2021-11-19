@@ -131,7 +131,7 @@ class NextOfKin extends React.Component {
           })
               
       } else{
-        alert("Please ensure that you entered all required information")
+        alert("Next of kin ID cannot be the same as student ID")
       }
   }
   postData()

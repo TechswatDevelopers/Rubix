@@ -36,6 +36,7 @@ class ProfileV1Page extends React.Component {
       tempDoc:{},
       isSelected: false,
       base64Pdf: null,
+      docUrl: '',
       trimmedDataURL: null,
     }
   }
@@ -43,6 +44,10 @@ class ProfileV1Page extends React.Component {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
     this.setState({myUserID: userID});
+    this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png')
+
+    //Generate base64 for dummy image
+    //this.getBase64FromSTorage('sign.png') 
     
     const fetchData = async() =>{
        //Get documents from DB
@@ -77,9 +82,9 @@ class ProfileV1Page extends React.Component {
  changeDocument = (file) => {
   const temp = this.state.docs.filter(doc => doc.FileType == file)
   //console.log("file type", file)
-  console.log("temp object", temp)
+  //console.log("temp object", temp)
   this.setState({keyString: file})
-  console.log("current file type", this.state.keyString)
+  //console.log("current file type", this.state.keyString)
   if(temp.length != 0){
     this.setState({doc: temp[0]})
   } else {
@@ -88,53 +93,10 @@ class ProfileV1Page extends React.Component {
    //this.setState(state => ({ document: {file: file}}));
  }
 
- //Post file using SQL
- postFile(e) {
-  //console.log("I am called")
-  var file = e.target.files[0]
-    let reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      this.setState({
-        imgUpload: reader.result
-      })
-      postDocument()
-      
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    }
-    console.log("This is the img:", reader.result)
-
-  const postDocument = async() =>{
-    const data = {
-      'RubixRegisterUserID': this.state.myUserID, //'2356',
-      'FileType': this.state.keyString,
-      'image': this.state.imgUpload,
-      'imageUrl': 'sent from frontend',
-      'FileName': file.name,
-      'FileExtension': file.type,
-      'FileSize': file.size
-  };
-  const requestOptions = {
-    title: 'Student Document Upload',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept':  'application/json'},
-    body: data
-};
-//console.log('File being sent:', file)
-console.log('Information sent:', data)
-await axios.post(' http://192.168.88.10:3300/api/RubixPostDocuments', data, requestOptions)
-                .then(response => {
-                    console.log("Upload details:",response)
-                    //this.setState({residence: response.data.PostRubixUserData[0]})
-                }) 
-  };
-}
-
 //convert to base64
 getBase64(e) {
   var file = e.target.files[0]
+  //console.log('My document before base64', e.target.files[0])
   let reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onload = () => {
@@ -179,13 +141,13 @@ onPressCancel(){
   this.setState({selectedFile: null})
   this.setState({isSelected: false})
 }
-changeHandler = (event) => {
+changeHandler(event){
   this.setState({selectedFile: event.target.files[0]})
-  console.log("selcted file", event.target.files[0])
+  console.log("selcted file1", event.target.files[0])
   this.setState({isSelected: true})
   this.getBase64(event)
 }
-handleUpdate(){
+handleUpdate(e){
   const inputFile = document.getElementById('upload-button')
   inputFile.click()
 }
@@ -197,20 +159,21 @@ handleUpdate(){
  }
  //Function for triming Signature Pad array and save as one png file
  trim = () => {
-   this.setState({trimmedDataURL: this.sigPad.getTrimmedCanvas()
-     .toDataURL('image/png')})
-
-     console.log(this.sigPad.getTrimmedCanvas()
-     .toDataURL('image/png'))
+   if(this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null){
+   this.setState({trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png')})
+     this.postSignature(this.state.trimmedDataURL)
+   } else {
+     alert("Please provide a signature")
+   }
  }
 //Function to post signature to API
-postSignature(){
+postSignature(signature){
   console.log('I am called ')
   const postDocument = async() =>{
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
       'ClientId': 1,
-      'image': this.state.trimmedDataURL
+      'image': signature
     }
     const requestOptions = {
       title: 'Student Signature Upload',
@@ -221,6 +184,7 @@ postSignature(){
   await axios.post('http://192.168.88.10:3005/PDFSignature', data, requestOptions)
                 .then(response => {
                     console.log("Signature upload details:",response)
+                    this.setState({docUrl: response.data.Base})
                 }) 
   }
   postDocument()
@@ -228,7 +192,7 @@ postSignature(){
 
   render() {
     let myBody;
-    if(this.state.doc == null || this.state.doc == undefined){
+    if(this.state.doc == null ){
       myBody = <> {this.state.isSelected
       ? <>
       <button className="btn btn-primary" onClick={()=>this.onPressUpload()}>Confirm Upload</button>{" "}
@@ -263,7 +227,7 @@ postSignature(){
         <p style={{textAlign: 'center'}} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
         <div style={{margin: 'auto', width: '25%'}}>
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
-        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload File</button>
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e)=>this.handleUpdate(e)}>Upload A File</button>
         </div>
         </div>
         </>
@@ -283,8 +247,8 @@ postSignature(){
           &nbsp;&nbsp;
           <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
         </nav>
-        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
-        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload A New File</button>
+        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>this.changeHandler(e)} />
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e)=>this.handleUpdate(e)}>Upload A New File</button>
         </>
     }
     return (
@@ -608,33 +572,31 @@ postSignature(){
                       </Tab>
                       <Tab eventKey="signing" title="Lease Agreement">
                         <div>
-                        {/* <Document
-            file= {{url: "data:application/pdf;base64," + this.state.tempDoc.image}}
+                         <Document
+            file= {{url: "data:application/pdf;base64," + this.state.docUrl}}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             <Page pageNumber={this.state.pageNumber} />
-          </Document> */}
+          </Document>
+          <nav>
+          <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
+        </nav> 
           <p>To agree to the above document, please enter your signature:</p>
           <div><SignatureCanvas penColor='blue'
     canvasProps={{width: 500, height: 200, className: 'sigCanvas'}} ref={(ref) => { this.sigPad = ref }}/></div>,
     
         
 
-        {this.state.trimmedDataURL
-        ? <><img 
-          src={this.state.trimmedDataURL} />
-          <button className="btn btn-primary"  onClick={()=>this.postSignature()}>
+        
+          <button className="btn btn-primary"  onClick={()=>this.trim()}>
           Submit Signature
-        </button>
-          </>
-        : <>
-        <button className="btn btn-primary"  onClick={this.trim}>
-          Save as Image
         </button>
         <button className="btn btn-default"  onClick={this.clear}>
           Clear
         </button>
-        </>}
+        
                         </div>
 
                       </Tab>

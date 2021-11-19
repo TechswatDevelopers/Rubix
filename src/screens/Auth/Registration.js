@@ -64,12 +64,15 @@ class Registration extends React.Component {
         await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
                 console.log(response.data)
-                if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID == null){
+                /*If User exists on DB:
+                1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
+                2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
+                3. If Response is equal to One, then the user exists on the DB
+                */
+                if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID == null ){
                   postData()
                  } else if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID != null){
                   localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
-                  //postData()
-                  //alert('User Already Exists')
                  }else {
                   console.log('User Already Exists')
                   alert('User Already Exists')
