@@ -94,7 +94,7 @@ class Login extends React.Component {
 
     //Google response for testing
  responseGoogle = (response) => {
-   console.log("I am called")
+   //console.log("I am called")
   this.SocialMediaLogin(response['googleId'])
 }
   //Facebook response for testing
@@ -108,15 +108,19 @@ class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoad: true
+      isLoad: true,
+      currentClientId: null,
     }
   }
   componentDidMount() {
     setTimeout(() => {
       this.setState({
-        isLoad: false
+        isLoad: false,
+        currentClientId: this.props.match.params.clientID
       })
     }, 500);
+    localStorage.setItem('clientID', this.props.match.params.clientID)
+    this.setThemeColor(this.props.match.params.clientID)
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");
     document.body.classList.remove("theme-blue");
@@ -125,6 +129,20 @@ class Login extends React.Component {
     document.body.classList.remove("theme-blush");
 
     console.log("Component is mounted and the message from store is ", this.props.myMessage)
+  }
+
+  //Set Theme Color
+  setThemeColor(client){
+    switch(client){
+      case '1':
+        this.props.onPressThemeColor('orange')
+        break
+      case '2': 
+      this.props.onPressThemeColor('purple')
+      break
+      case '3':
+        this.props.onPressThemeColor('cyan')
+    }
   }
   render() {
     const { navigation } = this.props;
