@@ -81,6 +81,8 @@ class ProfileV1Page extends React.Component {
   //Switch to different Document
   changeDocument = (file) => {
     const temp = this.state.docs.filter(doc => doc.FileType == file)
+    this.setState({isSelected: false})
+    this.setState({ selectedFile: null })
     //console.log("file type", file)
     //console.log("temp object", temp)
     this.setState({ keyString: file })
@@ -192,64 +194,60 @@ class ProfileV1Page extends React.Component {
 
   render() {
     let myBody;
-    if (this.state.doc === null) {
-      myBody = <> {this.state.isSelected && this.state.base64Pdf != null
+    if (!this.state.isSelected) {
+      myBody = <> {this.state.doc != null 
         ? <>
-          <button className="btn btn-primary" onClick={() => this.onPressUpload()}>Confirm Upload</button>{" "}
-          &nbsp;&nbsp;
-          <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
-            Cancel
-          </button>
+        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
           <Document className="border border-primary border-2"
-            file={{ url: this.state.base64Pdf }}
+            file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             <Page pageNumber={this.state.pageNumber} />
           </Document>
-
-          <div style={{ margin: 'auto', display: 'inline-block' }}>
-            <nav>
-              <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
-              &nbsp;&nbsp;
-              <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-            </nav>
-          </div>
-          <br></br>
-          <button className="btn btn-primary" onClick={() => this.onPressUpload()}>Confirm Upload</button>{" "}
-          &nbsp;&nbsp;
-          <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
-            Cancel
-          </button>
+  
+          <nav>
+            <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
+            &nbsp;&nbsp;
+            <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
+          </nav>
         </>
-        : <>
-          <div></div>
-          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-            <p style={{ textAlign: 'center'}} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
-            <div>
-              <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => { this.changeHandler(e) }} />
-              <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
-            </div>
+        
+        :<>
+        <div></div>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+          <p style={{ textAlign: 'center'}} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
+          <div>
+            <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => { this.changeHandler(e) }} />
+            <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
           </div>
-        </>
-      }
+        </div>
       </>
+    }
+    </>
+        
     } else {
       myBody = <>
-      <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
-      <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
-        <Document className="border border-primary border-2"
-          file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
-          <Page pageNumber={this.state.pageNumber} />
-        </Document>
+      <button className="btn btn-primary" onClick={() => this.onPressUpload()}>Confirm Upload</button>{" "}
+      &nbsp;&nbsp;
+      <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
+        Cancel
+      </button>
+      <Document className="border border-primary border-2"
+        file={{ url: this.state.base64Pdf }}
+        onLoadSuccess={this.onDocumentLoadSuccess}
+      >
+        <Page pageNumber={this.state.pageNumber} />
+      </Document>
 
+      <div style={{ margin: 'auto', display: 'inline-block' }}>
         <nav>
           <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
           &nbsp;&nbsp;
           <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
         </nav>
-      </>
+      </div>
+    </>
     }
     return (
       <div
@@ -389,19 +387,36 @@ class ProfileV1Page extends React.Component {
                           <div className="w-100 p-3">
                             <div className="body">
                               <h6 style={{textAlign:'center'}}>My Residence Information</h6>
-                                  <div className="login-session">
-                                    <div className="login-info">
-                                      <h3 className="login-title">
-                                        University - {this.state.residence.ResidenceUniversity}
-                                      </h3>
-                                    </div>
-                                  </div>
-                                
                               <ul className="list-unstyled list-login-session w-80 p-3">
                                 <li>
                                 <h3 className="login-title">
-                                        Residence Name - {this.state.residence.ResidenceName}
+                                       {this.state.residence.ResidenceName}
                                       </h3>
+                                      <li>
+                                      <h3 className="login-title">
+                                         {this.state.residence.ResidenceUniversity}
+                                      </h3>
+                                      </li>
+                                </li>
+                                
+                                <li>
+                                    <div className="login-info">
+                                      <span className="login-detail">
+                                        {this.state.residence.ResidenceLocation}
+                                      </span>
+                                      {/*<br></br>
+                                       <span className="login-detail">
+                                        Building number: {this.state.residence.BuildingNumber}
+                                      </span>
+                                      <br></br>
+                                      <span className="login-detail">
+                                        Floor: {this.state.residence.FloorNumber}
+                                      </span> 
+                                      <br></br>
+                                      <span className="login-detail">
+                                        Room:{this.state.residence.RoomNumber}
+                                      </span> */}
+                                    </div>
                                 </li>
                                 <img
                                   alt="cannot display"
@@ -424,29 +439,6 @@ class ProfileV1Page extends React.Component {
                                   </div>
                                 </li>
                                 
-                                <li>
-                                  <div className="login-session">
-                                    <div className="login-info">
-                                      
-                                      <span className="login-detail">
-                                        {this.state.residence.ResidenceLocation}
-                                      </span>
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Building number: {this.state.residence.BuildingNumber}
-                                      </span>
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Floor: {this.state.residence.FloorNumber}
-                                      </span>
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Room:{this.state.residence.RoomNumber}
-                                      </span>
-                                    </div>
-
-                                  </div>
-                                </li>
                               </ul>
                             </div>
                           </div>
@@ -498,7 +490,7 @@ class ProfileV1Page extends React.Component {
                       </Tab>
                       <Tab eventKey="signing" title="Lease Agreement">
                         <div className = "w-auto p-3">
-                          <Document className="border border-primary border-2 w-100 p-3"
+                          <Document className="border border-primary border-2"
                             file={{ url: "data:application/pdf;base64," + this.state.docUrl }}
                             onLoadSuccess={this.onDocumentLoadSuccess}
                           >
@@ -510,7 +502,7 @@ class ProfileV1Page extends React.Component {
                             <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
                           </nav>
                           <p>To agree to the above document, please enter your signature:</p>
-                          <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas penColor='black' 
+                          <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black' 
                             canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
 
 
