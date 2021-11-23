@@ -11,8 +11,8 @@ class FileStorageCard extends React.Component {
             {TotalSize} <i className="fa fa-server float-right"></i>
           </h4>
           <p className="mb-0">
-            Storage{" "}
-            <small className="text-muted float-right">of {TotalSize}</small>
+            Uploaded{" "}
+            <small className="text-muted float-right">out of {TotalSize}</small>
           </p>
           <div
             id="progress-striped progress-xs"

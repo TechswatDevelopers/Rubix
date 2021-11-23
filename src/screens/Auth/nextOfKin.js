@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class NextOfKin extends React.Component {
   constructor(props) {
@@ -11,6 +12,8 @@ class NextOfKin extends React.Component {
     this.state = {
         userGender: 'Male',
         errorMessage: '',
+        location: null,
+        myUserID: null,
         value: 0
 
     };
@@ -95,8 +98,16 @@ class NextOfKin extends React.Component {
   e.preventDefault();
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
+  const studentID =  localStorage.getItem('studentIDNo')
+
+  if(this.state.location !=null){
+    const locations = document.getElementById('location');
+    const postCode = document.getElementById('post-code').value;
+    const street_address = this.state.location['value']['structured_formatting']['main_text'] + ', ' + postCode
+  
   const data = {
-      'RubixRegisterUserID': this.props.rubixUserID,
+      'RubixRegisterUserID': this.state.myUserID,
+      'RubixUserNextOfKinAddress': street_address,
   };
   for (let i=0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -112,18 +123,44 @@ class NextOfKin extends React.Component {
   console.log(data)
   const postData = async() => {
 
-      if (this.Validate() && idNumber != this.props.studentIDNo){
-          await axios.post('http://197.242.69.18:3300/api/RubixUserNextOfKins', data, requestOptions)
+      if (this.Validate() && idNumber != studentID){
+          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
+              this.postStatus()
               this.props.history.push("/" )
           })
               
       } else{
-        alert("Please ensure that you entered all required information")
+        alert("Next of kin ID cannot be the same as student ID")
       }
   }
   postData()
+}else{
+  alert("Please a valid home address")
+}
+}
+
+//Posting Update status
+postStatus(){
+  const data = {
+    'RegisterStatus': 'Email Verify',
+    'RubixRegisterUserID': this.state.myUserID,
+};
+const requestOptions = {
+  title: 'Verify Status Form',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: data
+};
+const postData = async() => {
+  await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
+          .then(response => {
+              console.log(response)
+              //this.props.history.push("/" )
+          })
+}
+postData()
 }
 
 
@@ -134,6 +171,9 @@ class NextOfKin extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+    const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
+
   }
 
 
@@ -212,13 +252,40 @@ class NextOfKin extends React.Component {
 
                       <div className="form-group">
                         <label className="control-label sr-only" >
+                          Home Address
+                            </label>
+                            <GooglePlacesAutocomplete
+apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange = {(e)=>this.setState({location: e.target.value})}
+selectProps={{
+location: this.state.location,
+onChange: (e)=>this.setState({location: e}),
+placeholder: "Enter next of kin address"
+}}
+/>
+<br/>
+<div className="form-group">
+                        <label className="control-label sr-only" >
+                        Postal Code:
+                            </label>
+                        <input
+                          className="form-control"
+                          //name="PostCode"
+                          id="post-code"
+                          placeholder="Enter your post code"
+                          type="text"
+                          required/>
+                      </div>
+
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
                         Relationship:
                             </label>
                         <input
                           className="form-control"
                           id="NextOfKinEmail"
                           name='NextOfKiniRelationship'
-                          placeholder="Enter Next of kin email"
+                          placeholder="Enter Next of kin relation to you"
                           type="text"
                           required
                         />

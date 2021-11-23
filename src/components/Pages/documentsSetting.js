@@ -1,10 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import PageHeader from "../../components/PageHeader";
 import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
-import LineChartCard from "../../components/LineChartCard";
+import axios from "axios";
 import { Document, Page, pdfjs  } from "react-pdf";
 import {
   fileFolderCardData,
@@ -20,10 +19,32 @@ class DocumentManager extends React.Component {
     this.state = {
       pageNumber: 1,
       numPages: null,
+      doc: '',
+      document: {file: "test.pdf"}
     }
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+    
+    const fetchData = async() =>{
+      const data = {
+        'RubixRegisterUserID': '111111',
+        'FileType' : "id-document"
+    };
+    const requestOptions = {
+      title: 'Student Documents Request',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: data
+  };
+      //Get Rubix User Details
+      await axios.post('http://192.168.88.10:3300/api/RubixGetImages', data, requestOptions)
+            .then(response => {
+                console.log("Documents details:",response.data.PostRubixUserData[0])
+                this.setState({doc: response.data.PostRubixUserData[0]})
+            })
+        };
+        fetchData()
   }
 
   //When document is loaded successfuly
@@ -37,6 +58,12 @@ class DocumentManager extends React.Component {
     this.setState(state => ({ pageNumber: state.pageNumber - 1 }));
   goToNextPage = () =>
     this.setState(state => ({ pageNumber: state.pageNumber + 1 }));
+
+  //Switch to different Document
+  changeDocument = (file) => {
+    this.setState(state => ({ document: {file: file}}));
+  }
+  //
   render() {
     return (
       <div
@@ -49,12 +76,12 @@ class DocumentManager extends React.Component {
           <div className="container-fluid">
             <div className="row clearfix">
               {fileFolderCardData.map((data, index) => {
-                return <FileFolderCard key={index} HeaderText={data.Header} />;
+                return <FileFolderCard key={index} HeaderText={data.Header} onClick={()=>this.changeDocument(data.file)}/>;
               })}
             </div>
             <div className="row clearfix">
               <div className="col-lg-3 col-md-5 col-sm-12">
-                <FileStorageCard TotalSize="Storage Used" UsedSize={17} />
+                <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
                 {fileStorageStatusCardData.map((data, index) => {
                   return (
                     <FileStorageStatusCard
@@ -69,17 +96,21 @@ class DocumentManager extends React.Component {
                 })}
               </div>
               <div className="col-lg-9 col-md-7 col-sm-12">
-                <LineChartCard
+                {/* <LineChartCard
                   HeaderText="View File"
                   ChartOption={areaChartFileReport}
-                />
+                /> */}
                 <div className="pdf-div">
           <Document
-            file= "test.pdf"
+            file= {"data:application/pdf;base64," + this.state.doc.document} //{this.state.document.file}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             <Page pageNumber={this.state.pageNumber} />
           </Document>
+          <nav>
+          <button onClick={this.goToPrevPage}>Prev</button>
+          <button onClick={this.goToNextPage}>Next</button>
+        </nav>
         </div>
               </div>
             </div>

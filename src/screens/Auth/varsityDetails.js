@@ -16,13 +16,19 @@ class VarsityDetails extends React.Component {
             provList: [],
             courseList: [],
             yearList: [],
+            myUserID: null,
             res: null,
             prov: null,
             uni: null,
             course: null,
             year: null,
             payment: null,
+            hearAbout: null,
+            selectedFile: null,
+            bankType: null,
             payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+            hearAboutUs: ['Where did you hear about us?', 'Social Media', 'Word of Mouth', 'School Campiegn', 'Other'],
+            bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             value: 0
 
         };
@@ -32,7 +38,7 @@ class VarsityDetails extends React.Component {
         e.preventDefault();
         const form = document.getElementById('uniDetails');
         const data = {
-            'RubixRegisterUserID': this.props.rubixUserID,
+            'RubixRegisterUserID': this.state.myUserID,
             'ProvinceID': this.state.prov,
             'UniversityID': this.state.uni,
             'CourseID': this.state.course,
@@ -53,8 +59,8 @@ class VarsityDetails extends React.Component {
         };
         console.log(data)
         const postData = async()=>{
-            if (this.state.prov !=null && this.state.uni !=null && this.state.course !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+            if (this.state.prov !=null && this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
+                await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
                     this.props.history.push("/nextofkin")
@@ -76,11 +82,13 @@ async componentDidMount(){
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+    const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
 
     const fetchData = async() =>{
 
         //Populate university list
-        await fetch('http://197.242.69.18:3300/api/RubixUniversities')
+        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -88,7 +96,7 @@ async componentDidMount(){
             });
 
             //Populate Residence list
-            await fetch('http://197.242.69.18:3300/api/RubixResidences')
+            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -96,7 +104,7 @@ async componentDidMount(){
             });
 
             //Populate Provinces list
-        await fetch('http://197.242.69.18:3300/api/RubixProvinces')
+        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -107,7 +115,7 @@ async componentDidMount(){
             });
 
             //Populate Courses list
-            await fetch('http://197.242.69.18:3300/api/RubixCourses')
+            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCourses')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -115,7 +123,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('http://197.242.69.18:3300/api/RubixStudentYearofStudies')
+            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -126,7 +134,138 @@ async componentDidMount(){
     fetchData();
   }
 
+  onPressCancel(){
+    this.setState({selectedFile: null})
+    this.setState({isSelected: false})
+  }
+  changeHandler = (event) => {
+    this.setState({selectedFile: event.target.files[0]})
+    console.log("selcted file", event.target.files[0])
+    this.setState({isSelected: true})
+    this.getBase64(event)
+  }
+  handleUpdate(){
+    const inputFile = document.getElementById('upload-button')
+    inputFile.click()
+  }
+  
+//Post File Using Mongo
+onPressUpload() {
+  //var file = e.target.files[0]
+  //console.log("selected file is:", file)
+  //this.setState({selectedFile: file})
+  const postDocument = async() =>{
+    const data = new FormData()
+    data.append('image', this.state.selectedFile)
+    data.append('FileType', this.state.payment,)
+    data.append('RubixRegisterUserID', this.state.myUserID)
+    const requestOptions = {
+      title: 'Student Document Upload',
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data',},
+      body: data
+  };
+  for (var pair of data.entries()) {
+    console.log(pair[0], ', ',pair[1]); 
+}
+await axios.post('https://rubixdocuments.cjstudents.co.za/feed/post?image', data, requestOptions)
+                .then(response => {
+                    console.log("Upload details:",response)
+                    this.setState({mongoID: response.data.post._id})
+                }) 
+  }
+  postDocument()
+}
+
+
   render() {
+    let body;
+    if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
+      body = 
+      null
+      {/* <>
+      <div style={{margin: 'auto', width: '25%'}}>
+        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
+        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload Proof of Funding</button>
+        </div>
+      </> */}
+    } else if(this.state.payment == 'Self Funded'){
+      body = <>
+      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Holder Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountHolderName"
+                          name='AccountHolderName'
+                          placeholder="Enter your bank account holder name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Bank Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BankName"
+                          name='BankName'
+                          placeholder="Enter your bank name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Branch Code:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BranchCode"
+                          name='BranchCode'
+                          placeholder="Enter your branch code"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Number:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountNumber"
+                          name='AccountNumber'
+                          placeholder="Enter your account number"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Type:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({bankType: e.target.value})} value={this.state.bankType}>
+        {
+         this.state.bankTypes.map((banktype, index)=> (
+            <option key={index} name='AccountType' value = {banktype}>{banktype}</option>
+        ))  
+        }
+        </select> }
+                      </div>
+
+      </>
+    } else {
+      body = null;
+    }
     return (
       <div className="theme-green">
         <div >
@@ -178,15 +317,14 @@ async componentDidMount(){
                         <label className="control-label sr-only" >
                         Courses:
                             </label>
-                            {  
-        <select className="form-control" onChange={(e)=>this.setState({course: e.target.value})} value={this.state.course}>
-        {
-            
-            this.state.courseList.map((course, index)=> (
-            <option key={index} name='CourseID' value = {course.RubixCourseID}>{course.CourseName}</option>
-        ))   
-        }
-    </select> }
+                            <input
+                          className="form-control"
+                          id="CourseID"
+                          name='CourseID'
+                          placeholder="Enter your course name"
+                          type="text"
+                          required
+                        />
                       </div>
 
                       <div className="form-group">
@@ -230,6 +368,22 @@ async componentDidMount(){
             
             this.state.payMethods.map((payment, index)=> (
             <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+                     {body}
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Hear About Us: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({hearAbout: e.target.value})} value={this.state.hearAbout}>
+        {
+            
+            this.state.hearAboutUs.map((options, index)=> (
+            <option key={index} name='HearAbout' value={options}>{options}</option>
         ))   
         }
     </select> }

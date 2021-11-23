@@ -1,11 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Logo from "../../assets/images/logo-white.svg";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
-import {updateEmail, updatePassword, updateUserID, updatePlatformID } from "../../actions";
+import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateStudentID } from "../../actions";
 
 class PersonalInformation extends React.Component {
   constructor(props) {
@@ -14,6 +13,7 @@ class PersonalInformation extends React.Component {
         userGender: 'Male',
         medicalConditions: 'None',
         errorMessage: '',
+        countryList: [],
         value: 0
 
     };
@@ -96,12 +96,12 @@ class PersonalInformation extends React.Component {
 //final submit check
  Submit(e){
     e.preventDefault();
-    console.log("User email:", this.props.email)
+    //console.log("User email:", this.props.email)
+    var idNumber = document.getElementById("IDNumber").value;
     const form = document.getElementById('register');
     const data = {
-        'RegisterStatus': 'Pending',
         'ClientID': '1',
-        'PlatformID': this.props.rubixUserID,
+        'PlatformID': '1',
         'RubixUserPlatformID': this.props.rubixUserID,
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
@@ -120,9 +120,12 @@ class PersonalInformation extends React.Component {
     console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
-            await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
+            await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 console.log(response)
+                this.props.updateStudentID(idNumber)
+                localStorage.setItem('studentIDNo', idNumber)
+                this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.history.push("/addresses")
             })
                 
@@ -139,6 +142,20 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+
+    //Fetch Data
+    const fetchData = async() =>{
+      //Fetch Countries List
+      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
+      .then(response => response.json())
+      .then(data => {
+          //console.log("data is ", data.data)
+          this.setState({countryList: data.data})
+          //console.log("this is the countryList:", this.state.countryList)
+          //setCountryList(data.data)
+          });
+        }
+        fetchData()
   }
 
   render() {
@@ -201,6 +218,19 @@ class PersonalInformation extends React.Component {
 
                       <div className="form-group">
                         <label className="control-label sr-only" >
+                        Country:
+                            </label>
+                            <select className="form-control" onChange={(e)=>this.setState({country: e.target.value})} value={this.state.country}>
+        {
+         this.state.countryList.map((country, index)=> (
+            <option key={index} name='Nationality ' value = {country.Country_Name}>{country.Country_Name}</option>
+        ))   
+        }
+        </select> 
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
                           ID Number
                             </label>
                             <input type='number' name="IDNumber" className="form-control" id='IDNumber' 
@@ -244,7 +274,6 @@ class PersonalInformation extends React.Component {
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})} />
                       </div>
-
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           Your Student Number
@@ -270,7 +299,6 @@ class PersonalInformation extends React.Component {
                           type="text"
                           //defaultValue='none'
                           onChange ={(e)=>this.setState({medicalConditions: e.target.value})}
-                          required
                         />
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
@@ -301,6 +329,7 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
  
 export default connect(mapStateToProps, {
   updateUserID,
+  updateStudentID,
   updatePlatformID,
   updatePassword,
   updateEmail,

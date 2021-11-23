@@ -13,8 +13,8 @@ class PageHeader extends React.Component {
     };
   }
   componentDidMount() {
-    this.chartPlace();
-    this.chartPlace1();
+    //this.chartPlace();
+    //this.chartPlace1();
   }
   chartPlace = () => {
     var chartDom = document.getElementById("visitorsSparcalChart");
@@ -90,7 +90,7 @@ class PageHeader extends React.Component {
               })}
             </ul>
           </div>
-          <div className="col-lg-7 col-md-4 col-sm-12 text-right">
+          {/* <div className="col-lg-7 col-md-4 col-sm-12 text-right">
             <div className="inlineblock text-center m-r-15 m-l-15 hidden-sm">
               <div
                 id="visitorsSparcalChart"
@@ -107,7 +107,7 @@ class PageHeader extends React.Component {
               ></div>
               <span>Visits</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );

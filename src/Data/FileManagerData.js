@@ -17,42 +17,62 @@ import Image15 from "../assets/images/image-gallery/15.jpg";
 export const fileFolderCardData = [
   {
     Header: "ID Document",
+    file: "test.pdf"
   },
   {
     Header: "Proof of Residence",
+    file: "test2.pdf"
   },
   {
     Header: "University Registration",
+    file: "test.pdf"
   },
   {
     Header: "Next of Kin ID",
+    file: "test2.pdf"
   },
 ];
 
 export const fileStorageStatusCardData = [
   {
-    UsedSize: "2gb",
+    UsedSize: "ID Document",
     Type: "Documents",
+    status: "Approved",
+    FileType: "id-document",
     TotalSize: "1tb",
-    UsedPer: 18,
+    UsedPer: 100,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
   {
-    UsedSize: "10gb",
-    Type: "Media",
+    UsedSize: "Proof of Residence",
+    Type: "Documents",
+    status: "Pending",
+    FileType: "proof-of-res",
     TotalSize: "1tb",
-    UsedPer: 25,
+    UsedPer: 50,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-purple mb-0",
   },
-  {
-    UsedSize: "20gb",
-    Type: "Images",
+   {
+    UsedSize: "Proof of Registration",
+    Type: "Documents",
+    status: "Pending",
+    FileType: "proof-of-reg",
     TotalSize: "1tb",
-    UsedPer: 67,
+    UsedPer: 50,
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
+  },
+   {
+    UsedSize: "Next of Kin ID",
+    Type: "Documents",
+    status: "No Document",
+    FileType: "next-of-kin",
+    TotalSize: "1tb",
+    UsedPer: 0,
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-yellow mb-0",
   },
 ];
 

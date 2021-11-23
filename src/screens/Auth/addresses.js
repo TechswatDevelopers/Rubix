@@ -13,6 +13,7 @@ class Addresses extends React.Component {
             countryList: [],
             location: null,
             prov: null,
+            myUserID: null,
             country: null,
             value: 0
 
@@ -26,7 +27,7 @@ class Addresses extends React.Component {
       const locations = document.getElementById('location');
     const street_address = this.state.location['value']['structured_formatting']['main_text']
     const data = {
-        'RubixRegisterUserID': '78',
+        'RubixRegisterUserID': this.state.myUserID,
         'RegisterUserStreetNameAndNumer': street_address,
         'RegisterUserProvince': this.state.prov,
         'RegisterUserCountry': this.state.country,
@@ -46,7 +47,7 @@ class Addresses extends React.Component {
     const postData = async() => {
 
         if (this.state.location !=null && this.state.prov !=null && this.state.country !=null /* && document.getElementById('addresses').checkValidity() == true */){
-            await axios.post('http://197.242.69.18:3300/api/RubixRegisterUserAddesss', data, requestOptions)
+            await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
                 console.log(response)
                 this.props.history.push("/varsityDetails")
@@ -72,20 +73,21 @@ async componentDidMount(){
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+    const userID = localStorage.getItem('userID');
+    this.setState({myUserID: userID});
+
 
     const fetchData = async() =>{
-        await fetch('http://197.242.69.18:3300/api/RubixProvinces')
+        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
-            //this.state.provList = data.data
             this.setState({provList: data.data})
             //console.log("this is the provList:", this.state.provList)
             //setProvList(data.data)
             });
     
     //Fetch Countries List
-            await fetch('http://197.242.69.18:3300/api/RubixCountries')
+            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -211,12 +213,14 @@ placeholder: "Enter your home Address"
   }
 }
 
-/* PersonalInformation.propTypes = {
+Addresses.propTypes = {
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
+const mapStateToProps = ({navigationReducer, loginReducer }) => ({
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+  rubixUserID: navigationReducer.userID,
 });
- */
-export default Addresses;
+
+export default connect(mapStateToProps, {
+})(Addresses);

@@ -40,12 +40,13 @@ class Login extends React.Component {
       const postData = async() => {
 
           if (document.getElementById('login').checkValidity() == true){
-              await axios.post('http://197.242.69.18:3300/api//RubixLogin', data, requestOptions)
+              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixLogin', data, requestOptions)
               .then(response => {
                   console.log(response)
-                  if(response.data['0']['Response'] == 1){
-                    this.props.updateUserID(response.data['0']['RubixRegisterUserID'])
-                    this.props.history.push("dashboard")
+                  if(response.data.PostRubixUserData['0']['Response'] == 1){
+                    this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    this.props.history.push("profilev1page")
                   } else {
                     this.props.history.push("/" )
                     error.append("Login failed, email/password incorrect.")
@@ -73,12 +74,13 @@ class Login extends React.Component {
       body: data
   };
     const postData = async() => {
-      await axios.post('http://197.242.69.18:3300/api/RubixLogin', data, requestOptions)
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixLogin', data, requestOptions)
       .then(response => {
         console.log(response)
         console.log("checking data",response.data)
           if(response.data['0']['Response'] == 1){
             console.log("This is the data:", response.data)
+            localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
             this.props.history.push("dashboard" )
           } else {
             this.props.history.push("/" )
@@ -128,7 +130,7 @@ class Login extends React.Component {
     const { navigation } = this.props;
     const { email, password } = this.props;
     return (
-      <div className="theme-orange">
+      <div className={this.props.rubixThemeColor}>
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src="CJ-Logo.png" width="48" height="48" alt="Lucid" /></div>
@@ -174,12 +176,6 @@ class Login extends React.Component {
                           required = ''
                         />
                       </div>
-                      {/* <div className="form-group clearfix">
-                        <label className="fancy-checkbox element-left">
-                          <input type="checkbox" />
-                          <span>Remember me</span>
-                        </label>
-                      </div> */}
                       <p id="error"></p>
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
                       <p className="helper-text m-b-10 bottom">Or Login Using:</p>
@@ -226,10 +222,10 @@ class Login extends React.Component {
                           <a href="registration" >Register</a>
                         </span>
 
-                        <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>
+                        {/* <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>
                         <br></br>
                   <button type="button" onClick={()=>{this.props.onPressThemeColor("orange"); this.props.history.push("/registration")}}>Login with Opal</button>
-                      </div>
+                       */}</div>
                     </div>
                   </div>
                 </div>
@@ -252,7 +248,8 @@ Login.propTypes = {
 
 const mapStateToProps = ({navigationReducer, loginReducer}) => ({
   rubixUserID: navigationReducer.userID,
-  myMessage: loginReducer.customMessageOnLogin
+  myMessage: loginReducer.customMessageOnLogin,
+  rubixThemeColor: navigationReducer.themeColor
 });
 
 export default connect(mapStateToProps, {

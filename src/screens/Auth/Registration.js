@@ -38,16 +38,65 @@ class Registration extends React.Component {
         console.log("Submit function is called")
         e.preventDefault();
         const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        console.log(email)
+        //const password = document.getElementById('password').value;
+
+        // PingRequest data
+        const pingData = {
+          'Emailcheck': email,
+      };
+        //Ping Request Headers
+        const requestOptions = {
+          title: 'Email Check Details',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: pingData
+      };
+
+        // User Exists Request data
+        const userExistsData = {
+          'UserEmail': email,
+      };
+
+      //Check user exists
+      const checkUser = async()=>{
+        //Send email to DB
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
+            .then(response => {
+                console.log(response.data)
+                /*If User exists on DB:
+                1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
+                2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
+                3. If Response is equal to One, then the user exists on the DB
+                */
+                if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID == null ){
+                  postData()
+                 } else if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID != null){
+                  localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
+                 }else {
+                  console.log('User Already Exists')
+                  alert('User Already Exists')
+                 }
+            })
+      }
+      checkUser()
+
+      const postData = async()=>{
+        //Ping email address
+        await axios.post(' https://rubixpdf.cjstudents.co.za/validEmailCheck', pingData, requestOptions)
+            .then(response => {
+                console.log(response.data.EmailResult )
+                if(response.data.EmailResult){
+                  this.props.updateEmail(email);
+                  this.props.updatePlatformID("1");
+                 this.props.history.push("/logInformation")
+                 } else{
+               console.log('Email validation failed')
+               alert('Invalid email, please enter a valid email address')
+                 }
+            })
+          }
   
-       if(email != null && password != null){
-         this.props.updateEmail(email);
-         this.props.updatePlatformID("1");
-         this.props.updatePassword(password);
-        this.props.history.push("/logInformation")
-        } else{
-      console.log('Email validation failed')
-        }
       }
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
@@ -86,7 +135,7 @@ class Registration extends React.Component {
                           type="email"
                         />
                       </div>
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label className="control-label sr-only" >
                           Password
                             </label>
@@ -96,7 +145,7 @@ class Registration extends React.Component {
                           placeholder="Password"
                           type="password"
                         />
-                      </div>
+                      </div> */}
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue
                         </button>
@@ -104,7 +153,7 @@ class Registration extends React.Component {
                       <div className="bottom">
                         <span className="helper-text">
                           Already have an account?{" "}
-                          <a href="/studentInfo">Login</a>
+                          <a href="/">Login</a>
                         </span>
                       </div>
                     </form>
