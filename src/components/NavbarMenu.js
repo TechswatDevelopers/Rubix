@@ -42,7 +42,7 @@ class NavbarMenu extends React.Component {
     //Fetch data from DB
     const fetchData = async() =>{
     //Get Rubix User Details
-    await fetch(' http://192.168.88.10:3300/api/RubixRegisterUsers/'+ userID)
+    await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
         this.setState({profile: data})
@@ -447,7 +447,7 @@ class NavbarMenu extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
               <hr />
-              {/* <ul className="row list-unstyled">
+               <ul className="row list-unstyled">
                 <li className="col-4">
                   <small>Sales</small>
                   <h6>456</h6>
@@ -460,9 +460,9 @@ class NavbarMenu extends React.Component {
                   <small>Revenue</small>
                   <h6>$2.13B</h6>
                 </li>
-              </ul> */}
+              </ul> 
             </div>
-            {/* <ul className="nav nav-tabs">
+            <ul className="nav nav-tabs">
               <li className="nav-item">
                 <a
                   className={sideMenuTab[0] ? "nav-link active" : "nav-link"}
@@ -507,9 +507,9 @@ class NavbarMenu extends React.Component {
                   <i className="icon-question"></i>
                 </a>
               </li>
-            </ul> */}
+            </ul> 
 
-{/* 
+
             <div className="tab-content p-l-0 p-r-0">
               <div
                 className={sideMenuTab[0] ? "tab-pane active show" : "tab-pane"}
@@ -1498,7 +1498,7 @@ class NavbarMenu extends React.Component {
                   </li>
                 </ul>
               </div>
-            </div> */}
+            </div> 
           </div>
         </div>
       </div>

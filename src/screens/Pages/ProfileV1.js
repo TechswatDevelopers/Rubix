@@ -56,8 +56,7 @@ class ProfileV1Page extends React.Component {
         .then(data => {
           console.log("calleed")
           console.log("documents data:", data)
-          this.setState({ doc: data.post[0] })
-          this.setState({ tempDoc: data.post[1] })
+          this.setState({ doc: data.post[0]})
           this.setState({ docs: data.post })
         });
 
@@ -65,6 +64,7 @@ class ProfileV1Page extends React.Component {
       await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
         .then(response => response.json())
         .then(data => {
+          console.log("Residence Data:", data)
           this.setState({ residence: data })
         });
 
@@ -142,9 +142,9 @@ class ProfileV1Page extends React.Component {
     this.setState({ isSelected: false })
   }
   changeHandler(event) {
-    this.setState({ selectedFile: event.target.files[0] })
+    this.setState({selectedFile: event.target.files[0] })
     console.log("selcted file1", event.target.files[0])
-    this.setState({ isSelected: true })
+    this.setState({isSelected: true })
     this.getBase64(event)
   }
   handleUpdate(e) {
@@ -192,15 +192,15 @@ class ProfileV1Page extends React.Component {
 
   render() {
     let myBody;
-    if (this.state.doc == null) {
-      myBody = <> {this.state.isSelected
+    if (this.state.doc === null) {
+      myBody = <> {this.state.isSelected && this.state.base64Pdf != null
         ? <>
           <button className="btn btn-primary" onClick={() => this.onPressUpload()}>Confirm Upload</button>{" "}
           &nbsp;&nbsp;
           <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
             Cancel
           </button>
-          <Document
+          <Document className="border border-primary border-2"
             file={{ url: this.state.base64Pdf }}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
@@ -235,7 +235,9 @@ class ProfileV1Page extends React.Component {
       </>
     } else {
       myBody = <>
-        <Document
+      <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
+      <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
+        <Document className="border border-primary border-2"
           file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
           onLoadSuccess={this.onDocumentLoadSuccess}
         >
@@ -247,8 +249,6 @@ class ProfileV1Page extends React.Component {
           &nbsp;&nbsp;
           <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
         </nav>
-        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
-        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
       </>
     }
     return (
@@ -386,28 +386,48 @@ class ProfileV1Page extends React.Component {
                       </Tab>
                       <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
-                          <div className="col-lg-6 col-md-12">
+                          <div className="w-100 p-3">
                             <div className="body">
-                              <h6>My Residence Information</h6>
-                              <ul className="list-unstyled list-login-session">
-
-                                <li>
+                              <h6 style={{textAlign:'center'}}>My Residence Information</h6>
                                   <div className="login-session">
                                     <div className="login-info">
                                       <h3 className="login-title">
                                         University - {this.state.residence.ResidenceUniversity}
                                       </h3>
-
                                     </div>
-
                                   </div>
+                                
+                              <ul className="list-unstyled list-login-session w-80 p-3">
+                                <li>
+                                <h3 className="login-title">
+                                        Residence Name - {this.state.residence.ResidenceName}
+                                      </h3>
                                 </li>
+                                <img
+                                  alt="cannot display"
+                                  accept='.jpg, .png, .jpeg'
+                                  className="user-photo media-object"
+                                  src={this.state.residence.ResidencePhoto} />
+                               
+                                  <li>
+                                    <p>{this.state.residence.ResidenceDescription}</p>
+                                  </li>
                                 <li>
                                   <div className="login-session">
                                     <div className="login-info">
                                       <h3 className="login-title">
-                                        Residence Name - {this.state.residence.ResidenceName}
+                                        Residence Amenitis
                                       </h3>
+                                      <p>{this.state.residence.ResidenceAmenities}</p>
+                                    </div>
+
+                                  </div>
+                                </li>
+                                
+                                <li>
+                                  <div className="login-session">
+                                    <div className="login-info">
+                                      
                                       <span className="login-detail">
                                         {this.state.residence.ResidenceLocation}
                                       </span>
@@ -430,83 +450,6 @@ class ProfileV1Page extends React.Component {
                               </ul>
                             </div>
                           </div>
-                          {/* <div className="col-lg-6 col-md-12">
-                            <div className="body">
-                              <h6>Connected Social Media</h6>
-                              <ul className="list-unstyled list-connected-app">
-                                <li>
-                                  <div className="connected-app">
-                                    <i className="fa fa-facebook app-icon"></i>
-                                    <div className="connection-info">
-                                      <h3 className="app-title">FaceBook</h3>
-                                      <span className="actions">
-                                        <a>View Permissions</a>{" "}
-                                        <a className="text-danger">
-                                          Revoke Access
-                                        </a>
-                                      </span>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="connected-app">
-                                    <i className="fa fa-twitter app-icon"></i>
-                                    <div className="connection-info">
-                                      <h3 className="app-title">Twitter</h3>
-                                      <span className="actions">
-                                        <a>View Permissions</a>{" "}
-                                        <a className="text-danger">
-                                          Revoke Access
-                                        </a>
-                                      </span>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="connected-app">
-                                    <i className="fa fa-instagram app-icon"></i>
-                                    <div className="connection-info">
-                                      <h3 className="app-title">Instagram</h3>
-                                      <span className="actions">
-                                        <a>View Permissions</a>{" "}
-                                        <a className="text-danger">
-                                          Revoke Access
-                                        </a>
-                                      </span>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="connected-app">
-                                    <i className="fa fa-linkedin app-icon"></i>
-                                    <div className="connection-info">
-                                      <h3 className="app-title">Linkedin</h3>
-                                      <span className="actions">
-                                        <a>View Permissions</a>{" "}
-                                        <a className="text-danger">
-                                          Revoke Access
-                                        </a>
-                                      </span>
-                                    </div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div className="connected-app">
-                                    <i className="fa fa-vimeo app-icon"></i>
-                                    <div className="connection-info">
-                                      <h3 className="app-title">Vimeo</h3>
-                                      <span className="actions">
-                                        <a>View Permissions</a>{" "}
-                                        <a className="text-danger">
-                                          Revoke Access
-                                        </a>
-                                      </span>
-                                    </div>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </div> */}
                         </div>
                       </Tab>
                       <Tab eventKey="documents" title="Documents">
@@ -518,36 +461,15 @@ class ProfileV1Page extends React.Component {
                         >
                           <div>
                             <div className="container-fluid">
-                              {/* <Row>
-                  <Col>
-                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("id-document")}><i className="fa fa-folder m-r-10"></i>ID Document</button>
-                  </Col>
-                  <Col>
-                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("proof-of-res")}><i className="fa fa-folder m-r-10"></i>Proof of Residence</button>
-                  </Col>
-                  <Col>
-                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("proof-of-reg")}><i className="fa fa-folder m-r-10"></i>Proof of Registration</button>
-                  </Col>
-                  <Col>
-                  <button className="btn btn-signin-social" onClick={()=>this.changeDocument("next-of-kin")}><i className="fa fa-folder m-r-10"></i>Next of Kin ID</button>
-                  </Col>
-                </Row> */}
-
-                              {/* <div className="row clearfix">
-              {fileFolderCardData.map((data, index) => {
-                return <FileFolderCard key={index} HeaderText={data.Header} onClick={()=>this.changeDocument(data.file)}/>;
-              })}
-            </div> */}
-
-
-
                               <div className="row clearfix">
                                 <div className="col-lg-3 col-md-5 col-sm-12">
                                   <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
                                   {fileStorageStatusCardData.map((data, index) => {
                                     return (
-                                      <div onClick={() => this.changeDocument(data.FileType)}> <FileStorageStatusCard
+                                      <div key={index + "sidjpidj"} onClick={() => this.changeDocument(data.FileType)}> 
+                                      <FileStorageStatusCard
                                         key={index + "sidjpidj"}
+                                        TotalSize=''
                                         UsedSize={data.UsedSize}
                                         Type={data.status}
                                         UsedPer={data.UsedPer}
@@ -575,8 +497,8 @@ class ProfileV1Page extends React.Component {
                         </div>
                       </Tab>
                       <Tab eventKey="signing" title="Lease Agreement">
-                        <div>
-                          <Document
+                        <div className = "w-auto p-3">
+                          <Document className="border border-primary border-2 w-100 p-3"
                             file={{ url: "data:application/pdf;base64," + this.state.docUrl }}
                             onLoadSuccess={this.onDocumentLoadSuccess}
                           >
@@ -588,7 +510,7 @@ class ProfileV1Page extends React.Component {
                             <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
                           </nav>
                           <p>To agree to the above document, please enter your signature:</p>
-                          <div><SignatureCanvas penColor='blue'
+                          <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas penColor='black' 
                             canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
 
 

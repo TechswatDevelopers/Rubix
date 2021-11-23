@@ -103,7 +103,7 @@ class NextOfKin extends React.Component {
   if(this.state.location !=null){
     const locations = document.getElementById('location');
     const postCode = document.getElementById('post-code').value;
-    const street_address = this.state.location['value']['structured_formatting']['main_text'] + postCode
+    const street_address = this.state.location['value']['structured_formatting']['main_text'] + ', ' + postCode
   
   const data = {
       'RubixRegisterUserID': this.state.myUserID,
@@ -127,6 +127,7 @@ class NextOfKin extends React.Component {
           await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
+              this.postStatus()
               this.props.history.push("/" )
           })
               
@@ -138,6 +139,28 @@ class NextOfKin extends React.Component {
 }else{
   alert("Please a valid home address")
 }
+}
+
+//Posting Update status
+postStatus(){
+  const data = {
+    'RegisterStatus': 'Email Verify',
+    'RubixRegisterUserID': this.state.myUserID,
+};
+const requestOptions = {
+  title: 'Verify Status Form',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: data
+};
+const postData = async() => {
+  await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
+          .then(response => {
+              console.log(response)
+              //this.props.history.push("/" )
+          })
+}
+postData()
 }
 
 

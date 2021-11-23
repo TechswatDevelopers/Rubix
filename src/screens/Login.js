@@ -130,7 +130,7 @@ class Login extends React.Component {
     const { navigation } = this.props;
     const { email, password } = this.props;
     return (
-      <div className="theme-orange">
+      <div className={this.props.rubixThemeColor}>
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src="CJ-Logo.png" width="48" height="48" alt="Lucid" /></div>
@@ -248,7 +248,8 @@ Login.propTypes = {
 
 const mapStateToProps = ({navigationReducer, loginReducer}) => ({
   rubixUserID: navigationReducer.userID,
-  myMessage: loginReducer.customMessageOnLogin
+  myMessage: loginReducer.customMessageOnLogin,
+  rubixThemeColor: navigationReducer.themeColor
 });
 
 export default connect(mapStateToProps, {
