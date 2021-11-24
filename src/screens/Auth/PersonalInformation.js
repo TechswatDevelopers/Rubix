@@ -127,6 +127,7 @@ class PersonalInformation extends React.Component {
                 localStorage.setItem('studentIDNo', idNumber)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.history.push("/addresses")
+                this.postStatus()
             })
                 
         } else{
@@ -135,6 +136,29 @@ class PersonalInformation extends React.Component {
     }
     postData()
 }
+
+//Posting Update status
+postStatus(){
+  const data = {
+    'RegisterStatus': 'Email Verify',
+    'RubixRegisterUserID': this.state.myUserID,
+};
+const requestOptions = {
+  title: 'Verify Status Form',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: data
+};
+const postData = async() => {
+  await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
+          .then(response => {
+              console.log(response)
+              //this.props.history.push("/" )
+          })
+}
+postData()
+}
+
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");

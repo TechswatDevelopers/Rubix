@@ -127,7 +127,6 @@ class NextOfKin extends React.Component {
           await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
-              this.postStatus()
               this.props.history.push("/" )
           })
               
@@ -140,29 +139,6 @@ class NextOfKin extends React.Component {
   alert("Please a valid home address")
 }
 }
-
-//Posting Update status
-postStatus(){
-  const data = {
-    'RegisterStatus': 'Email Verify',
-    'RubixRegisterUserID': this.state.myUserID,
-};
-const requestOptions = {
-  title: 'Verify Status Form',
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: data
-};
-const postData = async() => {
-  await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
-          .then(response => {
-              console.log(response)
-              //this.props.history.push("/" )
-          })
-}
-postData()
-}
-
 
   componentDidMount(){
     document.body.classList.remove("theme-cyan");

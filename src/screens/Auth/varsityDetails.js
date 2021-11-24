@@ -181,12 +181,14 @@ await axios.post('http://192.168.88.10:3001/feed/post?image', data, requestOptio
   render() {
     let body;
     if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
-      body = <>
+      body = 
+      null
+      {/* <>
       <div style={{margin: 'auto', width: '25%'}}>
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
         <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload Proof of Funding</button>
         </div>
-      </>
+      </> */}
     } else if(this.state.payment == 'Self Funded'){
       body = <>
       <div className="form-group">
