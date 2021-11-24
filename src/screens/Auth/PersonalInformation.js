@@ -150,7 +150,7 @@ const requestOptions = {
   body: data
 };
 const postData = async() => {
-  await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
+  await axios.post('http://192.168.88.10:3300/api/RubixUpdateStatus', data, requestOptions)
           .then(response => {
               console.log(response)
               //this.props.history.push("/" )

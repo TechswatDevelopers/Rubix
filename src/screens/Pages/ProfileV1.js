@@ -37,6 +37,7 @@ class ProfileV1Page extends React.Component {
       isSelected: false,
       base64Pdf: null,
       docUrl: '',
+      showPad: false,
       trimmedDataURL: null,
     }
   }
@@ -44,27 +45,23 @@ class ProfileV1Page extends React.Component {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
-    this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png')
-
-    //Generate base64 for dummy image
-    //this.getBase64FromSTorage('sign.png') 
 
     const fetchData = async () => {
       //Get documents from DB
       await fetch('http://192.168.88.10:3001/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("calleed")
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
           this.setState({ doc: data.post[0]})
           this.setState({ docs: data.post })
+          this.checkLease(userID)
         });
 
       //Get Rubix User Residence Details
       await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("Residence Data:", data)
+          //console.log("Residence Data:", data)
           this.setState({ residence: data })
         });
 
@@ -78,6 +75,19 @@ class ProfileV1Page extends React.Component {
   goToNextPage = () =>
     this.setState(state => ({ pageNumber: state.pageNumber + 1 }));
 
+    //Check Lease Agreement Doc
+    checkLease(userId){
+      const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
+      console.log(temp[0].image)
+      if (temp.length != 0){
+        this.setState({docUrl:temp[0].image})
+        this.setState({showPad: false})
+      }
+      else {
+        this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png', userId, 0)
+        this.setState({showPad: true})
+      }
+    }
   //Switch to different Document
   changeDocument = (file) => {
     const temp = this.state.docs.filter(doc => doc.FileType == file)
@@ -111,16 +121,31 @@ class ProfileV1Page extends React.Component {
       console.log('Error: ', error);
     }
   }
+//Converts base64 to file
+  dataURLtoFile(dataurl, filename) {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], filename, {type:mime});
+}
 
   //Post File Using Mongo
-  onPressUpload() {
+  onPressUpload(image, filetype) {
     //var file = e.target.files[0]
     //console.log("selected file is:", file)
     //this.setState({selectedFile: file})
     const postDocument = async () => {
       const data = new FormData()
-      data.append('image', this.state.selectedFile)
-      data.append('FileType', this.state.keyString,)
+      data.append('image', image)
+      data.append('FileType', filetype)
       data.append('RubixRegisterUserID', this.state.myUserID)
       const requestOptions = {
         title: 'Student Document Upload',
@@ -163,17 +188,25 @@ class ProfileV1Page extends React.Component {
   trim = () => {
     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      this.postSignature(this.state.trimmedDataURL)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
     } else {
       alert("Please provide a signature")
     }
   }
+
+//Convert base64 to blob
+async convertBase64ToBlob(base64String) {
+  const res = await fetch('data:application/pdf;base64,' + base64String)
+  const blob = await res.blob()
+  console.log(blob)
+  return blob
+}
+
   //Function to post signature to API
-  postSignature(signature) {
-    console.log('I am called ')
+  postSignature(signature, userid, tryval) {
     const postDocument = async () => {
       const data = {
-        'RubixRegisterUserID': this.state.myUserID,
+        'RubixRegisterUserID': userid,
         'ClientId': 1,
         'image': signature
       }
@@ -183,14 +216,21 @@ class ProfileV1Page extends React.Component {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
+      console.log("Posted Data:", data)
       await axios.post('http://192.168.88.10:3005/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
-          this.setState({ docUrl: response.data.Base })
+          this.setState({docUrl: response.data.Base })
+          if(tryval === 1){
+            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+            this.onPressUpload(temp, 'lease-agreement')
+          }
         })
     }
     postDocument()
   }
+  
 
   render() {
     let myBody;
@@ -228,7 +268,7 @@ class ProfileV1Page extends React.Component {
         
     } else {
       myBody = <>
-      <button className="btn btn-primary" onClick={() => this.onPressUpload()}>Confirm Upload</button>{" "}
+      <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString)}>Confirm Upload</button>{" "}
       &nbsp;&nbsp;
       <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
         Cancel
@@ -501,19 +541,22 @@ class ProfileV1Page extends React.Component {
                             &nbsp;&nbsp;
                             <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
                           </nav>
-                          <p>To agree to the above document, please enter your signature:</p>
+                          {
+                            this.state.showPad
+                            ? <>
+                            <p>To agree to the above document, please enter your signature:</p>
                           <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black' 
                             canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
-
-
-
-
                           <button className="btn btn-primary" onClick={() => this.trim()}>
                             Submit Signature
                           </button>
                           <button className="btn btn-default" onClick={this.clear}>
                             Clear
                           </button>
+                            </>
+                            : null
+                          }
+                          
 
                         </div>
 

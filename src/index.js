@@ -13,6 +13,9 @@ import "./assets/assets/scss/main.scss";
 import "./assets/assets/scss/color_skins.scss";
 import "../node_modules/font-awesome/scss/font-awesome.scss";
 import MyProvider from "./App";
+//Respond.io Script
+//<script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
+
 
 
 const store = createStore(reducers, applyMiddleware(thunk));
