@@ -46,13 +46,12 @@ class Login extends React.Component {
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-                    this.props.history.push("profilev1page")
+                    this.props.history.push("/profilev1page")
                   } else {
                     this.props.history.push("/" )
                     error.append("Login failed, email/password incorrect.")
                   }
               })
-                  
           } else{
               
               console.log("checkValidity ", document.getElementById('nof').checkValidity())
