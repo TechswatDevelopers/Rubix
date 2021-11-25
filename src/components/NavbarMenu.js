@@ -165,6 +165,7 @@ class NavbarMenu extends React.Component {
       toggleEqualizer,
       sideMenuTab,
       isToastMessage,
+      clientLogo,
       activeKey,
     } = this.props;
     var path = window.location.pathname;
@@ -204,12 +205,12 @@ class NavbarMenu extends React.Component {
             <div className="navbar-brand">
               <a href="dashboard">
                 <img
-                  src="CJ-Logo.png"/* {
+                  src={clientLogo}/* {
                     document.body.classList.contains("full-dark")
                       ? LogoWhite
                       : Logo
                   } */
-                  alt="CJ Students Logo"
+                  alt="Company Logo"
                   className="img-responsive logo"
                 />
               </a>
@@ -1549,6 +1550,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     sideMenuTab,
     isToastMessage,
     userID,
+    clientLogo,
   } = navigationReducer;
   return {
     addClassactive,
@@ -1572,6 +1574,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     menuProfileDropdown,
     sideMenuTab,
     isToastMessage,
+    clientLogo
   };
 };
 

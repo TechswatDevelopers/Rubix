@@ -73,7 +73,7 @@ class Registration extends React.Component {
                   postData()
                  } else if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID != null){
                   localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
-                 }else {
+                 } else {
                   console.log('User Already Exists')
                   alert('User Already Exists')
                  }

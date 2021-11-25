@@ -13,6 +13,8 @@ import {
   UPDATE_USERID,
   UPDATE_PLATFORM,
   UPDATE_CLIENTID,
+  UPDATE_CLIENTNAME,
+  UPDATE_CLIENTLOGO,
   UPDATE_STUDENTID,
 } from "../actions/NavigationAction";
 
@@ -21,6 +23,8 @@ const initialState = {
   userID: "",
   platformID: "",
   clientID: "theme-blue",
+  clientName: "",
+  clientLogo: "",
   studentIDNo: null,
   addClassactive: [
     false,
@@ -439,7 +443,7 @@ export default (state = initialState, action) => {
     case TOAST_MESSAGE_LOAD: {
       return {
         ...state,
-        isToastMessage: !state.isToastMessage,
+        isToastMessage: state.isToastMessage,
       };
     }
 
@@ -461,6 +465,20 @@ export default (state = initialState, action) => {
       return{
         ...state,
         client: action.payload,
+      }
+    }
+    
+    case UPDATE_CLIENTNAME: {
+      return{
+        ...state,
+        clientName: action.payload,
+      }
+    }
+
+    case UPDATE_CLIENTLOGO: {
+      return{
+        ...state,
+        clientLogo: action.payload,
       }
     }
 

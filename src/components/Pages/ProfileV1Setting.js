@@ -324,6 +324,13 @@ class ProfileV1Setting extends React.Component {
           .then(response => {
             console.log("All profile data",response.data.PostRubixUserData[0])
             this.setState({myProfile: response.data.PostRubixUserData[0]})
+          }).then(() => {
+            localStorage.setItem('resName', this.state.myProfile.ResidenceName)
+            localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)
+            localStorage.setItem('resAddress', this.state.myProfile.ResidenceLocation)
+            localStorage.setItem('resUni', this.state.myProfile.ResidenceUniversity)
+            localStorage.setItem('resDescription', this.state.myProfile.ResidenceDescription)
+            localStorage.setItem('resAmenities', this.state.myProfile.ResidenceAmenities)
           })
     }
     postData()
@@ -524,7 +531,7 @@ class ProfileV1Setting extends React.Component {
   render() {
     let imageUrl, myButton;
     //Select Image Url
-    if (this.state.myProfile.UserProfileImage != null || this.state.base64Image == null) {
+    if (this.state.myProfile.UserProfileImage != null && this.state.base64Image == null) {
       imageUrl = this.state.myProfile.UserProfileImage
       myButton = <>
         <div>
@@ -562,7 +569,7 @@ class ProfileV1Setting extends React.Component {
           <div className="media">
             <div className="media-left m-r-15">
               <img
-                alt="cannot display"
+                alt="cannot display image"
                 accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
                 width="150px"

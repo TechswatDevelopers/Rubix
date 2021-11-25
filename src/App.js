@@ -65,6 +65,7 @@ import Registration from "./screens/Auth/Registration";
 import Addresses from "./screens/Auth/addresses";
 import VarsityDetails from "./screens/Auth/varsityDetails";
 import NextOfKin from "./screens/Auth/nextOfKin";
+import forgotPass from "./screens/Auth/ForgotPasswordPage";
 import StudentInformation from "./screens/Auth/studentdata";
 
 export const MContext = React.createContext();  //exporting context object
@@ -83,6 +84,8 @@ render() {
               }
             }>
             {this.props.children}
+            <script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
+
             </MContext.Provider>)
     }
 }
@@ -119,6 +122,7 @@ class App extends React.Component {
         activeKey1 === "lockscreen" ||
         activeKey1 === "logInformation" ||
         activeKey1 === "forgotpassword" ||
+        activeKey1 === "forgotpass" ||
         activeKey1 === "varsityDetails" ||
         activeKey1 === "studentData" ||
         activeKey1 === "nextofkin" ||
@@ -144,6 +148,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/forgotpassword`}
                 component={forgotpassword}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/forgotpass/:uid`}
+                component={forgotPass}
               />
               <Route
                 exact

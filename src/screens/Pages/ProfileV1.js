@@ -44,7 +44,7 @@ class ProfileV1Page extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
-    this.setState({ myUserID: userID });
+    this.setState({ myUserID: userID});
 
     const fetchData = async () => {
       //Get documents from DB
@@ -68,7 +68,14 @@ class ProfileV1Page extends React.Component {
 
     };
     fetchData()
+    this.loadData()
   }
+//Load Local Storage Data
+loadData(){
+  const myProfile = localStorage.getItem('profile');
+  this.setState({myUserProfile: myProfile})
+}
+
   //Page navigation functions
   goToPrevPage = () =>
     this.setState(state => ({ pageNumber: state.pageNumber - 1 }));
@@ -78,7 +85,7 @@ class ProfileV1Page extends React.Component {
     //Check Lease Agreement Doc
     checkLease(userId){
       const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
-      console.log(temp[0].image)
+      //console.log(temp[0].image)
       if (temp.length != 0){
         this.setState({docUrl:temp[0].image})
         this.setState({showPad: false})
@@ -90,6 +97,7 @@ class ProfileV1Page extends React.Component {
     }
   //Switch to different Document
   changeDocument = (file) => {
+    this.setLoadingPage(500)
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({isSelected: false})
     this.setState({ selectedFile: null })
@@ -138,10 +146,11 @@ class ProfileV1Page extends React.Component {
 }
 
   //Post File Using Mongo
-  onPressUpload(image, filetype) {
+  onPressUpload(image, filetype, currentActiveKey) {
     //var file = e.target.files[0]
     //console.log("selected file is:", file)
     //this.setState({selectedFile: file})
+    this.setLoadingPage(5000)
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
@@ -162,7 +171,11 @@ class ProfileV1Page extends React.Component {
           this.setState({ mongoID: response.data.post._id })
         })
     }
-    postDocument()
+    postDocument().then(() => {
+      alert("Document uploaded successfully")
+      window.location.reload()
+      document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
+    })
   }
   onPressCancel() {
     this.setState({ selectedFile: null })
@@ -186,6 +199,7 @@ class ProfileV1Page extends React.Component {
   }
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
+    this.setLoadingPage(3000)
     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
@@ -207,7 +221,7 @@ async convertBase64ToBlob(base64String) {
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
-        'ClientId': 1,
+        'ClientIdFronEnd': 1,
         'image': signature
       }
       const requestOptions = {
@@ -224,13 +238,21 @@ async convertBase64ToBlob(base64String) {
           if(tryval === 1){
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            this.onPressUpload(temp, 'lease-agreement')
+            this.onPressUpload(temp, 'lease-agreement', 'signing')
           }
         })
     }
     postDocument()
   }
-  
+  //On Press loading data
+  setLoadingPage(time){
+    this.setState({ isLoad: true,})
+    setTimeout(() => {
+      this.setState({
+        isLoad: false,
+      })
+    }, time);
+  }
 
   render() {
     let myBody;
@@ -268,7 +290,7 @@ async convertBase64ToBlob(base64String) {
         
     } else {
       myBody = <>
-      <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString)}>Confirm Upload</button>{" "}
+      <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString, 'documents')}>Confirm Upload</button>{" "}
       &nbsp;&nbsp;
       <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
         Cancel
@@ -296,6 +318,12 @@ async convertBase64ToBlob(base64String) {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
+          <div className="loader">
+            <div className="m-t-30"><img src="CJ-Logo.png" width="48" height="48" alt="Lucid" /></div>
+            <p>Please wait...</p>
+          </div>
+        </div>
         <div>
           <div className="container-fluid">
             <PageHeader
@@ -430,11 +458,11 @@ async convertBase64ToBlob(base64String) {
                               <ul className="list-unstyled list-login-session w-80 p-3">
                                 <li>
                                 <h3 className="login-title">
-                                       {this.state.residence.ResidenceName}
+                                {localStorage.getItem('resName')}
                                       </h3>
                                       <li>
                                       <h3 className="login-title">
-                                         {this.state.residence.ResidenceUniversity}
+                                      {localStorage.getItem('resUni')}
                                       </h3>
                                       </li>
                                 </li>
@@ -442,7 +470,7 @@ async convertBase64ToBlob(base64String) {
                                 <li>
                                     <div className="login-info">
                                       <span className="login-detail">
-                                        {this.state.residence.ResidenceLocation}
+                                        {localStorage.getItem('resAddress')}
                                       </span>
                                       {/*<br></br>
                                        <span className="login-detail">
@@ -462,10 +490,10 @@ async convertBase64ToBlob(base64String) {
                                   alt="cannot display"
                                   accept='.jpg, .png, .jpeg'
                                   className="user-photo media-object"
-                                  src={this.state.residence.ResidencePhoto} />
+                                  src={localStorage.getItem('resPhoto')} />
                                
                                   <li>
-                                    <p>{this.state.residence.ResidenceDescription}</p>
+                                    <p>{localStorage.getItem('resDescription')}</p>
                                   </li>
                                 <li>
                                   <div className="login-session">
@@ -473,7 +501,7 @@ async convertBase64ToBlob(base64String) {
                                       <h3 className="login-title">
                                         Residence Amenitis
                                       </h3>
-                                      <p>{this.state.residence.ResidenceAmenities}</p>
+                                      <p>{localStorage.getItem('resAmenities')}</p>
                                     </div>
 
                                   </div>

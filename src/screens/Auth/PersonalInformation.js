@@ -125,9 +125,10 @@ class PersonalInformation extends React.Component {
                 console.log(response)
                 this.props.updateStudentID(idNumber)
                 localStorage.setItem('studentIDNo', idNumber)
+                localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.history.push("/addresses")
-                this.postStatus()
+                
             })
                 
         } else{
@@ -135,29 +136,12 @@ class PersonalInformation extends React.Component {
         }
     }
     postData()
+    /* setTimeout(() => {
+      this.postStatus()
+    }, 5000); */
+    
 }
 
-//Posting Update status
-postStatus(){
-  const data = {
-    'RegisterStatus': 'Email Verify',
-    'RubixRegisterUserID': this.state.myUserID,
-};
-const requestOptions = {
-  title: 'Verify Status Form',
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: data
-};
-const postData = async() => {
-  await axios.post('http://192.168.88.10:3300/api/RubixUpdateStatus', data, requestOptions)
-          .then(response => {
-              console.log(response)
-              //this.props.history.push("/" )
-          })
-}
-postData()
-}
 
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
