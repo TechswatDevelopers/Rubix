@@ -100,7 +100,7 @@ class PersonalInformation extends React.Component {
     var idNumber = document.getElementById("IDNumber").value;
     const form = document.getElementById('register');
     const data = {
-        'ClientID': '1',
+        'ClientID': localStorage.getItem('clientID'),
         'PlatformID': '1',
         'RubixUserPlatformID': this.props.rubixUserID,
         'RubixRegisterUserID': '',

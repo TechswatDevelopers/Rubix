@@ -19,10 +19,9 @@ class Login extends React.Component {
 
     //final submit check
      Submit(e){
-       console.log("I am called")
+       //console.log("I am called")
       e.preventDefault();
       const form = document.getElementById('login');
-      const error = document.getElementById('error');
       const data = {
       };
       for (let i=0; i < form.elements.length; i++) {
@@ -48,7 +47,7 @@ class Login extends React.Component {
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     this.props.history.push("/profilev1page")
                   } else {
-                    this.props.history.push("/" )
+                    this.props.history.push("/login/" +  this.props.match.params.clientID)
                     this.setState({errorMessage: 'You have entered an incorrect Emain/Pasword.'})
                   }
               })
@@ -80,9 +79,9 @@ class Login extends React.Component {
           if(response.data['0']['Response'] == 1){
             console.log("This is the data:", response.data)
             localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-            this.props.history.push("dashboard" )
+            this.props.history.push("/profilev1page" )
           } else {
-            this.props.history.push("/" )
+            this.props.history.push("/login/" + this.props.match.params.clientID )
           }
           
       })
