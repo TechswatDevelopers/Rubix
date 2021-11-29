@@ -13,11 +13,6 @@ class ForgotPasswordPage extends React.Component {
     const data = {
       'UID': this.props.match.params.uid,
     };
-    /* for (let i=0; i < form.elements.length; i++) {
-        const elem = form.elements[i];
-        data[elem.name] = elem.value
-    } */
-    
     const requestOptions = {
         title: 'Forgot Password Form',
         method: 'POST',
@@ -57,7 +52,7 @@ class ForgotPasswordPage extends React.Component {
                         <input className="form-control" placeholder="Your New Password" type="password" name='UserPass' required='' />
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => { this.resetPassword(e) }}>
-                        Go to Login
+                        Submit
                         </button>
                     </form>
                   </div>

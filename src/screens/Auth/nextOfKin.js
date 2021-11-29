@@ -127,7 +127,8 @@ class NextOfKin extends React.Component {
           await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
-              this.props.history.push("/" )
+              alert("Registration complete")
+              this.props.history.push("/login/" + localStorage.getItem('clientID'))
           })
               
       } else{

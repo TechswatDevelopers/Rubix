@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Route, Switch ,withRouter} from "react-router-dom";
 import Login from "./screens/Login";
 import dashboard from "./screens/Dashbord/Dashbord";
+import myDashboard from "./screens/Dashbord/MyDashboard";
 import demographic from "./screens/Dashbord/Demographic";
 import ioT from "./screens/Dashbord/IoT";
 import NavbarMenu from "./components/NavbarMenu";
@@ -45,6 +46,7 @@ import profilev1page from "./screens/Pages/ProfileV1";
 import profilev2page from "./screens/Pages/ProfileV2";
 import imagegalleryprofile from "./screens/Pages/ImageGallery";
 import timeline from "./screens/Pages/TimeLine";
+import NewDashboard from "./screens/Pages/NewDashboard";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
 import invoicesv2 from "./screens/Pages/InvoicesV2";
@@ -125,6 +127,7 @@ class App extends React.Component {
         activeKey1 === "forgotpass" ||
         activeKey1 === "varsityDetails" ||
         activeKey1 === "studentData" ||
+        activeKey1 === "myDashboard" ||
         activeKey1 === "nextofkin" ||
         activeKey1 === "addresses" ||
         activeKey1 === "page404" ||
@@ -153,6 +156,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/forgotpass/:uid`}
                 component={forgotPass}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/myDashboard`}
+                component={myDashboard}
               />
               <Route
                 exact

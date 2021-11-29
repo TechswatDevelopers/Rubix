@@ -22,7 +22,7 @@ const initialState = {
   isToastMessage: false,
   userID: "",
   platformID: "",
-  clientID: "theme-blue",
+  clientID: "1",
   clientName: "",
   clientLogo: "",
   studentIDNo: null,
@@ -464,7 +464,7 @@ export default (state = initialState, action) => {
     case UPDATE_CLIENTID: {
       return{
         ...state,
-        client: action.payload,
+        clientID: action.payload,
       }
     }
     

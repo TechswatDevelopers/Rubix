@@ -9,7 +9,8 @@ import axios from "axios";
 import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
-import SignatureCanvas from 'react-signature-canvas'
+import SignatureCanvas from 'react-signature-canvas';
+
 import {
   fileFolderCardData,
   fileStorageStatusCardData,
@@ -39,21 +40,27 @@ class ProfileV1Page extends React.Component {
       docUrl: '',
       showPad: false,
       trimmedDataURL: null,
+      userIPAddress: null,
+      userBrowser: null,
+      dateAndTime: null,
     }
   }
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID});
-
+    this.getUserBrowser()
     const fetchData = async () => {
       //Get documents from DB
       await fetch('http://192.168.88.10:3001/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           //console.log("documents data:", data)
-          this.setState({ doc: data.post[0]})
+          //this.setState({ doc: data.post[0]})
+          this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0]})
+          //console.log('default doc:', data.post.filter(doc => doc.FileType == 'id-document'))
           this.setState({ docs: data.post })
+          //console.log("Documents: ", data.post)
           this.checkLease(userID)
         });
 
@@ -97,7 +104,7 @@ loadData(){
     }
   //Switch to different Document
   changeDocument = (file) => {
-    this.setLoadingPage(500)
+    this.setLoadingDocumentPage()
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({isSelected: false})
     this.setState({ selectedFile: null })
@@ -202,19 +209,78 @@ loadData(){
     this.setLoadingPage(3000)
     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
+      this.getUserWitnessData()
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
     } else {
       alert("Please provide a signature")
     }
   }
 
-//Convert base64 to blob
-async convertBase64ToBlob(base64String) {
-  const res = await fetch('data:application/pdf;base64,' + base64String)
-  const blob = await res.blob()
-  console.log(blob)
-  return blob
+  //Coleect User Signing Info
+  getUserWitnessData(){
+    //Fetch IP Address
+    const getData = async () => {
+      const res = await axios.get('https://geolocation-db.com/json/')
+      //console.log(res.data);
+      this.setState({userIPAddress: res.data.IPv4})
+    }
+    getData()
+    
+  }
+
+  //Get user browser information
+  getUserBrowser(){
+    
+    var browser
+    // Opera 8.0+
+var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+console.log("Opera:", isOpera)
+// Firefox 1.0+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+console.log("Firefox:", isFirefox)
+
+// Safari 3.0+ "[object HTMLElementConstructor]" 
+var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] /* || (typeof safari !== 'undefined' && safari.pushNotification) */);
+console.log("Safari:", isSafari)
+
+// Internet Explorer 6-11
+var isIE = /*@cc_on!@*/false || !!document.documentMode;
+console.log("Internet Explorer:", isIE)
+
+// Edge 20+
+var isEdge = !isIE && !!window.StyleMedia;
+console.log("Edge:", isEdge)
+
+// Chrome 1 - 71
+var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+console.log("Chrome:", isChrome)
+
+// Blink engine detection
+var isBlink = (isChrome || isOpera) && !!window.CSS;
+console.log("Blink:", isBlink)
+
+if(isChrome){
+  this.setState({userBrowser: 'Chrome'})
+  console.log("is chrome",isChrome)
 }
+else if (isEdge){
+  this.setState({userBrowser: 'Edge'})
+}
+else if (isIE){
+  this.setState({userBrowser: 'Internet Explorer'})
+}
+else if (isSafari){
+  this.setState({userBrowser: 'Safari'})
+}
+else if (isFirefox){
+  this.setState({userBrowser: 'Firefox'})
+}
+else if (isOpera){
+  this.setState({userBrowser: 'Opera'})
+}
+
+  }
+
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
@@ -245,13 +311,22 @@ async convertBase64ToBlob(base64String) {
     postDocument()
   }
   //On Press loading data
-  setLoadingPage(time){
+  setLoadingPage(time,){
     this.setState({ isLoad: true,})
     setTimeout(() => {
       this.setState({
         isLoad: false,
       })
     }, time);
+  }
+  //On Press loading data
+  setLoadingDocumentPage(){
+    this.setState({ isDocLoad: true,})
+    setTimeout(() => {
+      this.setState({
+        isDocLoad: false,
+      })
+    }, 700);
   }
 
   render() {
@@ -548,6 +623,12 @@ async convertBase64ToBlob(base64String) {
                 /> */}
                                   <div style={{height: '100%'}} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.keyString}</p>
+                                    <div className="page-loader-wrapper" style={{ display: this.state.isDocLoad ? 'block' : 'none' }}>
+          <div className="loader">
+            <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
+            <p>Please wait...</p>
+          </div>
+        </div>
                                     {myBody}
                                   </div>
                                 </div>
@@ -584,7 +665,9 @@ async convertBase64ToBlob(base64String) {
                             </>
                             : null
                           }
-                          
+                          <button className="btn btn-default" onClick={()=>{console.log(this.state.userBrowser)}}>
+                            test
+                          </button>
 
                         </div>
 

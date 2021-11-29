@@ -45,7 +45,7 @@ class Login extends React.Component {
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-                    this.props.history.push("/profilev1page")
+                    this.props.history.push("/dashboard")
                   } else {
                     this.props.history.push("/login/" +  this.props.match.params.clientID)
                     this.setState({errorMessage: 'You have entered an incorrect Emain/Pasword.'})
@@ -79,7 +79,7 @@ class Login extends React.Component {
           if(response.data['0']['Response'] == 1){
             console.log("This is the data:", response.data)
             localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-            this.props.history.push("/profilev1page" )
+            this.props.history.push("/dashboard" )
           } else {
             this.props.history.push("/login/" + this.props.match.params.clientID )
           }
