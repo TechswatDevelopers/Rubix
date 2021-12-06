@@ -16,9 +16,6 @@ import {
   onPressSideMenuTab,
   tostMessageLoad,
 } from "../actions";
-import Logo from "../assets/images/logo.svg";
-import LogoWhite from "../assets/images/logo-white.svg";
-import UserImage from "../assets/images/user.png";
 import Avatar4 from "../assets/images/xs/avatar4.jpg";
 import Avatar5 from "../assets/images/xs/avatar5.jpg";
 import Avatar2 from "../assets/images/xs/avatar2.jpg";
@@ -29,11 +26,13 @@ class NavbarMenu extends React.Component {
   state = {
     linkupdate: false,
     profile: {},
+    myClientogo: localStorage.getItem('clientLogo')
   };
   componentDidMount() {
-    this.props.tostMessageLoad(false);
+    this.props.tostMessageLoad(true);
     var res = window.location.pathname;
     const userID = localStorage.getItem('userID');
+    this.props.onPressThemeColor(localStorage.getItem('clientTheme'))
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
@@ -62,7 +61,7 @@ class NavbarMenu extends React.Component {
     } else if (
       activeKey === "/appinbox" ||
       activeKey === "/appchat" ||
-      activeKey === "/appcalendar" ||
+      //activeKey === "/appcalendar" ||
       activeKey === "/appcontact" ||
       activeKey === "/apptaskbar"
     ) {
@@ -119,7 +118,7 @@ class NavbarMenu extends React.Component {
       activeKey === "/testimonials" ||
       activeKey === "/faqs"
     ) {
-    //  this.activeMenutabContainer("PagesContainer");
+     this.activeMenutabContainer("PagesContainer");
     } else if (
       activeKey === "/formvalidation" ||
       activeKey === "/basicelements"
@@ -131,30 +130,32 @@ class NavbarMenu extends React.Component {
       this.activeMenutabContainer("chartsContainer");
     } else if (activeKey === "/leafletmap") {
       this.activeMenutabContainer("MapsContainer");
+    } else if (activeKey === "/appcalendar"){
+      this.activeMenutabContainer("Calendar")
     }
   }
 
-  // componentWillReceiveProps(){
-  //   this.setState({
-  //     linkupdate:!this.state.linkupdate
-  //   })
-  // }
+   componentWillReceiveProps(){
+     this.setState({
+       linkupdate:!this.state.linkupdate
+     })
+  }
 
-  /* activeMenutabContainer(id) {
+   activeMenutabContainer(id) {
     var parents = document.getElementById("main-menu");
     var activeMenu = document.getElementById(id);
 
     for (let index = 0; index < parents.children.length; index++) {
       if (parents.children[index].id !== id) {
         parents.children[index].classList.remove("active");
-        parents.children[index].children[1].classList.remove("in");
+       // parents.children[index].children[1].classList.remove("in");
       }
     }
     setTimeout(() => {
       activeMenu.classList.toggle("active");
       activeMenu.children[1].classList.toggle("in");
     }, 10);
-  } */
+  } 
   render() {
     const {
       addClassactive,
@@ -165,6 +166,7 @@ class NavbarMenu extends React.Component {
       toggleEqualizer,
       sideMenuTab,
       isToastMessage,
+      clientLogo,
       activeKey,
     } = this.props;
     var path = window.location.pathname;
@@ -204,12 +206,12 @@ class NavbarMenu extends React.Component {
             <div className="navbar-brand">
               <a href="dashboard">
                 <img
-                  src="CJ-Logo.png"/* {
+                  src={this.state.myClientogo == null ?'user.png' : this.state.myClientogo}/* {
                     document.body.classList.contains("full-dark")
                       ? LogoWhite
                       : Logo
                   } */
-                  alt="CJ Students Logo"
+                  alt="Company Logo"
                   className="img-responsive logo"
                 />
               </a>
@@ -333,7 +335,7 @@ class NavbarMenu extends React.Component {
                   <li
                     className={toggleEqualizer ? "show dropdown" : "dropdown"}
                   >
-                    <a
+                    {/* <a
                       href="#!"
                       className="dropdown-toggle icon-menu"
                       data-toggle="dropdown"
@@ -343,7 +345,7 @@ class NavbarMenu extends React.Component {
                       }}
                     >
                       <i className="icon-equalizer"></i>
-                    </a>
+                    </a> */}
                     <ul
                       className={
                         toggleEqualizer
@@ -412,7 +414,7 @@ class NavbarMenu extends React.Component {
           <div className="sidebar-scroll">
             <div className="user-account">
               <img
-                src={this.state.profile.UserProfileImage}
+                src={this.state.profile.UserProfileImage===null ? 'user.png' : this.state.profile.UserProfileImage}
                 className="rounded-circle user-photo"
                 alt="User Profile Picture"
               />
@@ -517,6 +519,45 @@ class NavbarMenu extends React.Component {
               >
                 <Nav id="left-sidebar-nav" className="sidebar-nav">
                   <ul id="main-menu" className="metismenu">
+                  <li className="" id="myProfile">
+                    <a
+                        href="profilev1page"
+                        className=""
+                        /* onClick={(e) => {
+                          e.preventDefault();
+                          this.activeMenutabContainer("AppContainer");
+                        }} */
+                      >
+                        <i className="icon-user"></i> <span>My Profile</span>
+                      </a>
+                    </li>
+                  <li className="" id="resInfo">
+                    <a
+                        href="#!"
+                        className=""
+                        /* onClick={(e) => {
+                          e.preventDefault();
+                          this.activeMenutabContainer("AppContainer");
+                        }} */
+                      >
+                        <i className="icon-home"></i> <span>Residene Information</span>
+                      </a>
+                    </li>
+                  <li className="" id="Calendar">
+                    <a
+                        href="appcalendar"
+                        className={
+                          activeKey === "appcalendar" ? "active" : ""
+                        }
+                        /* onClick={(e) => {
+                          e.preventDefault();
+                          this.activeMenutabContainer("AppContainer");
+                        }} */
+                      >
+                        <i className="icon-calendar"></i> <span>Calendar</span>
+                      </a>
+                    </li>
+
                     <li className="" id="dashboradContainer">
                       <a
                         href="#!"
@@ -570,14 +611,14 @@ class NavbarMenu extends React.Component {
                         >
                           <Link to="appchat">Chat</Link>
                         </li>
-                        <li
+                        {/* <li
                           className={
                             activeKey === "appcalendar" ? "active" : ""
                           }
                           onClick={() => {}}
                         >
                           <Link to="appcalendar">Calendar</Link>
-                        </li>
+                        </li> */}
                         <li
                           className={activeKey === "appcontact" ? "active" : ""}
                           onClick={() => {}}
@@ -1549,6 +1590,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     sideMenuTab,
     isToastMessage,
     userID,
+    clientLogo,
   } = navigationReducer;
   return {
     addClassactive,
@@ -1572,6 +1614,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     menuProfileDropdown,
     sideMenuTab,
     isToastMessage,
+    clientLogo
   };
 };
 

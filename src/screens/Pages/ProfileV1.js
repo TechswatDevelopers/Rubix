@@ -9,7 +9,8 @@ import axios from "axios";
 import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
-import SignatureCanvas from 'react-signature-canvas'
+import SignatureCanvas from 'react-signature-canvas';
+
 import {
   fileFolderCardData,
   fileStorageStatusCardData,
@@ -37,49 +38,85 @@ class ProfileV1Page extends React.Component {
       isSelected: false,
       base64Pdf: null,
       docUrl: '',
+      showPad: false,
       trimmedDataURL: null,
+      userIPAddress: null,
+      userBrowser: null,
+      dateAndTime: null,
     }
   }
+  
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
-    this.setState({ myUserID: userID });
-    this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png')
-
-    //Generate base64 for dummy image
-    //this.getBase64FromSTorage('sign.png') 
-
+    this.setState({ myUserID: userID});
+    this.getUserBrowser()
+    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long'};
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({dateAndTime: myDate+myTime})
+    /* console.log("The date is:", myDate)
+    console.log("The time is:", myTime) */
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://rubixdocuments.cjstudents.co.za/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("calleed")
-          console.log("documents data:", data)
-          this.setState({ doc: data.post[0]})
+          //console.log("documents data:", data)
+          //this.setState({ doc: data.post[0]})
+          this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0]})
+          //console.log('default doc:', data.post.filter(doc => doc.FileType == 'id-document'))
           this.setState({ docs: data.post })
+          //console.log("Documents: ", data.post)
+          this.checkLease(userID)
         });
 
-      //Get Rubix User Residence Details
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixStudentResDetails/' + userID)
+
+     /*  //Get Rubix User Residence Details
+      await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("Residence Data:", data)
+          //console.log("Residence Data:", data)
           this.setState({ residence: data })
-        });
+        }); */
 
 
     };
     fetchData()
+    this.loadData()
   }
+
+
+//Load Local Storage Data
+loadData(){
+  const myProfile = localStorage.getItem('profile');
+  this.setState({myUserProfile: myProfile})
+}
+
   //Page navigation functions
   goToPrevPage = () =>
     this.setState(state => ({ pageNumber: state.pageNumber - 1 }));
   goToNextPage = () =>
     this.setState(state => ({ pageNumber: state.pageNumber + 1 }));
 
+    //Check Lease Agreement Doc
+    checkLease(userId){
+      const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
+      //console.log(temp[0].image)
+      if (temp.length != 0){
+        this.setState({docUrl:temp[0].image})
+        this.setState({showPad: false})
+      }
+      else {
+        this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png', userId, 0)
+        this.setState({showPad: true})
+      }
+    }
+
+
   //Switch to different Document
   changeDocument = (file) => {
+    this.setLoadingDocumentPage()
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({isSelected: false})
     this.setState({ selectedFile: null })
@@ -112,15 +149,33 @@ class ProfileV1Page extends React.Component {
     }
   }
 
+
+//Converts base64 to file
+  dataURLtoFile(dataurl, filename) {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], filename, {type:mime});
+}
+
   //Post File Using Mongo
-  onPressUpload() {
+  onPressUpload(image, filetype, currentActiveKey) {
     //var file = e.target.files[0]
     //console.log("selected file is:", file)
     //this.setState({selectedFile: file})
+    this.setLoadingPage(5000)
     const postDocument = async () => {
       const data = new FormData()
-      data.append('image', this.state.selectedFile)
-      data.append('FileType', this.state.keyString,)
+      data.append('image', image)
+      data.append('FileType', filetype)
       data.append('RubixRegisterUserID', this.state.myUserID)
       const requestOptions = {
         title: 'Student Document Upload',
@@ -137,12 +192,20 @@ class ProfileV1Page extends React.Component {
           this.setState({ mongoID: response.data.post._id })
         })
     }
-    postDocument()
+    postDocument().then(() => {
+      alert("Document uploaded successfully")
+      window.location.reload()
+      document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
+    })
   }
+
+  //When User Presses Cancel on Document Uploading
   onPressCancel() {
-    this.setState({ selectedFile: null })
-    this.setState({ isSelected: false })
+    this.setState({selectedFile: null })
+    this.setState({isSelected: false })
   }
+
+  //Handle File Selection input
   changeHandler(event) {
     this.setState({selectedFile: event.target.files[0] })
     console.log("selcted file1", event.target.files[0])
@@ -153,6 +216,8 @@ class ProfileV1Page extends React.Component {
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
   }
+
+
   //Signature Pad array of lines
   sigPad = {}
   //Function for clearing signature pad
@@ -161,20 +226,90 @@ class ProfileV1Page extends React.Component {
   }
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
+    this.setLoadingPage(3000)
     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      this.postSignature(this.state.trimmedDataURL)
+      this.getUserWitnessData()
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
     } else {
       alert("Please provide a signature")
     }
   }
+
+  //Coleect User Signing Info
+  getUserWitnessData(){
+    //Fetch IP Address
+    const getData = async () => {
+      const res = await axios.get('https://geolocation-db.com/json/')
+      //console.log(res.data);
+      this.setState({userIPAddress: res.data.IPv4})
+    }
+    getData()
+    
+  }
+
+  //Get user browser information
+  getUserBrowser(){
+    
+    var browser
+    // Opera 8.0+
+var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+console.log("Opera:", isOpera)
+// Firefox 1.0+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+console.log("Firefox:", isFirefox)
+
+// Safari 3.0+ "[object HTMLElementConstructor]" 
+var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] /* || (typeof safari !== 'undefined' && safari.pushNotification) */);
+console.log("Safari:", isSafari)
+
+// Internet Explorer 6-11
+var isIE = /*@cc_on!@*/false || !!document.documentMode;
+console.log("Internet Explorer:", isIE)
+
+// Edge 20+
+var isEdge = !isIE && !!window.StyleMedia;
+console.log("Edge:", isEdge)
+
+// Chrome 1 - 71
+var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+console.log("Chrome:", isChrome)
+
+// Blink engine detection
+var isBlink = (isChrome || isOpera) && !!window.CSS;
+console.log("Blink:", isBlink)
+
+if(isChrome){
+  this.setState({userBrowser: 'Chrome'})
+  console.log("is chrome",isChrome)
+}
+else if (isEdge){
+  this.setState({userBrowser: 'Edge'})
+}
+else if (isIE){
+  this.setState({userBrowser: 'Internet Explorer'})
+}
+else if (isSafari){
+  this.setState({userBrowser: 'Safari'})
+}
+else if (isFirefox){
+  this.setState({userBrowser: 'Firefox'})
+}
+else if (isOpera){
+  this.setState({userBrowser: 'Opera'})
+}
+
+  }
+
+
   //Function to post signature to API
-  postSignature(signature) {
-    console.log('I am called ')
+  postSignature(signature, userid, tryval) {
     const postDocument = async () => {
       const data = {
-        'RubixRegisterUserID': this.state.myUserID,
-        'ClientId': 1,
+        'RubixRegisterUserID': userid,
+        'ClientIdFronEnd': 1,
+        'IP_Address': this.state.userIPAddress,
+        'Time_and_Date': this.state.dateAndTime,
         'image': signature
       }
       const requestOptions = {
@@ -183,13 +318,37 @@ class ProfileV1Page extends React.Component {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
+      console.log("Posted Data:", data)
       await axios.post('https://rubixpdf.cjstudents.co.za/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
-          this.setState({ docUrl: response.data.Base })
+          this.setState({docUrl: response.data.Base })
+          if(tryval === 1){
+            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+            this.onPressUpload(temp, 'lease-agreement', 'signing')
+          }
         })
     }
     postDocument()
+  }
+  //On Press loading data
+  setLoadingPage(time,){
+    this.setState({ isLoad: true,})
+    setTimeout(() => {
+      this.setState({
+        isLoad: false,
+      })
+    }, time);
+  }
+  //On Press loading data
+  setLoadingDocumentPage(){
+    this.setState({ isDocLoad: true,})
+    setTimeout(() => {
+      this.setState({
+        isDocLoad: false,
+      })
+    }, 700);
   }
 
   render() {
@@ -228,7 +387,7 @@ class ProfileV1Page extends React.Component {
         
     } else {
       myBody = <>
-      <button className="btn btn-primary" onClick={() => this.onPressUpload()}>Confirm Upload</button>{" "}
+      <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString, 'documents')}>Confirm Upload</button>{" "}
       &nbsp;&nbsp;
       <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
         Cancel
@@ -256,6 +415,12 @@ class ProfileV1Page extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
+          <div className="loader">
+            <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
+            <p>Please wait...</p>
+          </div>
+        </div>
         <div>
           <div className="container-fluid">
             <PageHeader
@@ -390,11 +555,11 @@ class ProfileV1Page extends React.Component {
                               <ul className="list-unstyled list-login-session w-80 p-3">
                                 <li>
                                 <h3 className="login-title">
-                                       {this.state.residence.ResidenceName}
+                                {localStorage.getItem('resName')}
                                       </h3>
                                       <li>
                                       <h3 className="login-title">
-                                         {this.state.residence.ResidenceUniversity}
+                                      {localStorage.getItem('resUni')}
                                       </h3>
                                       </li>
                                 </li>
@@ -402,7 +567,7 @@ class ProfileV1Page extends React.Component {
                                 <li>
                                     <div className="login-info">
                                       <span className="login-detail">
-                                        {this.state.residence.ResidenceLocation}
+                                        {localStorage.getItem('resAddress')}
                                       </span>
                                       {/*<br></br>
                                        <span className="login-detail">
@@ -422,10 +587,10 @@ class ProfileV1Page extends React.Component {
                                   alt="cannot display"
                                   accept='.jpg, .png, .jpeg'
                                   className="user-photo media-object"
-                                  src={this.state.residence.ResidencePhoto} />
+                                  src={localStorage.getItem('resPhoto')} />
                                
                                   <li>
-                                    <p>{this.state.residence.ResidenceDescription}</p>
+                                    <p>{localStorage.getItem('resDescription')}</p>
                                   </li>
                                 <li>
                                   <div className="login-session">
@@ -433,7 +598,7 @@ class ProfileV1Page extends React.Component {
                                       <h3 className="login-title">
                                         Residence Amenitis
                                       </h3>
-                                      <p>{this.state.residence.ResidenceAmenities}</p>
+                                      <p>{localStorage.getItem('resAmenities')}</p>
                                     </div>
 
                                   </div>
@@ -480,6 +645,13 @@ class ProfileV1Page extends React.Component {
                 /> */}
                                   <div style={{height: '100%'}} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.keyString}</p>
+                                    <div className="page-loader-wrapper" style={{ display: this.state.isDocLoad ? 'block' : 'none' }}>
+          <div className="loader">
+            <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
+            <p>Please wait...</p>
+          </div>
+        </div>
+
                                     {myBody}
                                   </div>
                                 </div>
@@ -501,18 +673,23 @@ class ProfileV1Page extends React.Component {
                             &nbsp;&nbsp;
                             <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
                           </nav>
-                          <p>To agree to the above document, please enter your signature:</p>
+                          {
+                            this.state.showPad
+                            ? <>
+                            <p>To agree to the above document, please enter your signature:</p>
                           <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black' 
                             canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
-
-
-
-
                           <button className="btn btn-primary" onClick={() => this.trim()}>
                             Submit Signature
                           </button>
                           <button className="btn btn-default" onClick={this.clear}>
                             Clear
+                          </button>
+                            </>
+                            : null
+                          }
+                          <button className="btn btn-default" onClick={()=>{console.log(this.state.userBrowser)}}>
+                            test
                           </button>
 
                         </div>

@@ -18,6 +18,8 @@ export const UPDATE_USERID = "navigationReducer/UPDATE_USERID";
 export const UPDATE_PLATFORM = "navigationReducer/UPDATE_PLATFORM";
 export const UPDATE_CLIENTID = "navigationReducer/UPDATE_CLIENTID";
 export const UPDATE_STUDENTID = "navigationReducer/UPDATE_STUDENTID";
+export const UPDATE_CLIENTNAME = "navigationReducer/UPDATE_CLIENTNAME";
+export const UPDATE_CLIENTLOGO = "navigationReducer/UPDATE_CLIENTLOGO";
 
 var toggle = false;
 var intervalId = "";
@@ -143,6 +145,22 @@ export const updateStudentID = (val)=>(disptch) =>{
   // alert("Hello Monkey");
   disptch({
     type:UPDATE_STUDENTID,
+    payload: val,
+  })
+};
+export const updateClientName = (val)=>(disptch) =>{
+  //console.log("Dispatch action is called with value ", val);
+  // alert("Hello Monkey");
+  disptch({
+    type:UPDATE_CLIENTNAME,
+    payload: val,
+  })
+};
+export const updateClientLogo = (val)=>(disptch) =>{
+  //console.log("Dispatch action is called with value ", val);
+  // alert("Hello Monkey");
+  disptch({
+    type:UPDATE_CLIENTLOGO,
     payload: val,
   })
 };

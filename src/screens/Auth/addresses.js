@@ -19,6 +19,7 @@ class Addresses extends React.Component {
 
         };
       }
+
      //final submit check
  AddressSubmit(e){
     e.preventDefault();
@@ -43,7 +44,7 @@ class Addresses extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async() => {
 
         if (this.state.location !=null && this.state.prov !=null && this.state.country !=null /* && document.getElementById('addresses').checkValidity() == true */){
@@ -65,6 +66,28 @@ class Addresses extends React.Component {
     
 }
 
+//Posting Update status
+postStatus(){
+  const data = {
+    'Status': 'Email Verify',
+    'RubixRegisterUserID': this.state.myUserID,
+};
+const requestOptions = {
+  title: 'Verify Status Form',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: data
+};
+console.log('User data:', data)
+const postData = async() => {
+  await axios.post('http://192.168.88.10:3300/api/RubixUpdateStatus', data, requestOptions)
+          .then(response => {
+              console.log("Verify email status", response)
+              //this.props.history.push("/" )
+          })
+}
+postData()
+}
 
 async componentDidMount(){
     document.body.classList.remove("theme-cyan");
@@ -75,7 +98,6 @@ async componentDidMount(){
     document.body.classList.remove("theme-blush");
     const userID = localStorage.getItem('userID');
     this.setState({myUserID: userID});
-
 
     const fetchData = async() =>{
         await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
@@ -97,7 +119,10 @@ async componentDidMount(){
             });
     
     }
-    fetchData();
+    fetchData().then(() => {
+      this.postStatus()
+    });
+    
   }
 
   render() {

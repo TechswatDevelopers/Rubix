@@ -59,7 +59,7 @@ class VarsityDetails extends React.Component {
         };
         console.log(data)
         const postData = async()=>{
-            if (this.state.prov !=null && this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
+            if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
@@ -281,7 +281,7 @@ await axios.post('https://rubixdocuments.cjstudents.co.za/feed/post?image', data
                   </div>
                   
                   <div className="body">
-                    <form id='uniDetails'>
+                    <form id='uniDetails'>{/* 
 
                       <div className="form-group">
                         <label className="control-label sr-only" >
@@ -295,7 +295,7 @@ await axios.post('https://rubixdocuments.cjstudents.co.za/feed/post?image', data
         ))  
         }
         </select> }
-                      </div>
+                      </div> */}
 
                       
                       <div className="form-group">

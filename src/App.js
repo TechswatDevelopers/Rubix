@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Route, Switch ,withRouter} from "react-router-dom";
 import Login from "./screens/Login";
 import dashboard from "./screens/Dashbord/Dashbord";
+import myDashboard from "./screens/Dashbord/MyDashboard";
 import demographic from "./screens/Dashbord/Demographic";
 import ioT from "./screens/Dashbord/IoT";
 import NavbarMenu from "./components/NavbarMenu";
@@ -45,6 +46,7 @@ import profilev1page from "./screens/Pages/ProfileV1";
 import profilev2page from "./screens/Pages/ProfileV2";
 import imagegalleryprofile from "./screens/Pages/ImageGallery";
 import timeline from "./screens/Pages/TimeLine";
+import NewDashboard from "./screens/Pages/NewDashboard";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
 import invoicesv2 from "./screens/Pages/InvoicesV2";
@@ -65,6 +67,7 @@ import Registration from "./screens/Auth/Registration";
 import Addresses from "./screens/Auth/addresses";
 import VarsityDetails from "./screens/Auth/varsityDetails";
 import NextOfKin from "./screens/Auth/nextOfKin";
+import forgotPass from "./screens/Auth/ForgotPasswordPage";
 import StudentInformation from "./screens/Auth/studentdata";
 
 export const MContext = React.createContext();  //exporting context object
@@ -83,6 +86,8 @@ render() {
               }
             }>
             {this.props.children}
+            <script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
+
             </MContext.Provider>)
     }
 }
@@ -119,8 +124,10 @@ class App extends React.Component {
         activeKey1 === "lockscreen" ||
         activeKey1 === "logInformation" ||
         activeKey1 === "forgotpassword" ||
+        activeKey1 === "forgotpass" ||
         activeKey1 === "varsityDetails" ||
         activeKey1 === "studentData" ||
+        activeKey1 === "myDashboard" ||
         activeKey1 === "nextofkin" ||
         activeKey1 === "addresses" ||
         activeKey1 === "page404" ||
@@ -137,13 +144,23 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path={`${process.env.PUBLIC_URL}/login`}
+                path={`${process.env.PUBLIC_URL}/login/:clientID`}
                 component={Login}
               />
               <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/forgotpassword`}
                 component={forgotpassword}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/forgotpass/:uid`}
+                component={forgotPass}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/myDashboard`}
+                component={myDashboard}
               />
               <Route
                 exact

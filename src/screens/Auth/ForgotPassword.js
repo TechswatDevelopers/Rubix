@@ -3,8 +3,28 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
 import axios from "axios";
+import { updateEmail, updatePassword,onLoggedin, updateUserID, 
+  updateClientID,onPressThemeColor,updateClientName, updateClientLogo } from "../../actions";
 
 class ForgotPassword extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoad: true,
+      currentClientId: null,
+      currentLogo: '',
+      clientName: '',
+      errorMessage: '',
+    }
+  }
+
+  componentDidMount(){
+    console.log("Theme Color:", this.props.rubixThemeColor)
+
+    this.setState({currentLogo: localStorage.getItem('clientLogo')})
+    this.setState({clientName: localStorage.getItem('clientName')})
+    this.props.onPressThemeColor(localStorage.getItem('clientTheme'))
+  }
   
   //Reset Password
   resetPassword(e){
@@ -37,16 +57,16 @@ class ForgotPassword extends React.Component {
     
   render() {
     return (
-      <div className="theme-cyan">
+      <div className={this.props.rubixThemeColor}>
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
-                <div className="top">
-                  <img src="CJ-Logo.png" alt="Lucid" style={{ height: "40px", margin: "10px" }} />
-                </div>
                 <div className="card">
                   <div className="header">
+                  <div className="top">
+                  <img src={this.state.currentLogo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+                </div>
                     <p className="lead">Recover my password</p>
                   </div>
                   <div className="body">
@@ -57,6 +77,9 @@ class ForgotPassword extends React.Component {
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => { this.resetPassword(e) }}>
                         RESET PASSWORD
+                        </button>
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => { this.props.history.push("/forgotpass/2" ) }}>
+                        pass
                         </button>
                       <div className="bottom">
                         <span className="helper-text">Know your password? <a href="login">Login</a></span>
@@ -76,8 +99,13 @@ class ForgotPassword extends React.Component {
 ForgotPassword.propTypes = {
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
+  myMessage: loginReducer.customMessageOnLogin,
+  rubixThemeColor: navigationReducer.themeColor,
+  rubixClientName: navigationReducer.clientName,
+  rubixClientLogo: navigationReducer.clientLogo,
 });
 
 export default connect(mapStateToProps, {
+  onPressThemeColor,
 })(ForgotPassword);

@@ -10,6 +10,7 @@ class ProfileV1Setting extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      myProfile:{},
       profile: {},
       profiles: [],
       clients: [],
@@ -40,6 +41,7 @@ class ProfileV1Setting extends React.Component {
       imgUpload: null,
       errorMessage: null,
       myUserID: null,
+      imageUrl: 'user.png',
       payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
       value: 0
 
@@ -70,11 +72,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
-          console.log(response)
+          //console.log(response)
           //alert(response.data.PostRubixUserData[0].Response)
         })
     }
@@ -87,7 +89,7 @@ class ProfileV1Setting extends React.Component {
     e.preventDefault();
     const form = document.getElementById('password');
     const data = {
-      'RubixRegisterUserID': this.props.rubixUserID
+      'RubixRegisterUserID': this.state.myUserID
     };
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -100,7 +102,7 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
@@ -214,7 +216,7 @@ class ProfileV1Setting extends React.Component {
       if (this.Validate) {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            console.log(response)
+            //console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
           })
       } else {
@@ -245,7 +247,7 @@ class ProfileV1Setting extends React.Component {
       if (this.state.base64Image != null) {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
           .then(response => {
-            console.log(response)
+            //console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
           })
       } else {
@@ -263,7 +265,7 @@ class ProfileV1Setting extends React.Component {
   }
   changeImageHandler = (event) => {
     this.setState({ selectedFile: event.target.files[0] })
-    console.log("selcted file", event.target.files[0])
+    //console.log("selcted file", event.target.files[0])
     this.setState({ isSelected: true })
     this.getBase64(event)
   }
@@ -279,7 +281,8 @@ class ProfileV1Setting extends React.Component {
     reader.readAsDataURL(file)
     reader.onload = () => {
       this.setState({
-        base64Image: reader.result
+        base64Image: reader.result,
+        imageUrl: reader.result,
       })
       //console.log("This is the img:", this.state.imgUpload)
     };
@@ -305,9 +308,45 @@ class ProfileV1Setting extends React.Component {
 
   };
 
+  //Get All User Data
+  getAllUserData(userId) {
+    const data = {
+      'RubixRegisterUserID': userId,
+    };
+
+    const requestOptions = {
+      title: 'Fetch User Profile Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+    console.log(data)
+    const postData = async () => {
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
+          .then(response => {
+            console.log("All profile data",response.data.PostRubixUserData[0])
+            this.setState({myProfile: response.data.PostRubixUserData[0]})
+          }).then(() => {
+            localStorage.setItem('resName', this.state.myProfile.ResidenceName)
+            localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)
+            localStorage.setItem('resAddress', this.state.myProfile.ResidenceLocation)
+            localStorage.setItem('resUni', this.state.myProfile.ResidenceUniversity)
+            localStorage.setItem('resDescription', this.state.myProfile.ResidenceDescription)
+            localStorage.setItem('resAmenities', this.state.myProfile.ResidenceAmenities)
+          })
+    }
+    postData()
+
+  }
+
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
+
+    //Get All User Data
+    this.getAllUserData(localStorage.getItem('userID'))
+    
+/* 
     //Fetch Data
     //Personal user Information
     this.fetchUserData();
@@ -337,7 +376,7 @@ class ProfileV1Setting extends React.Component {
     //Year of Study List
     setTimeout(() => {
       this.fetchYearOfStudyData()
-    }, 5000);
+    }, 5000); */
   }
 
   //Populate data from DB
@@ -492,10 +531,10 @@ class ProfileV1Setting extends React.Component {
   }
 
   render() {
-    let imageUrl, myButton;
+    let myButton;
     //Select Image Url
-    if (this.state.profile.UserProfileImage != null || this.state.base64Image == null) {
-      imageUrl = this.state.profile.UserProfileImage
+    if (this.state.myProfile.UserProfileImage != null && this.state.base64Image == null) {
+      //this.setState({imageUrl:this.state.myProfile.UserProfileImage})
       myButton = <>
         <div>
           {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
@@ -504,7 +543,7 @@ class ProfileV1Setting extends React.Component {
         </div>
       </>
     } else if (this.state.base64Image != null) {
-      imageUrl = this.state.base64Image
+      //this.setState({imageUrl:this.state.base64Image})
       myButton = <>
         <button className="btn btn-primary" onClick={(e) => this.updateProfileData(e)}>Confirm Upload</button>{" "}
         &nbsp;&nbsp;
@@ -512,16 +551,7 @@ class ProfileV1Setting extends React.Component {
           Cancel
         </button>
       </>
-    } else {
-      imageUrl = 'user.png'
-      myButton = <>
-        <button className="btn btn-primary" onClick={(e) => this.updateProfileData(e)}>Confirm Upload</button>{" "}
-        &nbsp;&nbsp;
-        <button className="btn btn-default" type="button" onClick={() => this.onPressImageCancel()}>
-          Cancel
-        </button>
-      </>
-    }
+    } 
 
     //Toggle image select button
 
@@ -532,18 +562,19 @@ class ProfileV1Setting extends React.Component {
           <div className="media">
             <div className="media-left m-r-15">
               <img
-                alt="cannot display"
+                alt="cannot display image"
                 accept='.jpg, .png, .jpeg'
                 className="user-photo media-object"
                 width="150px"
-                src={imageUrl} />
+                src={this.state.imageUrl} />
+                {myButton}
             </div>
             <div className="media-body">
               {/* <p>
                 Upload your photo. <br />
                 <em>Image should be at least 140px x 140px</em>
               </p> */}
-              {myButton}
+              {/* {myButton} */}
               <input className="sr-only" id="filePhoto" type="file" />
             </div>
           </div>
@@ -556,29 +587,38 @@ class ProfileV1Setting extends React.Component {
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
                 <div className="form-group">
+                <label>
+                   First Name:
+                  </label>
                   <input
                     className="form-control"
                     placeholder="First Name"
                     name="Name"
-                    defaultValue={this.state.profile.Name}
+                    defaultValue={this.state.myProfile.Name}
                     type="text"
                   />
                 </div>
                 <div className="form-group">
+                <label>
+                   Middle Name:
+                  </label>
                   <input
                     className="form-control"
                     placeholder="Middle Name"
                     name="MiddleName"
-                    defaultValue={this.state.profile.MiddleName}
+                    defaultValue={this.state.myProfile.MiddleName}
                     type="text"
                   />
                 </div>
                 <div className="form-group">
+                <label>
+                   Last Name:
+                  </label>
                   <input
                     className="form-control"
                     placeholder="Last Name"
                     name="Surname"
-                    defaultValue={this.state.profile.Surname}
+                    defaultValue={this.state.myProfile.Surname}
                     type="text"
                   />
                 </div>
@@ -610,6 +650,9 @@ class ProfileV1Setting extends React.Component {
                 </div>
 
                 <div className="form-group">
+                <label>
+                   ID Number:
+                  </label>
                   <input
                     className="form-control"
                     id='IDNumber'
@@ -619,7 +662,7 @@ class ProfileV1Setting extends React.Component {
                     maxLength='13'
                     minLength='13'
                     placeholder='Enter your ID Number'
-                    defaultValue={this.state.profile.IDNumber}
+                    defaultValue={this.state.myProfile.IDNumber}
                     type='number'
                   />
                   <br></br>
@@ -627,35 +670,47 @@ class ProfileV1Setting extends React.Component {
                 </div>
               </div>
               <div className="col-lg-6 col-md-12">
+              <label>
+                   Email Address:
+                  </label>
                 <div className="form-group">
                   <input
                     className="form-control"
                     placeholder="Email"
                     name="UserEmail"
-                    defaultValue={this.state.profile.UserEmail}
+                    defaultValue={this.state.myProfile.UserEmail}
                     type="text"
                   />
                 </div>
                 <div className="form-group">
+                <label>
+                   Phone Number:
+                  </label>
                   <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-                    defaultValue={this.state.profile.PhoneNumber} name="PhoneNumber" required=''
-                    value={this.state.profile.PhoneNumber}
+                    defaultValue={this.state.myProfile.PhoneNumber} name="PhoneNumber" required=''
+                    value={this.state.myProfile.PhoneNumber}
                     onChange={() => this.setState({ value: this.state.value })} />
                 </div>
                 <div className="form-group">
+                <label>
+                   Student Number:
+                  </label>
                   <input
                     className="form-control"
-                    defaultValue={this.state.profile.StudentNumber}
+                    defaultValue={this.state.myProfile.StudentNumber}
                     name="StudentNumber"
                     placeholder="Student Number"
                     type="text"
                   />
                 </div>
                 <div className="form-group">
+                <label>
+                   Medical Conditions:
+                  </label>
                   <input
                     className="form-control"
                     name="MedicalConditions"
-                    defaultValue={this.state.profile.MedicalConditions}
+                    defaultValue={this.state.myProfile.AdditionalUserInformationMedicalCondition}
                     placeholder="MedicalConditions"
                     type="text"
                   />
@@ -718,8 +773,12 @@ class ProfileV1Setting extends React.Component {
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
                 <h6>Address Information</h6>
-                <p>Current Address: {this.state.address.RegisterUserStreetNameAndNumer}</p>
-                <div className="form-group">
+                {/* <p>{this.state.myProfile.RegisterUserStreetNameAndNumer}</p>
+                <p>{this.state.myProfile.RegisterUserComplexorBuildingNumber}</p>
+                <p>{this.state.myProfile.RegisterUserComplexorBuildingName}</p>
+                <p>{this.state.myProfile.Province}</p>
+                <p>{this.state.myProfile.PostCode}</p> */}
+                {/* <div className="form-group">
                   <GooglePlacesAutocomplete
                     apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange={(e) => this.setState({ location: e.target.value })}
                     selectProps={{
@@ -728,38 +787,80 @@ class ProfileV1Setting extends React.Component {
                       placeholder: "Update home address"
                     }}
                   />
-                </div>
+                </div> */}
                 <div className="form-group">
+                  <label>
+                    Street Address:
+                  </label>
                   <input
                     className="form-control"
                     placeholder="Complex/Appartment Number"
-                    defaultValue={this.state.address.RegisterUserComplexorBuildingNumber}
-                    type="email"
-                    onChange={() => { }}
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    placeholder="Complex/Appartment Name"
-                    defaultValue={this.state.address.RegisterUserComplexorBuildingName}
+                    name="RegisterUserStreetNameAndNumer"
+                    defaultValue={this.state.myProfile.RegisterUserStreetNameAndNumer}
                     type="text"
                     onChange={() => { }}
                   />
                 </div>
+                <div className="form-group">
+                  <label>
+                    Unit Number:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="Complex/Appartment Number"
+                    name="RegisterUserComplexorBuildingNumber"
+                    defaultValue={this.state.myProfile.RegisterUserComplexorBuildingNumber}
+                    type="text"
+                    onChange={() => { }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>
+                    Complex Name:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="Complex/Appartment Number"
+                    name="RegisterUserComplexorBuildingName"
+                    defaultValue={this.state.myProfile.RegisterUserComplexorBuildingName}
+                    type="text"
+                    onChange={() => { }}
+                  />
+                </div>
+                {/* <div className="form-group">
+                  <label>
+                    Postal Code:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="Complex/Appartment Number"
+                    defaultValue={this.state.myProfile.PostCode}
+                    type="email"
+                    onChange={() => { }}
+                  />
+                </div> */}
+                {/* <div className="form-group">
+                  <input
+                    className="form-control"
+                    placeholder="Complex/Appartment Name"
+                    defaultValue={this.state.myProfile.RegisterUserComplexorBuildingName}
+                    type="text"
+                    onChange={() => { }}
+                  />
+                </div> */}
               </div>
-              <div className="col-lg-6 col-md-12">
+              {/* <div className="col-lg-6 col-md-12">
                 <div className="form-group">
                   <input
                     className="form-control"
                     placeholder="Postal Code"
-                    defaultValue={this.state.address.PostCode}
+                    defaultValue={this.state.myProfile.PostCode}
                     type="text"
                   />
-                </div>
+                </div> 
                 <div className="form-group">
                   {
-                    <select className="form-control" onChange={(e) => this.setState({addressProv: e.target.value })} value={this.state.addressProv}>
+                    <select className="form-control" onChange={(e) => this.setState({addressProv: e.target.value })} value={this.state.myProfile.Province}>
                       {
                         this.state.provList.map((province, index) => (
                           <option key={index} name='RegisterUserProvince' value={province.Province}>{province.Province}</option>
@@ -768,7 +869,7 @@ class ProfileV1Setting extends React.Component {
                     </select>}
                 </div>
                 <div className="form-group">
-                  <select className="form-control" onChange={(e) => this.setState({country: e.target.value })} value={this.state.addressCountry}>
+                  <select className="form-control" onChange={(e) => this.setState({country: e.target.value })} value={this.state.myProfile.Country}>
                     {
                       this.state.countryList.map((country, index) => (
                         <option key={index} name='RegisterUserCountry' value={country.Country_Name}>{country.Country_Name}</option>
@@ -776,13 +877,13 @@ class ProfileV1Setting extends React.Component {
                     }
                   </select>
                 </div>
-              </div>
+              </div> */}
             </div>
-            <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
-              Update
-            </button>{" "}
+            {/* <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
+              Edit Information
+            </button>{" "} */}
             &nbsp;&nbsp;
-            <button className="btn btn-default">Cancel</button>
+            {/* <button className="btn btn-default">Cancel</button> */}
           </form>
         </div>
 
@@ -791,9 +892,60 @@ class ProfileV1Setting extends React.Component {
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
               <h6>University Information</h6>
+              {/* <p>{this.state.myProfile.UniversityName}</p>
+              <p>{this.state.myProfile.RubixCourseID}, {this.state.myProfile.YearofStudy}</p>
+              <p>{this.state.myProfile.PaymentMethod}</p> */}
               <div className="form-group">
+                <label>
+                   University:
+                  </label>
+                  <input
+                    className="form-control"
+                    name="UniversityName"
+                    defaultValue={this.state.myProfile.UniversityName}
+                    placeholder="University Name"
+                    type="text"
+                  />
+                </div>
+              <div className="form-group">
+                <label>
+                   Field of Study:
+                  </label>
+                  <input
+                    className="form-control"
+                    name="CourseID"
+                    defaultValue={this.state.myProfile.RubixCourseID}
+                    placeholder="Field of Study"
+                    type="text"
+                  />
+                </div>
+              <div className="form-group">
+                <label>
+                   Year of Study:
+                  </label>
+                  <input
+                    className="form-control"
+                    name="StudentYearofStudyID"
+                    defaultValue={this.state.myProfile.YearofStudy}
+                    placeholder="Year of Study"
+                    type="text"
+                  />
+                </div>
+              <div className="form-group">
+                <label>
+                   Payment Method:
+                  </label>
+                  <input
+                    className="form-control"
+                    name="StudentYearofStudyID"
+                    defaultValue={this.state.myProfile.PaymentMethod}
+                    placeholder="Year of Study"
+                    type="text"
+                  />
+                </div>
+              {/* <div className="form-group">
                 {
-                  <select className="form-control" onChange={(e) => this.setState({ resProv: e.target.value })} value={this.state.resProv}>
+                  <select className="form-control" onChange={(e) => this.setState({ resProv: e.target.value })} value={this.state.myProfile}>
                     {
                       this.state.provList.map((province, index) => (
                         <option key={index} name='RegisterUserProvince' value={this.state.university.RegisterUserUniversityProvinceID}>{province.Province}</option>
@@ -817,22 +969,13 @@ class ProfileV1Setting extends React.Component {
                   <input
                     className="form-control"
                     placeholder="Enter Course"
-                    defaultValue={this.state.courseID}
+                    defaultValue={this.state.myProfile.RubixCourse}
                     type="text"
                   />
                 </div>
-                {/* {  
-        <select className="form-control" onChange={(e)=>this.setState({course: e.target.value})} value={this.state.course}>
-        {
-            
-            this.state.courseList.map((course, index)=> (
-            <option key={index} name='CourseID' value = {course.RubixCourseID}>{course.CourseName}</option>
-        ))   
-        }
-    </select> } */}
-              </div>
+              </div> */}
             </div>
-            <div className="col-lg-6 col-md-12">
+            {/* <div className="col-lg-6 col-md-12">
               <h6>.</h6>
               <div className="form-group">
                 {
@@ -866,13 +1009,13 @@ class ProfileV1Setting extends React.Component {
                   }
                 </select>}
               </div>
-            </div>
+            </div> */}
           </div>
-          <button className="btn btn-primary" type="button">
-            Update
-          </button>{" "}
+         {/*  <button className="btn btn-primary" type="button">
+            Edit Information
+          </button>{" "} */}
           &nbsp;&nbsp;
-          <button className="btn btn-default">Cancel</button>
+          {/* <button className="btn btn-default">Cancel</button> */}
         </div>
 
 
@@ -881,64 +1024,91 @@ class ProfileV1Setting extends React.Component {
             <div className="col-lg-6 col-md-12">
               <h6>Next of Kin Information</h6>
               <div className="form-group">
+              <label>
+                   First Name:
+                  </label>
                 <input
                   className="form-control"
                   disabled=""
                   placeholder="First Name"
+                  name='NextOfKinFirstName'
                   type="text"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKinFirstName}
+                  defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName}
                   onChange={() => { }}
                 />
               </div>
 
               <div className="form-group">
+              <label>
+                   Last Name:
+                  </label>
                 <input
                   className="form-control"
                   placeholder="Last Name"
+                  name='NextOfKinLastName'
                   type="text"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKinLastName}
+                  defaultValue={this.state.myProfile.RubixUserNextOfKinLastName}
                   onChange={() => { }}
                 />
               </div>
               <div className="form-group">
+              <label>
+                   Email Address:
+                  </label>
                 <input
                   className="form-control"
                   disabled=""
                   placeholder="Email"
+                  name='NextOfKinEmail'
                   type="text"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKinEmail}
+                  defaultValue={this.state.myProfile.RubixUserNextOfKinEmail}
                   onChange={() => { }}
                 />
               </div>
-              <div className="form-group">
+              
+              
+            </div>
+            <div className="col-lg-6 col-md-12">
+            <div className="form-group">
+            <label>
+                   Phone Number:
+                  </label>
                 <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKinPhoneNumber} name="RubixUserNextOfKinPhoneNumber" required=''
-                  value={this.state.nextOfKin.RubixUserNextOfKinPhoneNumber}
+                  defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber} name="NextOfKinPhoneNumber" required=''
+                  value={this.state.myProfile.RubixUserNextOfKinPhoneNumber}
                   onChange={() => this.setState({ value: this.state.value })} />
               </div>
-              <div className="form-group">
+            <div className="form-group">
+            <label>
+                   ID Number:
+                  </label>
                 <input
                   className="form-control"
                   placeholder="ID Number"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKinID}
+                  name="RubixUserNextOfKinID"
+                  defaultValue={this.state.myProfile.RubixUserNextOfKinID}
                   type="text"
                 />
               </div>
-            </div>
-            <div className="col-lg-6 col-md-12">
               <div className="form-group">
+              <label>
+                   Relationship:
+                  </label>
                 <input
                   className="form-control"
                   placeholder="Relationship"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKiniRelationship}
+                  defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship}
                   type="text"
                 />
               </div>
               <div className="form-group">
+              <label>
+                   Home Address:
+                  </label>
                 <input
                   className="form-control"
                   placeholder="Address"
-                  defaultValue={this.state.nextOfKin.RubixUserNextOfKinAddress}
+                  defaultValue={this.state.myProfile.RubixUserNextOfKinAddress}
                   type="text"
                 />
               </div>

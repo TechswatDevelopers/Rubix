@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../assets/images/logo-white.svg";
 import { updateEmail, updatePassword,onLoggedin, updateUserID, 
-  updateClientID,onPressThemeColor } from "../actions";
+  updateClientID,onPressThemeColor,updateClientName, updateClientLogo } from "../actions";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {Grid, Row, Col, Button} from "react-bootstrap";
@@ -19,10 +19,9 @@ class Login extends React.Component {
 
     //final submit check
      Submit(e){
-       console.log("I am called")
+       //console.log("I am called")
       e.preventDefault();
       const form = document.getElementById('login');
-      const error = document.getElementById('error');
       const data = {
       };
       for (let i=0; i < form.elements.length; i++) {
@@ -46,13 +45,12 @@ class Login extends React.Component {
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-                    this.props.history.push("profilev1page")
+                    this.props.history.push("/dashboard")
                   } else {
-                    this.props.history.push("/" )
-                    error.append("Login failed, email/password incorrect.")
+                    this.props.history.push("/login/" +  this.props.match.params.clientID)
+                    this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
                   }
               })
-                  
           } else{
               
               console.log("checkValidity ", document.getElementById('nof').checkValidity())
@@ -81,9 +79,9 @@ class Login extends React.Component {
           if(response.data['0']['Response'] == 1){
             console.log("This is the data:", response.data)
             localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-            this.props.history.push("dashboard" )
+            this.props.history.push("/dashboard" )
           } else {
-            this.props.history.push("/" )
+            this.props.history.push("/login/" + this.props.match.params.clientID )
           }
           
       })
@@ -94,7 +92,7 @@ class Login extends React.Component {
 
     //Google response for testing
  responseGoogle = (response) => {
-   console.log("I am called")
+   //console.log("I am called")
   this.SocialMediaLogin(response['googleId'])
 }
   //Facebook response for testing
@@ -108,15 +106,20 @@ class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoad: true
+      isLoad: true,
+      currentClientId: null,
+      errorMessage: '',
     }
   }
   componentDidMount() {
     setTimeout(() => {
       this.setState({
-        isLoad: false
+        isLoad: false,
+        currentClientId: this.props.match.params.clientID
       })
-    }, 500);
+    }, 2000);
+    localStorage.setItem('clientID', this.props.match.params.clientID)
+    this.setThemeColor(this.props.match.params.clientID)
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");
     document.body.classList.remove("theme-blue");
@@ -126,6 +129,32 @@ class Login extends React.Component {
 
     console.log("Component is mounted and the message from store is ", this.props.myMessage)
   }
+
+  //Set Theme Color
+  setThemeColor(client){
+    switch(client){
+      case '1':{
+        this.props.updateClientLogo('CJ-Logo.png')
+        this.props.updateClientName('CJ Students')
+        this.props.onPressThemeColor('orange')
+
+        localStorage.setItem('clientLogo', 'CJ-Logo.png')
+        localStorage.setItem('clientName', 'CJ Students')
+        localStorage.setItem('clientTheme', 'orange')
+      }
+        break
+      case '2': {
+      this.props.onPressThemeColor('purple')
+      this.props.updateClientLogo('opal.png')
+      this.props.updateClientName('Opal Students')
+
+      localStorage.setItem('clientLogo', 'opal.png')
+      localStorage.setItem('clientName', 'Opal Students')
+      localStorage.setItem('clientTheme', 'purple')
+    }
+    }
+    console.log('client:', this.props.rubixClientLogo)
+  }
   render() {
     const { navigation } = this.props;
     const { email, password } = this.props;
@@ -133,7 +162,7 @@ class Login extends React.Component {
       <div className={this.props.rubixThemeColor}>
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src="CJ-Logo.png" width="48" height="48" alt="Lucid" /></div>
+            <div className="m-t-30"><img src={this.props.rubixClientLogo} width="170" height="70" alt="Lucid" /></div>
             <p>Please wait...</p>
           </div>
         </div>
@@ -141,14 +170,14 @@ class Login extends React.Component {
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
-                <div className="top">
-                  <img src="CJ-Logo.png" alt="Lucid" style={{ height: "40px", margin: "10px" }} />
-                </div>
 
                 <form id='login' onSubmit = {(e) => this.Submit(this)}>
                 <div className="card">
+                <div className="top">
+                  <img src={this.props.rubixClientLogo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+                </div>
                   <div className="header">
-                    <p className="lead">Login to your CJ Students account</p>
+                    <p className="lead">Login to your {this.props.rubixClientName} account</p>
                     </div>
                   <div className="body">
                     <div className="form-auth-small" action="index.html">
@@ -176,7 +205,7 @@ class Login extends React.Component {
                           required = ''
                         />
                       </div>
-                      <p id="error"></p>
+                      <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
                       <p className="helper-text m-b-10 bottom">Or Login Using:</p>
 
@@ -249,11 +278,15 @@ Login.propTypes = {
 const mapStateToProps = ({navigationReducer, loginReducer}) => ({
   rubixUserID: navigationReducer.userID,
   myMessage: loginReducer.customMessageOnLogin,
-  rubixThemeColor: navigationReducer.themeColor
+  rubixThemeColor: navigationReducer.themeColor,
+  rubixClientName: navigationReducer.clientName,
+  rubixClientLogo: navigationReducer.clientLogo,
 });
 
 export default connect(mapStateToProps, {
   updateUserID,
   updateClientID,
   onPressThemeColor,
+  updateClientLogo,
+  updateClientName,
 })(Login);
