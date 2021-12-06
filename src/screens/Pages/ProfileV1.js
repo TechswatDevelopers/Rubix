@@ -201,8 +201,8 @@ loadData(){
 
   //When User Presses Cancel on Document Uploading
   onPressCancel() {
-    this.setState({ selectedFile: null })
-    this.setState({ isSelected: false })
+    this.setState({selectedFile: null })
+    this.setState({isSelected: false })
   }
 
   //Handle File Selection input
