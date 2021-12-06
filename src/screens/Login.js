@@ -15,7 +15,35 @@ import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 
 class Login extends React.Component {
 
+//Defining init
+constructor(props) {
+  super(props)
+  this.state = {
+    isLoad: true,
+    currentClientId: null,
+    errorMessage: '',
+  }
+}
 
+//Initial Loading
+componentDidMount() {
+  setTimeout(() => {
+    this.setState({
+      isLoad: false,
+      currentClientId: this.props.match.params.clientID
+    })
+  }, 2000);
+  localStorage.setItem('clientID', this.props.match.params.clientID)
+  this.setThemeColor(this.props.match.params.clientID)
+  document.body.classList.remove("theme-cyan");
+  document.body.classList.remove("theme-purple");
+  document.body.classList.remove("theme-blue");
+  document.body.classList.remove("theme-green");
+  document.body.classList.remove("theme-orange");
+  document.body.classList.remove("theme-blush");
+
+  console.log("Component is mounted and the message from store is ", this.props.myMessage)
+}
 
     //final submit check
      Submit(e){
@@ -76,7 +104,7 @@ class Login extends React.Component {
       .then(response => {
         console.log(response)
         console.log("checking data",response.data)
-          if(response.data['0']['Response'] == 1){
+          if(response.PostRubixUserData['0']['Response'] == 1){
             console.log("This is the data:", response.data)
             localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
             this.props.history.push("/dashboard" )
@@ -103,32 +131,6 @@ class Login extends React.Component {
  responseInstagram = (response) => {
   this.SocialMediaLogin(response['id'])
 }
-  constructor(props) {
-    super(props)
-    this.state = {
-      isLoad: true,
-      currentClientId: null,
-      errorMessage: '',
-    }
-  }
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        isLoad: false,
-        currentClientId: this.props.match.params.clientID
-      })
-    }, 2000);
-    localStorage.setItem('clientID', this.props.match.params.clientID)
-    this.setThemeColor(this.props.match.params.clientID)
-    document.body.classList.remove("theme-cyan");
-    document.body.classList.remove("theme-purple");
-    document.body.classList.remove("theme-blue");
-    document.body.classList.remove("theme-green");
-    document.body.classList.remove("theme-orange");
-    document.body.classList.remove("theme-blush");
-
-    console.log("Component is mounted and the message from store is ", this.props.myMessage)
-  }
 
   //Set Theme Color
   setThemeColor(client){
@@ -155,6 +157,8 @@ class Login extends React.Component {
     }
     console.log('client:', this.props.rubixClientLogo)
   }
+
+  
   render() {
     const { navigation } = this.props;
     const { email, password } = this.props;
