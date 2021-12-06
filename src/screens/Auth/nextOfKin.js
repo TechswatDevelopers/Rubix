@@ -98,7 +98,9 @@ class NextOfKin extends React.Component {
   e.preventDefault();
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
+  var nextofKinEmail = document.getElementById("NextOfKinEmail").value;
   const studentID =  localStorage.getItem('studentIDNo')
+  const studentEmail =  localStorage.getItem('email')
 
   if(this.state.location !=null){
     const locations = document.getElementById('location');
@@ -123,7 +125,7 @@ class NextOfKin extends React.Component {
   console.log(data)
   const postData = async() => {
 
-      if (this.Validate() && idNumber != studentID){
+      if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
@@ -132,7 +134,7 @@ class NextOfKin extends React.Component {
           })
               
       } else{
-        alert("Next of kin ID cannot be the same as student ID")
+        alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
       }
   }
   postData()

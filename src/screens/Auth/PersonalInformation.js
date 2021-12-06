@@ -98,6 +98,7 @@ class PersonalInformation extends React.Component {
     e.preventDefault();
     //console.log("User email:", this.props.email)
     var idNumber = document.getElementById("IDNumber").value;
+    var email = document.getElementById("email").value;
     const form = document.getElementById('register');
     const data = {
         'ClientID': localStorage.getItem('clientID'),
@@ -125,6 +126,7 @@ class PersonalInformation extends React.Component {
                 console.log(response)
                 this.props.updateStudentID(idNumber)
                 localStorage.setItem('studentIDNo', idNumber)
+                localStorage.setItem('studentEmail', email)
                 localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.history.push("/addresses")

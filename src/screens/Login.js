@@ -48,7 +48,7 @@ class Login extends React.Component {
                     this.props.history.push("/dashboard")
                   } else {
                     this.props.history.push("/login/" +  this.props.match.params.clientID)
-                    this.setState({errorMessage: 'You have entered an incorrect Emain/Pasword.'})
+                    this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
                   }
               })
           } else{

@@ -45,11 +45,18 @@ class ProfileV1Page extends React.Component {
       dateAndTime: null,
     }
   }
+  
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID});
     this.getUserBrowser()
+    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long'};
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({dateAndTime: myDate+myTime})
+    /* console.log("The date is:", myDate)
+    console.log("The time is:", myTime) */
     const fetchData = async () => {
       //Get documents from DB
       await fetch('http://192.168.88.10:3001/feed/post/' + userID)
@@ -64,19 +71,22 @@ class ProfileV1Page extends React.Component {
           this.checkLease(userID)
         });
 
-      //Get Rubix User Residence Details
+
+     /*  //Get Rubix User Residence Details
       await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
         .then(response => response.json())
         .then(data => {
           //console.log("Residence Data:", data)
           this.setState({ residence: data })
-        });
+        }); */
 
 
     };
     fetchData()
     this.loadData()
   }
+
+
 //Load Local Storage Data
 loadData(){
   const myProfile = localStorage.getItem('profile');
@@ -102,6 +112,8 @@ loadData(){
         this.setState({showPad: true})
       }
     }
+
+
   //Switch to different Document
   changeDocument = (file) => {
     this.setLoadingDocumentPage()
@@ -136,6 +148,8 @@ loadData(){
       console.log('Error: ', error);
     }
   }
+
+
 //Converts base64 to file
   dataURLtoFile(dataurl, filename) {
  
@@ -184,10 +198,14 @@ loadData(){
       document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
     })
   }
+
+  //When User Presses Cancel on Document Uploading
   onPressCancel() {
     this.setState({ selectedFile: null })
     this.setState({ isSelected: false })
   }
+
+  //Handle File Selection input
   changeHandler(event) {
     this.setState({selectedFile: event.target.files[0] })
     console.log("selcted file1", event.target.files[0])
@@ -198,6 +216,8 @@ loadData(){
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
   }
+
+
   //Signature Pad array of lines
   sigPad = {}
   //Function for clearing signature pad
@@ -288,6 +308,8 @@ else if (isOpera){
       const data = {
         'RubixRegisterUserID': userid,
         'ClientIdFronEnd': 1,
+        'IP_Address': this.state.userIPAddress,
+        'Time_and_Date': this.state.dateAndTime,
         'image': signature
       }
       const requestOptions = {
@@ -395,7 +417,7 @@ else if (isOpera){
       >
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src="CJ-Logo.png" width="48" height="48" alt="Lucid" /></div>
+            <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
             <p>Please wait...</p>
           </div>
         </div>
@@ -629,6 +651,7 @@ else if (isOpera){
             <p>Please wait...</p>
           </div>
         </div>
+
                                     {myBody}
                                   </div>
                                 </div>
