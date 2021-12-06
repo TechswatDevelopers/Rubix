@@ -104,11 +104,12 @@ componentDidMount() {
       .then(response => {
         console.log(response)
         console.log("checking data",response.data)
-          if(response.PostRubixUserData['0']['Response'] == 1){
+          if(response.data.PostRubixUserData['0']['Response'] == 1){
             console.log("This is the data:", response.data)
             localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
             this.props.history.push("/dashboard" )
           } else {
+            alert("The email is not registered. Please use registration portal to create account")
             this.props.history.push("/login/" + this.props.match.params.clientID )
           }
           
