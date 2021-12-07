@@ -76,13 +76,14 @@ class Login extends React.Component {
       .then(response => {
         console.log(response)
         console.log("checking data",response.data)
-          if(response.data['0']['Response'] == 1){
-            console.log("This is the data:", response.data)
-            localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-            this.props.history.push("/dashboard" )
-          } else {
-            this.props.history.push("/login/" + this.props.match.params.clientID )
-          }
+        if(response.data.PostRubixUserData['0']['Response'] == 1){
+          this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+          localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+          this.props.history.push("/dashboard")
+        } else {
+          this.props.history.push("/login/" +  this.props.match.params.clientID)
+          this.setState({errorMessage: 'The email entered does not exist or has not been valdated.'})
+        }
           
       })
      

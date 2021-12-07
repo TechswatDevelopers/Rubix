@@ -39,7 +39,6 @@ class Registration extends React.Component {
         e.preventDefault();
         const email = document.getElementById('email').value;
         console.log(email)
-        //const password = document.getElementById('password').value;
 
         // PingRequest data
         const pingData = {
@@ -83,7 +82,7 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post(' https://rubixpdf.cjstudents.co.za/validEmailCheck', pingData, requestOptions)
+        await axios.post(' https://rubixpdf.cjstudents.co.za:94/validEmailCheck', pingData, requestOptions)
             .then(response => {
                 console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
