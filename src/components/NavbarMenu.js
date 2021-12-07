@@ -28,6 +28,8 @@ class NavbarMenu extends React.Component {
     profile: {},
     myClientogo: localStorage.getItem('clientLogo')
   };
+
+
   componentDidMount() {
     this.props.tostMessageLoad(true);
     var res = window.location.pathname;
@@ -41,7 +43,7 @@ class NavbarMenu extends React.Component {
     //Fetch data from DB
     const fetchData = async() =>{
     //Get Rubix User Details
-    await fetch('http://192.168.88.10:3300/api/RubixRegisterUsers/'+ userID)
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
         this.setState({profile: data})

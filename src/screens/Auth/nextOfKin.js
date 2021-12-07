@@ -126,7 +126,7 @@ class NextOfKin extends React.Component {
   const postData = async() => {
 
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('http://192.168.88.10:3300/api/RubixUserNextOfKins', data, requestOptions)
+          await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
               alert("Registration complete")

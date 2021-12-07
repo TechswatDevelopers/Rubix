@@ -15,7 +15,7 @@ import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 
 class Login extends React.Component {
 
-//Defining init
+//Initial State
 constructor(props) {
   super(props)
   this.state = {
@@ -27,12 +27,15 @@ constructor(props) {
 
 //Initial Loading
 componentDidMount() {
+  //Set timer for loading screen
   setTimeout(() => {
     this.setState({
       isLoad: false,
       currentClientId: this.props.match.params.clientID
     })
   }, 2000);
+
+  //Save client ID to local Storage
   localStorage.setItem('clientID', this.props.match.params.clientID)
   this.setThemeColor(this.props.match.params.clientID)
   document.body.classList.remove("theme-cyan");
@@ -41,13 +44,10 @@ componentDidMount() {
   document.body.classList.remove("theme-green");
   document.body.classList.remove("theme-orange");
   document.body.classList.remove("theme-blush");
-
-  console.log("Component is mounted and the message from store is ", this.props.myMessage)
 }
 
-    //final submit check
+//final submit check
      Submit(e){
-       //console.log("I am called")
       e.preventDefault();
       const form = document.getElementById('login');
       const data = {
@@ -67,7 +67,7 @@ componentDidMount() {
       const postData = async() => {
 
           if (document.getElementById('login').checkValidity() == true){
-              await axios.post('http://192.168.88.10:3300/api/RubixLogin', data, requestOptions)
+              await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixLogin', data, requestOptions)
               .then(response => {
                   console.log(response)
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
@@ -87,7 +87,6 @@ componentDidMount() {
       postData()
   }
 
-
   //Login Using Social Media
    SocialMediaLogin(userId){
     const data = {
@@ -100,7 +99,7 @@ componentDidMount() {
       body: data
   };
     const postData = async() => {
-      await axios.post('http://192.168.88.10:3300/api/RubixLogin', data, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixLogin', data, requestOptions)
       .then(response => {
         console.log(response)
         console.log("checking data",response.data)

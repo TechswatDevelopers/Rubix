@@ -33,6 +33,7 @@ class VarsityDetails extends React.Component {
 
         };
       }
+
      //final submit check
      Submit(e){
         e.preventDefault();
@@ -60,7 +61,7 @@ class VarsityDetails extends React.Component {
         console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+                await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
                     this.props.history.push("/nextofkin")
@@ -88,7 +89,7 @@ async componentDidMount(){
     const fetchData = async() =>{
 
         //Populate university list
-        await fetch('http://192.168.88.10:3300/api/RubixUniversities')
+        await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixUniversities')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -96,7 +97,7 @@ async componentDidMount(){
             });
 
             //Populate Residence list
-            await fetch('http://192.168.88.10:3300/api/RubixResidences')
+            await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixResidences')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -104,7 +105,7 @@ async componentDidMount(){
             });
 
             //Populate Provinces list
-        await fetch('http://192.168.88.10:3300/api/RubixProvinces')
+        await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -115,7 +116,7 @@ async componentDidMount(){
             });
 
             //Populate Courses list
-            await fetch('http://192.168.88.10:3300/api/RubixCourses')
+            await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixCourses')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -123,7 +124,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('http://192.168.88.10:3300/api/RubixStudentYearofStudies')
+            await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -148,35 +149,6 @@ async componentDidMount(){
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
   }
-  
-//Post File Using Mongo
-onPressUpload() {
-  //var file = e.target.files[0]
-  //console.log("selected file is:", file)
-  //this.setState({selectedFile: file})
-  const postDocument = async() =>{
-    const data = new FormData()
-    data.append('image', this.state.selectedFile)
-    data.append('FileType', this.state.payment,)
-    data.append('RubixRegisterUserID', this.state.myUserID)
-    const requestOptions = {
-      title: 'Student Document Upload',
-      method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data',},
-      body: data
-  };
-  for (var pair of data.entries()) {
-    console.log(pair[0], ', ',pair[1]); 
-}
-await axios.post('http://192.168.88.10:3001/feed/post?image', data, requestOptions)
-                .then(response => {
-                    console.log("Upload details:",response)
-                    this.setState({mongoID: response.data.post._id})
-                }) 
-  }
-  postDocument()
-}
-
 
   render() {
     let body;

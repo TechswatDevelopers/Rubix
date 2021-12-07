@@ -61,7 +61,7 @@ class Registration extends React.Component {
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
-        await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserExists', userExistsData, requestOptions)
+        await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
                 console.log(response.data)
                 /*If User exists on DB:
@@ -83,7 +83,7 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post('http://192.168.88.10:3005/validEmailCheck', pingData, requestOptions)
+        await axios.post(' https://rubixpdfdev.cjstudents.co.za:94/validEmailCheck', pingData, requestOptions)
             .then(response => {
                 console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
