@@ -43,6 +43,8 @@ class ProfileV1Page extends React.Component {
       userIPAddress: null,
       userBrowser: null,
       dateAndTime: null,
+      testDoc: {},
+      numPages: null,
     }
   }
   
@@ -62,10 +64,13 @@ class ProfileV1Page extends React.Component {
       await fetch('http://192.168.88.10:3001/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+          console.log("documents data:", data)
           //this.setState({ doc: data.post[0]})
+           const string =  "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == 'id-document')[0].image
           this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0]})
-          //console.log('default doc:', data.post.filter(doc => doc.FileType == 'id-document'))
+          const image = this.dataURLtoFile(string, "document.pdf")
+          this.setState({testDoc: image})
+          console.log("document information:", image)
           this.setState({ docs: data.post })
           //console.log("Documents: ", data.post)
           this.checkLease(userID)
@@ -351,6 +356,7 @@ else if (isOpera){
     }, 700);
   }
 
+  
   render() {
     let myBody;
     if (!this.state.isSelected) {
@@ -362,9 +368,13 @@ else if (isOpera){
             file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
-            <Page pageNumber={this.state.pageNumber} />
+          
+
+            <Page pageNumber={this.state.pageNumber} renderAnnotationLayer={false}
+      renderTextLayer={false} />
           </Document>
-  
+          <iframe src='ftp://102.130.136.122/65cb1383-3406-47ab-8340-3ef190af6d7f.pdf' /* + this.state.doc.imageUrl + '.pdf' */ width="100%" height="500px">
+    </iframe>
           <nav>
             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
             &nbsp;&nbsp;
