@@ -145,6 +145,7 @@ class PersonalInformation extends React.Component {
 }
 
 
+//On Page load complete
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");

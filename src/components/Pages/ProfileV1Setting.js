@@ -43,10 +43,13 @@ class ProfileV1Setting extends React.Component {
       myUserID: null,
       imageUrl: 'user.png',
       payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
-      value: 0
+      value: 0,
+      profilePicture: {},
 
     };
   }
+
+
   //Reset password
   updateAddressInformation(e) {
     //const history = useHistory();
@@ -228,7 +231,7 @@ class ProfileV1Setting extends React.Component {
   }
 
   //Update Profile Picture
-  updateProfileData(e) {
+  /* updateProfileData(e) {
     e.preventDefault();
     console.log(this.state.selectedFile)
     const data = {
@@ -245,7 +248,11 @@ class ProfileV1Setting extends React.Component {
     console.log(data)
     const postData = async () => {
       if (this.state.base64Image != null) {
+<<<<<<< HEAD
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
+=======
+        await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
+>>>>>>> dev
           .then(response => {
             //console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
@@ -256,7 +263,35 @@ class ProfileV1Setting extends React.Component {
     }
     postData()
 
+  } */
+
+  onPressUpload(e) {
+    e.preventDefault();
+    var file = this.state.selectedFile
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', file)
+      data.append('FileType', 'profile-pic')
+      data.append('RubixRegisterUserID', this.state.myUserID)
+      const requestOptions = {
+        title: 'Student Profile Picture Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          console.log("Upload details:", response)
+          this.setState({ mongoID: response.data.post._id })
+          window.location.reload()
+        })
+    }
+    postDocument()
   }
+
 
   onPressImageCancel() {
     this.setState({ selectedFile: null })
@@ -320,11 +355,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+    console.log('All student data:', data)
     const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
           .then(response => {
-            console.log("All profile data",response.data.PostRubixUserData[0])
+            console.log("All profile data",response.data)
             this.setState({myProfile: response.data.PostRubixUserData[0]})
           }).then(() => {
             localStorage.setItem('resName', this.state.myProfile.ResidenceName)
@@ -345,38 +380,25 @@ class ProfileV1Setting extends React.Component {
 
     //Get All User Data
     this.getAllUserData(localStorage.getItem('userID'))
-    
-/* 
-    //Fetch Data
-    //Personal user Information
-    this.fetchUserData();
-    setTimeout(() => {
-      this.fetchUserAddressData()
-    }, 5000);
-    //User Next of Kin
-    setTimeout(() => {
-      this.fetchUserNextofKinData()
-    }, 5000);
-    //List of Provinces
-    setTimeout(() => {
-      this.fetchProvinceListData()
-    }, 5000);
-    //List of Countries
-    setTimeout(() => {
-      this.fetchCountriesData()
-    }, 5000);
-    //User University Details
-    setTimeout(() => {
-      this.fetchUniversitiesData()
-    }, 5000);
-    //User Residence Details
-    setTimeout(() => {
-      this.fetchResidencesData()
-    }, 5000);
-    //Year of Study List
-    setTimeout(() => {
-      this.fetchYearOfStudyData()
-    }, 5000); */
+
+    //Get User Profile Picture
+    const fetchData = async () => {
+      //Get documents from DB
+      await fetch('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post/' + userID)
+        .then(response => response.json())
+        .then(data => {
+          console.log("Profile data:", data)
+          const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
+          console.log("Profile Picture data:", profilePic)
+          //If Profile Picture Exists...
+          if(profilePic != null && profilePic != undefined){
+            this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
+            this.setState({imageUrl: 'https://rubiximagesdev.cjstudents.co.za:449/' + profilePic.filename})
+          }
+        });
+
+    };
+    fetchData()
   }
 
   //Populate data from DB
@@ -434,6 +456,7 @@ class ProfileV1Setting extends React.Component {
         this.setState({ addressCountry: data.RegisterUserCountry })
       });
     }
+
     fetchProvinceListData = async () => {
     //Get Rubix Provices
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
@@ -446,6 +469,7 @@ class ProfileV1Setting extends React.Component {
         }
       });
     }
+
     fetchCountriesData = async () => {
     //Fetch Countries List
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
@@ -487,6 +511,7 @@ class ProfileV1Setting extends React.Component {
         
       });
     }
+
     fetchCoursesData = async () => {
     //Populate Courses list
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCourses')
@@ -533,7 +558,7 @@ class ProfileV1Setting extends React.Component {
   render() {
     let myButton;
     //Select Image Url
-    if (this.state.myProfile.UserProfileImage != null && this.state.base64Image == null) {
+    if (this.state.profilePicture!= null && this.state.base64Image == null) {
       //this.setState({imageUrl:this.state.myProfile.UserProfileImage})
       myButton = <>
         <div>
@@ -545,7 +570,7 @@ class ProfileV1Setting extends React.Component {
     } else if (this.state.base64Image != null) {
       //this.setState({imageUrl:this.state.base64Image})
       myButton = <>
-        <button className="btn btn-primary" onClick={(e) => this.updateProfileData(e)}>Confirm Upload</button>{" "}
+        <button className="btn btn-primary" onClick={(e) => this.onPressUpload(e)}>Confirm Upload</button>{" "}
         &nbsp;&nbsp;
         <button className="btn btn-default" type="button" onClick={() => this.onPressImageCancel()}>
           Cancel
@@ -570,11 +595,6 @@ class ProfileV1Setting extends React.Component {
                 {myButton}
             </div>
             <div className="media-body">
-              {/* <p>
-                Upload your photo. <br />
-                <em>Image should be at least 140px x 140px</em>
-              </p> */}
-              {/* {myButton} */}
               <input className="sr-only" id="filePhoto" type="file" />
             </div>
           </div>
@@ -623,30 +643,6 @@ class ProfileV1Setting extends React.Component {
                   />
                 </div>
                 <div className="form-group">
-                  {/* <div>
-                  <label className="fancy-radio">
-                    <input
-                      name="Gender"
-                      type="radio"
-                      value="male"
-                      onChange={() => {}}
-                    />
-                    <span>
-                      <i></i>Male
-                    </span>
-                  </label>
-                  <label className="fancy-radio">
-                    <input
-                      name="Gender"
-                      type="radio"
-                      value="female"
-                      onChange={() => {}}
-                    />
-                    <span>
-                      <i></i>Female
-                    </span>
-                  </label>
-                </div> */}
                 </div>
 
                 <div className="form-group">
@@ -794,7 +790,7 @@ class ProfileV1Setting extends React.Component {
                   </label>
                   <input
                     className="form-control"
-                    placeholder="Complex/Appartment Number"
+                    placeholder="Street Address"
                     name="RegisterUserStreetNameAndNumer"
                     defaultValue={this.state.myProfile.RegisterUserStreetNameAndNumer}
                     type="text"
@@ -807,7 +803,7 @@ class ProfileV1Setting extends React.Component {
                   </label>
                   <input
                     className="form-control"
-                    placeholder="Complex/Appartment Number"
+                    placeholder="Appartment/Unit Number"
                     name="RegisterUserComplexorBuildingNumber"
                     defaultValue={this.state.myProfile.RegisterUserComplexorBuildingNumber}
                     type="text"
@@ -820,7 +816,7 @@ class ProfileV1Setting extends React.Component {
                   </label>
                   <input
                     className="form-control"
-                    placeholder="Complex/Appartment Number"
+                    placeholder="Complex Name"
                     name="RegisterUserComplexorBuildingName"
                     defaultValue={this.state.myProfile.RegisterUserComplexorBuildingName}
                     type="text"

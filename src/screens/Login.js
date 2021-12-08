@@ -15,9 +15,39 @@ import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 
 class Login extends React.Component {
 
-    //final submit check
+//Initial State
+constructor(props) {
+  super(props)
+  this.state = {
+    isLoad: true,
+    currentClientId: null,
+    errorMessage: '',
+  }
+}
+
+//Initial Loading
+componentDidMount() {
+  //Set timer for loading screen
+  setTimeout(() => {
+    this.setState({
+      isLoad: false,
+      currentClientId: this.props.match.params.clientID
+    })
+  }, 2000);
+
+  //Save client ID to local Storage
+  localStorage.setItem('clientID', this.props.match.params.clientID)
+  this.setThemeColor(this.props.match.params.clientID)
+  document.body.classList.remove("theme-cyan");
+  document.body.classList.remove("theme-purple");
+  document.body.classList.remove("theme-blue");
+  document.body.classList.remove("theme-green");
+  document.body.classList.remove("theme-orange");
+  document.body.classList.remove("theme-blush");
+}
+
+//final submit check
      Submit(e){
-       //console.log("I am called")
       e.preventDefault();
       const form = document.getElementById('login');
       const data = {
@@ -56,7 +86,6 @@ class Login extends React.Component {
       }
       postData()
   }
-
 
   //Login Using Social Media
    SocialMediaLogin(userId){
@@ -102,32 +131,6 @@ class Login extends React.Component {
  responseInstagram = (response) => {
   this.SocialMediaLogin(response['id'])
 }
-  constructor(props) {
-    super(props)
-    this.state = {
-      isLoad: true,
-      currentClientId: null,
-      errorMessage: '',
-    }
-  }
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        isLoad: false,
-        currentClientId: this.props.match.params.clientID
-      })
-    }, 2000);
-    localStorage.setItem('clientID', this.props.match.params.clientID)
-    this.setThemeColor(this.props.match.params.clientID)
-    document.body.classList.remove("theme-cyan");
-    document.body.classList.remove("theme-purple");
-    document.body.classList.remove("theme-blue");
-    document.body.classList.remove("theme-green");
-    document.body.classList.remove("theme-orange");
-    document.body.classList.remove("theme-blush");
-
-    console.log("Component is mounted and the message from store is ", this.props.myMessage)
-  }
 
   //Set Theme Color
   setThemeColor(client){
@@ -154,6 +157,8 @@ class Login extends React.Component {
     }
     console.log('client:', this.props.rubixClientLogo)
   }
+
+  
   render() {
     const { navigation } = this.props;
     const { email, password } = this.props;
@@ -216,8 +221,10 @@ class Login extends React.Component {
                           buttonText="Google"
                           onSuccess={this.responseGoogle}
                           cookiePolicy={'single_host_origin'}/>
+
+
                           <FacebookLogin
-                        appId="284158963537717"
+                        appId="552332679301004"
                         fields="name,email,picture, first_name, about"
                         height='10'
                         textButton='Facebook'

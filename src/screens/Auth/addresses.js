@@ -80,7 +80,7 @@ class Addresses extends React.Component {
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('http://192.168.88.10:3300/api/RubixUpdateStatus', data, requestOptions)
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           console.log("Verify email status", response)
           //this.props.history.push("/" )

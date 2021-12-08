@@ -31,6 +31,7 @@ class ProfileV1Page extends React.Component {
       imgUpload: null,
       selectedFile: null,
       keyString: 'id-document',
+      docType: 'ID Document',
       myUserID: null,
       doc: {},
       docs: [],
@@ -43,6 +44,8 @@ class ProfileV1Page extends React.Component {
       userIPAddress: null,
       userBrowser: null,
       dateAndTime: null,
+      testDoc: {},
+      numPages: null,
     }
   }
   
@@ -62,24 +65,17 @@ class ProfileV1Page extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+          console.log("documents data:", data)
           //this.setState({ doc: data.post[0]})
+           const string =  "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == 'id-document')[0].image
           this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0]})
-          //console.log('default doc:', data.post.filter(doc => doc.FileType == 'id-document'))
+          const image = this.dataURLtoFile(string, "document.pdf")
+          this.setState({testDoc: image})
+          console.log("document information:", image)
           this.setState({ docs: data.post })
           //console.log("Documents: ", data.post)
           this.checkLease(userID)
         });
-
-
-     /*  //Get Rubix User Residence Details
-      await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
-        .then(response => response.json())
-        .then(data => {
-          //console.log("Residence Data:", data)
-          this.setState({ residence: data })
-        }); */
-
 
     };
     fetchData()
@@ -119,10 +115,11 @@ loadData(){
     this.setLoadingDocumentPage()
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({isSelected: false})
-    this.setState({ selectedFile: null })
+    this.setState({selectedFile: null })
     //console.log("file type", file)
     //console.log("temp object", temp)
     this.setState({ keyString: file })
+    this.changeHeading(file)
     //console.log("current file type", this.state.keyString)
     if (temp.length != 0) {
       this.setState({ doc: temp[0] })
@@ -130,6 +127,31 @@ loadData(){
       this.setState({ doc: null })
     }
     //this.setState(state => ({ document: {file: file}}));
+  }
+
+  //Change heading
+  changeHeading(file) {
+    switch(file){
+      case 'id-document':
+        {
+          this.setState({docType: "My ID Document"})
+        }
+        break
+      case 'proof-of-res':
+        {
+          this.setState({docType: "My Proof of Residence"})
+        }
+        break
+      case 'proof-of-reg':
+        {
+          this.setState({docType: "My Proof of Registration"})
+        }
+        break
+      case 'next-of-kin': 
+      {
+        this.setState({docType: "Next of Kin ID"})
+      }
+    }
   }
 
   //convert to base64
@@ -351,6 +373,7 @@ else if (isOpera){
     }, 700);
   }
 
+  
   render() {
     let myBody;
     if (!this.state.isSelected) {
@@ -358,18 +381,23 @@ else if (isOpera){
         ? <>
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
-          <Document className="border border-primary border-2"
+          {/* <Document className="border border-primary border-2"
             file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
-            <Page pageNumber={this.state.pageNumber} />
-          </Document>
-  
-          <nav>
+          
+            <Page pageNumber={this.state.pageNumber} renderAnnotationLayer={false}
+      renderTextLayer={false} />
+          </Document> */}
+
+          <iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
+    </iframe>
+
+          {/* <nav>
             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
             &nbsp;&nbsp;
             <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-          </nav>
+          </nav> */}
         </>
         
         :<>
@@ -398,6 +426,8 @@ else if (isOpera){
       >
         <Page pageNumber={this.state.pageNumber} />
       </Document>
+          {/* <iframe src={this.state.doc.selectedFile}width="100%" height="500px">
+    </iframe> */}
 
       <div style={{ margin: 'auto', display: 'inline-block' }}>
         <nav>
@@ -644,7 +674,7 @@ else if (isOpera){
                   ChartOption={areaChartFileReport}
                 /> */}
                                   <div style={{height: '100%'}} className="pdf-div">
-                                    <p className="lead" style={{ textAlign: 'center' }}>{this.state.keyString}</p>
+                                    <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
                                     <div className="page-loader-wrapper" style={{ display: this.state.isDocLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
@@ -688,9 +718,6 @@ else if (isOpera){
                             </>
                             : null
                           }
-                          <button className="btn btn-default" onClick={()=>{console.log(this.state.userBrowser)}}>
-                            test
-                          </button>
 
                         </div>
 

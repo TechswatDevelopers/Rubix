@@ -14,6 +14,7 @@ class ForgotPassword extends React.Component {
       currentClientId: null,
       currentLogo: '',
       clientName: '',
+      loginLink: '',
       errorMessage: '',
     }
   }
@@ -23,7 +24,9 @@ class ForgotPassword extends React.Component {
 
     this.setState({currentLogo: localStorage.getItem('clientLogo')})
     this.setState({clientName: localStorage.getItem('clientName')})
+    this.setState({loginLink: "login/" + localStorage.getItem('clientID')})
     this.props.onPressThemeColor(localStorage.getItem('clientTheme'))
+    
   }
   
   //Reset Password
@@ -47,8 +50,14 @@ class ForgotPassword extends React.Component {
     const postData = async() => {
               await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixForgetPasswordEmail', data, requestOptions)
             .then(response => {
-                console.log(response)
-                //alert(response.data.PostRubixUserData[0].ResponceMessage)
+                console.log(response.data.PostRubixUserData[0].Response)
+                if(response.data.PostRubixUserData[0].Response === "Redirected"){
+                  alert("Your request has been received, please check your email for more information")
+                  this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                } else {
+                  alert("The email you entered does not exist, please check try again.")
+                  this.setState({errorMessage: "Please enter an email that exists."})
+                }
             })
     }
     postData()
@@ -75,14 +84,18 @@ class ForgotPassword extends React.Component {
                       <div className="form-group">
                         <input className="form-control" placeholder="Your Email" type="email" name='UserEmail' required='' />
                       </div>
+                      <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => { this.resetPassword(e) }}>
                         RESET PASSWORD
                         </button>
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => { this.props.history.push("/forgotpass/2" ) }}>
-                        pass
-                        </button>
+                        <div className="bottom">
+                        <span className="helper-text">
+                          Don't have an account yet?{" "}
+                          <a href="registration" >Register</a>
+                        </span>
+                        </div>
                       <div className="bottom">
-                        <span className="helper-text">Know your password? <a href="login">Login</a></span>
+                        <span className="helper-text">Know your password? <a href={this.state.loginLink}>Login</a></span>
                       </div>
                     </form>
                   </div>

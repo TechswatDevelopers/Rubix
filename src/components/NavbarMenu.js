@@ -26,8 +26,11 @@ class NavbarMenu extends React.Component {
   state = {
     linkupdate: false,
     profile: {},
+    imageUrl: 'user.png',
     myClientogo: localStorage.getItem('clientLogo')
   };
+
+
   componentDidMount() {
     this.props.tostMessageLoad(true);
     var res = window.location.pathname;
@@ -39,7 +42,7 @@ class NavbarMenu extends React.Component {
     this.activeMenutabwhenNavigate("/" + activeKey);
 
     //Fetch data from DB
-    const fetchData = async() =>{
+    const fetchUserData = async() =>{
     //Get Rubix User Details
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
@@ -48,7 +51,27 @@ class NavbarMenu extends React.Component {
         //console.log("image url", this.state.profile)
         });
       };
-      fetchData();
+      fetchUserData();
+
+      
+    //Get User Profile Picture
+    const fetchData = async () => {
+      //Get documents from DB
+      await fetch('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post/' + userID)
+        .then(response => response.json())
+        .then(data => {
+          console.log("Profile data:", data)
+          const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
+          console.log("Profile Picture data:", profilePic)
+          //If Profile Picture Exists...
+          if(profilePic != null && profilePic != undefined){
+            //this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
+            this.setState({imageUrl: 'https://rubiximagesdev.cjstudents.co.za:449/' + profilePic.filename})
+          }
+        });
+
+    };
+    fetchData()
   }
 
   activeMenutabwhenNavigate(activeKey) {
@@ -132,6 +155,8 @@ class NavbarMenu extends React.Component {
       this.activeMenutabContainer("MapsContainer");
     } else if (activeKey === "/appcalendar"){
       this.activeMenutabContainer("Calendar")
+    } else if (activeKey === "/residence"){
+      this.activeMenutabContainer("Residence")
     }
   }
 
@@ -151,10 +176,10 @@ class NavbarMenu extends React.Component {
        // parents.children[index].children[1].classList.remove("in");
       }
     }
-    setTimeout(() => {
+    /* setTimeout(() => {
       activeMenu.classList.toggle("active");
       activeMenu.children[1].classList.toggle("in");
-    }, 10);
+    }, 10); */
   } 
   render() {
     const {
@@ -414,7 +439,7 @@ class NavbarMenu extends React.Component {
           <div className="sidebar-scroll">
             <div className="user-account">
               <img
-                src={this.state.profile.UserProfileImage===null ? 'user.png' : this.state.profile.UserProfileImage}
+                src={this.state.imageUrl}
                 className="rounded-circle user-photo"
                 alt="User Profile Picture"
               />
@@ -449,7 +474,7 @@ class NavbarMenu extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
               <hr />
-               <ul className="row list-unstyled">
+               {/* <ul className="row list-unstyled">
                 <li className="col-4">
                   <small>Sales</small>
                   <h6>456</h6>
@@ -462,7 +487,7 @@ class NavbarMenu extends React.Component {
                   <small>Revenue</small>
                   <h6>$2.13B</h6>
                 </li>
-              </ul> 
+              </ul> */} 
             </div>
             <ul className="nav nav-tabs">
               <li className="nav-item">
@@ -476,7 +501,7 @@ class NavbarMenu extends React.Component {
                   Menu
                 </a>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a
                   className={sideMenuTab[1] ? "nav-link active" : "nav-link"}
                   data-toggle="tab"
@@ -486,7 +511,7 @@ class NavbarMenu extends React.Component {
                 >
                   <i className="icon-book-open"></i>
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <a
                   className={sideMenuTab[2] ? "nav-link active" : "nav-link"}
@@ -498,7 +523,7 @@ class NavbarMenu extends React.Component {
                   <i className="icon-settings"></i>
                 </a>
               </li>
-              <li className="nav-item">
+             {/*  <li className="nav-item">
                 <a
                   className={sideMenuTab[3] ? "nav-link active" : "nav-link"}
                   data-toggle="tab"
@@ -508,7 +533,7 @@ class NavbarMenu extends React.Component {
                 >
                   <i className="icon-question"></i>
                 </a>
-              </li>
+              </li> */}
             </ul> 
 
 
@@ -531,10 +556,14 @@ class NavbarMenu extends React.Component {
                         <i className="icon-user"></i> <span>My Profile</span>
                       </a>
                     </li>
-                  <li className="" id="resInfo">
+
+
+                  <li className="" id="Residence">
                     <a
-                        href="#!"
-                        className=""
+                        href="residence"
+                        className={
+                          activeKey === "residence" ? "active" : ""
+                        }
                         /* onClick={(e) => {
                           e.preventDefault();
                           this.activeMenutabContainer("AppContainer");
@@ -543,6 +572,8 @@ class NavbarMenu extends React.Component {
                         <i className="icon-home"></i> <span>Residene Information</span>
                       </a>
                     </li>
+
+                    
                   <li className="" id="Calendar">
                     <a
                         href="appcalendar"
@@ -558,7 +589,7 @@ class NavbarMenu extends React.Component {
                       </a>
                     </li>
 
-                    <li className="" id="dashboradContainer">
+                    {/* <li className="" id="dashboradContainer">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -586,8 +617,10 @@ class NavbarMenu extends React.Component {
                           <Link to="ioT">IoT</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="AppContainer" className="">
+                    </li> */}
+
+
+                    {/* <li id="AppContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -611,14 +644,7 @@ class NavbarMenu extends React.Component {
                         >
                           <Link to="appchat">Chat</Link>
                         </li>
-                        {/* <li
-                          className={
-                            activeKey === "appcalendar" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="appcalendar">Calendar</Link>
-                        </li> */}
+                        
                         <li
                           className={activeKey === "appcontact" ? "active" : ""}
                           onClick={() => {}}
@@ -632,8 +658,10 @@ class NavbarMenu extends React.Component {
                           <Link to="apptaskbar">Taskboard</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="FileManagerContainer" className="">
+                    </li> */}
+
+                    
+                    {/* <li id="FileManagerContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -675,8 +703,10 @@ class NavbarMenu extends React.Component {
                           <Link to="fileimages">Images</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="BlogContainer" className="">
+                    </li> */}
+
+
+                    {/* <li id="BlogContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -710,8 +740,10 @@ class NavbarMenu extends React.Component {
                           <Link to="blogdetails">Blog Detail</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="UIElementsContainer" className="">
+                    </li> */}
+
+
+                    {/* <li id="UIElementsContainer" className="">
                       <a
                         href="#uiElements"
                         className="has-arrow"
@@ -804,8 +836,10 @@ class NavbarMenu extends React.Component {
                           <Link to="uiprogressbar">Progress Bars</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="WidgetsContainer" className="">
+                    </li> */}
+
+                    
+                    {/* <li id="WidgetsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -852,8 +886,11 @@ class NavbarMenu extends React.Component {
                           <Link to="widgetsecommers">eCommerce</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="AuthenticationContainer" className="">
+                    </li> */}
+
+
+
+                    {/* <li id="AuthenticationContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -913,8 +950,11 @@ class NavbarMenu extends React.Component {
                           <a href="page503">Page 503</a>
                         </li>
                       </ul>
-                    </li>
-                    <li id="PagesContainer" className="">
+                    </li> */}
+
+
+
+                    {/* <li id="PagesContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1055,8 +1095,11 @@ class NavbarMenu extends React.Component {
                           <Link to="faqs">FAQ</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="FormsContainer" className="">
+                    </li> */}
+
+
+
+                    {/* <li id="FormsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1085,8 +1128,10 @@ class NavbarMenu extends React.Component {
                           <Link to="basicelements">Basic Elements</Link>
                         </li>
                       </ul>
-                    </li>
-                    <li id="TablesContainer" className="">
+                    </li> */}
+
+
+                    {/* <li id="TablesContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1107,8 +1152,10 @@ class NavbarMenu extends React.Component {
                           <Link to="tablenormal">Normal Tables</Link>{" "}
                         </li>
                       </ul>
-                    </li>
-                    <li id="chartsContainer" className="">
+                    </li> */}
+
+
+                    {/* <li id="chartsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1127,8 +1174,10 @@ class NavbarMenu extends React.Component {
                           <Link to="echart">E-chart</Link>{" "}
                         </li>
                       </ul>
-                    </li>
-                    <li id="MapsContainer" className="">
+                    </li> */}
+
+
+                    {/* <li id="MapsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1152,7 +1201,9 @@ class NavbarMenu extends React.Component {
                           <Link to="leafletmap">Leaflet Map</Link>
                         </li>
                       </ul>
-                    </li>
+                    </li> */}
+
+
                   </ul>
                 </Nav>
               </div>

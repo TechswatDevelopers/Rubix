@@ -33,6 +33,7 @@ class VarsityDetails extends React.Component {
 
         };
       }
+
      //final submit check
      Submit(e){
         e.preventDefault();
@@ -148,35 +149,6 @@ async componentDidMount(){
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
   }
-  
-//Post File Using Mongo
-onPressUpload() {
-  //var file = e.target.files[0]
-  //console.log("selected file is:", file)
-  //this.setState({selectedFile: file})
-  const postDocument = async() =>{
-    const data = new FormData()
-    data.append('image', this.state.selectedFile)
-    data.append('FileType', this.state.payment,)
-    data.append('RubixRegisterUserID', this.state.myUserID)
-    const requestOptions = {
-      title: 'Student Document Upload',
-      method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data',},
-      body: data
-  };
-  for (var pair of data.entries()) {
-    console.log(pair[0], ', ',pair[1]); 
-}
-await axios.post('https://rubixdocuments.cjstudents.co.za/feed/post?image', data, requestOptions)
-                .then(response => {
-                    console.log("Upload details:",response)
-                    this.setState({mongoID: response.data.post._id})
-                }) 
-  }
-  postDocument()
-}
-
 
   render() {
     let body;
