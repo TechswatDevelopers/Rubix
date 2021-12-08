@@ -42,6 +42,7 @@ import page403 from "./screens/Auth/Page403";
 import page500 from "./screens/Auth/Page500";
 import page503 from "./screens/Auth/Page503";
 import blankpage from "./screens/Pages/BlankPage";
+import residence from "./screens/Pages/Residence";
 import profilev1page from "./screens/Pages/ProfileV1";
 import profilev2page from "./screens/Pages/ProfileV2";
 import imagegalleryprofile from "./screens/Pages/ImageGallery";
@@ -479,6 +480,11 @@ class App extends React.Component {
                     path={`${process.env.PUBLIC_URL}/leafletmap`}
                     component={leafletmap}
                   />
+                  <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/residence`}
+                component={residence}
+              />
                 </Switch>
               </div>
           </>

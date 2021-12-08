@@ -26,6 +26,7 @@ class NavbarMenu extends React.Component {
   state = {
     linkupdate: false,
     profile: {},
+    imageUrl: 'user.png',
     myClientogo: localStorage.getItem('clientLogo')
   };
 
@@ -41,7 +42,7 @@ class NavbarMenu extends React.Component {
     this.activeMenutabwhenNavigate("/" + activeKey);
 
     //Fetch data from DB
-    const fetchData = async() =>{
+    const fetchUserData = async() =>{
     //Get Rubix User Details
     await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
@@ -50,7 +51,27 @@ class NavbarMenu extends React.Component {
         //console.log("image url", this.state.profile)
         });
       };
-      fetchData();
+      fetchUserData();
+
+      
+    //Get User Profile Picture
+    const fetchData = async () => {
+      //Get documents from DB
+      await fetch('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post/' + userID)
+        .then(response => response.json())
+        .then(data => {
+          console.log("Profile data:", data)
+          const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
+          console.log("Profile Picture data:", profilePic)
+          //If Profile Picture Exists...
+          if(profilePic != null && profilePic != undefined){
+            //this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
+            this.setState({imageUrl: 'https://rubiximagesdev.cjstudents.co.za:449/' + profilePic.filename})
+          }
+        });
+
+    };
+    fetchData()
   }
 
   activeMenutabwhenNavigate(activeKey) {
@@ -134,6 +155,8 @@ class NavbarMenu extends React.Component {
       this.activeMenutabContainer("MapsContainer");
     } else if (activeKey === "/appcalendar"){
       this.activeMenutabContainer("Calendar")
+    } else if (activeKey === "/residence"){
+      this.activeMenutabContainer("Residence")
     }
   }
 
@@ -416,7 +439,7 @@ class NavbarMenu extends React.Component {
           <div className="sidebar-scroll">
             <div className="user-account">
               <img
-                src={this.state.profile.UserProfileImage===null ? 'user.png' : this.state.profile.UserProfileImage}
+                src={this.state.imageUrl}
                 className="rounded-circle user-photo"
                 alt="User Profile Picture"
               />
@@ -533,10 +556,14 @@ class NavbarMenu extends React.Component {
                         <i className="icon-user"></i> <span>My Profile</span>
                       </a>
                     </li>
-                  <li className="" id="resInfo">
+
+
+                  <li className="" id="Residence">
                     <a
-                        href="#!"
-                        className=""
+                        href="residence"
+                        className={
+                          activeKey === "residence" ? "active" : ""
+                        }
                         /* onClick={(e) => {
                           e.preventDefault();
                           this.activeMenutabContainer("AppContainer");
@@ -545,6 +572,8 @@ class NavbarMenu extends React.Component {
                         <i className="icon-home"></i> <span>Residene Information</span>
                       </a>
                     </li>
+
+                    
                   <li className="" id="Calendar">
                     <a
                         href="appcalendar"

@@ -77,16 +77,6 @@ class ProfileV1Page extends React.Component {
           this.checkLease(userID)
         });
 
-
-     /*  //Get Rubix User Residence Details
-      await fetch('http://192.168.88.10:3300/api/RubixStudentResDetails/' + userID)
-        .then(response => response.json())
-        .then(data => {
-          //console.log("Residence Data:", data)
-          this.setState({ residence: data })
-        }); */
-
-
     };
     fetchData()
     this.loadData()
@@ -436,6 +426,8 @@ else if (isOpera){
       >
         <Page pageNumber={this.state.pageNumber} />
       </Document>
+          {/* <iframe src={this.state.doc.selectedFile}width="100%" height="500px">
+    </iframe> */}
 
       <div style={{ margin: 'auto', display: 'inline-block' }}>
         <nav>
