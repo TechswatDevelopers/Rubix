@@ -369,14 +369,13 @@ else if (isOpera){
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
           
-
             <Page pageNumber={this.state.pageNumber} renderAnnotationLayer={false}
       renderTextLayer={false} />
           </Document>
-        {/*   
-          <iframe src='ftp://102.130.136.122/65cb1383-3406-47ab-8340-3ef190af6d7f.pdf'width="100%" height="500px">
+
+          <iframe src='https://rubiximagesdev.cjstudents.co.za:449/02065601-f980-4056-b4a9-2b10488d7859.pdf'width="100%" height="500px">
     </iframe>
- */}
+
           <nav>
             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
             &nbsp;&nbsp;
