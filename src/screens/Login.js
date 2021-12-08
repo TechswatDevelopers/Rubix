@@ -15,8 +15,6 @@ import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 
 class Login extends React.Component {
 
-
-
     //final submit check
      Submit(e){
        //console.log("I am called")
