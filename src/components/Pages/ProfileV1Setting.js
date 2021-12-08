@@ -74,7 +74,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('http://192.168.88.10:3300/api/RubixRegisterUserAddesss', data, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
           //console.log(response)
           //alert(response.data.PostRubixUserData[0].Response)
@@ -104,7 +104,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('http://192.168.88.10:3300/api/RubixResetPassword', data, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
           //console.log(response)
           alert(response.data.PostRubixUserData[0].Response)
