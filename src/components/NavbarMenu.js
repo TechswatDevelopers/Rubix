@@ -176,10 +176,10 @@ class NavbarMenu extends React.Component {
        // parents.children[index].children[1].classList.remove("in");
       }
     }
-    setTimeout(() => {
+    /* setTimeout(() => {
       activeMenu.classList.toggle("active");
       activeMenu.children[1].classList.toggle("in");
-    }, 10);
+    }, 10); */
   } 
   render() {
     const {
