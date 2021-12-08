@@ -577,7 +577,7 @@ else if (isOpera){
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="Preferences" title="Residence Information">
+                      {/* <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
                           <div className="w-100 p-3">
                             <div className="body">
@@ -599,18 +599,6 @@ else if (isOpera){
                                       <span className="login-detail">
                                         {localStorage.getItem('resAddress')}
                                       </span>
-                                      {/*<br></br>
-                                       <span className="login-detail">
-                                        Building number: {this.state.residence.BuildingNumber}
-                                      </span>
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Floor: {this.state.residence.FloorNumber}
-                                      </span> 
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Room:{this.state.residence.RoomNumber}
-                                      </span> */}
                                     </div>
                                 </li>
                                 <img
@@ -638,7 +626,7 @@ else if (isOpera){
                             </div>
                           </div>
                         </div>
-                      </Tab>
+                      </Tab> */}
                       <Tab eventKey="documents" title="Documents">
                         <div
                           style={{ flex: 1 }}
