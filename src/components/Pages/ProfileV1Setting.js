@@ -231,36 +231,6 @@ class ProfileV1Setting extends React.Component {
   }
 
   //Update Profile Picture
-  /* updateProfileData(e) {
-    e.preventDefault();
-    console.log(this.state.selectedFile)
-    const data = {
-      'RubixRegisterUserID': this.state.myUserID,
-      'ProfileImage': this.state.base64Image,
-    };
-
-    const requestOptions = {
-      title: 'Update Profile Image Form',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: data
-    };
-    console.log(data)
-    const postData = async () => {
-      if (this.state.base64Image != null) {
-        await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
-          .then(response => {
-            //console.log(response)
-            alert(response.data.PostRubixUserData[0].ResponceMessage)
-          })
-      } else {
-        alert("Please select a valid Image")
-      }
-    }
-    postData()
-
-  } */
-
   onPressUpload(e) {
     e.preventDefault();
     var file = this.state.selectedFile
@@ -398,22 +368,8 @@ class ProfileV1Setting extends React.Component {
   }
 
   //Populate data from DB
-  fetchUserData = async () => {
-    //console.log("user id:", localStorage.getItem('userID'))
-    //Get Rubix User Details
-    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers/' + localStorage.getItem('userID'))
-      .then(response => response.json())
-      .then(data => {
-        if(data === null || data === undefined){
-          alert('Error loading user data')
-        }else{
-          this.setState({ profile: data })
-        }
-      });
-    }
-
-    fetchUserUniversityData = async () => {
     //Get Rubix User University Details
+    fetchUserUniversityData = async () => {
     await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
@@ -430,9 +386,10 @@ class ProfileV1Setting extends React.Component {
         }
       });
     }
+
+    //Get Rubix User Address Details
     fetchUserAddressData = async () => {
       //console.log("User ID being used:", localStorage.getItem('userID'))
-    //Get Rubix User Address Details
     await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
@@ -785,12 +742,12 @@ class ProfileV1Setting extends React.Component {
                     Street Address:
                   </label>
                   <input
+                    readOnly ={true}
                     className="form-control"
                     placeholder="Street Address"
                     name="RegisterUserStreetNameAndNumer"
                     defaultValue={this.state.myProfile.RegisterUserStreetNameAndNumer}
                     type="text"
-                    onChange={() => { }}
                   />
                 </div>
                 <div className="form-group">
@@ -798,12 +755,12 @@ class ProfileV1Setting extends React.Component {
                     Unit Number:
                   </label>
                   <input
+                    readOnly ={true}
                     className="form-control"
                     placeholder="Appartment/Unit Number"
                     name="RegisterUserComplexorBuildingNumber"
                     defaultValue={this.state.myProfile.RegisterUserComplexorBuildingNumber}
                     type="text"
-                    onChange={() => { }}
                   />
                 </div>
                 <div className="form-group">
@@ -811,12 +768,12 @@ class ProfileV1Setting extends React.Component {
                     Complex Name:
                   </label>
                   <input
+                  readOnly ={true}
                     className="form-control"
                     placeholder="Complex Name"
                     name="RegisterUserComplexorBuildingName"
                     defaultValue={this.state.myProfile.RegisterUserComplexorBuildingName}
                     type="text"
-                    onChange={() => { }}
                   />
                 </div>
                 {/* <div className="form-group">

@@ -170,7 +170,7 @@ class Registration extends React.Component {
                           cookiePolicy={'single_host_origin'}/>
                           
                     <FacebookLogin
-                        appId="284158963537717"
+                        appId="552332679301004"
                         fields="name,email,picture, first_name, about"
                         height='10'
                         textButton='Facebook'
