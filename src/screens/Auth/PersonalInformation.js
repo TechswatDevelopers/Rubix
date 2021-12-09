@@ -258,7 +258,6 @@ class PersonalInformation extends React.Component {
                           name="UserEmail"
                           id="email"
                           value = {this.props.email}
-                          readOnly
                           placeholder="Enter your email"
                           type="email"/>
                       </div>
@@ -305,11 +304,9 @@ class PersonalInformation extends React.Component {
                             </label>
                         <input
                           className="form-control"
-                          //name="MedicalConditions"
                           id="middle-name"
                           placeholder="Enter your Medical Condition"
                           type="text"
-                          //defaultValue='none'
                           onChange ={(e)=>this.setState({medicalConditions: e.target.value})}
                         />
                       </div>
