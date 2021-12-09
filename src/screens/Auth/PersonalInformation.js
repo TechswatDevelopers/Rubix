@@ -107,6 +107,7 @@ class PersonalInformation extends React.Component {
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
+        'Nationality': this.state.country
     };
     for (let i=0; i < form.elements.length; i++) {
         const elem = form.elements[i];
@@ -129,7 +130,7 @@ class PersonalInformation extends React.Component {
                 localStorage.setItem('studentEmail', email)
                 localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
-                this.props.history.push("/addresses")
+                //this.props.history.push("/addresses")
                 
             })
                 

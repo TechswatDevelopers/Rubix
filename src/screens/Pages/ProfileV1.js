@@ -62,7 +62,7 @@ class ProfileV1Page extends React.Component {
     console.log("The time is:", myTime) */
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://rubixdocuments.cjstudents.co.za/feed/post/' + userID)
+      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           console.log("documents data:", data)
@@ -208,7 +208,7 @@ loadData(){
       for (var pair of data.entries()) {
         console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://rubixdocuments.cjstudents.co.za/feed/post?image', data, requestOptions)
+      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
           console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -341,7 +341,7 @@ else if (isOpera){
         body: data
       };
       console.log("Posted Data:", data)
-      await axios.post('https://rubixpdf.cjstudents.co.za/PDFSignature', data, requestOptions)
+      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
           this.setState({docUrl: response.data.Base })
@@ -390,7 +390,7 @@ else if (isOpera){
       renderTextLayer={false} />
           </Document> */}
 
-          <iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
+          <iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
     </iframe>
 
           {/* <nav>

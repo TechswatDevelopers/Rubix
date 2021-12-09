@@ -45,7 +45,8 @@ class VarsityDetails extends React.Component {
             'CourseID': this.state.course,
             'ResidenceID': this.state.res,
             'StudentYearofStudyID': this.state.year,
-            'PaymentMethod': this.state.payment
+            'PaymentMethod': this.state.payment,
+            'HearAbout': this.state.hearAbout
         };
         for (let i=0; i < form.elements.length; i++) {
             const elem = form.elements[i];
@@ -64,7 +65,7 @@ class VarsityDetails extends React.Component {
                 await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
-                    this.props.history.push("/nextofkin")
+                    //this.props.history.push("/nextofkin")
                 })
                     
             } else{
