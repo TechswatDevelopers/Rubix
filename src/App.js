@@ -42,6 +42,7 @@ import page403 from "./screens/Auth/Page403";
 import page500 from "./screens/Auth/Page500";
 import page503 from "./screens/Auth/Page503";
 import blankpage from "./screens/Pages/BlankPage";
+import verifyemail from "./screens/Pages/VerifyEmail";
 import residence from "./screens/Pages/Residence";
 import profilev1page from "./screens/Pages/ProfileV1";
 import profilev2page from "./screens/Pages/ProfileV2";
@@ -131,6 +132,7 @@ class App extends React.Component {
         activeKey1 === "myDashboard" ||
         activeKey1 === "nextofkin" ||
         activeKey1 === "addresses" ||
+        activeKey1 === "verifyemail" ||
         activeKey1 === "page404" ||
         activeKey1 === "page403" ||
         activeKey1 === "page500" ||
@@ -147,6 +149,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/login/:clientID`}
                 component={Login}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/verifyemail/:activeCode`}
+                component={verifyemail}
               />
               <Route
                 exact

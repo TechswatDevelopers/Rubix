@@ -27,7 +27,8 @@ class NavbarMenu extends React.Component {
     linkupdate: false,
     profile: {},
     imageUrl: 'user.png',
-    myClientogo: localStorage.getItem('clientLogo')
+    myClientogo: localStorage.getItem('clientLogo'),
+    clientID: localStorage.getItem('clientID')
   };
 
 
@@ -421,7 +422,7 @@ class NavbarMenu extends React.Component {
                     </ul>
                   </li>
                   <li>
-                    <a href="login" className="icon-menu">
+                    <a href={"login/" + this.state.clientID} className="icon-menu">
                       <i className="icon-login"></i>
                     </a>
                   </li>
