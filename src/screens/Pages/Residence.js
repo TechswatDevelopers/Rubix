@@ -17,73 +17,88 @@ class Residence extends React.Component {
       >
         <div>
           <div className="container-fluid">
-            <PageHeader
+            {/* <PageHeader
               HeaderText="My Residense Information"
               Breadcrumb={[
                 { name: "Page", navigate: "" },
                 { name: "Residence Page", navigate: "" },
               ]}
-            />
+            /> */}
             <div className="row clearfix">
-                          <div className="w-100 p-3">
-                            <div className="body">
-                              <h6 style={{textAlign:'center'}}>My Residence Information</h6>
-                              <ul className="list-unstyled list-login-session w-80 p-3">
-                                <li>
-                                <h3 className="login-title">
-                                {localStorage.getItem('resName')}
-                                      </h3>
-                                      <li>
-                                      <h3 className="login-title">
-                                      {localStorage.getItem('resUni')}
-                                      </h3>
-                                      </li>
-                                </li>
-                                
-                                <li>
-                                    <div className="login-info">
-                                      <span className="login-detail">
-                                        {localStorage.getItem('resAddress')}
-                                      </span>
-                                      {/*<br></br>
-                                       <span className="login-detail">
-                                        Building number: {this.state.residence.BuildingNumber}
-                                      </span>
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Floor: {this.state.residence.FloorNumber}
-                                      </span> 
-                                      <br></br>
-                                      <span className="login-detail">
-                                        Room:{this.state.residence.RoomNumber}
-                                      </span> */}
-                                    </div>
-                                </li>
-                                <img
-                                  alt="cannot display"
-                                  accept='.jpg, .png, .jpeg'
-                                  className="user-photo media-object"
-                                  src={localStorage.getItem('resPhoto')} />
-                               
-                                  <li>
-                                    <p>{localStorage.getItem('resDescription')}</p>
-                                  </li>
-                                <li>
-                                  <div className="login-session">
-                                    <div className="login-info">
-                                      <h3 className="login-title">
-                                        Residence Amenitis
-                                      </h3>
-                                      <p>{localStorage.getItem('resAmenities')}</p>
-                                    </div>
+              <div className="w-100 p-3">
+                <div className="body w-100 p-3">
 
-                                  </div>
-                                </li>
-                                
-                              </ul>
-                            </div>
-                          </div>
+                  <div className="has-bg-img w-100 p-3" id="top-div"
+                    style={{
+                      backgroundImage: 'url(' + localStorage.getItem('resPhoto') + ')',
+                      backgroundPosition: 'center',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      height: '250px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      alignContent: 'center'
+                    }} >
+                    <h3 className=""
+                      style={{
+                        color: "white",
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignContent: 'center'
+                      }}
+                    >
+                      {localStorage.getItem('resName')}
+                    </h3>
+                    <span className=""
+                      style={{
+                        color: "white",
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignContent: 'center'
+                      }}>
+                      {localStorage.getItem('resAddress')}
+                    </span>
+
+                  </div>
+                  <ul className="list-unstyled list-login-session w-80 p-3">
+
+                    <li>
+                      <div className="login-info shadow-sm p-3 mb-5 bg-white rounded">
+                        <h3
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            alignContent: 'center'
+                          }}
+                        >About Us</h3>
+                        <p>{localStorage.getItem('resDescription')}</p>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div className="login-session">
+                        <div className="login-info">
+                          <h3 >
+                            Residence Amenitis
+                          </h3>
+                          <p>{localStorage.getItem('resAmenities')}</p>
                         </div>
+
+                      </div>
+                    </li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
