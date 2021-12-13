@@ -117,9 +117,14 @@ class App extends React.Component {
 
     return (
       <div>
-        <div>
         
+        <div>
+        <ScriptTag isHydrating={true} type="text/javascript" 
+      src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"/>
+        <script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
+ 
                </div>
+               
       <div id="wrapper">
         {activeKey1 === "" ||
         activeKey1 === "/" ||
@@ -490,6 +495,7 @@ class App extends React.Component {
               />
                 </Switch>
               </div>
+              
           </>
         )}
         
