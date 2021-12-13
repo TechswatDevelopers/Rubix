@@ -10,6 +10,8 @@ import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
+//import tempfile from 'tempfile';
+//import DocViewer from "react-doc-viewer";
 
 import {
   fileFolderCardData,
@@ -48,18 +50,24 @@ class ProfileV1Page extends React.Component {
       numPages: null,
     }
   }
-  
+
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
-    this.setState({ myUserID: userID});
+    this.setState({ myUserID: userID });
     this.getUserBrowser()
-    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long'};
+    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
-    this.setState({dateAndTime: myDate+myTime})
+    this.setState({ dateAndTime: myDate + myTime })
     /* console.log("The date is:", myDate)
     console.log("The time is:", myTime) */
+    this.loadDocuments(userID)
+    this.loadData()
+  }
+
+  //Fetch All documents from DB
+  loadDocuments(userID) {
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post/' + userID)
@@ -67,10 +75,10 @@ class ProfileV1Page extends React.Component {
         .then(data => {
           console.log("documents data:", data)
           //this.setState({ doc: data.post[0]})
-           const string =  "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == 'id-document')[0].image
-          this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0]})
+          const string = "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == 'id-document')[0].image
+          this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0] })
           const image = this.dataURLtoFile(string, "document.pdf")
-          this.setState({testDoc: image})
+          this.setState({ testDoc: image })
           console.log("document information:", image)
           this.setState({ docs: data.post })
           //console.log("Documents: ", data.post)
@@ -79,15 +87,14 @@ class ProfileV1Page extends React.Component {
 
     };
     fetchData()
-    this.loadData()
   }
 
 
-//Load Local Storage Data
-loadData(){
-  const myProfile = localStorage.getItem('profile');
-  this.setState({myUserProfile: myProfile})
-}
+  //Load Local Storage Data
+  loadData() {
+    const myProfile = localStorage.getItem('profile');
+    this.setState({ myUserProfile: myProfile })
+  }
 
   //Page navigation functions
   goToPrevPage = () =>
@@ -95,27 +102,28 @@ loadData(){
   goToNextPage = () =>
     this.setState(state => ({ pageNumber: state.pageNumber + 1 }));
 
-    //Check Lease Agreement Doc
-    checkLease(userId){
-      const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
-      //console.log(temp[0].image)
-      if (temp.length != 0){
-        this.setState({docUrl:temp[0].image})
-        this.setState({showPad: false})
-      }
-      else {
-        this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png', userId, 0)
-        this.setState({showPad: true})
-      }
+  //Check Lease Agreement Doc
+  checkLease(userId) {
+    const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
+    //console.log(temp[0].image)
+    if (temp.length != 0) {
+      this.setState({ docUrl: temp[0].image })
+      //tempfile('.png');
+      this.setState({ showPad: false })
     }
+    else {
+      this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png', userId, 0)
+      this.setState({ showPad: true })
+    }
+  }
 
 
   //Switch to different Document
   changeDocument = (file) => {
     this.setLoadingDocumentPage()
     const temp = this.state.docs.filter(doc => doc.FileType == file)
-    this.setState({isSelected: false})
-    this.setState({selectedFile: null })
+    this.setState({ isSelected: false })
+    this.setState({ selectedFile: null })
     //console.log("file type", file)
     //console.log("temp object", temp)
     this.setState({ keyString: file })
@@ -131,26 +139,26 @@ loadData(){
 
   //Change heading
   changeHeading(file) {
-    switch(file){
+    switch (file) {
       case 'id-document':
         {
-          this.setState({docType: "My ID Document"})
+          this.setState({ docType: "My ID Document" })
         }
         break
       case 'proof-of-res':
         {
-          this.setState({docType: "My Proof of Residence"})
+          this.setState({ docType: "My Proof of Residence" })
         }
         break
       case 'proof-of-reg':
         {
-          this.setState({docType: "My Proof of Registration"})
+          this.setState({ docType: "My Proof of Registration" })
         }
         break
-      case 'next-of-kin': 
-      {
-        this.setState({docType: "Next of Kin ID"})
-      }
+      case 'next-of-kin':
+        {
+          this.setState({ docType: "Next of Kin ID" })
+        }
     }
   }
 
@@ -172,21 +180,21 @@ loadData(){
   }
 
 
-//Converts base64 to file
+  //Converts base64 to file
   dataURLtoFile(dataurl, filename) {
- 
+
     var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
-        u8arr = new Uint8Array(n);
-        
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
     }
-    
-    return new File([u8arr], filename, {type:mime});
-}
+
+    return new File([u8arr], filename, { type: mime });
+  }
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
@@ -223,15 +231,16 @@ loadData(){
 
   //When User Presses Cancel on Document Uploading
   onPressCancel() {
-    this.setState({selectedFile: null })
-    this.setState({isSelected: false })
+    this.setState({ selectedFile: null })
+    this.setState({ isSelected: false })
   }
 
   //Handle File Selection input
   changeHandler(event) {
-    this.setState({selectedFile: event.target.files[0] })
+    this.setState({ selectedFile: event.target.files[0] })
     console.log("selcted file1", event.target.files[0])
-    this.setState({isSelected: true })
+    this.onPressUpload(event.target.files[0], this.state.keyString, 'documents')
+    this.setState({ isSelected: true })
     this.getBase64(event)
   }
   handleUpdate(e) {
@@ -259,67 +268,67 @@ loadData(){
   }
 
   //Coleect User Signing Info
-  getUserWitnessData(){
+  getUserWitnessData() {
     //Fetch IP Address
     const getData = async () => {
       const res = await axios.get('https://geolocation-db.com/json/')
       //console.log(res.data);
-      this.setState({userIPAddress: res.data.IPv4})
+      this.setState({ userIPAddress: res.data.IPv4 })
     }
     getData()
-    
+
   }
 
   //Get user browser information
-  getUserBrowser(){
-    
+  getUserBrowser() {
+
     var browser
     // Opera 8.0+
-var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-console.log("Opera:", isOpera)
-// Firefox 1.0+
-var isFirefox = typeof InstallTrigger !== 'undefined';
-console.log("Firefox:", isFirefox)
+    var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    console.log("Opera:", isOpera)
+    // Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    console.log("Firefox:", isFirefox)
 
-// Safari 3.0+ "[object HTMLElementConstructor]" 
-var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] /* || (typeof safari !== 'undefined' && safari.pushNotification) */);
-console.log("Safari:", isSafari)
+    // Safari 3.0+ "[object HTMLElementConstructor]" 
+    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] /* || (typeof safari !== 'undefined' && safari.pushNotification) */);
+    console.log("Safari:", isSafari)
 
-// Internet Explorer 6-11
-var isIE = /*@cc_on!@*/false || !!document.documentMode;
-console.log("Internet Explorer:", isIE)
+    // Internet Explorer 6-11
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    console.log("Internet Explorer:", isIE)
 
-// Edge 20+
-var isEdge = !isIE && !!window.StyleMedia;
-console.log("Edge:", isEdge)
+    // Edge 20+
+    var isEdge = !isIE && !!window.StyleMedia;
+    console.log("Edge:", isEdge)
 
-// Chrome 1 - 71
-var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-console.log("Chrome:", isChrome)
+    // Chrome 1 - 71
+    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    console.log("Chrome:", isChrome)
 
-// Blink engine detection
-var isBlink = (isChrome || isOpera) && !!window.CSS;
-console.log("Blink:", isBlink)
+    // Blink engine detection
+    var isBlink = (isChrome || isOpera) && !!window.CSS;
+    console.log("Blink:", isBlink)
 
-if(isChrome){
-  this.setState({userBrowser: 'Chrome'})
-  console.log("is chrome",isChrome)
-}
-else if (isEdge){
-  this.setState({userBrowser: 'Edge'})
-}
-else if (isIE){
-  this.setState({userBrowser: 'Internet Explorer'})
-}
-else if (isSafari){
-  this.setState({userBrowser: 'Safari'})
-}
-else if (isFirefox){
-  this.setState({userBrowser: 'Firefox'})
-}
-else if (isOpera){
-  this.setState({userBrowser: 'Opera'})
-}
+    if (isChrome) {
+      this.setState({ userBrowser: 'Chrome' })
+      console.log("is chrome", isChrome)
+    }
+    else if (isEdge) {
+      this.setState({ userBrowser: 'Edge' })
+    }
+    else if (isIE) {
+      this.setState({ userBrowser: 'Internet Explorer' })
+    }
+    else if (isSafari) {
+      this.setState({ userBrowser: 'Safari' })
+    }
+    else if (isFirefox) {
+      this.setState({ userBrowser: 'Firefox' })
+    }
+    else if (isOpera) {
+      this.setState({ userBrowser: 'Opera' })
+    }
 
   }
 
@@ -344,8 +353,8 @@ else if (isOpera){
       await axios.post('https://rubixpdfdev.cjstudents.co.za:94/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
-          this.setState({docUrl: response.data.Base })
-          if(tryval === 1){
+          this.setState({ docUrl: response.data.Base })
+          if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
@@ -355,8 +364,8 @@ else if (isOpera){
     postDocument()
   }
   //On Press loading data
-  setLoadingPage(time,){
-    this.setState({ isLoad: true,})
+  setLoadingPage(time,) {
+    this.setState({ isLoad: true, })
     setTimeout(() => {
       this.setState({
         isLoad: false,
@@ -364,8 +373,8 @@ else if (isOpera){
     }, time);
   }
   //On Press loading data
-  setLoadingDocumentPage(){
-    this.setState({ isDocLoad: true,})
+  setLoadingDocumentPage() {
+    this.setState({ isDocLoad: true, })
     setTimeout(() => {
       this.setState({
         isDocLoad: false,
@@ -373,70 +382,62 @@ else if (isOpera){
     }, 700);
   }
 
-  
+
   render() {
     let myBody;
     if (!this.state.isSelected) {
-      myBody = <> {this.state.doc != null 
+      myBody = <> {this.state.doc != null
         ? <>
-        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
-        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
-          {/* <Document className="border border-primary border-2"
-            file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
-            onLoadSuccess={this.onDocumentLoadSuccess}
-          >
-          
-            <Page pageNumber={this.state.pageNumber} renderAnnotationLayer={false}
-      renderTextLayer={false} />
-          </Document> */}
+        <div className="float-left" style={{display: this.state.isDocLoad ? 'block-inline' : 'none' }}>
+                                      <div className="">
+                                        <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
+                                        <p>Uploading Document Please wait...</p>
+                                      </div>
+                                    </div>
+          <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
+          <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
 
-          <iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
-    </iframe>
+          <iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.doc.filename} width="100%" height="500px">
+          </iframe>
+        </>
 
-          {/* <nav>
+        : <>
+          <div></div>
+          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+            <p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
+            <div>
+              <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => { this.changeHandler(e) }} />
+              <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
+            </div>
+          </div>
+        </>
+      }
+      </>
+
+    } else {
+      myBody = <>
+        <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString, 'documents')}>Confirm Upload</button>{" "}
+        &nbsp;&nbsp;
+        <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
+          Cancel
+        </button>
+        <Document className="border border-primary border-2"
+          file={{ url: this.state.base64Pdf }}
+          onLoadSuccess={this.onDocumentLoadSuccess}
+        >
+          <Page pageNumber={this.state.pageNumber} />
+        </Document>
+        {/* <iframe src={this.state.doc.selectedFile}width="100%" height="500px">
+    </iframe> */}
+
+        <div style={{ margin: 'auto', display: 'inline-block' }}>
+          <nav>
             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
             &nbsp;&nbsp;
             <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-          </nav> */}
-        </>
-        
-        :<>
-        <div></div>
-        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-          <p style={{ textAlign: 'center'}} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
-          <div>
-            <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => { this.changeHandler(e) }} />
-            <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
-          </div>
+          </nav>
         </div>
       </>
-    }
-    </>
-        
-    } else {
-      myBody = <>
-      <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString, 'documents')}>Confirm Upload</button>{" "}
-      &nbsp;&nbsp;
-      <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
-        Cancel
-      </button>
-      <Document className="border border-primary border-2"
-        file={{ url: this.state.base64Pdf }}
-        onLoadSuccess={this.onDocumentLoadSuccess}
-      >
-        <Page pageNumber={this.state.pageNumber} />
-      </Document>
-          {/* <iframe src={this.state.doc.selectedFile}width="100%" height="500px">
-    </iframe> */}
-
-      <div style={{ margin: 'auto', display: 'inline-block' }}>
-        <nav>
-          <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
-          &nbsp;&nbsp;
-          <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-        </nav>
-      </div>
-    </>
     }
     return (
       <div
@@ -641,15 +642,15 @@ else if (isOpera){
                                   <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
                                   {fileStorageStatusCardData.map((data, index) => {
                                     return (
-                                      <div key={index + "sidjpidj"} onClick={() => this.changeDocument(data.FileType)}> 
-                                      <FileStorageStatusCard
-                                        key={index + "sidjpidj"}
-                                        TotalSize=''
-                                        UsedSize={data.UsedSize}
-                                        Type={data.status}
-                                        UsedPer={data.UsedPer}
-                                        ProgressBarClass={`${data.ProgressBarClass}`}
-                                      />
+                                      <div key={index + "sidjpidj"} onClick={() => this.changeDocument(data.FileType)}>
+                                        <FileStorageStatusCard
+                                          key={index + "sidjpidj"}
+                                          TotalSize=''
+                                          UsedSize={data.UsedSize}
+                                          Type={data.status}
+                                          UsedPer={data.UsedPer}
+                                          ProgressBarClass={`${data.ProgressBarClass}`}
+                                        />
                                       </div>
                                     );
                                   })}
@@ -661,14 +662,9 @@ else if (isOpera){
                   HeaderText="View File"
                   ChartOption={areaChartFileReport}
                 /> */}
-                                  <div style={{height: '100%'}} className="pdf-div">
+                                  <div style={{ height: '100%' }} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
-                                    <div className="page-loader-wrapper" style={{ display: this.state.isDocLoad ? 'block' : 'none' }}>
-          <div className="loader">
-            <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
-            <p>Please wait...</p>
-          </div>
-        </div>
+                                    
 
                                     {myBody}
                                   </div>
@@ -679,13 +675,18 @@ else if (isOpera){
                         </div>
                       </Tab>
                       <Tab eventKey="signing" title="Lease Agreement">
-                        <div className = "w-auto p-3">
+                        <div className="w-auto p-3">
                           <Document className="border border-primary border-2"
                             file={{ url: "data:application/pdf;base64," + this.state.docUrl }}
                             onLoadSuccess={this.onDocumentLoadSuccess}
                           >
                             <Page pageNumber={this.state.pageNumber} />
                           </Document>
+                          <iframe src={this.dataURLtoFile("data:application/pdf;base64," + this.state.docUrl, 'lease')} width="100%" height="500px">
+                         </iframe>
+                          {/* <DocViewer documents={[
+                            {uri: "data:application/pdf;base64," + this.state.docUrl}
+                          ]} /> */}
                           <nav>
                             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
                             &nbsp;&nbsp;
@@ -693,18 +694,18 @@ else if (isOpera){
                           </nav>
                           {
                             this.state.showPad
-                            ? <>
-                            <p>To agree to the above document, please enter your signature:</p>
-                          <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black' 
-                            canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
-                          <button className="btn btn-primary" onClick={() => this.trim()}>
-                            Submit Signature
-                          </button>
-                          <button className="btn btn-default" onClick={this.clear}>
-                            Clear
-                          </button>
-                            </>
-                            : null
+                              ? <>
+                                <p>To agree to the above document, please enter your signature:</p>
+                                <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black'
+                                  canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
+                                <button className="btn btn-primary" onClick={() => this.trim()}>
+                                  Submit Signature
+                                </button>
+                                <button className="btn btn-default" onClick={this.clear}>
+                                  Clear
+                                </button>
+                              </>
+                              : null
                           }
 
                         </div>

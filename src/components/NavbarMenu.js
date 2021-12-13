@@ -216,7 +216,10 @@ class NavbarMenu extends React.Component {
             </Toast.Header>
           </Toast>
         ) : null}
-        <nav className="navbar navbar-fixed-top">
+
+        {//Top Nav Bar
+        }
+        <nav className="navbar navbar-fixed-top h-35">
           <div className="container-fluid">
             <div className="navbar-btn">
               <button
@@ -239,6 +242,10 @@ class NavbarMenu extends React.Component {
                   } */
                   alt="Company Logo"
                   className="img-responsive logo"
+                  style={{
+                    height: '50px',
+                    width: '150px'
+                  }}
                 />
               </a>
             </div>

@@ -517,13 +517,13 @@ class ProfileV1Setting extends React.Component {
         <div>
           {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
           <input style={{ display: 'none' }} id='upload-image-button' type="file" onChange={(e) => { this.changeImageHandler(e) }} />
-          <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={() => this.handleImageUpdate()}>Change Profile Image</button>
+          <button className="btn btn-primary rounded-0" variant="contained" color="primary" component="span" onClick={() => this.handleImageUpdate()}>Change Profile Image</button>
         </div>
       </>
     } else if (this.state.base64Image != null) {
       //this.setState({imageUrl:this.state.base64Image})
       myButton = <>
-        <button className="btn btn-primary" onClick={(e) => this.onPressUpload(e)}>Confirm Upload</button>{" "}
+        <button className="btn btn-primary rounded-0" onClick={(e) => this.onPressUpload(e)}>Confirm Upload</button>{" "}
         &nbsp;&nbsp;
         <button className="btn btn-default" type="button" onClick={() => this.onPressImageCancel()}>
           Cancel
@@ -538,7 +538,7 @@ class ProfileV1Setting extends React.Component {
         <div className="body">
           <h6>Profile Photo</h6>
           <div className="media">
-            <div className="media-left m-r-15">
+            <div className="media-left m-r-15 border border-primary border-2">
               <img
                 alt="cannot display image"
                 accept='.jpg, .png, .jpeg'
