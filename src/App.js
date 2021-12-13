@@ -70,6 +70,7 @@ import VarsityDetails from "./screens/Auth/varsityDetails";
 import NextOfKin from "./screens/Auth/nextOfKin";
 import forgotPass from "./screens/Auth/ForgotPasswordPage";
 import StudentInformation from "./screens/Auth/studentdata";
+import ScriptTag from 'react-script-tag';
 
 export const MContext = React.createContext();  //exporting context object
 class MyProvider extends Component {
@@ -87,8 +88,10 @@ render() {
               }
             }>
             {this.props.children}
-            <script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
-
+            {/* <script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
+ */}
+            <ScriptTag isHydrating={true} type="text/javascript" 
+      src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"/>
             </MContext.Provider>)
     }
 }
