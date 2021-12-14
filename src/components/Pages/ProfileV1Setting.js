@@ -365,6 +365,7 @@ class ProfileV1Setting extends React.Component {
 
     };
     fetchData()
+    this.fetchUserUniversityData()
   }
 
   //Populate data from DB
