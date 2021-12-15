@@ -332,17 +332,31 @@ class ProfileV1Setting extends React.Component {
             console.log("All profile data",response.data.PostRubixUserData)
             this.setState({myProfile: response.data.PostRubixUserData[0]})
             
-            this.setState({idProgress: response.data.PostRubixUserData[7].Percentage})
-            this.setState({nextOfKinProgress: response.data.PostRubixUserData[9].Percentage})
-            this.setState({proofOfRegProgress: response.data.PostRubixUserData[11].Percentage})
-            this.setState({proofOfResProgress: response.data.PostRubixUserData[12].Percentage})
-
             localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
             
-            localStorage.setItem('idProgress', response.data.PostRubixUserData[7].Percentage)
-            localStorage.setItem('nextOfKinProgress', response.data.PostRubixUserData[9].Percentage)
-            localStorage.setItem('proofOfRegProgress', response.data.PostRubixUserData[11].Percentage)
-            localStorage.setItem('proofOfResProgress', response.data.PostRubixUserData[12].Percentage)
+            //Set Documents progresses
+
+            //ID Progress
+            if(response.data.PostRubixUserData[7]){
+              localStorage.setItem('idProgress', response.data.PostRubixUserData[7].Percentage)
+            }
+            
+            //Next of Kin ID Progress
+            if(response.data.PostRubixUserData[9]){
+              localStorage.setItem('nextOfKinProgress', response.data.PostRubixUserData[9].Percentage)
+            }
+            
+            //Proof of Registratiom Progress
+            if(response.data.PostRubixUserData[11]){
+              localStorage.setItem('proofOfRegProgress', response.data.PostRubixUserData[11].Percentage)
+            }
+            
+            
+            //Proof of Residence Progress
+            if(response.data.PostRubixUserData[12]){
+              localStorage.setItem('proofOfResProgress', response.data.PostRubixUserData[12].Percentage)
+            }
+            
           }).then(() => {
             localStorage.setItem('resName', this.state.myProfile.ResidenceName)
             localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)
@@ -381,7 +395,6 @@ class ProfileV1Setting extends React.Component {
 
     };
     fetchData()
-    this.fetchUserUniversityData()
   }
 
   //Populate data from DB
@@ -693,7 +706,8 @@ class ProfileV1Setting extends React.Component {
           </form>
         </div>
 
-
+{//Change Password Section
+}
         <div className="body">
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
@@ -733,7 +747,8 @@ class ProfileV1Setting extends React.Component {
           <button className="btn btn-default">Cancel</button>
         </div>
 
-
+{//Residential Address Section
+}
         <div className="body">
           <form id="addresses">
             <div className="row clearfix">
@@ -759,7 +774,6 @@ class ProfileV1Setting extends React.Component {
                     Street Address:
                   </label>
                   <input
-                    readOnly ={true}
                     className="form-control"
                     placeholder="Street Address"
                     name="RegisterUserStreetNameAndNumer"
@@ -772,7 +786,6 @@ class ProfileV1Setting extends React.Component {
                     Unit Number:
                   </label>
                   <input
-                    readOnly ={true}
                     className="form-control"
                     placeholder="Appartment/Unit Number"
                     name="RegisterUserComplexorBuildingNumber"
@@ -785,7 +798,6 @@ class ProfileV1Setting extends React.Component {
                     Complex Name:
                   </label>
                   <input
-                  readOnly ={true}
                     className="form-control"
                     placeholder="Complex Name"
                     name="RegisterUserComplexorBuildingName"
@@ -845,11 +857,11 @@ class ProfileV1Setting extends React.Component {
                 </div>
               </div> */}
             </div>
-            {/* <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
+            <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
               Edit Information
-            </button>{" "} */}
+            </button>{" "} 
             &nbsp;&nbsp;
-            {/* <button className="btn btn-default">Cancel</button> */}
+            <button className="btn btn-default">Cancel</button> 
           </form>
         </div>
 

@@ -19,7 +19,7 @@ class ProfileHeaderCard extends React.Component {
             </h4>
             <span>Washington, d.c.</span>
           </div>
-          <div className="progress progress-xs m-b-25 m-t-25">
+          {/* <div className="progress progress-xs m-b-25 m-t-25">
             <div
               className="progress-bar"
               role="progressbar"
@@ -30,7 +30,7 @@ class ProfileHeaderCard extends React.Component {
             >
               <span className="progress-value">60% Complete</span>
             </div>
-          </div>
+          </div> */}
 
           <div className="row">
             <div className="col-4">

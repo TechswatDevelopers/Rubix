@@ -6,6 +6,8 @@ import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
 import echarts from "echarts";
 import axios from "axios";
+import ImageGallery from "react-image-gallery";
+import ResManagerCard from "../../components/ResManagerCard";
 import {
   topProductOption,
   topRevenueOption,
@@ -14,7 +16,28 @@ import {
   dataManagetOption,
   sparkleCardData,
 } from "../../Data/DashbordData";
-
+const images = [
+  {
+    original: require("../../assets/images/image-gallery/1.jpg"),
+    thumbnail: require("../../assets/images/image-gallery/1.jpg"),
+  },
+  {
+    original: require("../../assets/images/image-gallery/2.jpg"),
+    thumbnail: require("../../assets/images/image-gallery/2.jpg"),
+  },
+  {
+    original: require("../../assets/images/image-gallery/3.jpg"),
+    thumbnail: require("../../assets/images/image-gallery/3.jpg"),
+  },
+  {
+    original: require("../../assets/images/image-gallery/11.jpg"),
+    thumbnail: require("../../assets/images/image-gallery/11.jpg"),
+  },
+  {
+    original: require("../../assets/images/image-gallery/5.jpg"),
+    thumbnail: require("../../assets/images/image-gallery/5.jpg"),
+  },
+];
 class Residence extends React.Component {
   constructor(props) {
     super(props)
@@ -26,61 +49,68 @@ class Residence extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+    //Set timer for loading screen
+  setTimeout(() => {
+    this.setState({
+      isLoad: false,
+      currentClientId: this.props.match.params.clientID
+    })
+  }, 2000);
 
     const pingData = {
       'RubixRegisterUserID': localStorage.getItem('userID'),
-  };
+    };
     //Ping Request Headers
     const requestOptions = {
       title: 'Get residence Details',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: pingData
-  };
+    };
 
-    const postData = async()=>{
+    const postData = async () => {
       //Ping email address
       await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
-          .then(response => {
-              console.log("Student Res Details", response.data.PostRubixUserData[0])
-              this.setState({
-                resDetails: response.data.PostRubixUserData[0],
-                resDetailTag: "Total Capacity",
-                resCapacity: response.data.PostRubixUserData[0].Capacity
-              })
-             /*  if(response.data.EmailResult){
-                this.props.updateEmail(email);
-                this.props.updatePlatformID("1");
-               this.props.history.push("/logInformation")
-               } else{
-             console.log('Email validation failed')
-             alert('Invalid email, please enter a valid email address')
-               } */
+        .then(response => {
+          console.log("Student Res Details", response.data.PostRubixUserData[0])
+          this.setState({
+            resDetails: response.data.PostRubixUserData[0],
+            resDetailTag: "Total Capacity",
+            resCapacity: response.data.PostRubixUserData[0].Capacity
           })
-        }
-        postData()
+          /*  if(response.data.EmailResult){
+             this.props.updateEmail(email);
+             this.props.updatePlatformID("1");
+            this.props.history.push("/logInformation")
+            } else{
+          console.log('Email validation failed')
+          alert('Invalid email, please enter a valid email address')
+            } */
+        })
+    }
+    postData()
   }
 
   //Function for changing res capacity
   toggleCapacity(e, keyString) {
     e.preventDefault();
-    switch(keyString){
+    switch (keyString) {
       case 'total':
         {
-          this.setState({resDetailTag: "Total Capacity"})
-          this.setState({resCapacity: this.state.resDetails.Capacity})
+          this.setState({ resDetailTag: "Total Capacity" })
+          this.setState({ resCapacity: this.state.resDetails.Capacity })
         }
         break
       case 'occupied':
         {
-          this.setState({resDetailTag: "Currently Occupied"})
-          this.setState({resCapacity: this.state.resDetails.Occupied})
+          this.setState({ resDetailTag: "Currently Occupied" })
+          this.setState({ resCapacity: this.state.resDetails.Occupied })
         }
         break
       case 'available':
         {
-          this.setState({resDetailTag: "Currently Available"})
-          this.setState({resCapacity: this.state.resDetails.Capacity - this.state.resDetails.Occupied})
+          this.setState({ resDetailTag: "Currently Available" })
+          this.setState({ resCapacity: this.state.resDetails.Capacity - this.state.resDetails.Occupied })
         }
     }
   }
@@ -93,60 +123,114 @@ class Residence extends React.Component {
         }}
       >
         <div>
+        <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
+          <div className="loader">
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
+            <p>Please wait...</p>
+          </div>
+        </div>
           <div className="container-fluid">
-            {/* <PageHeader
-              HeaderText="My Residense Information"
-              Breadcrumb={[
-                { name: "Page", navigate: "" },
-                { name: "Residence Page", navigate: "" },
-              ]}
-            /> */}
             <div className="row clearfix">
               <div className="w-100 p-3">
                 <div className="body w-100 p-3">
-
                   <div>
-                  <div className="has-bg-img w-100 p-3" id="top-div"
-                    style={{
-                      backgroundImage: 'url(' + this.state.resDetails.ResidencePhoto + ')',
-                      backgroundPosition: 'center',
-                      backgroundSize: 'cover',
-                      backgroundRepeat: 'no-repeat',
-                      height: '250px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignContent: 'center'
-                    }} >
-                    <h3 className=""
+                    <div className="has-bg-img w-100 p-3" id="top-div"
                       style={{
-                        color: "white",
+                        backgroundImage: 'url(' + this.state.resDetails.ResidencePhoto + ')',
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        height: '250px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
                         alignContent: 'center'
-                      }}
-                    >
-                      {this.state.resDetails.ResidenceName}
-                    </h3>
-                    <span className=""
-                      style={{
-                        color: "white",
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignContent: 'center'
-                      }}>
-                      {this.state.resDetails.ResidenceLocation}
-                    </span>
+                      }} >
+                      <h1 className=""
+                        style={{
+                          color: "white",
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignContent: 'center'
+                        }}
+                      >
+                        {this.state.resDetails.ResidenceName}
+                      </h1>
+                      <hr style={{
+                        border: '1px solid green',
+                        width: '100%'
+                      }} />
+                      <span className=""
+                        style={{
+                          color: "white",
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignContent: 'center'
+                        }}>
+                        {this.state.resDetails.ResidenceLocation}
+                      </span>
 
+                    </div>
+
+                    <div className="login-info shadow-sm p-3 mb-5 bg-white rounded">
+                      <h3
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignContent: 'center'
+                        }}
+                      >About Us</h3>
+                      <p>{this.state.resDetails.ResidenceDescription}</p>
+                    </div>
                   </div>
 
-                  <div className="login-info shadow-sm p-3 mb-5 bg-white rounded">
-                        <h3
+                  <div className="row">
+                    <div className=" col-3">
+                      <div className="card">
+                        <div className="header">
+                          <h2>{this.state.resDetailTag}</h2>
+                          <Dropdown as="ul" className="header-dropdown">
+                            <Dropdown.Toggle
+                              variant="success"
+                              as="li"
+                              id="dropdown-basic"
+                            >
+                              <Dropdown.Menu
+                                as="ul"
+                                className="dropdown-menu dropdown-menu-right"
+                              >
+                                <li>
+                                  <a
+                                    href="#!"
+                                    onClick={(e) => this.toggleCapacity(e, 'total')}
+                                  >Total Capacity</a>
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#!"
+                                    onClick={(e) => this.toggleCapacity(e, 'occupied')}
+                                  >Currently Occupied</a>
+                                </li>
+
+                                <li>
+                                  <a
+                                    href="#!"
+                                    onClick={(e) => this.toggleCapacity(e, 'available')}
+                                  >Currently Available</a>
+                                </li>
+                              </Dropdown.Menu>
+                            </Dropdown.Toggle>
+                          </Dropdown>
+                        </div>
+                        <div className="body text-center"
                           style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -154,111 +238,151 @@ class Residence extends React.Component {
                             alignItems: 'center',
                             alignContent: 'center'
                           }}
-                        >About Us</h3>
-                        <p>{this.state.resDetails.ResidenceDescription}</p>
-                      </div>
-                  </div>
-
-
-                  <div className="col-lg-3 col-md-6">
-                <div className="card">
-                  <div className="header">
-                    <h2>{this.state.resDetailTag}</h2>
-                    <Dropdown as="ul" className="header-dropdown">
-                      <Dropdown.Toggle
-                        variant="success"
-                        as="li"
-                        id="dropdown-basic"
-                      >
-                        <Dropdown.Menu
-                          as="ul"
-                          className="dropdown-menu dropdown-menu-right"
                         >
-                          <li>
-                            <a
-                            href="#!"
-                            onClick={(e)=> this.toggleCapacity(e, 'total')}
-                            >Total Capacity</a>
-                          </li>
+                          <div className="rounded-circle margin-0"
+                            style={{
+                              width: "120px",
+                              height: "120px",
+                              backgroundColor: "purple",
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              alignContent: 'center'
+                            }}
+                          >
+                            <h4 className="margin-0"
+                              style={{
+                                color: "white",
+                                fontSize: "50px",
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignContent: 'center'
+                              }}
+                            >{this.state.resCapacity}</h4>
+                          </div>
 
-                          <li>
-                            <a
-                            href="#!"
-                            onClick={(e)=> this.toggleCapacity(e, 'occupied')}
-                            >Currently Occupied</a>
-                          </li>
-
-                          <li>
-                            <a
-                            href="#!"
-                            onClick={(e)=> this.toggleCapacity(e, 'available')}
-                            >Currently Available</a>
-                          </li>
-                        </Dropdown.Menu>
-                      </Dropdown.Toggle>
-                    </Dropdown>
-                  </div>
-                  <div className="body text-center"
-                  style={{
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
-                    alignContent: 'center'
-                  }}
-                  >
-                    <div className="rounded-circle margin-0"
-                    style={{
-                      width: "120px",
-                      height: "120px",
-                      backgroundColor: "purple",
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      justifyContent: 'center', 
-                      alignItems: 'center', 
-                      alignContent: 'center'
-                    }}
-                    >
-                    <h4 className="margin-0" 
-                    style={{
-                      color: "white",
-                      fontSize: "50px",
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      justifyContent: 'center', 
-                      alignItems: 'center', 
-                      alignContent: 'center'
-                    }}
-                    >{this.state.resCapacity}</h4>
+                          <h4 className="margin-0">Beds</h4>
+                          
+                        </div>
+                      </div>
                     </div>
-                    
-                    <h4 className="margin-0">Beds</h4>
-                    <div
-                      id="topsaleDonut"
-                      style={{ height: 125, width: "100%" }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
 
-              <div className="login-session col-lg-3 ">
-                        <div className="login-info">
-                          <h3 >
-                            Residence Amenitis
-                          </h3>
-                          <p>{localStorage.getItem('resAmenities')}</p>
+                    <div className="col-9">
+                      <div className="card profile-header">
+                        <h3 >
+                          Residence Amenitis
+                        </h3>
+
+                        <div className="row">
+                          <div className="col-3">
+                            <img src='icons/retail.png'
+                            style={{
+                              width: "70px",
+                              height: "70px"
+                            }}
+                            ></img>
+                            <br></br>
+                            <span>Retail and Shop</span>
+                          </div>
+
+
+                          <div className="col-3">
+                            <img src='icons/laundry.png'
+                            style={{
+                              width: "70px",
+                              height: "70px"
+                            }}
+                            ></img>
+                            <br></br>
+                            <span>Laundry Room</span>
+                          </div>
+
+
+                          <div className="col-3">
+                            <img src='icons/canteen.png'
+                            style={{
+                              width: "70px",
+                              height: "70px"
+                            }}
+                            ></img>
+                            <br></br>
+                            <span>Canteen</span>
+                          </div>
+                          <div className="col-3">
+                            <img src='icons/lounge.png'
+                            style={{
+                              width: "70px",
+                              height: "70px"
+                            }}
+                            ></img>
+                            <br></br>
+                            <span>Lounge</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-7">
+                      <div className="card">
+                        <ResManagerCard
+                          Name={this.state.resDetails.ResidenceManagerName}
+                          Surname={this.state.resDetails.ResidenceManagerSurname}
+                          Email={this.state.resDetails.ResidenceManagerEmail}
+                          Office={this.state.resDetails.ResidenceManagerOffice}
+                          Bio={this.state.resDetails.ResidenceManagerShortBio}
+                          Phone={this.state.resDetails.ResidenceManagerPhoneNumber}
+                          ProfilePic={this.state.resDetails.ResidenceManagerName}
+                        />
+                      </div>
+                    </div>
+
+                    <div className=" col-5">
+                      <div className="card">
+                        <div className="header text-center">
+                          <h3>Our Socials</h3>
+                        </div>
+
+                        <div>
+                          <div className="row col-8">
+                            <img className="pl-3" src='icons/fb.png'></img>
+                            <span className="pt-2">Rubix Intake System</span>
+                          </div>
+
+                          <div className="row col-8">
+                            <img className="pl-3" src='icons/insta.png'></img>
+                            <span className="px-0">Rubix Intake System</span>
+                          </div>
+
+                          <div className="row col-8">
+                            <img className="pl-3" src='icons/twitter.png'></img>
+                            <span className="px-0">Rubix Intake System</span>
+                          </div>
                         </div>
 
                       </div>
+                    </div>
+                  </div>
 
+                  <div className="card text-center">
+                    <h2>Our Gallery</h2>
+                    <div style={{
+                    
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center'
+                  }}>
+                  <ImageGallery 
+                   items={images} />
+                  </div>
+                  </div>
 
-                  <ul className="list-unstyled list-login-session w-80 p-3">
-
-                    <li>
-                      
-                    </li>
-
-                  </ul>
                 </div>
               </div>
             </div>

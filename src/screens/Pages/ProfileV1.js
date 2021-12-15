@@ -49,6 +49,7 @@ class ProfileV1Page extends React.Component {
       testDoc: {},
       numPages: null,
       progress: '',
+      myLease: '',
     }
   }
 
@@ -59,6 +60,7 @@ class ProfileV1Page extends React.Component {
     this.setState({ myUserID: userID });
     this.setState({ progress: userProgress });
     this.getUserBrowser()
+    this.getUserWitnessData()
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
@@ -77,13 +79,25 @@ class ProfileV1Page extends React.Component {
         .then(response => response.json())
         .then(data => {
           console.log("documents data:", data)
-          //this.setState({ doc: data.post[0]})
+
+          //Set Documents list to 'docs'
+          this.setState({ docs: data.post })
+
+          //Load initial PDF as ID Document
+          const tempList = data.post.filter(doc => doc.FileType == 'id-document')[0]
+
+          if(tempList != null || tempList != undefined){
+            //Set ID Document to initial Document
           const string = "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == 'id-document')[0].image
           this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0] })
+
+          //Convert base64 to file
           const image = this.dataURLtoFile(string, "document.pdf")
           this.setState({ testDoc: image })
-          console.log("document information:", image)
-          this.setState({ docs: data.post })
+          }
+          else {
+            this.setState({doc: null})
+          }
           //console.log("Documents: ", data.post)
           this.checkLease(userID)
         });
@@ -110,12 +124,12 @@ class ProfileV1Page extends React.Component {
     const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
     //console.log(temp[0].image)
     if (temp.length != 0) {
-      this.setState({ docUrl: temp[0].image })
+      this.setState({ docUrl: temp[0].image, myLease: temp[0].filename })
       //tempfile('.png');
       this.setState({ showPad: false })
     }
     else {
-      this.postSignature('https://www.drupal.org/files/issues/test-transparent-background.png', userId, 0)
+      this.postSignature('https://cdn.hipwallpaper.com/i/96/13/QOhrVz.png', userId, 0)
       this.setState({ showPad: true })
     }
   }
@@ -263,8 +277,8 @@ class ProfileV1Page extends React.Component {
     this.setLoadingPage(3000)
     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      this.getUserWitnessData()
-      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
+      console.log("IP Address:", this.state.userIPAddress)
+      //this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
     } else {
       alert("Please provide a signature")
     }
@@ -275,11 +289,10 @@ class ProfileV1Page extends React.Component {
     //Fetch IP Address
     const getData = async () => {
       const res = await axios.get('https://geolocation-db.com/json/')
-      //console.log(res.data);
-      this.setState({ userIPAddress: res.data.IPv4 })
+      console.log(res.data);
+      this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
-
   }
 
   //Get user browser information
@@ -341,7 +354,7 @@ class ProfileV1Page extends React.Component {
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': 1,
+        'ClientIdFronEnd': localStorage.getItem('clientID'),
         'IP_Address': this.state.userIPAddress,
         'Time_and_Date': this.state.dateAndTime,
         'image': signature
@@ -360,6 +373,7 @@ class ProfileV1Page extends React.Component {
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+            console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           }
         })
@@ -430,8 +444,6 @@ class ProfileV1Page extends React.Component {
         >
           <Page pageNumber={this.state.pageNumber} />
         </Document>
-        {/* <iframe src={this.state.doc.selectedFile}width="100%" height="500px">
-    </iframe> */}
 
         <div style={{ margin: 'auto', display: 'inline-block' }}>
           <nav>
@@ -451,7 +463,7 @@ class ProfileV1Page extends React.Component {
       >
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src="CJ-Logo.png" width="170" height="70" alt="Lucid" /></div>
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
             <p>Please wait...</p>
           </div>
         </div>
@@ -679,14 +691,15 @@ class ProfileV1Page extends React.Component {
                       </Tab>
                       <Tab eventKey="signing" title="Lease Agreement">
                         <div className="w-auto p-3">
-                          <Document className="border border-primary border-2"
+                          { !this.state.myLease
+                            ? <Document className="border border-primary border-2"
                             file={{ url: "data:application/pdf;base64," + this.state.docUrl }}
                             onLoadSuccess={this.onDocumentLoadSuccess}
                           >
                             <Page pageNumber={this.state.pageNumber} />
                           </Document>
-                          <iframe src={this.dataURLtoFile("data:application/pdf;base64," + this.state.docUrl, 'lease')} width="100%" height="500px">
-                         </iframe>
+                          :<iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
+                         </iframe>}
                           {/* <DocViewer documents={[
                             {uri: "data:application/pdf;base64," + this.state.docUrl}
                           ]} /> */}
@@ -698,7 +711,7 @@ class ProfileV1Page extends React.Component {
                           {
                             this.state.showPad
                               ? <>
-                                <p>To agree to the above document, please enter your signature:</p>
+                                <p>If you agree to the above document, please enter your signature:</p>
                                 <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black'
                                   canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
                                 <button className="btn btn-primary" onClick={() => this.trim()}>
