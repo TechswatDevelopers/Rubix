@@ -5,6 +5,7 @@ import PageHeader from "../../components/PageHeader";
 import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
 import echarts from "echarts";
+import axios from "axios";
 import {
   topProductOption,
   topRevenueOption,
@@ -15,8 +16,73 @@ import {
 } from "../../Data/DashbordData";
 
 class Residence extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      resDetails: {},
+      resDetailTag: '',
+      resCapacity: 0,
+    }
+  }
   componentDidMount() {
     window.scrollTo(0, 0);
+
+    const pingData = {
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+  };
+    //Ping Request Headers
+    const requestOptions = {
+      title: 'Get residence Details',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: pingData
+  };
+
+    const postData = async()=>{
+      //Ping email address
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
+          .then(response => {
+              console.log("Student Res Details", response.data.PostRubixUserData[0])
+              this.setState({
+                resDetails: response.data.PostRubixUserData[0],
+                resDetailTag: "Total Capacity",
+                resCapacity: response.data.PostRubixUserData[0].Capacity
+              })
+             /*  if(response.data.EmailResult){
+                this.props.updateEmail(email);
+                this.props.updatePlatformID("1");
+               this.props.history.push("/logInformation")
+               } else{
+             console.log('Email validation failed')
+             alert('Invalid email, please enter a valid email address')
+               } */
+          })
+        }
+        postData()
+  }
+
+  //Function for changing res capacity
+  toggleCapacity(e, keyString) {
+    e.preventDefault();
+    switch(keyString){
+      case 'total':
+        {
+          this.setState({resDetailTag: "Total Capacity"})
+          this.setState({resCapacity: this.state.resDetails.Capacity})
+        }
+        break
+      case 'occupied':
+        {
+          this.setState({resDetailTag: "Currently Occupied"})
+          this.setState({resCapacity: this.state.resDetails.Occupied})
+        }
+        break
+      case 'available':
+        {
+          this.setState({resDetailTag: "Currently Available"})
+          this.setState({resCapacity: this.state.resDetails.Capacity - this.state.resDetails.Occupied})
+        }
+    }
   }
   render() {
     return (
@@ -42,7 +108,7 @@ class Residence extends React.Component {
                   <div>
                   <div className="has-bg-img w-100 p-3" id="top-div"
                     style={{
-                      backgroundImage: 'url(' + localStorage.getItem('resPhoto') + ')',
+                      backgroundImage: 'url(' + this.state.resDetails.ResidencePhoto + ')',
                       backgroundPosition: 'center',
                       backgroundSize: 'cover',
                       backgroundRepeat: 'no-repeat',
@@ -63,7 +129,7 @@ class Residence extends React.Component {
                         alignContent: 'center'
                       }}
                     >
-                      {localStorage.getItem('resName')}
+                      {this.state.resDetails.ResidenceName}
                     </h3>
                     <span className=""
                       style={{
@@ -74,7 +140,7 @@ class Residence extends React.Component {
                         alignItems: 'center',
                         alignContent: 'center'
                       }}>
-                      {localStorage.getItem('resAddress')}
+                      {this.state.resDetails.ResidenceLocation}
                     </span>
 
                   </div>
@@ -89,7 +155,7 @@ class Residence extends React.Component {
                             alignContent: 'center'
                           }}
                         >About Us</h3>
-                        <p>{localStorage.getItem('resDescription')}</p>
+                        <p>{this.state.resDetails.ResidenceDescription}</p>
                       </div>
                   </div>
 
@@ -97,7 +163,7 @@ class Residence extends React.Component {
                   <div className="col-lg-3 col-md-6">
                 <div className="card">
                   <div className="header">
-                    <h2>Residence Capacity</h2>
+                    <h2>{this.state.resDetailTag}</h2>
                     <Dropdown as="ul" className="header-dropdown">
                       <Dropdown.Toggle
                         variant="success"
@@ -109,13 +175,24 @@ class Residence extends React.Component {
                           className="dropdown-menu dropdown-menu-right"
                         >
                           <li>
-                            <a>Action</a>
+                            <a
+                            href="#!"
+                            onClick={(e)=> this.toggleCapacity(e, 'total')}
+                            >Total Capacity</a>
                           </li>
+
                           <li>
-                            <a>Another Action</a>
+                            <a
+                            href="#!"
+                            onClick={(e)=> this.toggleCapacity(e, 'occupied')}
+                            >Currently Occupied</a>
                           </li>
+
                           <li>
-                            <a>Something else</a>
+                            <a
+                            href="#!"
+                            onClick={(e)=> this.toggleCapacity(e, 'available')}
+                            >Currently Available</a>
                           </li>
                         </Dropdown.Menu>
                       </Dropdown.Toggle>
@@ -152,10 +229,10 @@ class Residence extends React.Component {
                       alignItems: 'center', 
                       alignContent: 'center'
                     }}
-                    >600</h4>
+                    >{this.state.resCapacity}</h4>
                     </div>
                     
-                    <h4 className="margin-0">Students</h4>
+                    <h4 className="margin-0">Beds</h4>
                     <div
                       id="topsaleDonut"
                       style={{ height: 125, width: "100%" }}

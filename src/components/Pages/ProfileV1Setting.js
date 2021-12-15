@@ -45,7 +45,11 @@ class ProfileV1Setting extends React.Component {
       payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
       value: 0,
       profilePicture: {},
-
+      progress: '',
+      idProgress: '',
+      nextOfKinProgress: '',
+      proofOfResProgress: '',
+      proofOfRegProgress: '',
     };
   }
 
@@ -325,8 +329,20 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
         await axios.post('https://rubixapidev.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
           .then(response => {
-            console.log("All profile data",response.data.PostRubixUserData[0])
+            console.log("All profile data",response.data.PostRubixUserData)
             this.setState({myProfile: response.data.PostRubixUserData[0]})
+            
+            this.setState({idProgress: response.data.PostRubixUserData[7].Percentage})
+            this.setState({nextOfKinProgress: response.data.PostRubixUserData[9].Percentage})
+            this.setState({proofOfRegProgress: response.data.PostRubixUserData[11].Percentage})
+            this.setState({proofOfResProgress: response.data.PostRubixUserData[12].Percentage})
+
+            localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
+            
+            localStorage.setItem('idProgress', response.data.PostRubixUserData[7].Percentage)
+            localStorage.setItem('nextOfKinProgress', response.data.PostRubixUserData[9].Percentage)
+            localStorage.setItem('proofOfRegProgress', response.data.PostRubixUserData[11].Percentage)
+            localStorage.setItem('proofOfResProgress', response.data.PostRubixUserData[12].Percentage)
           }).then(() => {
             localStorage.setItem('resName', this.state.myProfile.ResidenceName)
             localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)

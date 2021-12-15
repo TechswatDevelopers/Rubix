@@ -48,13 +48,16 @@ class ProfileV1Page extends React.Component {
       dateAndTime: null,
       testDoc: {},
       numPages: null,
+      progress: '',
     }
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
+    const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
+    this.setState({ progress: userProgress });
     this.getUserBrowser()
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
@@ -462,12 +465,12 @@ class ProfileV1Page extends React.Component {
               ]}
             />
             <div
-              className="progress-bar progress-bar-warning"
-              data-transitiongoal={`44`}
-              aria-valuenow={`44`}
-              style={{ width: `44%` }}
+              className="progress-bar bg-success progress-bar-striped"
+              data-transitiongoal={this.state.progress}
+              aria-valuenow={this.state.progress}
+              style={{ width: this.state.progress + `%` }}
             >
-              Profile is 44% complete
+              Profile is {this.state.progress}% complete
             </div>
             <div className="row clearfix">
               <div className="col-lg-12">
