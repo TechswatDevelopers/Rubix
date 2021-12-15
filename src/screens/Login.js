@@ -221,10 +221,9 @@ componentDidMount() {
                           buttonText="Google"
                           onSuccess={this.responseGoogle}
                           cookiePolicy={'single_host_origin'}/>
-
-
+                          
                           <FacebookLogin
-                        appId="552332679301004"
+                        appId=  "552332679301004"  //"284158963537717"
                         fields="name,email,picture, first_name, about"
                         height='10'
                         textButton='Facebook'

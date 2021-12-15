@@ -40,7 +40,7 @@ export const fileStorageStatusCardData = [
     status: "Approved",
     FileType: "id-document",
     TotalSize: "1tb",
-    UsedPer: 100,
+    UsedPer: localStorage.getItem('idProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
@@ -50,7 +50,7 @@ export const fileStorageStatusCardData = [
     status: "Pending",
     FileType: "proof-of-res",
     TotalSize: "1tb",
-    UsedPer: 50,
+    UsedPer: localStorage.getItem('proofOfResProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-purple mb-0",
   },
@@ -60,7 +60,7 @@ export const fileStorageStatusCardData = [
     status: "Pending",
     FileType: "proof-of-reg",
     TotalSize: "1tb",
-    UsedPer: 50,
+    UsedPer: localStorage.getItem('proofOfRegProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
@@ -70,7 +70,7 @@ export const fileStorageStatusCardData = [
     status: "No Document",
     FileType: "next-of-kin",
     TotalSize: "1tb",
-    UsedPer: 0,
+    UsedPer: localStorage.getItem('nextOfKinProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-yellow mb-0",
   },

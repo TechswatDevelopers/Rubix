@@ -45,7 +45,11 @@ class ProfileV1Setting extends React.Component {
       payMethods: ['NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
       value: 0,
       profilePicture: {},
-
+      progress: '',
+      idProgress: '',
+      nextOfKinProgress: '',
+      proofOfResProgress: '',
+      proofOfRegProgress: '',
     };
   }
 
@@ -231,6 +235,7 @@ class ProfileV1Setting extends React.Component {
   }
 
   //Update Profile Picture
+
   /* updateProfileData(e) {
     e.preventDefault();
     console.log(this.state.selectedFile)
@@ -264,7 +269,6 @@ class ProfileV1Setting extends React.Component {
     postData()
 
   } */
-
   onPressUpload(e) {
     e.preventDefault();
     var file = this.state.selectedFile
@@ -359,8 +363,34 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
           .then(response => {
-            console.log("All profile data",response.data)
+            console.log("All profile data",response.data.PostRubixUserData)
             this.setState({myProfile: response.data.PostRubixUserData[0]})
+            
+            localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
+            
+            //Set Documents progresses
+
+            //ID Progress
+            if(response.data.PostRubixUserData[7]){
+              localStorage.setItem('idProgress', response.data.PostRubixUserData[7].Percentage)
+            }
+            
+            //Next of Kin ID Progress
+            if(response.data.PostRubixUserData[9]){
+              localStorage.setItem('nextOfKinProgress', response.data.PostRubixUserData[9].Percentage)
+            }
+            
+            //Proof of Registratiom Progress
+            if(response.data.PostRubixUserData[11]){
+              localStorage.setItem('proofOfRegProgress', response.data.PostRubixUserData[11].Percentage)
+            }
+            
+            
+            //Proof of Residence Progress
+            if(response.data.PostRubixUserData[12]){
+              localStorage.setItem('proofOfResProgress', response.data.PostRubixUserData[12].Percentage)
+            }
+            
           }).then(() => {
             localStorage.setItem('resName', this.state.myProfile.ResidenceName)
             localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)
@@ -434,6 +464,8 @@ class ProfileV1Setting extends React.Component {
         }
       });
     }
+
+    //Get Rubix User Address Details
     fetchUserAddressData = async () => {
       //console.log("User ID being used:", localStorage.getItem('userID'))
     //Get Rubix User Address Details
@@ -564,13 +596,13 @@ class ProfileV1Setting extends React.Component {
         <div>
           {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
           <input style={{ display: 'none' }} id='upload-image-button' type="file" onChange={(e) => { this.changeImageHandler(e) }} />
-          <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={() => this.handleImageUpdate()}>Change Profile Image</button>
+          <button className="btn btn-primary rounded-0" variant="contained" color="primary" component="span" onClick={() => this.handleImageUpdate()}>Change Profile Image</button>
         </div>
       </>
     } else if (this.state.base64Image != null) {
       //this.setState({imageUrl:this.state.base64Image})
       myButton = <>
-        <button className="btn btn-primary" onClick={(e) => this.onPressUpload(e)}>Confirm Upload</button>{" "}
+        <button className="btn btn-primary rounded-0" onClick={(e) => this.onPressUpload(e)}>Confirm Upload</button>{" "}
         &nbsp;&nbsp;
         <button className="btn btn-default" type="button" onClick={() => this.onPressImageCancel()}>
           Cancel
@@ -585,7 +617,7 @@ class ProfileV1Setting extends React.Component {
         <div className="body">
           <h6>Profile Photo</h6>
           <div className="media">
-            <div className="media-left m-r-15">
+            <div className="media-left m-r-15 border border-primary border-2">
               <img
                 alt="cannot display image"
                 accept='.jpg, .png, .jpeg'
@@ -723,7 +755,8 @@ class ProfileV1Setting extends React.Component {
           </form>
         </div>
 
-
+{//Change Password Section
+}
         <div className="body">
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
@@ -763,7 +796,8 @@ class ProfileV1Setting extends React.Component {
           <button className="btn btn-default">Cancel</button>
         </div>
 
-
+{//Residential Address Section
+}
         <div className="body">
           <form id="addresses">
             <div className="row clearfix">
@@ -794,7 +828,6 @@ class ProfileV1Setting extends React.Component {
                     name="RegisterUserStreetNameAndNumer"
                     defaultValue={this.state.myProfile.RegisterUserStreetNameAndNumer}
                     type="text"
-                    onChange={() => { }}
                   />
                 </div>
                 <div className="form-group">
@@ -807,7 +840,6 @@ class ProfileV1Setting extends React.Component {
                     name="RegisterUserComplexorBuildingNumber"
                     defaultValue={this.state.myProfile.RegisterUserComplexorBuildingNumber}
                     type="text"
-                    onChange={() => { }}
                   />
                 </div>
                 <div className="form-group">
@@ -820,7 +852,6 @@ class ProfileV1Setting extends React.Component {
                     name="RegisterUserComplexorBuildingName"
                     defaultValue={this.state.myProfile.RegisterUserComplexorBuildingName}
                     type="text"
-                    onChange={() => { }}
                   />
                 </div>
                 {/* <div className="form-group">
@@ -875,11 +906,11 @@ class ProfileV1Setting extends React.Component {
                 </div>
               </div> */}
             </div>
-            {/* <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
+            <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
               Edit Information
-            </button>{" "} */}
+            </button>{" "} 
             &nbsp;&nbsp;
-            {/* <button className="btn btn-default">Cancel</button> */}
+            <button className="btn btn-default">Cancel</button> 
           </form>
         </div>
 
