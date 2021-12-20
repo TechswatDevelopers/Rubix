@@ -613,11 +613,7 @@ class ProfileV1Page extends React.Component {
                         </div>
                       </Tab> */}
 
-<<<<<<< HEAD
                       
-=======
-
->>>>>>> dev
                       {/* <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
                           <div className="w-100 p-3">
@@ -723,7 +719,6 @@ class ProfileV1Page extends React.Component {
                           >
                             <Page pageNumber={this.state.pageNumber} />
                           </Document>
-<<<<<<< HEAD
                           <nav>
                             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
                             &nbsp;&nbsp;
@@ -733,18 +728,6 @@ class ProfileV1Page extends React.Component {
                           :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
                          </iframe>}
                           
-=======
-                          :<iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
-                         </iframe>}
-                          {/* <DocViewer documents={[
-                            {uri: "data:application/pdf;base64," + this.state.docUrl}
-                          ]} /> */}
-                          {/* <nav>
-                            <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
-                            &nbsp;&nbsp;
-                            <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-                          </nav> */}
->>>>>>> dev
                           {
                             this.state.showPad
                               ? <>
