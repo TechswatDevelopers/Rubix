@@ -601,6 +601,8 @@ class ProfileV1Page extends React.Component {
                           </div>
                         </div>
                       </Tab> */}
+
+                      
                       {/* <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
                           <div className="w-100 p-3">
