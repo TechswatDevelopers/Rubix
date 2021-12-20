@@ -45,6 +45,7 @@ class Residence extends React.Component {
       resDetails: {},
       resDetailTag: '',
       resCapacity: 0,
+      amenities: [],
     }
   }
   componentDidMount() {
@@ -72,23 +73,21 @@ class Residence extends React.Component {
       //Ping email address
       await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
         .then(response => {
-          console.log("Student Res Details", response.data.PostRubixUserData[0])
+          console.log("Student Res Details", response.data.PostRubixUserData)
+          const temp = response.data.PostRubixUserData;
           this.setState({
             resDetails: response.data.PostRubixUserData[0],
             resDetailTag: "Total Capacity",
             resCapacity: response.data.PostRubixUserData[0].Capacity
-          })
-          /*  if(response.data.EmailResult){
-             this.props.updateEmail(email);
-             this.props.updatePlatformID("1");
-            this.props.history.push("/logInformation")
-            } else{
-          console.log('Email validation failed')
-          alert('Invalid email, please enter a valid email address')
-            } */
+          });
+          let i =1;
+          for(i == 1; i <= temp.length - 1; ++i){
+            this.state.amenities.push(temp[i])
+          }
         })
     }
     postData()
+    console.log('amenities', this.state.amenities)
   }
 
   //Function for changing res capacity
@@ -275,53 +274,24 @@ class Residence extends React.Component {
                         <h3 >
                           Residence Amenitis
                         </h3>
-
                         <div className="row">
+                        {this.state.amenities.map((amenity, index) => (
+                          <>
                           <div className="col-3">
-                            <img src='icons/retail.png'
-                            style={{
-                              width: "70px",
-                              height: "70px"
-                            }}
-                            ></img>
-                            <br></br>
-                            <span>Retail and Shop</span>
+                            <img src= {'icons/' + amenity.RubixResidencesAmenitieImageKey}
+                          style={{
+                            width: "70px",
+                            height: "70px"
+                          }}
+                          ></img>
+                          <br></br>
+                            <span>{amenity.RubixResidencesAmenitieDescription}</span>
+                            </div>
+                            </>
+                          ))}
                           </div>
-
-
-                          <div className="col-3">
-                            <img src='icons/laundry.png'
-                            style={{
-                              width: "70px",
-                              height: "70px"
-                            }}
-                            ></img>
-                            <br></br>
-                            <span>Laundry Room</span>
-                          </div>
-
-
-                          <div className="col-3">
-                            <img src='icons/canteen.png'
-                            style={{
-                              width: "70px",
-                              height: "70px"
-                            }}
-                            ></img>
-                            <br></br>
-                            <span>Canteen</span>
-                          </div>
-                          <div className="col-3">
-                            <img src='icons/lounge.png'
-                            style={{
-                              width: "70px",
-                              height: "70px"
-                            }}
-                            ></img>
-                            <br></br>
-                            <span>Lounge</span>
-                          </div>
-                        </div>
+                          
+                        
                       </div>
                     </div>
                   </div>
