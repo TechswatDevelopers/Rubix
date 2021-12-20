@@ -395,6 +395,12 @@ class ProfileV1Setting extends React.Component {
 
     };
     fetchData()
+
+    //Fetch Provices list
+    this.fetchProvinceListData()
+
+    //Fetch countries
+    this.fetchCountriesData()
   }
 
   //Populate data from DB
@@ -921,7 +927,7 @@ class ProfileV1Setting extends React.Component {
                     type="text"
                   />
                 </div>
-              {/* <div className="form-group">
+              <div className="form-group">
                 {
                   <select className="form-control" onChange={(e) => this.setState({ resProv: e.target.value })} value={this.state.myProfile}>
                     {
@@ -951,7 +957,7 @@ class ProfileV1Setting extends React.Component {
                     type="text"
                   />
                 </div>
-              </div> */}
+              </div>
             </div>
             {/* <div className="col-lg-6 col-md-12">
               <h6>.</h6>
@@ -989,11 +995,11 @@ class ProfileV1Setting extends React.Component {
               </div>
             </div> */}
           </div>
-         {/*  <button className="btn btn-primary" type="button">
+          <button className="btn btn-primary" type="button">
             Edit Information
-          </button>{" "} */}
+          </button>{" "}
           &nbsp;&nbsp;
-          {/* <button className="btn btn-default">Cancel</button> */}
+          <button className="btn btn-default">Cancel</button>
         </div>
 
 
