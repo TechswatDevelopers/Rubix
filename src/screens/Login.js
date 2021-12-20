@@ -20,7 +20,7 @@ constructor(props) {
   super(props)
   this.state = {
     isLoad: true,
-    currentClientId: null,
+    currentClientId: '1',
     errorMessage: '',
   }
 }
@@ -31,13 +31,23 @@ componentDidMount() {
   setTimeout(() => {
     this.setState({
       isLoad: false,
-      currentClientId: this.props.match.params.clientID
+      //currentClientId: this.props.match.params.clientID
     })
   }, 2000);
 
-  //Save client ID to local Storage
-  localStorage.setItem('clientID', this.props.match.params.clientID)
-  this.setThemeColor(this.props.match.params.clientID)
+   //Add redirect
+   if(this.props.match.params.clientID != null || this.props.match.params.clientID != undefined){
+    this.setState({
+      currentClientId: this.props.match.params.clientID
+    });
+    localStorage.setItem('clientID', this.props.match.params.clientID)
+    this.setThemeColor(this.props.match.params.clientID)
+  } else {
+    localStorage.setItem('clientID', this.state.currentClientId)
+    this.setThemeColor(this.state.currentClientId)
+    //this.props.history.push('/login/1')
+  }
+
   document.body.classList.remove("theme-cyan");
   document.body.classList.remove("theme-purple");
   document.body.classList.remove("theme-blue");
