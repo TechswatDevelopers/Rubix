@@ -75,7 +75,7 @@ componentDidMount() {
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     this.props.history.push("/dashboard")
                   } else {
-                    this.props.history.push("/login/" +  this.props.match.params.clientID)
+                    this.props.history.push("/login/" +  this.state.currentClientId)
                     this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
                   }
               })
