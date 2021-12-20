@@ -552,6 +552,18 @@ class NavbarMenu extends React.Component {
               >
                 <Nav id="left-sidebar-nav" className="sidebar-nav">
                   <ul id="main-menu" className="metismenu">
+                  <li className="" id="dashboard">
+                    <a
+                        href="dashboard"
+                        className=""
+                        /* onClick={(e) => {
+                          e.preventDefault();
+                          this.activeMenutabContainer("AppContainer");
+                        }} */
+                      >
+                        <i className="icon-home"></i> <span>Dashboard</span>
+                      </a>
+                    </li>
                   <li className="" id="myProfile">
                     <a
                         href="profilev1page"

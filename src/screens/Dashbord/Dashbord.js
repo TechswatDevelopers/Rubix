@@ -12,6 +12,7 @@ import ResentChat from "../../components/Dashboard/ResentChat";
 import TwitterFeedCard from "../../components/Dashboard/TwitterFeedCard";
 import FeedCards from "../../components/Dashboard/FeedsCard";
 import PageHeader from "../../components/PageHeader";
+import axios from "axios";
 import {
   topProductOption,
   topRevenueOption,
@@ -20,7 +21,7 @@ import {
   dataManagetOption,
   sparkleCardData,
 } from "../../Data/DashbordData";
-import {
+/* import {
   toggleMenuArrow,
   onPressTopProductDropDown,
   loadSparcleCard,
@@ -31,7 +32,7 @@ import {
   twitterProgressBar,
   affiliatesProgressBar,
   searchProgressBar,
-} from "../../actions";
+} from "../../actions"; */
 import SparkleCard from "../../components/SparkleCard";
 
 var timer = null;
@@ -40,26 +41,28 @@ class Dashbord extends React.Component {
     super(props);
     this.state = {
       cardData: [],
+      notices: {},
     };
   }
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.loadDataCard();
+    //this.loadDataCard();
     this.setState({
       cardData: [...sparkleCardData],
     });
 
-    this.chartPlace();
+    this.getNoticies()
+    //this.chartPlace();
   }
 
-  chartPlace = () => {
+ /*  chartPlace = () => {
     var chartDom = document.getElementById("topsaleDonut");
     var myChart = echarts.init(chartDom);
     var option;
     option = saleGaugeOption;
 
     option && myChart.setOption(option);
-  };
+  }; */
   async loadDataCard() {
     const { cardData } = this.state;
     var allCardData = cardData;
@@ -71,6 +74,16 @@ class Dashbord extends React.Component {
       allCardData[i].sparklineData.data = [...uData];
     });
     this.setState({ cardData: [...allCardData] });
+  }
+
+  //Get noticies
+  getNoticies(){
+    const getData = async () => {
+      const res = await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
+      console.log("Messages data",res.data.PostRubixUserData);
+      this.setState({notices: res.data.PostRubixUserData[0] })
+    }
+    getData()
   }
 
   render() {
@@ -100,29 +113,12 @@ class Dashbord extends React.Component {
               HeaderText="My Dashboard"
               Breadcrumb={[{ name: "Dashboard" }]}
             />
-            {/* <div className="row clearfix">
-              {cardData.map((data, i) => (
-                <SparkleCard
-                  index={i}
-                  key={data.heading}
-                  Heading={data.heading}
-                  Money={data.money}
-                  PerText={data.perText}
-                  isRandomUpdate={true}
-                  // Data={data.sparklineData}
-                  mainData={data.sparklineData.data}
-                  chartColor={data.sparklineData.areaStyle.color}
-                  ContainerClass="col-lg-3 col-md-6 col-sm-6"
-                />
-              ))}
-            </div> */}
-
 
 <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
                   <div className="header">
-                    <h2>Student Activities</h2>
+                    <h2>Noticeboard</h2>
                   </div>
                   <div className="body">
                     <div
@@ -130,15 +126,18 @@ class Dashbord extends React.Component {
                       date-is="20-04-2018 - Today"
                     >
                       <h5>
-                        Hello and Welcome to Rubix system!
+                       {this.state.notices.Title}
                       </h5>
                       <span>
-                        <a>Elisse Joson</a> San Francisco, CA
+                        <a>{this.state.notices.Name}</a> {this.state.notices.Surname}
+                      </span>
+                      <br></br>
+                      <span>
+                      {this.state.notices.Residence}
                       </span>
                       <div className="msg">
                         <p>
-                          Welcome to your one stop Rubix system, you have successfully registered as one of our students.
-                          Have a look at the many features that we have developed specifically for you.
+                        {this.state.notices.UserMessage}
                         </p>
                         <a className="m-r-20">
                           <i className="icon-heart"></i> Like
@@ -264,7 +263,7 @@ class Dashbord extends React.Component {
               </div> */}
 
 
-              <div className="col-lg-3 col-md-6">
+              {/* <div className="col-lg-3 col-md-6">
                 <div className="card">
                   <div className="header">
                     <h2>Total Time Spent</h2>
@@ -326,7 +325,7 @@ class Dashbord extends React.Component {
                   </div>
                 </div>
               </div>
-              
+               */}
             </div>
 
             {/* <div className="row clearfix">
@@ -529,7 +528,7 @@ const mapStateToProps = ({
 });
 
 export default connect(mapStateToProps, {
-  toggleMenuArrow,
+ /*  toggleMenuArrow,
   loadSparcleCard,
   onPressTopProductDropDown,
   onPressReferralsDropDown,
@@ -538,5 +537,5 @@ export default connect(mapStateToProps, {
   facebookProgressBar,
   twitterProgressBar,
   affiliatesProgressBar,
-  searchProgressBar,
+  searchProgressBar, */
 })(Dashbord);
