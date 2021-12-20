@@ -122,11 +122,17 @@ class ProfileV1Page extends React.Component {
   //Check Lease Agreement Doc
   checkLease(userId) {
     const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
+    const temp2 = this.state.docs.filter(doc => doc.FileType == 'unsigned-agreement')
     //console.log(temp[0].image)
     if (temp.length != 0) {
       this.setState({ docUrl: temp[0].image, myLease: temp[0].filename })
       //tempfile('.png');
       this.setState({ showPad: false })
+    }
+    else if(temp2.length != 0){
+      this.setState({ docUrl: temp2[0].image, myLease: temp2[0].filename })
+      //tempfile('.png');
+      this.setState({ showPad: true })
     }
     else {
       this.postSignature('https://cdn.hipwallpaper.com/i/96/13/QOhrVz.png', userId, 0)
@@ -277,8 +283,8 @@ class ProfileV1Page extends React.Component {
     this.setLoadingPage(3000)
     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      console.log("IP Address:", this.state.userIPAddress)
-      //this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
+      //console.log("IP Address:", this.state.userIPAddress)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
     } else {
       alert("Please provide a signature")
     }
@@ -375,6 +381,11 @@ class ProfileV1Page extends React.Component {
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
+          } else if (tryval === 0) {
+            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
+            console.log("temp file:", temp)
+            this.onPressUpload(temp, 'unsigned-agreement', 'signing')
           }
         })
     }
@@ -602,7 +613,11 @@ class ProfileV1Page extends React.Component {
                         </div>
                       </Tab> */}
 
+<<<<<<< HEAD
                       
+=======
+
+>>>>>>> dev
                       {/* <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
                           <div className="w-100 p-3">
@@ -708,6 +723,7 @@ class ProfileV1Page extends React.Component {
                           >
                             <Page pageNumber={this.state.pageNumber} />
                           </Document>
+<<<<<<< HEAD
                           <nav>
                             <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
                             &nbsp;&nbsp;
@@ -717,6 +733,18 @@ class ProfileV1Page extends React.Component {
                           :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
                          </iframe>}
                           
+=======
+                          :<iframe src={'https://rubiximagesdev.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
+                         </iframe>}
+                          {/* <DocViewer documents={[
+                            {uri: "data:application/pdf;base64," + this.state.docUrl}
+                          ]} /> */}
+                          {/* <nav>
+                            <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
+                            &nbsp;&nbsp;
+                            <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
+                          </nav> */}
+>>>>>>> dev
                           {
                             this.state.showPad
                               ? <>

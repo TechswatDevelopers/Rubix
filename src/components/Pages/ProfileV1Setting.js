@@ -1038,11 +1038,11 @@ class ProfileV1Setting extends React.Component {
               </div>
             </div> */}
           </div>
-         {/*  <button className="btn btn-primary" type="button">
+          <button className="btn btn-primary" type="button">
             Edit Information
-          </button>{" "} */}
+          </button>{" "}
           &nbsp;&nbsp;
-          {/* <button className="btn btn-default">Cancel</button> */}
+          <button className="btn btn-default">Cancel</button>
         </div>
 
 

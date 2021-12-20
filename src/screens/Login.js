@@ -31,11 +31,20 @@ componentDidMount() {
   setTimeout(() => {
     this.setState({
       isLoad: false,
+<<<<<<< HEAD
     })
   }, 2000);
 
   //Add redirect
   if(this.props.match.params.clientID != null || this.props.match.params.clientID != undefined){
+=======
+      //currentClientId: this.props.match.params.clientID
+    })
+  }, 2000);
+
+   //Add redirect
+   if(this.props.match.params.clientID != null || this.props.match.params.clientID != undefined){
+>>>>>>> dev
     this.setState({
       currentClientId: this.props.match.params.clientID
     });
@@ -46,7 +55,11 @@ componentDidMount() {
     this.setThemeColor(this.state.currentClientId)
     //this.props.history.push('/login/1')
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> dev
   document.body.classList.remove("theme-cyan");
   document.body.classList.remove("theme-purple");
   document.body.classList.remove("theme-blue");
@@ -84,7 +97,7 @@ componentDidMount() {
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     this.props.history.push("/dashboard")
                   } else {
-                    this.props.history.push("/login/" +  this.props.match.params.clientID)
+                    this.props.history.push("/login/" +  this.state.currentClientId)
                     this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
                   }
               })

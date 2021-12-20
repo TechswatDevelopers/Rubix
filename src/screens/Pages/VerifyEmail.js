@@ -13,12 +13,15 @@ constructor(props) {
     errorMessage: '',
     errorMessage: '',
     rubixClientLogo: localStorage.getItem('clientLogo'),
+    currentClientId: '1',
     userData: {}
   }
 }
 
   componentDidMount() {
     window.scrollTo(0, 0);
+    localStorage.setItem('clientID', this.state.currentClientId)
+    this.setThemeColor(this.state.currentClientId)
      //Set timer for loading screen
   setTimeout(() => {
     this.setState({
@@ -39,6 +42,32 @@ constructor(props) {
           });
   }
   verify()
+  }
+  
+  //Set Theme Color
+  setThemeColor(client){
+    switch(client){
+      case '1':{
+        /* this.props.updateClientLogo('CJ-Logo.png')
+        this.props.updateClientName('CJ Students')
+        this.props.onPressThemeColor('orange') */
+
+        localStorage.setItem('clientLogo', 'CJ-Logo.png')
+        localStorage.setItem('clientName', 'CJ Students')
+        localStorage.setItem('clientTheme', 'orange')
+      }
+        break
+      case '2': {
+      /* this.props.onPressThemeColor('purple')
+      this.props.updateClientLogo('opal.png')
+      this.props.updateClientName('Opal Students') */
+
+      localStorage.setItem('clientLogo', 'opal.png')
+      localStorage.setItem('clientName', 'Opal Students')
+      localStorage.setItem('clientTheme', 'purple')
+    }
+    }
+    //console.log('client:', this.props.rubixClientLogo)
   }
 
 
