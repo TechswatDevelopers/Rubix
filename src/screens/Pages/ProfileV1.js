@@ -503,7 +503,7 @@ class ProfileV1Page extends React.Component {
                       <Tab eventKey="settings" title="Personal Information">
                         <ProfileV1Setting />
                       </Tab>
-                      <Tab eventKey="Billing" title="Billing">
+                      {/* <Tab eventKey="Billing" title="Billing">
                         <div className="tab-pane active show" id="billings">
                           <div className="body">
                             <h6>Payment Method</h6>
@@ -600,7 +600,7 @@ class ProfileV1Page extends React.Component {
                             </button>
                           </div>
                         </div>
-                      </Tab>
+                      </Tab> */}
                       {/* <Tab eventKey="Preferences" title="Residence Information">
                         <div className="row clearfix">
                           <div className="w-100 p-3">
