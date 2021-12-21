@@ -130,6 +130,8 @@ componentDidMount() {
     //Google response for testing
  responseGoogle = (response) => {
    //console.log("I am called")
+   this.props.updateEmail(response.profileObj.email);
+   localStorage.setItem('studentEmail', response.profileObj.email)
   this.SocialMediaLogin(response['googleId'])
 }
   //Facebook response for testing
@@ -301,6 +303,7 @@ export default connect(mapStateToProps, {
   updateUserID,
   updateClientID,
   onPressThemeColor,
+  updateEmail,
   updateClientLogo,
   updateClientName,
 })(Login);
