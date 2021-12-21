@@ -19,24 +19,8 @@ import {
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 const images = [
   {
-    original: require("../../assets/images/image-gallery/1.jpg"),
-    thumbnail: require("../../assets/images/image-gallery/1.jpg"),
-  },
-  {
-    original: require("../../assets/images/image-gallery/2.jpg"),
-    thumbnail: require("../../assets/images/image-gallery/2.jpg"),
-  },
-  {
-    original: require("../../assets/images/image-gallery/3.jpg"),
-    thumbnail: require("../../assets/images/image-gallery/3.jpg"),
-  },
-  {
-    original: require("../../assets/images/image-gallery/11.jpg"),
-    thumbnail: require("../../assets/images/image-gallery/11.jpg"),
-  },
-  {
-    original: require("../../assets/images/image-gallery/5.jpg"),
-    thumbnail: require("../../assets/images/image-gallery/5.jpg"),
+    original: require("../../assets/images/stock.png"),
+    thumbnail: require("../../assets/images/stock.png"),
   },
 ];
 class Residence extends React.Component {
@@ -401,7 +385,10 @@ class Residence extends React.Component {
                     alignContent: 'center'
                   }}>
                   <ImageGallery 
-                   items={this.state.gallery} />
+                   items={this.state.gallery.length == 0
+                   ? images
+                   : this.state.gallery
+                   } />
                   </div>
                   </div>
 

@@ -369,27 +369,9 @@ class ProfileV1Setting extends React.Component {
             localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
             
             //Set Documents progresses
-
-            //ID Progress
-            if(response.data.PostRubixUserData[7]){
-              localStorage.setItem('idProgress', response.data.PostRubixUserData[7].Percentage)
-            }
+            this.setDocumentProgress()
             
-            //Next of Kin ID Progress
-            if(response.data.PostRubixUserData[9]){
-              localStorage.setItem('nextOfKinProgress', response.data.PostRubixUserData[9].Percentage)
-            }
-            
-            //Proof of Registratiom Progress
-            if(response.data.PostRubixUserData[11]){
-              localStorage.setItem('proofOfRegProgress', response.data.PostRubixUserData[11].Percentage)
-            }
-            
-            
-            //Proof of Residence Progress
-            if(response.data.PostRubixUserData[12]){
-              localStorage.setItem('proofOfResProgress', response.data.PostRubixUserData[12].Percentage)
-            }
+          
             
           }).then(() => {
             localStorage.setItem('resName', this.state.myProfile.ResidenceName)
@@ -404,12 +386,65 @@ class ProfileV1Setting extends React.Component {
 
   }
 
+  //Get user document progress
+  setDocumentProgress() {
+    const data = {
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+    };
+
+    const requestOptions = {
+      title: 'Fetch User Profile Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
+      .then(response =>{
+        console.log("document progress", response.data.PostRubixUserData)
+        const temp = response.data.PostRubixUserData
+        localStorage.removeItem('idProgress', 0)
+        localStorage.setItem('proofOfResProgress', 0)
+        localStorage.setItem('proofOfRegProgress', 0)
+        localStorage.setItem('nextOfKinProgress', 0)
+        for(let i = 1; i <= temp.length - 1; i++){
+          switch(temp[i].FileType){
+            case 'id-document':{
+              console.log('its an ID')
+              localStorage.setItem('idProgress', temp[i].Percentage)
+            }
+            break;
+            case "proof-of-res":{
+              console.log('its a Proof of res')
+              localStorage.setItem('proofOfResProgress', temp[i].Percentage)
+            }
+            break;
+            case "proof-of-reg":{
+              console.log('its a proof of res')
+              localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
+            }
+            break;
+            case "next-of-kin":{
+              console.log('its a next of kin')
+              localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
+            }
+          }
+        }
+      })
+
+    }
+    postData()
+  }
+
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
 
     //Get All User Data
     this.getAllUserData(localStorage.getItem('userID'))
+
+    
 
     //Get User Profile Picture
     const fetchData = async () => {
