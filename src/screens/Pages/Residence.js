@@ -16,6 +16,7 @@ import {
   dataManagetOption,
   sparkleCardData,
 } from "../../Data/DashbordData";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
 const images = [
   {
     original: require("../../assets/images/image-gallery/1.jpg"),
@@ -46,6 +47,9 @@ class Residence extends React.Component {
       resDetailTag: '',
       resCapacity: 0,
       amenities: [],
+      gallery: [],
+      socials: [],
+      resManagerPic: '',
     }
   }
   componentDidMount() {
@@ -80,14 +84,54 @@ class Residence extends React.Component {
             resDetailTag: "Total Capacity",
             resCapacity: response.data.PostRubixUserData[0].Capacity
           });
-          let i =1;
-          for(i == 1; i <= temp.length - 1; ++i){
+
+          //Load amenities
+          for(let i = 4; i <= temp.length - 1; ++i){
             this.state.amenities.push(temp[i])
           }
+
+          //Load social links
+          for(let i = 1; i<=3; ++i){
+            this.state.socials.push(temp[i])
+          }
+
+          //Load Residence Images
+          this.fetchImages(response.data.PostRubixUserData[0].RubixResidenceID)
         })
     }
     postData()
     console.log('amenities', this.state.amenities)
+  }
+
+  //Fetch Res Gallery Images
+  fetchImages(resID) {
+    const fetchData = async () => {
+    await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + resID)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Images:", data.post)
+      for(let i = 0; i <= data.post.length - 1; ++i){
+
+       if(data.post[i].FileType != "ResManager"){ 
+         this.state.gallery.push(
+          {
+            original: 'https://rubiximages.cjstudents.co.za:449/' + data.post[i].filename,
+            thumbnail: 'https://rubiximages.cjstudents.co.za:449/' + data.post[i].filename
+          }
+        )
+        }
+        else (
+          this.setState({
+            resManagerPic: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
+          })
+        )
+      }
+      /* this.setState({
+        gallery: data.post
+      }) */
+    })
+  }
+  fetchData()
   }
 
   //Function for changing res capacity
@@ -306,7 +350,7 @@ class Residence extends React.Component {
                           Office={this.state.resDetails.ResidenceManagerOffice}
                           Bio={this.state.resDetails.ResidenceManagerShortBio}
                           Phone={this.state.resDetails.ResidenceManagerPhoneNumber}
-                          ProfilePic={this.state.resDetails.ResidenceManagerName}
+                          ProfilePic={this.state.resManagerPic}
                         />
                       </div>
                     </div>
@@ -316,8 +360,16 @@ class Residence extends React.Component {
                         <div className="header text-center">
                           <h3>Our Socials</h3>
                         </div>
+                        {
+                          this.state.socials.map((social, index) =>(
+                            <div className="row col-8">
+                            <img className="pl-3 pr-2" src={"icons/" + social.ResidenceSocialImage}></img>
+                            <a  className="pt-1" href={social.ResidenceSocialLink}><span>CJ Students</span></a>
+                          </div>
+                          ))
+                        }
 
-                        <div>
+                       {/*  <div>
                           <div className="row col-8">
                             <img className="pl-3" src='icons/fb.png'></img>
                             <span className="pt-2">Rubix Intake System</span>
@@ -332,7 +384,7 @@ class Residence extends React.Component {
                             <img className="pl-3" src='icons/twitter.png'></img>
                             <span className="px-0">Rubix Intake System</span>
                           </div>
-                        </div>
+                        </div> */}
 
                       </div>
                     </div>
@@ -349,7 +401,7 @@ class Residence extends React.Component {
                     alignContent: 'center'
                   }}>
                   <ImageGallery 
-                   items={images} />
+                   items={this.state.gallery} />
                   </div>
                   </div>
 

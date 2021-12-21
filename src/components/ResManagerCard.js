@@ -14,7 +14,14 @@ class ResManagerCard extends React.Component {
         <div className="text-left">
           <div className="row">
             <div>
-          <img src={User} className="rounded-circle m-b-15" alt="" />
+          <img src={ProfilePic} className="rounded-circle m-b-0 pl-4" alt="" 
+          style={{
+            height: "150px",
+            justifyContent: "center",
+            alignItems: 'center',
+            alignContent: 'center'
+          }}
+          />
           <h4 className="m-b-0">
               <strong>{Name}</strong> {Surname}
             </h4>
