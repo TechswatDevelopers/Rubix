@@ -115,9 +115,9 @@ componentDidMount() {
         if(response.data.PostRubixUserData['0']['Response'] == 1){
           this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
           localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-          this.props.history.push("/logInformation")
+          this.props.history.push("/dashboard")
         } else {
-          this.props.history.push("/login/" +  this.props.match.params.clientID)
+          this.props.history.push("/logInformation")
           this.setState({errorMessage: 'The email entered does not exist or has not been valdated.'})
         }
           

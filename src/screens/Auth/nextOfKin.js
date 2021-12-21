@@ -160,7 +160,7 @@ const postData = async() => {
   await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
-              //this.props.history.push("/" )
+              this.props.history.push("/" )
           })
 }
 postData()

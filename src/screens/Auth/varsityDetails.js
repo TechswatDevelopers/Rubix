@@ -65,7 +65,7 @@ class VarsityDetails extends React.Component {
                 await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
-                    //this.props.history.push("/nextofkin")
+                    this.props.history.push("/nextofkin")
                 })
                     
             } else{
