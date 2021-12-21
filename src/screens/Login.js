@@ -20,7 +20,7 @@ constructor(props) {
   super(props)
   this.state = {
     isLoad: true,
-    currentClientId: null,
+    currentClientId: '1',
     errorMessage: '',
   }
 }
@@ -31,13 +31,22 @@ componentDidMount() {
   setTimeout(() => {
     this.setState({
       isLoad: false,
-      currentClientId: this.props.match.params.clientID
     })
   }, 2000);
 
-  //Save client ID to local Storage
-  localStorage.setItem('clientID', this.props.match.params.clientID)
-  this.setThemeColor(this.props.match.params.clientID)
+  //Add redirect
+  if(this.props.match.params.clientID != null || this.props.match.params.clientID != undefined){
+    this.setState({
+      currentClientId: this.props.match.params.clientID
+    });
+    localStorage.setItem('clientID', this.props.match.params.clientID)
+    this.setThemeColor(this.props.match.params.clientID)
+  } else {
+    localStorage.setItem('clientID', this.state.currentClientId)
+    this.setThemeColor(this.state.currentClientId)
+    //this.props.history.push('/login/1')
+  }
+  
   document.body.classList.remove("theme-cyan");
   document.body.classList.remove("theme-purple");
   document.body.classList.remove("theme-blue");
@@ -75,7 +84,7 @@ componentDidMount() {
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     this.props.history.push("/dashboard")
                   } else {
-                    this.props.history.push("/login/" +  this.props.match.params.clientID)
+                    this.props.history.push("/login/" +  this.state.currentClientId)
                     this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
                   }
               })
@@ -108,7 +117,7 @@ componentDidMount() {
           localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
           this.props.history.push("/dashboard")
         } else {
-          this.props.history.push("/login/" +  this.props.match.params.clientID)
+          this.props.history.push("/logInformation")
           this.setState({errorMessage: 'The email entered does not exist or has not been valdated.'})
         }
           
@@ -121,6 +130,8 @@ componentDidMount() {
     //Google response for testing
  responseGoogle = (response) => {
    //console.log("I am called")
+   this.props.updateEmail(response.profileObj.email);
+   localStorage.setItem('studentEmail', response.profileObj.email)
   this.SocialMediaLogin(response['googleId'])
 }
   //Facebook response for testing
@@ -221,10 +232,9 @@ componentDidMount() {
                           buttonText="Google"
                           onSuccess={this.responseGoogle}
                           cookiePolicy={'single_host_origin'}/>
-
-
+                          
                           <FacebookLogin
-                        appId="552332679301004"
+                        appId=  "552332679301004"  //"284158963537717"
                         fields="name,email,picture, first_name, about"
                         height='10'
                         textButton='Facebook'
@@ -293,6 +303,7 @@ export default connect(mapStateToProps, {
   updateUserID,
   updateClientID,
   onPressThemeColor,
+  updateEmail,
   updateClientLogo,
   updateClientName,
 })(Login);
