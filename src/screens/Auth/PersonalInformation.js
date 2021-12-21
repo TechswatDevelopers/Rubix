@@ -102,7 +102,7 @@ class PersonalInformation extends React.Component {
     const form = document.getElementById('register');
     const data = {
         'ClientID': localStorage.getItem('clientID'),
-        'PlatformID': '1',
+        'PlatformID': localStorage.getItem('platformID'),
         'RubixUserPlatformID': this.props.rubixUserID,
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
@@ -154,6 +154,8 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+
+    console.log('platform ID', localStorage.getItem('platformID'))
 
     //Fetch Data
     const fetchData = async () => {

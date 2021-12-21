@@ -33,7 +33,7 @@ constructor(props) {
   //console.log("client ID:", localStorage.getItem('clientID'))
   //Send verification
   const verify = async() => {
-    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
+    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
       .then(response => response.json())
       .then(data => {
         console.log("response data:", data)

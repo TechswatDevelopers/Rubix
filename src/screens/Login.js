@@ -130,16 +130,20 @@ componentDidMount() {
     //Google response for testing
  responseGoogle = (response) => {
    //console.log("I am called")
+  localStorage.setItem('platformID', "2")
    this.props.updateEmail(response.profileObj.email);
    localStorage.setItem('studentEmail', response.profileObj.email)
   this.SocialMediaLogin(response['googleId'])
 }
   //Facebook response for testing
    responseFacebook = (response) => {
+    this.props.updatePlatformID("3");
+    localStorage.setItem('platformID', "3")
     this.SocialMediaLogin(response['id'])
   }
   //Instagram response
  responseInstagram = (response) => {
+  localStorage.setItem('platformID', "4")
   this.SocialMediaLogin(response['id'])
 }
 

@@ -16,6 +16,7 @@ import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateClien
 class Registration extends React.Component {
     //Google response for testing
  responseGoogle = (response) => {
+  localStorage.setItem('platformID', "2")
   this.props.updateEmail(response.profileObj.email);
   this.props.updatePlatformID("2");
    this.props.updateUserID(response['googleId'])
@@ -24,12 +25,14 @@ class Registration extends React.Component {
   //Facebook response for testing
    responseFacebook = (response) => {
     this.props.updatePlatformID("3");
+    localStorage.setItem('platformID', "3")
     this.props.updateUserID(response['id'])
     this.props.history.push("/logInformation")
   }
   //Instagram response
  responseInstagram = (response) => {
   this.props.updatePlatformID("4");
+  localStorage.setItem('platformID', "4")
   this.props.updateUserID(response['id'])
   this.props.history.push("/logInformation")
 }
@@ -88,6 +91,7 @@ class Registration extends React.Component {
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
+                  localStorage.setItem('platformID', "1")
                  this.props.history.push("/logInformation")
                  } else{
                console.log('Email validation failed')
