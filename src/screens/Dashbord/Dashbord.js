@@ -13,6 +13,7 @@ import TwitterFeedCard from "../../components/Dashboard/TwitterFeedCard";
 import FeedCards from "../../components/Dashboard/FeedsCard";
 import PageHeader from "../../components/PageHeader";
 import axios from "axios";
+import "bootstrap/dist/js/bootstrap.min.js";
 import {
   topProductOption,
   topRevenueOption,
@@ -86,6 +87,11 @@ class Dashbord extends React.Component {
     getData()
   }
 
+  //Submit Comment
+  submitComment(){
+    
+  }
+
   render() {
     const { loadingPage } = this.props;
     const { cardData } = this.state;
@@ -113,7 +119,6 @@ class Dashbord extends React.Component {
               HeaderText="My Dashboard"
               Breadcrumb={[{ name: "Dashboard" }]}
             />
-
 <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
@@ -147,6 +152,7 @@ class Dashbord extends React.Component {
                           data-toggle="collapse"
                           aria-expanded="false"
                           aria-controls="collapseComment"
+                          href="#collapseComment"
                         >
                           <i className="icon-bubbles"></i> Comment
                         </a>
@@ -158,6 +164,7 @@ class Dashbord extends React.Component {
                                   rows="2"
                                   className="form-control no-resize"
                                   placeholder="Enter here for tweet..."
+                                  id="comment"
                                 ></textarea>
                               </div>
                               <button className="btn btn-primary">
