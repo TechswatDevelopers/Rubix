@@ -18,6 +18,7 @@ class Registration extends React.Component {
  responseGoogle = (response) => {
   localStorage.setItem('platformID', "2")
   this.props.updateEmail(response.profileObj.email);
+  localStorage.setItem('studentEmail', response.profileObj.email)
   this.props.updatePlatformID("2");
    this.props.updateUserID(response['googleId'])
    this.props.history.push("/logInformation")
@@ -41,6 +42,7 @@ class Registration extends React.Component {
         console.log("Submit function is called")
         e.preventDefault();
         const email = document.getElementById('email').value;
+        localStorage.setItem('studentEmail', email)
         console.log(email)
 
         // PingRequest data

@@ -260,7 +260,7 @@ class PersonalInformation extends React.Component {
                           name="UserEmail"
                           id="email"
                           required
-                          value={this.props.email}
+                          value={localStorage.getItem('studentEmail')}
                           placeholder="Enter your email"
                           type="email" />
                       </div>
