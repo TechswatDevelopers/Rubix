@@ -652,7 +652,15 @@ class ProfileV1Setting extends React.Component {
         <div className="body">
           <h6>Profile Photo</h6>
           <div className="media">
-            <div className="media-left m-r-15 border border-primary border-2">
+            <div className="media-left m-r-15 border border-primary border-2"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignContent: 'center'
+            }}
+            >
               <img
                 alt="cannot display image"
                 accept='.jpg, .png, .jpeg'

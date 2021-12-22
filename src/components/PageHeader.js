@@ -48,7 +48,7 @@ class PageHeader extends React.Component {
   render() {
     const { HeaderText, Breadcrumb } = this.props;
     return (
-      <div className="block-header">
+      <div className="block-header pt-4">
         <div className="row">
           <div className="col-lg-5 col-md-6 col-sm-12">
             <h2>

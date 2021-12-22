@@ -50,6 +50,7 @@ class ProfileV1Page extends React.Component {
       numPages: null,
       progress: '',
       myLease: '',
+      isSigned: false,
     }
   }
 
@@ -68,7 +69,6 @@ class ProfileV1Page extends React.Component {
     /* console.log("The date is:", myDate)
     console.log("The time is:", myTime) */
     this.loadDocuments(userID)
-    this.loadData()
   }
 
   //Fetch All documents from DB
@@ -99,25 +99,16 @@ class ProfileV1Page extends React.Component {
             this.setState({doc: null})
           }
           //console.log("Documents: ", data.post)
+
+          //Check the lease
+          const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
+          const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
           this.checkLease(userID)
         });
 
     };
     fetchData()
   }
-
-
-  //Load Local Storage Data
-  loadData() {
-    const myProfile = localStorage.getItem('profile');
-    this.setState({ myUserProfile: myProfile })
-  }
-
-  //Page navigation functions
-  goToPrevPage = () =>
-    this.setState(state => ({ pageNumber: state.pageNumber - 1 }));
-  goToNextPage = () =>
-    this.setState(state => ({ pageNumber: state.pageNumber + 1 }));
 
   //Check Lease Agreement Doc
   checkLease(userId) {
@@ -126,18 +117,17 @@ class ProfileV1Page extends React.Component {
     //console.log(temp[0].image)
     if (temp.length != 0) {
       this.setState({ docUrl: temp[0].image, myLease: temp[0].filename })
-      //tempfile('.png');
       this.setState({ showPad: false })
     }
     else if(temp2.length != 0){
       this.setState({ docUrl: temp2[0].image, myLease: temp2[0].filename })
-      //tempfile('.png');
       this.setState({ showPad: true })
     }
-    else {
-      this.postSignature('https://cdn.hipwallpaper.com/i/96/13/QOhrVz.png', userId, 0)
-      this.setState({ showPad: true })
-    }
+    /* else {
+      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', userId, 0)
+      //this.setState({ showPad: true })
+      //this.loadDocuments(userId)
+    } */
   }
 
 
@@ -224,7 +214,7 @@ class ProfileV1Page extends React.Component {
     //var file = e.target.files[0]
     //console.log("selected file is:", file)
     //this.setState({selectedFile: file})
-    this.setLoadingPage(5000)
+    //this.setLoadingPage(5000)
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
@@ -247,8 +237,9 @@ class ProfileV1Page extends React.Component {
     }
     postDocument().then(() => {
       alert("Document uploaded successfully")
+      this.loadDocuments(this.state.myUserID)
       window.location.reload()
-      document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
+      document.getElementById('uncontrolled-tab-example').defaultActiveKey = currentActiveKey
     })
   }
 
@@ -295,7 +286,7 @@ class ProfileV1Page extends React.Component {
     //Fetch IP Address
     const getData = async () => {
       const res = await axios.get('https://geolocation-db.com/json/')
-      console.log(res.data);
+      console.log("my IP", res.data);
       this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
@@ -379,12 +370,12 @@ class ProfileV1Page extends React.Component {
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            console.log("temp file:", temp)
+            //console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            console.log("temp file:", temp)
+            //console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
           }
         })
@@ -418,23 +409,8 @@ class ProfileV1Page extends React.Component {
         ? <>
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
-          {/* <Document className="border border-primary border-2"
-            file={{ url: "data:application/pdf;base64," + this.state.doc.image }}
-            onLoadSuccess={this.onDocumentLoadSuccess}
-          >
-          
-            <Page pageNumber={this.state.pageNumber} renderAnnotationLayer={false}
-      renderTextLayer={false} />
-          </Document> */}
-
           <iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
     </iframe>
-
-          {/* <nav>
-            <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
-            &nbsp;&nbsp;
-            <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-          </nav> */}
         </>
 
         : <>
@@ -452,25 +428,7 @@ class ProfileV1Page extends React.Component {
 
     } else {
       myBody = <>
-        <button className="btn btn-primary" onClick={() => this.onPressUpload(this.state.selectedFile, this.state.keyString, 'documents')}>Confirm Upload</button>{" "}
-        &nbsp;&nbsp;
-        <button className="btn btn-default" type="button" onClick={() => this.onPressCancel()}>
-          Cancel
-        </button>
-        <Document className="border border-primary border-2"
-          file={{ url: this.state.base64Pdf }}
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
-          <Page pageNumber={this.state.pageNumber} />
-        </Document>
-
-        <div style={{ margin: 'auto', display: 'inline-block' }}>
-          <nav>
-            <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
-            &nbsp;&nbsp;
-            <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-          </nav>
-        </div>
+        <p>Loading...</p>
       </>
     }
     return (
@@ -713,17 +671,8 @@ class ProfileV1Page extends React.Component {
                       <Tab eventKey="signing" title="Lease Agreement">
                         <div className="w-auto p-3">
                           { !this.state.myLease
-                            ? <><Document className="border border-primary border-2"
-                            file={{ url: "data:application/pdf;base64," + this.state.docUrl }}
-                            onLoadSuccess={this.onDocumentLoadSuccess}
-                          >
-                            <Page pageNumber={this.state.pageNumber} />
-                          </Document>
-                          <nav>
-                            <button className="btn btn-signin-social" onClick={this.goToPrevPage}>Prev</button>{" "}
-                            &nbsp;&nbsp;
-                            <button className="btn btn-signin-social" onClick={this.goToNextPage}>Next</button>
-                          </nav>
+                            ? <>
+                            <p>Loading document...</p>
                           </>
                           :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
                          </iframe>}

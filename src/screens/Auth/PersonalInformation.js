@@ -103,7 +103,7 @@ class PersonalInformation extends React.Component {
     const data = {
         'ClientID': localStorage.getItem('clientID'),
         'PlatformID': localStorage.getItem('platformID'),
-        'RubixUserPlatformID': this.props.rubixUserID,
+        'RubixUserPlatformID': localStorage.getItem('userplatformID'),
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
@@ -181,7 +181,9 @@ class PersonalInformation extends React.Component {
               <div className="auth-box">
                 <div className="card">
                   <div className="top">
-                    <img src="CJ-Logo.png" alt="user profile picture" style={{ height: "80px", margin: "10px", display: "block", margin: "auto" }} />
+                    <img src="CJ-Logo.png" alt="user profile picture" style={{ 
+                      height: "80px", 
+                      margin: "10px", display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
                     <p className="lead">Student User Details</p>

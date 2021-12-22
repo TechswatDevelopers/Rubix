@@ -19,6 +19,7 @@ class Registration extends React.Component {
   localStorage.setItem('platformID', "2")
   this.props.updateEmail(response.profileObj.email);
   localStorage.setItem('studentEmail', response.profileObj.email)
+  localStorage.setItem('userplatformID', response['googleId'])
   this.props.updatePlatformID("2");
    this.props.updateUserID(response['googleId'])
    this.props.history.push("/logInformation")
@@ -27,6 +28,7 @@ class Registration extends React.Component {
    responseFacebook = (response) => {
     this.props.updatePlatformID("3");
     localStorage.setItem('platformID', "3")
+    localStorage.setItem('userplatformID', response['id'])
     this.props.updateUserID(response['id'])
     this.props.history.push("/logInformation")
   }
@@ -34,6 +36,7 @@ class Registration extends React.Component {
  responseInstagram = (response) => {
   this.props.updatePlatformID("4");
   localStorage.setItem('platformID', "4")
+  localStorage.setItem('userplatformID', response['id'])
   this.props.updateUserID(response['id'])
   this.props.history.push("/logInformation")
 }

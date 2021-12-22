@@ -219,7 +219,7 @@ class NavbarMenu extends React.Component {
 
         {//Top Nav Bar
         }
-        <nav className="navbar navbar-fixed-top h-35">
+        <nav className="navbar navbar-fixed-top h-30">
           <div className="container-fluid">
             <div className="navbar-btn">
               <button
@@ -241,10 +241,10 @@ class NavbarMenu extends React.Component {
                       : Logo
                   } */
                   alt="Company Logo"
-                  className="img-responsive logo"
+                  className="img-responsive logo pl-3"
                   style={{
                     height: '50px',
-                    width: '150px'
+                    width: '130px'
                   }}
                 />
               </a>
@@ -443,7 +443,7 @@ class NavbarMenu extends React.Component {
 
 {//Left Side Bar
 }
-        <div id="left-sidebar" className="sidebar" style={{ zIndex: 9 }}>
+        <div id="left-sidebar" className="sidebar pt-4" style={{ zIndex: 9 }}>
           <div className="sidebar-scroll">
             <div className="user-account">
               <img
