@@ -13,6 +13,7 @@ import TwitterFeedCard from "../../components/Dashboard/TwitterFeedCard";
 import FeedCards from "../../components/Dashboard/FeedsCard";
 import PageHeader from "../../components/PageHeader";
 import axios from "axios";
+import "bootstrap/dist/js/bootstrap.min.js";
 import {
   topProductOption,
   topRevenueOption,
@@ -42,6 +43,8 @@ class Dashbord extends React.Component {
     this.state = {
       cardData: [],
       notices: {},
+      comments: [],
+      likes: [],
     };
   }
   componentDidMount() {
@@ -82,6 +85,91 @@ class Dashbord extends React.Component {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
       console.log("Messages data",res.data.PostRubixUserData);
       this.setState({notices: res.data.PostRubixUserData[0] })
+      this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
+    }
+    getData()
+  }
+
+  //Submit Comment
+  submitComment(){
+    const comment = document.getElementById('comment').value;
+    const data = {
+      'UserComments': comment,
+      'RubixRegisterUserMessageID': this.state.notices.RubixRegisterUserMessageID,
+      'RubixRegisterUserID': localStorage.getItem('userID')
+  }
+  const requestOptions = {
+    title: 'Post Comment Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+    const getData = async () => {
+      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserComments', data, requestOptions)
+      //console.log("Comment Respinse",res.data);
+    }
+    getData()
+  }
+
+  //Load Comments from DB
+  loadComments(postID){
+    const data = {
+      'RubixRegisterUserMessageID': postID,
+  }
+  const requestOptions = {
+    title: 'Get Comments Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+    const getData = async () => {
+      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsGet', data, requestOptions)
+      console.log("List of Comments data",res.data.PostRubixUserData);
+      this.setState({
+        comments: res.data.PostRubixUserData
+      })
+      this.getLikes(postID)
+    }
+    getData()
+  }
+
+  //Get post likes
+  getLikes(postID){
+    const data = {
+      'RubixRegisterUserMessageID': postID,
+  }
+  const requestOptions = {
+    title: 'Get likes Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+    const getData = async () => {
+      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserLikesGet', data, requestOptions)
+      console.log("List of likes data",res.data);
+      this.setState({
+        likes: res.data.PostRubixUserData
+      })
+    }
+    getData()
+  }
+
+  //Post Like
+  postLike(postID){
+    const data = {
+      'RubixRegisterUserMessageID': postID,
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+      'LikedStatus': '1'
+  }
+  const requestOptions = {
+    title: 'Post like Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+    const getData = async () => {
+      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserLikes', data, requestOptions)
+      console.log("My likes Response",res.data);
     }
     getData()
   }
@@ -113,17 +201,16 @@ class Dashbord extends React.Component {
               HeaderText="My Dashboard"
               Breadcrumb={[{ name: "Dashboard" }]}
             />
-
 <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
                   <div className="header">
-                    <h2>Noticeboard</h2>
+                    <h2>Announcements</h2>
                   </div>
                   <div className="body">
                     <div
                       className="timeline-item green"
-                      date-is="20-04-2018 - Today"
+                      date-is="21-12-2021"
                     >
                       <h5>
                        {this.state.notices.Title}
@@ -139,18 +226,29 @@ class Dashbord extends React.Component {
                         <p>
                         {this.state.notices.UserMessage}
                         </p>
-                        <a className="m-r-20">
+                        <a onClick={()=>{this.postLike(this.state.notices.RubixRegisterUserMessageID)}} className="m-r-20">
                           <i className="icon-heart"></i> Like
                         </a>
                         <a
                           role="button"
                           data-toggle="collapse"
                           aria-expanded="false"
-                          aria-controls="collapseExample"
+                          aria-controls="collapseComment"
+                          href="#collapseComment"
                         >
                           <i className="icon-bubbles"></i> Comment
                         </a>
-                        <div className="collapse m-t-10" id="collapseExample">
+                        <div>
+                          {this.state.comments.map((comment, index) => (
+                            <div>
+
+                              <span><strong>{comment.NameAndSurname}:</strong></span>
+                            <span>   {comment.UserComments}</span>
+                            
+                            </div>
+                          ))}
+                        </div>
+                        <div className="collapse m-t-10" id="collapseComment">
                           <div className="well">
                             <form>
                               <div className="form-group">
@@ -158,9 +256,10 @@ class Dashbord extends React.Component {
                                   rows="2"
                                   className="form-control no-resize"
                                   placeholder="Enter here for tweet..."
+                                  id="comment"
                                 ></textarea>
                               </div>
-                              <button className="btn btn-primary">
+                              <button className="btn btn-primary" onClick={()=>{this.submitComment()}}>
                                 Submit
                               </button>
                             </form>

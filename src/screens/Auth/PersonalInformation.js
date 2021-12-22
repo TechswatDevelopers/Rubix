@@ -122,7 +122,7 @@ class PersonalInformation extends React.Component {
     console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
-            await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
+            await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 console.log(response)
                 this.props.updateStudentID(idNumber)
@@ -160,7 +160,7 @@ class PersonalInformation extends React.Component {
     //Fetch Data
     const fetchData = async () => {
       //Fetch Countries List
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
+      await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data.data)

@@ -58,7 +58,7 @@ class NavbarMenu extends React.Component {
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post/' + userID)
+      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           console.log("Profile data:", data)
@@ -67,7 +67,7 @@ class NavbarMenu extends React.Component {
           //If Profile Picture Exists...
           if(profilePic != null && profilePic != undefined){
             //this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
-            this.setState({imageUrl: 'https://rubiximagesdev.cjstudents.co.za:449/' + profilePic.filename})
+            this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
           }
         });
 
@@ -608,8 +608,8 @@ class NavbarMenu extends React.Component {
                         <i className="icon-calendar"></i> <span>Calendar</span>
                       </a>
                     </li>
-
-                    {/* <li className="" id="dashboradContainer">
+{/* 
+                    <li className="" id="dashboradContainer">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -639,8 +639,8 @@ class NavbarMenu extends React.Component {
                       </ul>
                     </li> */}
 
-
-                    {/* <li id="AppContainer" className="">
+{/* 
+                    <li id="AppContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -678,8 +678,8 @@ class NavbarMenu extends React.Component {
                           <Link to="apptaskbar">Taskboard</Link>
                         </li>
                       </ul>
-                    </li> */}
-
+                    </li>
+ */}
                     
                     {/* <li id="FileManagerContainer" className="">
                       <a

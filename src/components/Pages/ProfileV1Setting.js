@@ -253,11 +253,7 @@ class ProfileV1Setting extends React.Component {
     console.log(data)
     const postData = async () => {
       if (this.state.base64Image != null) {
-<<<<<<< HEAD
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
-=======
         await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
->>>>>>> dev
           .then(response => {
             //console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
@@ -286,7 +282,7 @@ class ProfileV1Setting extends React.Component {
       for (var pair of data.entries()) {
         console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
           console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -449,7 +445,7 @@ class ProfileV1Setting extends React.Component {
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://rubixdocumentsdev.cjstudents.co.za:86/feed/post/' + userID)
+      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           console.log("Profile data:", data)
@@ -458,7 +454,7 @@ class ProfileV1Setting extends React.Component {
           //If Profile Picture Exists...
           if(profilePic != null && profilePic != undefined){
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
-            this.setState({imageUrl: 'https://rubiximagesdev.cjstudents.co.za:449/' + profilePic.filename})
+            this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
           }
         });
 
