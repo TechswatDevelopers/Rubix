@@ -62,7 +62,7 @@ class VarsityDetails extends React.Component {
         console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+                await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     console.log(response)
                     this.props.history.push("/nextofkin")
@@ -90,7 +90,7 @@ async componentDidMount(){
     const fetchData = async() =>{
 
         //Populate university list
-        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities')
+        await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixUniversities')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -98,7 +98,7 @@ async componentDidMount(){
             });
 
             //Populate Residence list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences')
+            await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixResidences')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -106,7 +106,7 @@ async componentDidMount(){
             });
 
             //Populate Provinces list
-        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
+        await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -117,7 +117,7 @@ async componentDidMount(){
             });
 
             //Populate Courses list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCourses')
+            await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixCourses')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -125,7 +125,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixStudentYearofStudies')
+            await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)

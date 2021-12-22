@@ -81,7 +81,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
           //console.log(response)
           //alert(response.data.PostRubixUserData[0].Response)
@@ -111,7 +111,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixResetPassword', data, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
           //console.log(response)
           alert(response.data.PostRubixUserData[0].Response)
@@ -221,7 +221,7 @@ class ProfileV1Setting extends React.Component {
     console.log(data)
     const postData = async () => {
       if (this.Validate) {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
+        await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
             //console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
@@ -253,11 +253,7 @@ class ProfileV1Setting extends React.Component {
     console.log(data)
     const postData = async () => {
       if (this.state.base64Image != null) {
-<<<<<<< HEAD
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
-=======
         await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixImageUpload', data, requestOptions)
->>>>>>> dev
           .then(response => {
             //console.log(response)
             alert(response.data.PostRubixUserData[0].ResponceMessage)
@@ -361,7 +357,7 @@ class ProfileV1Setting extends React.Component {
     };
     console.log('All student data:', data)
     const postData = async () => {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
+        await axios.post('https://rubixapidev.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
           .then(response => {
             console.log("All profile data",response.data.PostRubixUserData)
             this.setState({myProfile: response.data.PostRubixUserData[0]})
@@ -435,7 +431,7 @@ class ProfileV1Setting extends React.Component {
   fetchUserData = async () => {
     //console.log("user id:", localStorage.getItem('userID'))
     //Get Rubix User Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/' + localStorage.getItem('userID'))
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if(data === null || data === undefined){
@@ -448,7 +444,7 @@ class ProfileV1Setting extends React.Component {
 
     fetchUserUniversityData = async () => {
     //Get Rubix User University Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if(data === null || data === undefined){
@@ -469,7 +465,7 @@ class ProfileV1Setting extends React.Component {
     fetchUserAddressData = async () => {
       //console.log("User ID being used:", localStorage.getItem('userID'))
     //Get Rubix User Address Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if(data === null || data === undefined){
@@ -491,7 +487,7 @@ class ProfileV1Setting extends React.Component {
 
     fetchProvinceListData = async () => {
     //Get Rubix Provices
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixProvinces')
       .then(response => response.json())
       .then(data => {
         if(data.data != null || data.data != undefined){
@@ -504,7 +500,7 @@ class ProfileV1Setting extends React.Component {
 
     fetchCountriesData = async () => {
     //Fetch Countries List
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
         if(data.data != null || data.data != undefined){
@@ -517,7 +513,7 @@ class ProfileV1Setting extends React.Component {
     }
     fetchUniversitiesData = async () => {
     //Populate university list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities')
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixUniversities')
       .then(response => response.json())
       .then(data => {
         if(data.data === null || data.data === undefined){
@@ -532,7 +528,7 @@ class ProfileV1Setting extends React.Component {
 
     fetchResidencesData = async () => {
     //Populate Residence list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences')
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixResidences')
       .then(response => response.json())
       .then(data => {
         if(data.data === null || data.data === undefined){
@@ -546,7 +542,7 @@ class ProfileV1Setting extends React.Component {
 
     fetchCoursesData = async () => {
     //Populate Courses list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCourses')
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixCourses')
       .then(response => response.json())
       .then(data => {
         if(data.data === null || data.data === undefined){
@@ -560,7 +556,7 @@ class ProfileV1Setting extends React.Component {
 
     fetchYearOfStudyData = async () => {
     //Populate Year of Study list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixStudentYearofStudies')
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentYearofStudies')
       .then(response => response.json())
       .then(data => {
         if(data.data === null || data.data === undefined){
@@ -573,7 +569,7 @@ class ProfileV1Setting extends React.Component {
     }
     fetchUserNextofKinData = async () => {
     //Populate Next of Kin
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if(data === null || data === undefined){

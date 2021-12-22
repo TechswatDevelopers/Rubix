@@ -48,7 +48,7 @@ class Addresses extends React.Component {
       const postData = async () => {
 
         if (this.state.location != null && this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
-          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
+          await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
               console.log(response)
               this.props.history.push("/varsityDetails")
@@ -80,7 +80,7 @@ class Addresses extends React.Component {
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           console.log("Verify email status", response)
           //this.props.history.push("/" )
@@ -100,7 +100,7 @@ class Addresses extends React.Component {
     this.setState({ myUserID: userID });
 
     const fetchData = async () => {
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
+      await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
           this.setState({ provList: data.data })
@@ -109,7 +109,7 @@ class Addresses extends React.Component {
         });
 
       //Fetch Countries List
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
+      await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixCountries')
         .then(response => response.json())
         .then(data => {
           //console.log("data is ", data.data)

@@ -79,7 +79,7 @@ class Dashbord extends React.Component {
   //Get noticies
   getNoticies(){
     const getData = async () => {
-      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
+      const res = await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
       console.log("Messages data",res.data.PostRubixUserData);
       this.setState({notices: res.data.PostRubixUserData[0] })
     }

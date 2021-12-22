@@ -45,7 +45,7 @@ class NavbarMenu extends React.Component {
     //Fetch data from DB
     const fetchUserData = async() =>{
     //Get Rubix User Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
+    await fetch('https://rubixapidev.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
         this.setState({profile: data})

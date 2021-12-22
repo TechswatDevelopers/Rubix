@@ -75,7 +75,7 @@ class Residence extends React.Component {
 
     const postData = async () => {
       //Ping email address
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
+      await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
         .then(response => {
           console.log("Student Res Details", response.data.PostRubixUserData)
           const temp = response.data.PostRubixUserData;
