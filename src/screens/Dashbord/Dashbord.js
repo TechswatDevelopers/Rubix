@@ -118,12 +118,12 @@ class Dashbord extends React.Component {
               <div className="col-lg-12">
                 <div className="card">
                   <div className="header">
-                    <h2>Noticeboard</h2>
+                    <h2>Announcements</h2>
                   </div>
                   <div className="body">
                     <div
                       className="timeline-item green"
-                      date-is="20-04-2018 - Today"
+                      date-is="21-12-2021"
                     >
                       <h5>
                        {this.state.notices.Title}
@@ -146,11 +146,11 @@ class Dashbord extends React.Component {
                           role="button"
                           data-toggle="collapse"
                           aria-expanded="false"
-                          aria-controls="collapseExample"
+                          aria-controls="collapseComment"
                         >
                           <i className="icon-bubbles"></i> Comment
                         </a>
-                        <div className="collapse m-t-10" id="collapseExample">
+                        <div className="collapse m-t-10" id="collapseComment">
                           <div className="well">
                             <form>
                               <div className="form-group">

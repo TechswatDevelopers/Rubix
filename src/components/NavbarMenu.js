@@ -609,7 +609,7 @@ class NavbarMenu extends React.Component {
                       </a>
                     </li>
 
-                    {/* <li className="" id="dashboradContainer">
+                    <li className="" id="dashboradContainer">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -637,10 +637,10 @@ class NavbarMenu extends React.Component {
                           <Link to="ioT">IoT</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
-                    {/* <li id="AppContainer" className="">
+                    <li id="AppContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -678,10 +678,10 @@ class NavbarMenu extends React.Component {
                           <Link to="apptaskbar">Taskboard</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
                     
-                    {/* <li id="FileManagerContainer" className="">
+                    <li id="FileManagerContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -723,10 +723,10 @@ class NavbarMenu extends React.Component {
                           <Link to="fileimages">Images</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
-                    {/* <li id="BlogContainer" className="">
+                    <li id="BlogContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -760,10 +760,10 @@ class NavbarMenu extends React.Component {
                           <Link to="blogdetails">Blog Detail</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
-                    {/* <li id="UIElementsContainer" className="">
+                    <li id="UIElementsContainer" className="">
                       <a
                         href="#uiElements"
                         className="has-arrow"
@@ -856,10 +856,10 @@ class NavbarMenu extends React.Component {
                           <Link to="uiprogressbar">Progress Bars</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
                     
-                    {/* <li id="WidgetsContainer" className="">
+                    <li id="WidgetsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -906,11 +906,11 @@ class NavbarMenu extends React.Component {
                           <Link to="widgetsecommers">eCommerce</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
 
-                    {/* <li id="AuthenticationContainer" className="">
+                    <li id="AuthenticationContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -970,11 +970,11 @@ class NavbarMenu extends React.Component {
                           <a href="page503">Page 503</a>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
 
-                    {/* <li id="PagesContainer" className="">
+                    <li id="PagesContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1115,11 +1115,11 @@ class NavbarMenu extends React.Component {
                           <Link to="faqs">FAQ</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
 
-                    {/* <li id="FormsContainer" className="">
+                    <li id="FormsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1148,10 +1148,10 @@ class NavbarMenu extends React.Component {
                           <Link to="basicelements">Basic Elements</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
-                    {/* <li id="TablesContainer" className="">
+                    <li id="TablesContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1172,10 +1172,10 @@ class NavbarMenu extends React.Component {
                           <Link to="tablenormal">Normal Tables</Link>{" "}
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
-                    {/* <li id="chartsContainer" className="">
+                    <li id="chartsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1194,10 +1194,10 @@ class NavbarMenu extends React.Component {
                           <Link to="echart">E-chart</Link>{" "}
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
-                    {/* <li id="MapsContainer" className="">
+                    <li id="MapsContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -1221,7 +1221,7 @@ class NavbarMenu extends React.Component {
                           <Link to="leafletmap">Leaflet Map</Link>
                         </li>
                       </ul>
-                    </li> */}
+                    </li>
 
 
                   </ul>
