@@ -76,7 +76,7 @@ componentDidMount() {
       const postData = async() => {
 
           if (document.getElementById('login').checkValidity() == true){
-              await axios.post('https://rubixapidev.cjstudents.co.za:88/api/RubixLogin', data, requestOptions)
+              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixLogin', data, requestOptions)
               .then(response => {
                   console.log(response)
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
