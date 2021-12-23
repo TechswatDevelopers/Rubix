@@ -589,7 +589,7 @@ class NavbarMenu extends React.Component {
                           this.activeMenutabContainer("AppContainer");
                         }} */
                       >
-                        <i className="icon-home"></i> <span>Residene Information</span>
+                        <i className="icon-home"></i> <span>Residence Information</span>
                       </a>
                     </li>
 

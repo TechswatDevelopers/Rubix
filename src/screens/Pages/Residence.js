@@ -220,7 +220,8 @@ class Residence extends React.Component {
 
                   <div className="row">
                     <div className=" col-3">
-                      <div className="card">
+                      <div className="card profile-header pt-3">
+                          <h3>Occupancy</h3>
                         <div className="header">
                           <h2>{this.state.resDetailTag}</h2>
                           <Dropdown as="ul" className="header-dropdown">
@@ -298,7 +299,7 @@ class Residence extends React.Component {
                     </div>
 
                     <div className="col-9">
-                      <div className="card profile-header">
+                      <div className="card profile-header pt-3">
                         <h3 >
                           Residence Amenitis
                         </h3>
@@ -347,7 +348,7 @@ class Residence extends React.Component {
                         {
                           this.state.socials.map((social, index) =>(
                             <div className="row col-8">
-                            <img className="pl-3 pr-2" src={"icons/" + social.ResidenceSocialImage}></img>
+                            <img className="pl-3 pr-2 pb-2" src={"icons/" + social.ResidenceSocialImage}></img>
                             <a  className="pt-1" href={social.ResidenceSocialLink}><span>CJ Students</span></a>
                           </div>
                           ))
@@ -374,7 +375,7 @@ class Residence extends React.Component {
                     </div>
                   </div>
 
-                  <div className="card text-center">
+                  <div className="card text-center pt-3">
                     <h2>Our Gallery</h2>
                     <div style={{
                     

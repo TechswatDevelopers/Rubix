@@ -38,7 +38,7 @@ class AppCalendar extends React.Component {
                           left: "prev,next today",
                           center: "title",
                           right:
-                            "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+                            "dayGridMonth",
                         }}
                         plugins={[
                           dayGridPlugin,
