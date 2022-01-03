@@ -145,7 +145,6 @@ class PersonalInformation extends React.Component {
 
   }
 
-
   //On Page load complete
   componentDidMount() {
     document.body.classList.remove("theme-cyan");
@@ -156,7 +155,6 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-blush");
 
     console.log('platform ID', localStorage.getItem('platformID'))
-
     //Fetch Data
     const fetchData = async () => {
       //Fetch Countries List
