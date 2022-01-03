@@ -171,7 +171,6 @@ class PersonalInformation extends React.Component {
     }
     fetchData()
   }
-
   render() {
     return (
       <div className="theme-green">
