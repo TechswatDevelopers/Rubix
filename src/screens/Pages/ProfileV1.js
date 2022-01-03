@@ -239,7 +239,7 @@ class ProfileV1Page extends React.Component {
       alert("Document uploaded successfully")
       this.loadDocuments(this.state.myUserID)
       window.location.reload()
-      document.getElementById('uncontrolled-tab-example').defaultActiveKey = currentActiveKey
+      //document.getElementById('uncontrolled-tab-example').defaultActiveKey = currentActiveKey
     })
   }
 
@@ -633,7 +633,7 @@ class ProfileV1Page extends React.Component {
                             <div className="container-fluid">
                               <div className="row clearfix">
                                 <div className="col-lg-3 col-md-5 col-sm-12">
-                                  <FileStorageCard TotalSize="Storage Used" UsedSize={90} />
+                                  {/* <FileStorageCard TotalSize="Storage Used" UsedSize={90} /> */}
                                   {fileStorageStatusCardData.map((data, index) => {
                                     return (
                                       <div key={index + "sidjpidj"} onClick={() => this.changeDocument(data.FileType)}>

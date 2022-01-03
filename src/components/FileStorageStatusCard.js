@@ -10,10 +10,6 @@ class FileStorageStatusCard extends React.Component {
       <div className="card modal-open m-b-5">
         <div className="body">
           <h6>{UsedSize}</h6>
-          <p className="mb-0">
-            {Type}{" "}
-            <small className="text-muted float-right">{TotalSize}</small>
-          </p>
         </div>
         <div className={ProgressBarClass}>
           <ProgressBar now={parseInt(UsedPer)} min={0} max={100} />

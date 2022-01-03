@@ -382,6 +382,22 @@ class ProfileV1Setting extends React.Component {
 
   }
 
+  //Set Message according to percentage
+  setMessage(percent){
+    let message
+    switch(percent){
+      case 0, '0': 
+        message = 'No document uploaded'
+        break
+      case 50, '50':
+        message = 'Pending validation'
+        break
+      case 100, '100':
+        message = 'Approved'
+    }
+    return message
+  }
+
   //Get user document progress
   setDocumentProgress() {
     const data = {
@@ -400,30 +416,41 @@ class ProfileV1Setting extends React.Component {
       .then(response =>{
         console.log("document progress", response.data.PostRubixUserData)
         const temp = response.data.PostRubixUserData
-        localStorage.removeItem('idProgress', 0)
+        //Set local storage to default values
         localStorage.setItem('proofOfResProgress', 0)
         localStorage.setItem('proofOfRegProgress', 0)
         localStorage.setItem('nextOfKinProgress', 0)
+
+        localStorage.setItem('idProgressMsg', 'No document uploaded')
+        localStorage.setItem('proofOfResProgressMsg', 'No document uploaded')
+        localStorage.setItem('proofOfRegProgressMsg', 'No document uploaded')
+        localStorage.setItem('nextOfKinProgressMsg', 'No document uploaded')
+
+
         for(let i = 1; i <= temp.length - 1; i++){
           switch(temp[i].FileType){
             case 'id-document':{
-              console.log('its an ID')
+              //console.log('its an ID')
               localStorage.setItem('idProgress', temp[i].Percentage)
+              localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
             }
             break;
             case "proof-of-res":{
-              console.log('its a Proof of res')
+              //console.log('its a Proof of res')
               localStorage.setItem('proofOfResProgress', temp[i].Percentage)
+              localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
             }
             break;
             case "proof-of-reg":{
-              console.log('its a proof of res')
+              //console.log('its a proof of res')
               localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
+              localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
             }
             break;
             case "next-of-kin":{
-              console.log('its a next of kin')
+              //console.log('its a next of kin')
               localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
+              localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
             }
           }
         }
@@ -980,7 +1007,7 @@ class ProfileV1Setting extends React.Component {
                   <input
                     className="form-control"
                     name="CourseID"
-                    defaultValue={this.state.myProfile.RubixCourseID}
+                    defaultValue={this.state.myProfile.RubixCourse}
                     placeholder="Field of Study"
                     type="text"
                   />

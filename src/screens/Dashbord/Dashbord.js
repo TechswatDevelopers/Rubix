@@ -14,6 +14,7 @@ import FeedCards from "../../components/Dashboard/FeedsCard";
 import PageHeader from "../../components/PageHeader";
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.min.js";
+import ReactList from 'react-list';
 import {
   topProductOption,
   topRevenueOption,
@@ -45,6 +46,7 @@ class Dashbord extends React.Component {
       notices: {},
       comments: [],
       likes: [],
+      liked: false,
     };
   }
   componentDidMount() {
@@ -57,15 +59,6 @@ class Dashbord extends React.Component {
     this.getNoticies()
     //this.chartPlace();
   }
-
- /*  chartPlace = () => {
-    var chartDom = document.getElementById("topsaleDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = saleGaugeOption;
-
-    option && myChart.setOption(option);
-  }; */
   async loadDataCard() {
     const { cardData } = this.state;
     var allCardData = cardData;
@@ -80,51 +73,52 @@ class Dashbord extends React.Component {
   }
 
   //Get noticies
-  getNoticies(){
+  getNoticies() {
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
-      console.log("Messages data",res.data.PostRubixUserData);
-      this.setState({notices: res.data.PostRubixUserData[0] })
+      console.log("Messages data", res.data.PostRubixUserData);
+      this.setState({ notices: res.data.PostRubixUserData[0] })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
     }
     getData()
   }
 
   //Submit Comment
-  submitComment(){
+  submitComment() {
     const comment = document.getElementById('comment').value;
     const data = {
       'UserComments': comment,
       'RubixRegisterUserMessageID': this.state.notices.RubixRegisterUserMessageID,
       'RubixRegisterUserID': localStorage.getItem('userID')
-  }
-  const requestOptions = {
-    title: 'Post Comment Form',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: data
-};
+    }
+    const requestOptions = {
+      title: 'Post Comment Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserComments', data, requestOptions)
       //console.log("Comment Respinse",res.data);
     }
     getData()
+    window.location.reload()
   }
 
   //Load Comments from DB
-  loadComments(postID){
+  loadComments(postID) {
     const data = {
       'RubixRegisterUserMessageID': postID,
-  }
-  const requestOptions = {
-    title: 'Get Comments Form',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: data
-};
+    }
+    const requestOptions = {
+      title: 'Get Comments Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsGet', data, requestOptions)
-      console.log("List of Comments data",res.data.PostRubixUserData);
+      console.log("List of Comments data", res.data.PostRubixUserData)
       this.setState({
         comments: res.data.PostRubixUserData
       })
@@ -134,44 +128,78 @@ class Dashbord extends React.Component {
   }
 
   //Get post likes
-  getLikes(postID){
+  getLikes(postID) {
     const data = {
       'RubixRegisterUserMessageID': postID,
-  }
-  const requestOptions = {
-    title: 'Get likes Form',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: data
-};
+    }
+    const requestOptions = {
+      title: 'Get likes Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserLikesGet', data, requestOptions)
-      console.log("List of likes data",res.data);
-      this.setState({
-        likes: res.data.PostRubixUserData
-      })
+      //console.log("List of likes data",res.data);
+      const tempLikes = res.data.PostRubixUserData
+      if (tempLikes.length == 0 || tempLikes == undefined) {
+
+      } else {
+        this.setState({
+          likes: res.data.PostRubixUserData
+        })
+        //Check if post is liked
+        const liked = tempLikes.filter(doc => doc.RubixRegisterUserID == localStorage.getItem('userID'))
+        if (liked[0].LikedStatus) {
+          this.setState({
+            liked: true
+          })
+        }
+        //console.log("Liked: ", liked)
+      }
+
     }
     getData()
   }
 
   //Post Like
-  postLike(postID){
+  postLike(postID) {
+    let liked;
+    if (this.state.liked) {
+      liked = '0'
+    } else {
+      liked = '1'
+    }
     const data = {
       'RubixRegisterUserMessageID': postID,
       'RubixRegisterUserID': localStorage.getItem('userID'),
-      'LikedStatus': '1'
-  }
-  const requestOptions = {
-    title: 'Post like Form',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: data
-};
+      'LikedStatus': liked
+    }
+    const requestOptions = {
+      title: 'Post like Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserLikes', data, requestOptions)
-      console.log("My likes Response",res.data);
+      console.log("My likes Response", res.data);
     }
     getData()
+    window.location.reload()
+
+  }
+
+  //Comments Scrollable list
+  renderItem = (index, key) => {
+    let comment, commenter;
+    if(this.state.comments != undefined){
+      comment = this.state.comments[index].UserComments
+      commenter = this.state.comments[index].NameAndSurname
+    } else {
+      comment = "No comments..."
+    }
+    return <div key={key}><strong>{commenter}: </strong>{comment}</div>;
   }
 
   render() {
@@ -197,11 +225,11 @@ class Dashbord extends React.Component {
       >
         <div>
           <div className="container-fluid">
-            <PageHeader 
+            <PageHeader
               HeaderText="My Dashboard"
               Breadcrumb={[{ name: "Dashboard" }]}
             />
-<div className="row clearfix">
+            <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
                   <div className="header">
@@ -213,21 +241,21 @@ class Dashbord extends React.Component {
                       date-is="21-12-2021"
                     >
                       <h5>
-                       {this.state.notices.Title}
+                        {this.state.notices.Title}
                       </h5>
                       <span>
                         <a>{this.state.notices.Name}</a> {this.state.notices.Surname}
                       </span>
                       <br></br>
                       <span>
-                      {this.state.notices.Residence}
+                        {this.state.notices.Residence}
                       </span>
                       <div className="msg">
                         <p>
-                        {this.state.notices.UserMessage}
+                          {this.state.notices.UserMessage}
                         </p>
-                        <a onClick={()=>{this.postLike(this.state.notices.RubixRegisterUserMessageID)}} className="m-r-20">
-                          <i className="icon-heart"></i> Like
+                        <a onClick={() => { this.postLike(this.state.notices.RubixRegisterUserMessageID) }} className="m-r-20">
+                          <i className="icon-heart"></i> {this.state.liked ? 'Unlike' : 'Like'}
                         </a>
                         <a
                           role="button"
@@ -239,14 +267,20 @@ class Dashbord extends React.Component {
                           <i className="icon-bubbles"></i> Comment
                         </a>
                         <div>
-                          {this.state.comments.map((comment, index) => (
+                          <ReactList
+                            itemRenderer={this.renderItem}
+                          length={this.state.comments.length}
+                          type='uniform'
+          />
+
+                          {/* {this.state.comments.map((comment, index) => (
                             <div>
 
                               <span><strong>{comment.NameAndSurname}:</strong></span>
-                            <span>   {comment.UserComments}</span>
-                            
+                              <span>   {comment.UserComments}</span>
+
                             </div>
-                          ))}
+                          ))} */}
                         </div>
                         <div className="collapse m-t-10" id="collapseComment">
                           <div className="well">
@@ -259,7 +293,7 @@ class Dashbord extends React.Component {
                                   id="comment"
                                 ></textarea>
                               </div>
-                              <button className="btn btn-primary" onClick={()=>{this.submitComment()}}>
+                              <button className="btn btn-primary" onClick={() => { this.submitComment() }}>
                                 Submit
                               </button>
                             </form>
@@ -297,14 +331,14 @@ const mapStateToProps = ({
 });
 
 export default connect(mapStateToProps, {
- /*  toggleMenuArrow,
-  loadSparcleCard,
-  onPressTopProductDropDown,
-  onPressReferralsDropDown,
-  onPressRecentChatDropDown,
-  onPressDataManagedDropDown,
-  facebookProgressBar,
-  twitterProgressBar,
-  affiliatesProgressBar,
-  searchProgressBar, */
+  /*  toggleMenuArrow,
+   loadSparcleCard,
+   onPressTopProductDropDown,
+   onPressReferralsDropDown,
+   onPressRecentChatDropDown,
+   onPressDataManagedDropDown,
+   facebookProgressBar,
+   twitterProgressBar,
+   affiliatesProgressBar,
+   searchProgressBar, */
 })(Dashbord);

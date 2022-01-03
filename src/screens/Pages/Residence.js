@@ -84,7 +84,7 @@ class Residence extends React.Component {
         })
     }
     postData()
-    console.log('amenities', this.state.amenities)
+    //console.log('amenities', this.state.amenities)
   }
 
   //Fetch Res Gallery Images

@@ -37,7 +37,7 @@ export const fileStorageStatusCardData = [
   {
     UsedSize: "ID Document",
     Type: "Documents",
-    status: "Approved",
+    status: localStorage.getItem('idProgressMsg'),
     FileType: "id-document",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('idProgress'),
@@ -47,7 +47,7 @@ export const fileStorageStatusCardData = [
   {
     UsedSize: "Proof of Residence",
     Type: "Documents",
-    status: "Pending",
+    status: localStorage.getItem('proofOfResProgressMsg'),
     FileType: "proof-of-res",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('proofOfResProgress'),
@@ -57,7 +57,7 @@ export const fileStorageStatusCardData = [
    {
     UsedSize: "Proof of Registration",
     Type: "Documents",
-    status: "Pending",
+    status: localStorage.getItem('proofOfRegProgressMsg'),
     FileType: "proof-of-reg",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('proofOfRegProgress'),
@@ -67,7 +67,7 @@ export const fileStorageStatusCardData = [
    {
     UsedSize: "Next of Kin ID",
     Type: "Documents",
-    status: "No Document",
+    status: localStorage.getItem('nextOfKinProgressMsg'),
     FileType: "next-of-kin",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('nextOfKinProgress'),
