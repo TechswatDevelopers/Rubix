@@ -681,9 +681,12 @@ class ProfileV1Page extends React.Component {
                             this.state.showPad
                               ? <>
                                 <p>If you agree to the above document, please enter your signature:</p>
-                                <div className="border border-primary border-2 w-auto p-3"><SignatureCanvas className="border border-primary border-2 w-100 p-3" penColor='black'
-                                  canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
-                                <button className="btn btn-primary" onClick={() => this.trim()}>
+                                <div className="border border-primary border-2 p-3" style={{
+                                  width: '500px'
+                                }}>
+                                  <SignatureCanvas className="border border-primary border-2 w-20" penColor='black'
+                                  canvasProps={{ width: 490, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
+                                <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
                                   Submit Signature
                                 </button>
                                 <button className="btn btn-default" onClick={this.clear}>
