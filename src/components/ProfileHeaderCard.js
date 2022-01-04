@@ -8,42 +8,33 @@ import Avatar5 from "../assets/images/xs/avatar5.jpg";
 
 class ProfileHeaderCard extends React.Component {
   render() {
-    const { HeaderText, Breadcrumb } = this.props;
+    const { FirstName, SecondName, ProfilePicture, PastEvents, UpcomingEvents} = this.props;
     return (
       <div className="body">
         <div className="text-center">
-          <img src={User} className="rounded-circle m-b-15" alt="" />
+          <img src={ProfilePicture == null ?"user.png" : ProfilePicture} className="rounded-circle m-b-15 " alt="" 
+          style={{
+            height: "150px"
+          }}
+          />
           <div>
             <h4 className="m-b-0">
-              <strong>Alizee</strong> Thomas
+              <strong>{FirstName}</strong> {SecondName}
             </h4>
-            <span>Washington, d.c.</span>
           </div>
-          {/* <div className="progress progress-xs m-b-25 m-t-25">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              aria-valuenow="60"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              style={{ width: "60%" }}
-            >
-              <span className="progress-value">60% Complete</span>
-            </div>
-          </div> */}
 
           <div className="row">
             <div className="col-4">
-              <h6>17</h6>
-              <span>Completed</span>
+              <h6>0</h6>
+              <span>Past Events</span>
             </div>
             <div className="col-4">
-              <h6>34</h6>
-              <span>ToDo</span>
+              <h6>0</h6>
+              <span>Upcoming Events</span>
             </div>
             <div className="col-4">
-              <h6>78</h6>
-              <span>All Tasks</span>
+              <h6>0</h6>
+              <span>Total Events</span>
             </div>
           </div>
         </div>
@@ -55,7 +46,7 @@ class ProfileHeaderCard extends React.Component {
         <span className="badge badge-warning mb-2">Meeting</span>
         <span className="badge badge-danger mb-2">Conference</span>
         <hr />
-        <h6>Team</h6>
+        <h6>The Awesome Company Team</h6>
         <ul className="list-unstyled team-info m-t-20">
           <li>
             <img src={Avatar1} title="Avatar" alt="Avatar" />

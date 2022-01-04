@@ -93,6 +93,8 @@ class PersonalInformation extends React.Component {
     }
     return correct
   }
+
+  
   //final submit check
   Submit(e) {
     e.preventDefault();

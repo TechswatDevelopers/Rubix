@@ -11,10 +11,66 @@ import listPlugin from "@fullcalendar/list";
 import AddEventModal from "../../components/AddEventModal";
 import { events } from "../../Data/AppData";
 import { onPresAddEvent } from "../../actions";
+import axios from "axios";
 
 class AppCalendar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      resDetails: {},
+      resManagerPic: '',
+    }
+  }
   componentDidMount() {
     window.scrollTo(0, 0);
+    this.getResData()
+  }
+
+  //Fetch Res Details
+  getResData(){
+    const pingData = {
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+    };
+    //Ping Request Headers
+    const requestOptions = {
+      title: 'Get residence Details',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: pingData
+    };
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
+      .then(response => {
+        console.log("Res Data:", response.data.PostRubixUserData[0])
+        this.setState({
+          resDetails: response.data.PostRubixUserData[0]
+        })
+
+        this.fetchImages(response.data.PostRubixUserData[0].RubixResidenceID)
+      })
+    }
+    postData()
+  }
+  
+  //Fetch Res Gallery Images
+  fetchImages(resID) {
+    const fetchData = async () => {
+    await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + resID)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Images:", data.post)
+      for(let i = 0; i <= data.post.length - 1; ++i){
+
+       if(data.post[i].FileType == "ResManager"){ 
+        
+        this.setState({
+          resManagerPic: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
+        })
+        }
+      }
+    })
+  }
+  fetchData()
   }
   render() {
     const { isEventModal } = this.props;
@@ -69,7 +125,11 @@ class AppCalendar extends React.Component {
                     </div>
                   </div>
                   <div className="card profile-header">
-                    <ProfileHeaderCard />
+                    <ProfileHeaderCard 
+                    FirstName = {this.state.resDetails.ResidenceManagerName}
+                    SecondName = {this.state.resDetails.ResidenceManagerSurname}
+                    ProfilePicture = {this.state.resManagerPic}
+                    />
                   </div>
                 </div>
               </div>

@@ -254,23 +254,7 @@ async componentDidMount(){
                   </div>
                   
                   <div className="body">
-                    <form id='uniDetails'>{/* 
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Province:
-                            </label>
-                            {  
-        <select className="form-control" onChange={(e)=>this.setState({prov: e.target.value})} value={this.state.prov}>
-        {
-         this.state.provList.map((province, index)=> (
-            <option key={index} name='RegisterUserProvince' value = {province.RubixProvinceID}>{province.Province}</option>
-        ))  
-        }
-        </select> }
-                      </div> */}
-
-                      
+                    <form id='uniDetails'>
                       <div className="form-group">
                         <label className="control-label sr-only" >
                         University:
@@ -288,7 +272,7 @@ async componentDidMount(){
                       
                       <div className="form-group">
                         <label className="control-label sr-only" >
-                        Courses:
+                        Course:
                             </label>
                             <input
                           className="form-control"

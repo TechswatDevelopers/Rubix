@@ -96,7 +96,6 @@ class NextOfKin extends React.Component {
 
 //final submit check
  Submit(e){
-  //const history = useHistory();
   e.preventDefault();
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
@@ -131,7 +130,7 @@ class NextOfKin extends React.Component {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              console.log(response)
+              //console.log(response)
               alert("Registration complete")
               this.props.history.push("/login/" + localStorage.getItem('clientID'))
           })

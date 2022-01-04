@@ -266,7 +266,7 @@ class Dashbord extends React.Component {
                         >
                           <i className="icon-bubbles"></i> Comment
                         </a>
-                        <div>
+                        <div style={{overflow: 'auto', maxHeight: 400}}>
                           <ReactList
                             itemRenderer={this.renderItem}
                           length={this.state.comments.length}

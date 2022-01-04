@@ -104,11 +104,12 @@ class Residence extends React.Component {
           }
         )
         }
-        else (
+        else {
           this.setState({
             resManagerPic: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
           })
-        )
+          localStorage.setItem('reManagerPic', 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename)
+        }
       }
       /* this.setState({
         gallery: data.post
@@ -271,7 +272,7 @@ class Residence extends React.Component {
                             style={{
                               width: "120px",
                               height: "120px",
-                              backgroundColor: "purple",
+                              backgroundColor: "blue",
                               display: 'flex',
                               flexDirection: 'column',
                               justifyContent: 'center',
@@ -292,14 +293,14 @@ class Residence extends React.Component {
                             >{this.state.resCapacity}</h4>
                           </div>
 
-                          <h4 className="margin-0">Beds</h4>
+                          <h4 className="margin-0 pt-3">Beds</h4>
                           
                         </div>
                       </div>
                     </div>
 
                     <div className="col-9">
-                      <div className="card profile-header pt-3">
+                      <div className="card profile-header p-3">
                         <h3 >
                           Residence Amenitis
                         </h3>
