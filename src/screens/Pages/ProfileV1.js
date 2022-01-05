@@ -19,6 +19,7 @@ import {
   areaChartFileReport,
 } from "../../Data/FileManagerData";
 import { Document, Page, pdfjs } from "react-pdf";
+import { set } from "echarts-gl";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -51,6 +52,7 @@ class ProfileV1Page extends React.Component {
       progress: '',
       myLease: '',
       isSigned: false,
+      tabKey: ''
     }
   }
 
@@ -66,9 +68,21 @@ class ProfileV1Page extends React.Component {
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate + myTime })
-    /* console.log("The date is:", myDate)
-    console.log("The time is:", myTime) */
+    
     this.loadDocuments(userID)
+
+    console.log("tab key", localStorage.getItem('Tabkey'))
+    if(localStorage.getItem('tab') == '' || localStorage.getItem('tab') == null){
+      this.setState({
+        tabKey: 'settings'
+      })
+      this.setKey('settings')
+    } else {
+      this.setState({
+        tabKey: localStorage.getItem('tab')
+      })
+      this.setKey(localStorage.getItem('tab'))
+    }
   }
 
   //Fetch All documents from DB
@@ -123,11 +137,7 @@ class ProfileV1Page extends React.Component {
       this.setState({ docUrl: temp2[0].image, myLease: temp2[0].filename })
       this.setState({ showPad: true })
     }
-    /* else {
-      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', userId, 0)
-      //this.setState({ showPad: true })
-      //this.loadDocuments(userId)
-    } */
+    
   }
 
 
@@ -211,10 +221,6 @@ class ProfileV1Page extends React.Component {
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
-    //var file = e.target.files[0]
-    //console.log("selected file is:", file)
-    //this.setState({selectedFile: file})
-    //this.setLoadingPage(5000)
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
@@ -236,11 +242,16 @@ class ProfileV1Page extends React.Component {
         })
     }
     postDocument().then(() => {
+      console.log('Tabkey', currentActiveKey)
+      localStorage.setItem('tab', currentActiveKey)
       alert("Document uploaded successfully")
-      this.loadDocuments(this.state.myUserID)
+      //this.loadDocuments(this.state.myUserID)
       window.location.reload()
+      
+      //this.setKey(currentActiveKey)
       //document.getElementById('uncontrolled-tab-example').defaultActiveKey = currentActiveKey
     })
+      
   }
 
   //When User Presses Cancel on Document Uploading
@@ -401,10 +412,16 @@ class ProfileV1Page extends React.Component {
     }, 700);
   }
 
+  //Set Key
+  setKey(e){
+    this.setState({
+      tabKey: e
+    })
+  }
+
 
   render() {
     let myBody;
-    if (!this.state.isSelected) {
       myBody = <> {this.state.doc != null
         ? <>
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
@@ -425,12 +442,6 @@ class ProfileV1Page extends React.Component {
         </>
       }
       </>
-
-    } else {
-      myBody = <>
-        <p>Loading...</p>
-      </>
-    }
     return (
       <div
         style={{ flex: 1 }}
@@ -466,8 +477,9 @@ class ProfileV1Page extends React.Component {
                 <div className="card">
                   <div className="body">
                     <Tabs
-                      defaultActiveKey="settings"
-                      id="uncontrolled-tab-example"
+                      activeKey={this.state.tabKey}
+                      onSelect={(e) => this.setKey(e)}
+                      id="controlled-tab-example"
                     >
                       <Tab eventKey="settings" title="Personal Information">
                         <ProfileV1Setting />

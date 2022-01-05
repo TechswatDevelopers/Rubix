@@ -256,8 +256,12 @@ class NavbarMenu extends React.Component {
                 <ul className="nav navbar-nav">
                   <li>
                     <a
-                      href="filedocuments"
+                      href="profilev1page"
                       className="icon-menu d-none d-sm-block d-md-none d-lg-block"
+                      onClick={(e)=>{
+                        //e.preventDefault()
+                        localStorage.setItem('tab', 'documents')
+                      }}
                     >
                       <i className="fa fa-folder-open-o"></i>
                     </a>
@@ -568,10 +572,11 @@ class NavbarMenu extends React.Component {
                     <a
                         href="profilev1page"
                         className=""
-                        /* onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("AppContainer");
-                        }} */
+                        onClick={(e)=>{
+                          //e.preventDefault()
+                          localStorage.setItem('tab', 'settings')
+                        }}
+                      
                       >
                         <i className="icon-user"></i> <span>My Profile</span>
                       </a>

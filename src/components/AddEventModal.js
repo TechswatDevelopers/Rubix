@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { onPresAddEvent } from "../actions";
+import { Form } from 'react-bootstrap';
 
 class AddEventModal extends React.Component {
   render() {
@@ -20,8 +21,9 @@ class AddEventModal extends React.Component {
             <div className="modal-body">
               <div className="form-group">
                 <div className="form-line">
+                  <label>Event Start Date</label>
                   <input
-                    type="number"
+                    type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
                   />
@@ -29,6 +31,17 @@ class AddEventModal extends React.Component {
               </div>
               <div className="form-group">
                 <div className="form-line">
+                  <label>Event End Date</label>
+                  <input
+                    type="datetime-local"
+                    className="form-control"
+                    placeholder="Event Date"
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <div className="form-line">
+                <label>Event Name</label>
                   <input
                     type="text"
                     className="form-control"
@@ -38,6 +51,17 @@ class AddEventModal extends React.Component {
               </div>
               <div className="form-group">
                 <div className="form-line">
+                <label>Event Type</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Event Type"
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <div className="form-line">
+                <label>Event Description</label>
                   <textarea
                     className="form-control no-resize"
                     placeholder="Event Description..."

@@ -355,31 +355,15 @@ class Residence extends React.Component {
                           ))
                         }
 
-                       {/*  <div>
-                          <div className="row col-8">
-                            <img className="pl-3" src='icons/fb.png'></img>
-                            <span className="pt-2">Rubix Intake System</span>
-                          </div>
-
-                          <div className="row col-8">
-                            <img className="pl-3" src='icons/insta.png'></img>
-                            <span className="px-0">Rubix Intake System</span>
-                          </div>
-
-                          <div className="row col-8">
-                            <img className="pl-3" src='icons/twitter.png'></img>
-                            <span className="px-0">Rubix Intake System</span>
-                          </div>
-                        </div> */}
-
                       </div>
                     </div>
+
+                    
                   </div>
 
                   <div className="card text-center pt-3">
                     <h2>Our Gallery</h2>
                     <div style={{
-                    
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',

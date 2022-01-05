@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
 import ProfileHeaderCard from "../../components/ProfileHeaderCard";
+import UIModalComponent from "../../components/UIElements/UIModal";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -72,6 +73,25 @@ class AppCalendar extends React.Component {
   }
   fetchData()
   }
+
+  //View Event Information
+  viewEvent = (event) => {
+    //console.log("I am called")
+    alert("I am called")
+    
+    return(
+      <>
+      <div className= "modal fade show" role="dialog">
+      <UIModalComponent
+      title = {events[0].title}
+      bodyText = "Event Description"
+      size = '500px'
+      />
+      </div>
+      </>
+    )
+  }
+
   render() {
     const { isEventModal } = this.props;
     return (
@@ -103,6 +123,11 @@ class AppCalendar extends React.Component {
                           listPlugin,
                         ]}
                         events={events}
+                        eventClick={(event)=> {
+                          this.viewEvent(event)}}
+                        dateClick={() => {
+                          this.props.onPresAddEvent();
+                        }}
                       />
                     </div>
                   </div>

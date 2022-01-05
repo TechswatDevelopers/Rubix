@@ -140,7 +140,7 @@ class Dashbord extends React.Component {
     };
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserLikesGet', data, requestOptions)
-      //console.log("List of likes data",res.data);
+      console.log("List of likes data",res.data);
       const tempLikes = res.data.PostRubixUserData
       if (tempLikes.length == 0 || tempLikes == undefined) {
 
@@ -150,11 +150,17 @@ class Dashbord extends React.Component {
         })
         //Check if post is liked
         const liked = tempLikes.filter(doc => doc.RubixRegisterUserID == localStorage.getItem('userID'))
-        if (liked[0].LikedStatus) {
-          this.setState({
-            liked: true
-          })
+        //Check if liked posts
+        if(liked.length != 0){
+          if ( liked[0].LikedStatus) {
+            this.setState({
+              liked: true
+            })
+          } else {
+  
+          }
         }
+        
         //console.log("Liked: ", liked)
       }
 
@@ -272,15 +278,6 @@ class Dashbord extends React.Component {
                           length={this.state.comments.length}
                           type='uniform'
           />
-
-                          {/* {this.state.comments.map((comment, index) => (
-                            <div>
-
-                              <span><strong>{comment.NameAndSurname}:</strong></span>
-                              <span>   {comment.UserComments}</span>
-
-                            </div>
-                          ))} */}
                         </div>
                         <div className="collapse m-t-10" id="collapseComment">
                           <div className="well">
