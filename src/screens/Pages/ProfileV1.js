@@ -52,7 +52,8 @@ class ProfileV1Page extends React.Component {
       progress: '',
       myLease: '',
       isSigned: false,
-      tabKey: ''
+      tabKey: '',
+      fade: false
     }
   }
 
@@ -70,8 +71,9 @@ class ProfileV1Page extends React.Component {
     this.setState({ dateAndTime: myDate + myTime })
     
     this.loadDocuments(userID)
+    
 
-    console.log("tab key", localStorage.getItem('Tabkey'))
+    //Set tab 
     if(localStorage.getItem('tab') == '' || localStorage.getItem('tab') == null){
       this.setState({
         tabKey: 'settings'
@@ -82,6 +84,11 @@ class ProfileV1Page extends React.Component {
         tabKey: localStorage.getItem('tab')
       })
       this.setKey(localStorage.getItem('tab'))
+    }
+
+    //Set document type
+    if(localStorage.getItem('docType') != null){
+      this.changeDocument(localStorage.getItem('docType'))
     }
   }
 
@@ -97,13 +104,21 @@ class ProfileV1Page extends React.Component {
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
-          //Load initial PDF as ID Document
-          const tempList = data.post.filter(doc => doc.FileType == 'id-document')[0]
+          //Load initial PDF
+          let tempList, currentDoc
+          if(localStorage.getItem('docType') == null){
+            tempList = data.post.filter(doc => doc.FileType == 'id-document')[0]
+            currentDoc = 'id-document'
+          }else {
+            tempList = data.post.filter(doc => doc.FileType == localStorage.getItem('docType'))[0]
+            currentDoc = localStorage.getItem('docType')
+          }
+          
 
           if(tempList != null || tempList != undefined){
             //Set ID Document to initial Document
-          const string = "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == 'id-document')[0].image
-          this.setState({ doc: data.post.filter(doc => doc.FileType == 'id-document')[0] })
+          const string = "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == currentDoc)[0].image
+          this.setState({ doc: data.post.filter(doc => doc.FileType == currentDoc)[0] })
 
           //Convert base64 to file
           const image = this.dataURLtoFile(string, "document.pdf")
@@ -122,6 +137,10 @@ class ProfileV1Page extends React.Component {
 
     };
     fetchData()
+    .then(()=>{
+      this.setDocumentProgress()
+    })
+    
   }
 
   //Check Lease Agreement Doc
@@ -138,20 +157,23 @@ class ProfileV1Page extends React.Component {
       this.setState({ showPad: true })
     }
     
+    
   }
 
 
-  //Switch to different Document
+  //Switch to different Document type
   changeDocument = (file) => {
     this.setLoadingDocumentPage()
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({ isSelected: false })
     this.setState({ selectedFile: null })
-    //console.log("file type", file)
-    //console.log("temp object", temp)
+    
     this.setState({ keyString: file })
+    localStorage.setItem('docType', file)
     this.changeHeading(file)
-    //console.log("current file type", this.state.keyString)
+
+    
+    
     if (temp.length != 0) {
       this.setState({ doc: temp[0] })
     } else {
@@ -242,16 +264,92 @@ class ProfileV1Page extends React.Component {
         })
     }
     postDocument().then(() => {
-      console.log('Tabkey', currentActiveKey)
       localStorage.setItem('tab', currentActiveKey)
       alert("Document uploaded successfully")
-      //this.loadDocuments(this.state.myUserID)
       window.location.reload()
-      
-      //this.setKey(currentActiveKey)
-      //document.getElementById('uncontrolled-tab-example').defaultActiveKey = currentActiveKey
+      this.setDocumentProgress()
     })
       
+  }
+
+   //Set Message according to percentage
+   setMessage(percent) {
+    let message
+    switch (percent) {
+      case 0, '0':
+        message = 'No document uploaded'
+        break
+      case 50, '50':
+        message = 'Pending validation'
+        break
+      case 100, '100':
+        message = 'Approved'
+    }
+    return message
+  }
+
+  
+  //Get user document progress
+  setDocumentProgress() {
+    const data = {
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+    };
+
+    const requestOptions = {
+      title: 'Fetch User Profile Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
+        .then(response => {
+          console.log("document progress", response)
+          const temp = response.data.PostRubixUserData
+          //Set local storage to default values
+          localStorage.setItem('idProgress', 0)
+          localStorage.setItem('proofOfResProgress', 0)
+          localStorage.setItem('proofOfRegProgress', 0)
+          localStorage.setItem('nextOfKinProgress', 0)
+
+          localStorage.setItem('idProgressMsg', 'No document uploaded')
+          localStorage.setItem('proofOfResProgressMsg', 'No document uploaded')
+          localStorage.setItem('proofOfRegProgressMsg', 'No document uploaded')
+          localStorage.setItem('nextOfKinProgressMsg', 'No document uploaded')
+
+
+          for (let i = 1; i <= temp.length - 1; i++) {
+            switch (temp[i].FileType) {
+              case 'id-document': {
+                //console.log('its an ID')
+                localStorage.setItem('idProgress', temp[i].Percentage)
+                localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
+              }
+                break;
+              case "proof-of-res": {
+                //console.log('its a Proof of res')
+                localStorage.setItem('proofOfResProgress', temp[i].Percentage)
+                localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
+              }
+                break;
+              case "proof-of-reg": {
+                //console.log('its a proof of res')
+                localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
+                localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
+              }
+                break;
+              case "next-of-kin": {
+                //console.log('its a next of kin')
+                localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
+                localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
+              }
+            }
+          }
+        })
+
+    }
+    postData()
   }
 
   //When User Presses Cancel on Document Uploading
@@ -301,6 +399,7 @@ class ProfileV1Page extends React.Component {
       this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
+    
   }
 
   //Get user browser information
@@ -414,6 +513,7 @@ class ProfileV1Page extends React.Component {
 
   //Set Key
   setKey(e){
+    localStorage.setItem('tab', e)
     this.setState({
       tabKey: e
     })
@@ -648,7 +748,11 @@ class ProfileV1Page extends React.Component {
                                   {/* <FileStorageCard TotalSize="Storage Used" UsedSize={90} /> */}
                                   {fileStorageStatusCardData.map((data, index) => {
                                     return (
-                                      <div key={index + "sidjpidj"} onClick={() => this.changeDocument(data.FileType)}>
+                                      <div 
+                                      key={index + "sidjpidj"} 
+                                      onClick={() => this.changeDocument(data.FileType)}
+                                      onAnimationEnd={() => this.setState({ fade: false })}
+                                      >
                                         <FileStorageStatusCard
                                           key={index + "sidjpidj"}
                                           TotalSize=''
@@ -694,10 +798,11 @@ class ProfileV1Page extends React.Component {
                               ? <>
                                 <p>If you agree to the above document, please enter your signature:</p>
                                 <div className="border border-primary border-2 p-3" style={{
-                                  width: '500px'
-                                }}>
-                                  <SignatureCanvas className="border border-primary border-2 w-20" penColor='black'
-                                  canvasProps={{ width: 490, height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} /></div>,
+                                  width: '33%'
+                                  }}>
+                                  <SignatureCanvas className="border border-primary border-2" penColor='black'
+                                  canvasProps={{  height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
+                                  </div>
                                 <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
                                   Submit Signature
                                 </button>

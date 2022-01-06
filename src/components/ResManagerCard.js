@@ -35,12 +35,12 @@ class ResManagerCard extends React.Component {
               Res Manager
             </h2>
             
-            <span>
+            {/* <span>
               <strong>Office: </strong>
               {Office}
-            </span>
+            </span> 
 
-            <br></br>
+            <br></br>*/}
            <span>
               <strong>Email: </strong>
               {Email}

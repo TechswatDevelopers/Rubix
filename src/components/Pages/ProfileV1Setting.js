@@ -403,7 +403,7 @@ class ProfileV1Setting extends React.Component {
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
 
           //Set Documents progresses
-          this.setDocumentProgress()
+          //this.setDocumentProgress()
 
 
 

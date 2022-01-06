@@ -205,7 +205,7 @@ class Residence extends React.Component {
 
                     </div>
 
-                    <div className="login-info shadow-sm p-3 mb-5 bg-white rounded">
+                    <div className="login-info shadow-sm p-3 mb-4 bg-white rounded">
                       <h3
                         style={{
                           display: 'flex',
@@ -220,6 +220,51 @@ class Residence extends React.Component {
                   </div>
 
                   <div className="row">
+                    
+
+                    <div className="px-3">
+                      <div className="card profile-header shadow-sm p-3">
+                        <h3 >
+                          Residence Amenitis
+                        </h3>
+                        <div className="row">
+                        {this.state.amenities.map((amenity, index) => (
+                          <>
+                          <div className="col-3">
+                            <img src= {'icons/' + amenity.RubixResidencesAmenitieImageKey}
+                          style={{
+                            width: "70px",
+                            height: "70px"
+                          }}
+                          ></img>
+                          <br></br>
+                            <span>{amenity.RubixResidencesAmenitieDescription}</span>
+                            </div>
+                            </>
+                          ))}
+                          </div>
+                          
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-6">
+                      <div className="card">
+                        <ResManagerCard
+                          Name={this.state.resDetails.ResidenceManagerName}
+                          Surname={this.state.resDetails.ResidenceManagerSurname}
+                          Email={this.state.resDetails.ResidenceManagerEmail}
+                          Office={this.state.resDetails.ResidenceManagerOffice}
+                          Bio={this.state.resDetails.ResidenceManagerShortBio}
+                          Phone={this.state.resDetails.ResidenceManagerPhoneNumber}
+                          ProfilePic={this.state.resManagerPic}
+                        />
+                      </div>
+                    </div>
+
+
                     <div className=" col-3">
                       <div className="card profile-header pt-3">
                           <h3>Occupancy</h3>
@@ -299,49 +344,7 @@ class Residence extends React.Component {
                       </div>
                     </div>
 
-                    <div className="col-9">
-                      <div className="card profile-header p-3">
-                        <h3 >
-                          Residence Amenitis
-                        </h3>
-                        <div className="row">
-                        {this.state.amenities.map((amenity, index) => (
-                          <>
-                          <div className="col-3">
-                            <img src= {'icons/' + amenity.RubixResidencesAmenitieImageKey}
-                          style={{
-                            width: "70px",
-                            height: "70px"
-                          }}
-                          ></img>
-                          <br></br>
-                            <span>{amenity.RubixResidencesAmenitieDescription}</span>
-                            </div>
-                            </>
-                          ))}
-                          </div>
-                          
-                        
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-7">
-                      <div className="card">
-                        <ResManagerCard
-                          Name={this.state.resDetails.ResidenceManagerName}
-                          Surname={this.state.resDetails.ResidenceManagerSurname}
-                          Email={this.state.resDetails.ResidenceManagerEmail}
-                          Office={this.state.resDetails.ResidenceManagerOffice}
-                          Bio={this.state.resDetails.ResidenceManagerShortBio}
-                          Phone={this.state.resDetails.ResidenceManagerPhoneNumber}
-                          ProfilePic={this.state.resManagerPic}
-                        />
-                      </div>
-                    </div>
-
-                    <div className=" col-5">
+                    <div className=" col-3">
                       <div className="card">
                         <div className="header text-center">
                           <h3>Our Socials</h3>
@@ -349,8 +352,13 @@ class Residence extends React.Component {
                         {
                           this.state.socials.map((social, index) =>(
                             <div className="row col-8">
-                            <img className="pl-3 pr-2 pb-2" src={"icons/" + social.ResidenceSocialImage}></img>
-                            <a  className="pt-1" href={social.ResidenceSocialLink}><span>CJ Students</span></a>
+                            <img className="pl-3 pr-2 pb-2" src={"icons/" + social.ResidenceSocialImage}
+                            style={{
+                              height: "30px",
+                              width: "50px"
+                            }}
+                            ></img>
+                            <a  className="" href={social.ResidenceSocialLink}><span>CJ Students</span></a>
                           </div>
                           ))
                         }
