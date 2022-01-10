@@ -27,7 +27,7 @@ class VarsityDetails extends React.Component {
             selectedFile: null,
             bankType: null,
             payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
-            hearAboutUs: ['Where did you hear about us?', 'Social Media', 'Word of Mouth', 'School Campiegn', 'Other'],
+            hearAboutUs: ['Where did you hear about us?', 'Social Media', 'Word of Mouth', 'School Campaign', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             value: 0
 

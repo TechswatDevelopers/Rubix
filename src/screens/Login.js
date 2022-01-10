@@ -22,6 +22,7 @@ constructor(props) {
     isLoad: true,
     currentClientId: '1',
     errorMessage: '',
+    isAdmin: false,
   }
 }
 
@@ -83,6 +84,46 @@ componentDidMount() {
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     this.props.history.push("/dashboard")
+                  } else {
+                    this.props.history.push("/login/" +  this.state.currentClientId)
+                    this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
+                  }
+              })
+          } else{
+              
+              console.log("checkValidity ", document.getElementById('nof').checkValidity())
+          }
+      }
+      postData()
+  }
+//final submit check
+     LoginToAdmin(e){
+      e.preventDefault();
+      const form = document.getElementById('login');
+      const data = {
+      };
+      for (let i=0; i < form.elements.length; i++) {
+          const elem = form.elements[i];
+          data[elem.name] = elem.value
+      }
+  
+      const requestOptions = {
+          title: 'Login Form',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: data
+      };
+      console.log(data)
+      const postData = async() => {
+
+          if (document.getElementById('login').checkValidity() == true){
+              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserLogin', data, requestOptions)
+              .then(response => {
+                  console.log(response)
+                  if(response.data.PostRubixUserData['0']['Response'] == 1){
+                    this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    this.props.history.push("/blankpage")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)
                     this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
@@ -176,6 +217,14 @@ componentDidMount() {
     console.log('client:', this.props.rubixClientLogo)
   }
 
+  //Admin Toggle
+  changeToAdmin(e){
+    e.preventDefault()
+    
+    this.setState({
+      isAdmin: true
+    })
+  }
   
   render() {
     const { navigation } = this.props;
@@ -199,7 +248,7 @@ componentDidMount() {
                   <img src={this.props.rubixClientLogo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Login to your {this.props.rubixClientName} account</p>
+                    <p className="lead">Login to your {this.props.rubixClientName} {this.state.isAdmin ? "Admin" : ''} account</p>
                     </div>
                   <div className="body">
                     <div className="form-auth-small" action="index.html">
@@ -210,7 +259,7 @@ componentDidMount() {
                           id="UserEmail"
                           placeholder="UserEmail"
                           type="email"
-                          name = 'UserEmail'
+                          name = {this.state.isAdmin ? 'AdminUserEmail' :'UserEmail'}
                           required = ''
                         />
                       </div>
@@ -228,9 +277,16 @@ componentDidMount() {
                         />
                       </div>
                       <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
-                      <button onClick = {(e) => this.Submit(e)} className="btn btn-primary btn-lg btn-block" >Login Now</button>
-                      <p className="helper-text m-b-10 bottom">Or Login Using:</p>
+                      <button onClick = {(e) => {this.state.isAdmin ? this.LoginToAdmin(e) :this.Submit(e)}} className="btn btn-primary btn-lg btn-block" >Login Now</button>
 
+                      
+                      <p className="helper-text m-b-10 bottom" style = {{
+                        display: this.state.isAdmin ? 'none' : 'block'
+                      }}>Or Login Using:</p>
+
+                      <div style = {{
+                        display: this.state.isAdmin ? 'none' : 'block'
+                      }}>
                       <GoogleLogin as={Col}
                         render={renderProps => (
                           <button className="btn btn-signin-social" onClick={renderProps.onClick} disabled={renderProps.disabled}><FaGoogle style = {{ color: "#EA4335 ", fontSize: "1.5em", paddingRight: "4px"}}/>Google</button>
@@ -259,6 +315,7 @@ componentDidMount() {
                         >
                           <FaInstagram style = {{ color: "#cd486b", fontSize: "1.5em", paddingRight: "4px"}}/> Instagram
                           </InstagramLogin>
+                          </div>
 
                       <div className="bottom">
                         <span className="helper-text m-b-10">
@@ -269,9 +326,18 @@ componentDidMount() {
                           </a>
                         </span>
                         
-                        <span>
+                        <span style = {{
+                        display: this.state.isAdmin ? 'none' : 'block'
+                      }}>
                           Don't have an account?{" "}
                           <a href="registration" >Register</a>
+                        </span>
+
+                        <span style = {{
+                        display: this.state.isAdmin ? 'none' : 'block'
+                      }}>
+                          For Admins, please log in {" "}
+                          <a href="login" onClick={(e)=> {this.changeToAdmin(e)}} >here.</a>
                         </span>
 
                         {/* <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>

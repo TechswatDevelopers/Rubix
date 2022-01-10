@@ -404,7 +404,6 @@ class ProfileV1Page extends React.Component {
 
   //Get user browser information
   getUserBrowser() {
-
     var browser
     // Opera 8.0+
     var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -521,7 +520,7 @@ class ProfileV1Page extends React.Component {
 
 
   render() {
-    let myBody;
+    let myBody, myLease;
       myBody = <> {this.state.doc != null
         ? <>
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
@@ -542,6 +541,43 @@ class ProfileV1Page extends React.Component {
         </>
       }
       </>
+
+      if(this.state.progress != '80' || this.state.progress != 80){
+        myLease = null
+      } else {
+        myLease = <Tab eventKey="signing" title="Lease Agreement">
+        <div className="w-auto p-3">
+          { !this.state.myLease
+            ? <>
+            <p>Loading document...</p>
+          </>
+          :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
+         </iframe>}
+          
+          {
+            this.state.showPad
+              ? <>
+                <p>If you agree to the above document, please enter your signature:</p>
+                <div className="border border-primary border-2 p-3" style={{
+                  width: '33%'
+                  }}>
+                  <SignatureCanvas className="border border-primary border-2" penColor='black'
+                  canvasProps={{  height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
+                  </div>
+                <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
+                  Submit Signature
+                </button>
+                <button className="btn btn-default" onClick={this.clear}>
+                  Clear
+                </button>
+              </>
+              : null
+          }
+
+        </div>
+
+      </Tab>
+      }
     return (
       <div
         style={{ flex: 1 }}
@@ -784,38 +820,9 @@ class ProfileV1Page extends React.Component {
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="signing" title="Lease Agreement">
-                        <div className="w-auto p-3">
-                          { !this.state.myLease
-                            ? <>
-                            <p>Loading document...</p>
-                          </>
-                          :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
-                         </iframe>}
-                          
-                          {
-                            this.state.showPad
-                              ? <>
-                                <p>If you agree to the above document, please enter your signature:</p>
-                                <div className="border border-primary border-2 p-3" style={{
-                                  width: '33%'
-                                  }}>
-                                  <SignatureCanvas className="border border-primary border-2" penColor='black'
-                                  canvasProps={{  height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
-                                  </div>
-                                <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
-                                  Submit Signature
-                                </button>
-                                <button className="btn btn-default" onClick={this.clear}>
-                                  Clear
-                                </button>
-                              </>
-                              : null
-                          }
 
-                        </div>
 
-                      </Tab>
+{myLease}
                     </Tabs>
                   </div>
                 </div>

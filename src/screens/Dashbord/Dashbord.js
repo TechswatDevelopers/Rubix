@@ -261,7 +261,7 @@ class Dashbord extends React.Component {
                           {this.state.notices.UserMessage}
                         </p>
                         <a onClick={() => { this.postLike(this.state.notices.RubixRegisterUserMessageID) }} className="m-r-20">
-                          <i className="icon-heart"></i> {this.state.liked ? 'Unlike' : 'Like'}
+                          <i className="icon-heart" style={{color: this.state.liked ? 'red' : 'black'}}></i> {this.state.liked ? 'Unlike' : 'Like'}
                         </a>
                         <a
                           role="button"

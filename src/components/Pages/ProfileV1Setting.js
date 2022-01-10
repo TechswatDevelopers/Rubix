@@ -455,6 +455,7 @@ class ProfileV1Setting extends React.Component {
           console.log("document progress", response.data.PostRubixUserData)
           const temp = response.data.PostRubixUserData
           //Set local storage to default values
+          localStorage.setItem('idProgress', 0)
           localStorage.setItem('proofOfResProgress', 0)
           localStorage.setItem('proofOfRegProgress', 0)
           localStorage.setItem('nextOfKinProgress', 0)

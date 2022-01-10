@@ -16,6 +16,7 @@ class NextOfKin extends React.Component {
         myUserID: null,
         userIPAddress: null,
         dateAndTime: null,
+        isLoad: false,
         value: 0
 
     };
@@ -96,6 +97,10 @@ class NextOfKin extends React.Component {
 
 //final submit check
  Submit(e){
+   //Set timer for loading screen
+  this.setState({
+    isLoad: true
+  })
   e.preventDefault();
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
@@ -132,7 +137,8 @@ class NextOfKin extends React.Component {
           .then(response => {
               //console.log(response)
               alert("Registration complete")
-              this.props.history.push("/login/" + localStorage.getItem('clientID'))
+              this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
+              
           })
               
       } else{
@@ -140,7 +146,6 @@ class NextOfKin extends React.Component {
       }
   }
   postData()
-  this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
 }else{
   alert("Please a valid home address")
 }
@@ -148,10 +153,7 @@ class NextOfKin extends React.Component {
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
-    //var file = e.target.files[0]
-    //console.log("selected file is:", file)
-    //this.setState({selectedFile: file})
-    //this.setLoadingPage(5000)
+    
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
@@ -173,7 +175,11 @@ class NextOfKin extends React.Component {
         })
     }
     postDocument().then(() => {
-      alert("Document uploaded successfully")
+      //alert("Document uploaded successfully")
+      this.setState({
+        isLoad: false
+      })
+      this.props.history.push("/login/" + localStorage.getItem('clientID'))
       //window.location.reload()
       //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
     })
@@ -282,12 +288,26 @@ postData()
     this.setState({ dateAndTime: myDate + myTime })
 
   }
+  setLoadingPage(time,) {
+    this.setState({ isLoad: true, })
+    setTimeout(() => {
+      this.setState({
+        isLoad: false,
+      })
+    }, time);
+  }
 
 
   render() {
     //const user = useContext(MyProvider);
     return (
       <div className="theme-purple">
+        <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
+          <div className="loader">
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
+            <p>Registering please wait...</p>
+          </div>
+        </div>
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
