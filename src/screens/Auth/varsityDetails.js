@@ -247,7 +247,7 @@ async componentDidMount(){
               <div className="auth-box">
                 <div className="card">
                 <div className="top">
-                  <img src="CJ-Logo.png" alt="Logo" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                  <img src="CJ-Logo.png" alt="Logo" style={{  height: "40%",  width:"44%",  display: "block", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
                     <p className="lead">Student University Details</p>

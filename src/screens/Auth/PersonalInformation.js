@@ -181,8 +181,7 @@ class PersonalInformation extends React.Component {
                 <div className="card">
                   <div className="top">
                     <img src="CJ-Logo.png" alt="user profile picture" style={{ 
-                      height: "80px", 
-                      margin: "10px", display: "block", margin: "auto" }} />
+                      height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
                     <p className="lead">Student User Details</p>

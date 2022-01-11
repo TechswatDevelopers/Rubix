@@ -195,11 +195,11 @@ componentDidMount() {
   setThemeColor(client){
     switch(client){
       case '1':{
-        this.props.updateClientLogo('CJ-Logo.png')
+        this.props.updateClientLogo('CJ-Logo4.png')
         this.props.updateClientName('CJ Students')
         this.props.onPressThemeColor('orange')
 
-        localStorage.setItem('clientLogo', 'CJ-Logo.png')
+        localStorage.setItem('clientLogo', 'CJ-Logo4.png')
         localStorage.setItem('clientName', 'CJ Students')
         localStorage.setItem('clientTheme', 'orange')
       }
@@ -233,7 +233,7 @@ componentDidMount() {
       <div className={this.props.rubixThemeColor}>
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src={this.props.rubixClientLogo} width="170" height="70" alt="Lucid" /></div>
+            <div className="m-t-30"><img src={this.props.rubixClientLogo} width="20%" height="20%" alt="Lucid" /></div>
             <p>Please wait...</p>
           </div>
         </div>
@@ -245,7 +245,7 @@ componentDidMount() {
                 <form id='login' onSubmit = {(e) => this.Submit(this)}>
                 <div className="card">
                 <div className="top">
-                  <img src={this.props.rubixClientLogo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+                  <img src={this.props.rubixClientLogo} alt="Lucid" style={{ height: "10%",  width:"55%", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
                     <p className="lead">Login to your {this.props.rubixClientName} {this.state.isAdmin ? "Admin" : ''} account</p>

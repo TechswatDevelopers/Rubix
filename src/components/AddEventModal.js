@@ -5,8 +5,31 @@ import { Form } from 'react-bootstrap';
 import axios from "axios";
 
 class AddEventModal extends React.Component {
-  
+    //Initial State
+constructor(props) {
+  super(props)
+  this.state = {
+    startDate: '',
+    endDate: '',
+  }
+}
 
+  //On Date Select
+  handleChange = e =>{
+    const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+    const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
+    const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
+    console.log('Date', myTime)
+    this.setState({startDate: myDate + ' ' + myTime})
+  }
+  //On Date Select
+  handleEndChange = e =>{
+    const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+    const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
+    const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
+    console.log('Date', myTime)
+    this.setState({endDate: myDate + ' ' + myTime})
+  }
   //Post Event to DB:
   postEvent(e, resID) {
     e.preventDefault()
@@ -24,7 +47,9 @@ class AddEventModal extends React.Component {
     //Populate Posting Data
     const data = {
       'RubixResidenceID': resID,
-      'RubixResidenceManagerID': localStorage.getItem('userID')
+      'RubixResidenceManagerID': localStorage.getItem('userID'),
+      'ResidenceEventStartDate': this.state.startDate,
+      'ResidenceEventEndDate': this.state.endDate
     }
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -74,7 +99,8 @@ class AddEventModal extends React.Component {
                     type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
-                    name= "ResidenceEventStartDate"
+                    //name= "ResidenceEventStartDate"
+                    onChange={this.handleChange}
                   />
                 </div>
               </div>
@@ -86,7 +112,8 @@ class AddEventModal extends React.Component {
                     type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
-                    name= "ResidenceEventEndDate"
+                    //name= "ResidenceEventEndDate"
+                    onChange={this.handleEndChange}
                   />
                 </div>
               </div>
