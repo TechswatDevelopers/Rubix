@@ -2,10 +2,56 @@ import React from "react";
 import { connect } from "react-redux";
 import { onPresAddEvent } from "../actions";
 import { Form } from 'react-bootstrap';
+import axios from "axios";
 
 class AddEventModal extends React.Component {
+  
+
+  //Post Event to DB:
+  postEvent(e, resID) {
+    e.preventDefault()
+
+    //Convert Date Information
+    const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+    const startDate = document.getElementById('start').value
+    //const endDate = document.getElementById('end').value.toLocaleDateString('en-ZA', DATE_OPTIONS)
+
+    console.log('Start Date', startDate)
+
+    //Populate form data
+    const form = document.getElementById('add-event');
+  
+    //Populate Posting Data
+    const data = {
+      'RubixResidenceID': resID,
+      'RubixResidenceManagerID': localStorage.getItem('userID')
+    }
+    for (let i = 0; i < form.elements.length; i++) {
+      const elem = form.elements[i];
+      data[elem.name] = elem.value
+    }
+
+    //Post Parameters
+    const requestOptions = {
+      title: 'Add Event Request',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    }
+    console.log("Post info", data)
+
+    //Make Post
+    const postData = async()=>{
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixResidenceEventsAddData', data, requestOptions)
+      .then(response => {
+        console.log("Add Event Response", response)
+      })
+    }
+    postData()
+
+  }
   render() {
-    const { isEventModal } = this.props;
+    const { isEventModal, resID } = this.props;
     return (
       <div
         className={isEventModal ? "modal fade show" : "modal fade"}
@@ -19,13 +65,16 @@ class AddEventModal extends React.Component {
               </h4>
             </div>
             <div className="modal-body">
+              <form id="add-event" onSubmit={(e)=> this.postEvent(e, resID)}>
               <div className="form-group">
                 <div className="form-line">
                   <label>Event Start Date</label>
                   <input
+                    id="start"
                     type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
+                    name= "ResidenceEventStartDate"
                   />
                 </div>
               </div>
@@ -33,9 +82,11 @@ class AddEventModal extends React.Component {
                 <div className="form-line">
                   <label>Event End Date</label>
                   <input
+                    id="end"
                     type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
+                    name= "ResidenceEventEndDate"
                   />
                 </div>
               </div>
@@ -46,6 +97,7 @@ class AddEventModal extends React.Component {
                     type="text"
                     className="form-control"
                     placeholder="Event Title"
+                    name="ResidenceEventName"
                   />
                 </div>
               </div>
@@ -56,6 +108,7 @@ class AddEventModal extends React.Component {
                     type="text"
                     className="form-control"
                     placeholder="Event Type"
+                    name="ResidenceEventTypeID"
                   />
                 </div>
               </div>
@@ -65,12 +118,14 @@ class AddEventModal extends React.Component {
                   <textarea
                     className="form-control no-resize"
                     placeholder="Event Description..."
+                    name="ResidenceEventDescription"
                   ></textarea>
                 </div>
               </div>
+              </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary">
+              <button type="button" className="btn btn-primary" onClick={(e)=> this.postEvent(e, resID)}>
                 Add
               </button>
               <button

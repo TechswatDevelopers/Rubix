@@ -161,7 +161,7 @@ class AppCalendar extends React.Component {
             </div>
           </div>
         </div>
-        <AddEventModal />
+        <AddEventModal resID= {this.state.resDetails.RubixResidenceID}/>
       </div>
     );
   }

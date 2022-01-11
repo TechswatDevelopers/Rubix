@@ -12,7 +12,7 @@ class ProfileHeaderCard extends React.Component {
     return (
       <div className="body">
         <div className="text-center">
-          <img src={ProfilePicture == null ?"user.png" : ProfilePicture} className="rounded-circle m-b-15 " alt="" 
+          <img src={ProfilePicture == null || ProfilePicture == '' ?"user.png" : ProfilePicture} className="rounded-circle m-b-15 " alt="" 
           style={{
             height: "150px"
           }}

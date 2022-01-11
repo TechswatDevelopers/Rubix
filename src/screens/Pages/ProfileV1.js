@@ -344,6 +344,7 @@ class ProfileV1Page extends React.Component {
                 localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
               }
+              
             }
           }
         })

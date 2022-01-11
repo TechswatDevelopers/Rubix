@@ -109,6 +109,7 @@ class Dashbord extends React.Component {
   loadComments(postID) {
     const data = {
       'RubixRegisterUserMessageID': postID,
+      'RubixRegisterUserID': localStorage.getItem('userID')
     }
     const requestOptions = {
       title: 'Get Comments Form',
@@ -119,9 +120,16 @@ class Dashbord extends React.Component {
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsGet', data, requestOptions)
       console.log("List of Comments data", res.data.PostRubixUserData)
-      this.setState({
-        comments: res.data.PostRubixUserData
-      })
+      const tempComments = res.data.PostRubixUserData
+
+      if(tempComments == null || tempComments.length == 0){
+
+      } else {
+        this.setState({
+          comments: res.data.PostRubixUserData
+        })
+      }
+      
       this.getLikes(postID)
     }
     getData()
