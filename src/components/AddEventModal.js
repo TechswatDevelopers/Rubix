@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent } from "../actions";
+import { onPresAddEvent , onPresPopUpEvent} from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -11,6 +11,7 @@ constructor(props) {
   this.state = {
     startDate: '',
     endDate: '',
+    role: localStorage.getItem('role')
   }
 }
 
@@ -30,8 +31,18 @@ constructor(props) {
     console.log('Date', myTime)
     this.setState({endDate: myDate + ' ' + myTime})
   }
+
+
   //Post Event to DB:
   postEvent(e, resID) {
+    if(this.state.role == 'admin'){
+      this.postResEvent(e, resID)
+    } else {
+      this.postStudentEvent(e)
+    }
+  }
+
+  postResEvent(e, resID) {
     e.preventDefault()
 
     //Convert Date Information
@@ -73,8 +84,63 @@ constructor(props) {
       })
     }
     postData()
+    .then(()=>{
+      this.props.onPresAddEvent()
+      window.location.reload()
+    })
 
   }
+
+
+  //Post Event to DB:
+  postStudentEvent(e) {
+    e.preventDefault()
+
+    //Convert Date Information
+    const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+    const startDate = document.getElementById('start').value
+    //const endDate = document.getElementById('end').value.toLocaleDateString('en-ZA', DATE_OPTIONS)
+
+    console.log('Start Date', startDate)
+
+    //Populate form data
+    const form = document.getElementById('add-event');
+  
+    //Populate Posting Data
+    const data = {
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+      'StudentEventStartDate': this.state.startDate,
+      'StudentEventEndDate': this.state.endDate,
+      'StudentEventName': document.getElementById('title').value,
+      'StudentEventTypeID': document.getElementById('type').value,
+      'StudentEventDescription': document.getElementById('desc').value
+    }
+
+    //Post Parameters
+    const requestOptions = {
+      title: 'Add Student Event Request',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    }
+    console.log("Post info", data)
+
+    //Make Post
+    const postData = async()=>{
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentEventsAddData', data, requestOptions)
+      .then(response => {
+        console.log("Add Student Event Response: ", response)
+      })
+    }
+    postData()
+    .then(()=>{
+      this.props.onPresAddEvent()
+      window.location.reload()
+    })
+
+  }
+
+
   render() {
     const { isEventModal, resID } = this.props;
     return (
@@ -121,6 +187,7 @@ constructor(props) {
                 <div className="form-line">
                 <label>Event Name</label>
                   <input
+                  id="title"
                     type="text"
                     className="form-control"
                     placeholder="Event Title"
@@ -132,6 +199,7 @@ constructor(props) {
                 <div className="form-line">
                 <label>Event Type</label>
                   <input
+                  id="type"
                     type="text"
                     className="form-control"
                     placeholder="Event Type"
@@ -143,6 +211,7 @@ constructor(props) {
                 <div className="form-line">
                 <label>Event Description</label>
                   <textarea
+                  id="desc"
                     className="form-control no-resize"
                     placeholder="Event Description..."
                     name="ResidenceEventDescription"

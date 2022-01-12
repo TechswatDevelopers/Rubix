@@ -10,8 +10,9 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import AddEventModal from "../../components/AddEventModal";
+import PopUpModal from "../../components/PopUpModal";
 import { events } from "../../Data/AppData";
-import { onPresAddEvent } from "../../actions";
+import { onPresAddEvent, onPresPopUpEvent } from "../../actions";
 import axios from "axios";
 
 class AppCalendar extends React.Component {
@@ -20,12 +21,86 @@ class AppCalendar extends React.Component {
     this.state = {
       resDetails: {},
       resManagerPic: '',
+      resEvents: [],
+      studentEvents: [],
+      eventBody: '',
+      eventTitle: ''
     }
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+
+    //Get Residence Data
     this.getResData()
   }
+
+  //Get Events
+  getResEvents() {
+    //Post Request Data
+    const data = {
+
+    }
+    const requestOptions = {
+      title: 'Get Residence Events Details',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    }
+
+    //Http Post Request
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixResidenceEventsGetData', data, requestOptions)
+      .then(response => {
+
+        if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
+
+        } else {
+          console.log("Res Events: ", response.data.PostRubixUserData)
+          //Popolate Events List
+          this.populateEvents(response.data.PostRubixUserData)
+        }
+
+        
+    //Get Student Events
+    this.getStudentEvents()
+        
+      })
+    }
+    postData()
+  }
+
+  //Get Events
+  getStudentEvents() {
+    //Post Request Data
+    const data = {
+      'RubixRegisterUserID': localStorage.getItem('userID')
+    }
+    const requestOptions = {
+      title: 'Get Student Events Details',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    }
+
+    //Http Post Request
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentEventsGetData', data, requestOptions)
+      .then(response => {
+
+        if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
+
+        } else {
+          console.log("Student Events: ", response.data.PostRubixUserData)
+          //Popolate Events List
+          this.populateStudentEvents(response.data.PostRubixUserData)
+          
+        }
+        
+      })
+    }
+    postData()
+  }
+
 
   //Fetch Res Details
   getResData(){
@@ -48,6 +123,8 @@ class AppCalendar extends React.Component {
         })
 
         this.fetchImages(response.data.PostRubixUserData[0].RubixResidenceID)
+        //Get Events Data
+    this.getResEvents()
       })
     }
     postData()
@@ -76,20 +153,57 @@ class AppCalendar extends React.Component {
 
   //View Event Information
   viewEvent = (event) => {
-    //console.log("I am called")
-    alert("I am called")
+    console.log("I am called", event.event._def)
+    this.props.onPresPopUpEvent()
     
-    return(
-      <>
-      <div className= "modal fade show" role="dialog">
-      <UIModalComponent
-      title = {events[0].title}
-      bodyText = "Event Description"
-      size = '500px'
-      />
-      </div>
+     this.setState({
+       eventTitle: event.event._def.title,
+       eventBody: <>
+       <p>{event.event._def.extendedProps.desc}</p>
       </>
-    )
+    })
+  }
+
+  //Populate Events List
+  populateEvents(eventsList){
+    let tempEvents = []
+    for( let i = 0; i <= eventsList.length - 1; i++){
+      tempEvents.push(
+       {
+          id: i,
+          title: eventsList[i].ResidenceEventName,
+          start: new Date(eventsList[i].ResidenceEventStartDate),
+          end: new Date(eventsList[i].ResidenceEventEndDate),
+          desc: eventsList[i].ResidenceEventDescription,
+        }
+      )
+    }
+    this.setState({
+      resEvents: tempEvents
+    })
+  }
+
+
+  //Populate Events List
+  populateStudentEvents(eventsList){
+    let tempEvents = []
+    for( let i = 0; i <= eventsList.length - 1; i++){
+      tempEvents.push(
+       {
+          id: i,
+          title: eventsList[i].StudentEventName,
+          start: new Date(eventsList[i].StudentEventStartDate),
+          end: new Date(eventsList[i].StudentEventEndDate),
+          desc: eventsList[i].StudentEventDescription,
+        }
+      )
+
+    }
+    const temp2 = this.state.resEvents.concat(tempEvents)
+    console.log('Joint string', temp2)
+    this.setState({
+      resEvents: temp2
+    })
   }
 
   render() {
@@ -122,7 +236,7 @@ class AppCalendar extends React.Component {
                           interactionPlugin,
                           listPlugin,
                         ]}
-                        events={events}
+                        events={this.state.resEvents}
                         eventClick={(event)=> {
                           this.viewEvent(event)}}
                         dateClick={() => {
@@ -162,6 +276,10 @@ class AppCalendar extends React.Component {
           </div>
         </div>
         <AddEventModal resID= {this.state.resDetails.RubixResidenceID}/>
+        <PopUpModal 
+        Title= {this.state.eventTitle}
+        Body = {this.state.eventBody}
+        />
       </div>
     );
   }
@@ -169,6 +287,7 @@ class AppCalendar extends React.Component {
 
 const mapStateToProps = ({ mailInboxReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
+  isPopUpModal: mailInboxReducer.isPopUpModal,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent })(AppCalendar);
+export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent })(AppCalendar);

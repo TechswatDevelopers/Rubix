@@ -4,6 +4,7 @@ import {
   ON_PRESS_COMPOSE,
   ON_PRESS_ADD_EVENT,
   ON_PRESS_ADD_CONTACT,
+  ON_PRESS_POP_UP_EVENT,
 } from "../actions/MailInboxAction";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   isMoreDropDown: false,
   isInbox: true,
   isEventModal: false,
+  isPopUpModal: false,
   isContactModal: false,
 };
 
@@ -43,6 +45,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isEventModal: !state.isEventModal,
+      };
+    }
+
+    case ON_PRESS_POP_UP_EVENT: {
+      return {
+        ...state,
+        isPopUpModal: !state.isPopUpModal,
       };
     }
 

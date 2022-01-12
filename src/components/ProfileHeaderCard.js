@@ -39,12 +39,9 @@ class ProfileHeaderCard extends React.Component {
           </div>
         </div>
         <hr />
-        <span className="badge badge-default mb-2">Marketing</span>
-        <span className="badge badge-primary mb-2">Design Task</span>
-        <span className="badge badge-success mb-2">Development</span>
-        <span className="badge badge-info mb-2">Finance</span>
-        <span className="badge badge-warning mb-2">Meeting</span>
-        <span className="badge badge-danger mb-2">Conference</span>
+        <span className="badge badge-info mb-2">Student Induction</span>
+        <span className="badge badge-primary mb-2">Student Life Event</span>
+        <span className="badge badge-success mb-2">Student Wellness</span>
         <hr />
         <h6>The Awesome Company Team</h6>
         <ul className="list-unstyled team-info m-t-20">

@@ -83,6 +83,7 @@ componentDidMount() {
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    localStorage.setItem('role','student')
                     this.props.history.push("/dashboard")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)
@@ -123,6 +124,7 @@ componentDidMount() {
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    localStorage.setItem('role','admin')
                     this.props.history.push("/blankpage")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)
@@ -156,6 +158,7 @@ componentDidMount() {
         if(response.data.PostRubixUserData['0']['Response'] == 1){
           this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
           localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+          localStorage.setItem('role','student')
           this.props.history.push("/dashboard")
         } else {
           this.props.history.push("/logInformation")
