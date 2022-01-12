@@ -11,8 +11,30 @@ constructor(props) {
   this.state = {
     startDate: '',
     endDate: '',
-    role: localStorage.getItem('role')
+    role: localStorage.getItem('role'),
+    eventTypes: [],
+    eventType: null
   }
+}
+
+componentDidMount() {
+  window.scrollTo(0, 0);
+
+  //Get Events Type Data
+  this.getEventsData()
+}
+
+//Get Events Types List
+getEventsData() {
+  const fetchData = async() =>{
+    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixEventTypess')
+        .then(response => response.json())
+        .then(data => {
+            //console.log("data is ", data.data)
+            this.setState({eventTypes: data.data})
+            });
+  }
+  fetchData()
 }
 
   //On Date Select
@@ -112,8 +134,8 @@ constructor(props) {
       'StudentEventStartDate': this.state.startDate,
       'StudentEventEndDate': this.state.endDate,
       'StudentEventName': document.getElementById('title').value,
-      'StudentEventTypeID': document.getElementById('type').value,
-      'StudentEventDescription': document.getElementById('desc').value
+      'StudentEventDescription': document.getElementById('desc').value,
+      'ResidenceEventTypeID': this.state.eventType
     }
 
     //Post Parameters
@@ -132,11 +154,16 @@ constructor(props) {
         console.log("Add Student Event Response: ", response)
       })
     }
-    postData()
-    .then(()=>{
-      this.props.onPresAddEvent()
-      window.location.reload()
-    })
+    if(this.state.eventType == null || this.state.startDate == null || this.state.startDate == '' || this.state.endDate == '' || this.state.endDate == null  || document.getElementById('title').value == '' || document.getElementById('title').value == null  || document.getElementById('desc').value.value == '' ||document.getElementById('desc').value.value == null){
+      alert("Please Fill Out All the information")
+    } else {
+      postData()
+      .then(()=>{
+        this.props.onPresAddEvent()
+        window.location.reload()
+      })
+    }
+    
 
   }
 
@@ -161,6 +188,7 @@ constructor(props) {
                 <div className="form-line">
                   <label>Event Start Date</label>
                   <input
+                    required
                     id="start"
                     type="datetime-local"
                     className="form-control"
@@ -174,6 +202,7 @@ constructor(props) {
                 <div className="form-line">
                   <label>Event End Date</label>
                   <input
+                    required
                     id="end"
                     type="datetime-local"
                     className="form-control"
@@ -187,6 +216,7 @@ constructor(props) {
                 <div className="form-line">
                 <label>Event Name</label>
                   <input
+                    required
                   id="title"
                     type="text"
                     className="form-control"
@@ -198,19 +228,22 @@ constructor(props) {
               <div className="form-group">
                 <div className="form-line">
                 <label>Event Type</label>
-                  <input
-                  id="type"
-                    type="text"
-                    className="form-control"
-                    placeholder="Event Type"
-                    name="ResidenceEventTypeID"
-                  />
+
+                <select className="form-control" onChange={(e)=>this.setState({eventType: e.target.value})} value={this.state.eventType}>
+        {
+            
+         this.state.eventTypes.map((event, index)=> (
+            <option key={index} name='ResidenceEventTypeID' value = {event.RubixResidenceEventTypeID}>{event.ResidenceEventTypeDescription}</option>
+        ))   
+        }
+    </select>
                 </div>
               </div>
               <div className="form-group">
                 <div className="form-line">
                 <label>Event Description</label>
                   <textarea
+                    required
                   id="desc"
                     className="form-control no-resize"
                     placeholder="Event Description..."
