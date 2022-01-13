@@ -275,27 +275,21 @@ class NavbarMenu extends React.Component {
                     </a>
                   </li>
                   <li
-                    className={
-                      toggleNotification ? "show dropdown" : "dropdown"
-                    }
+                    className=''
                   >
                     <a
-                      href="#!"
-                      className="dropdown-toggle icon-menu"
-                      data-toggle="dropdown"
-                      onClick={(e) => {
+                      href="dashboard"
+                      className=" icon-menu"
+                      //data-toggle="dropdown"
+                     /*  onClick={(e) => {
                         e.preventDefault();
                         this.props.onPressNotification();
-                      }}
+                      }} */
                     >
                       <i className="icon-bell"></i>
-                      <span className="notification-dot"></span>
                     </a>
                     <ul
-                      className={
-                        toggleNotification
-                          ? "dropdown-menu notifications show"
-                          : "dropdown-menu notifications"
+                      className={"dropdown-menu notifications"
                       }
                     >
                       <li className="header">

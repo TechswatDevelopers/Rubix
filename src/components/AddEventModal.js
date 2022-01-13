@@ -135,7 +135,7 @@ getEventsData() {
       'StudentEventEndDate': this.state.endDate,
       'StudentEventName': document.getElementById('title').value,
       'StudentEventDescription': document.getElementById('desc').value,
-      'ResidenceEventTypeID': this.state.eventType
+      'StudentEventTypeID': this.state.eventType
     }
 
     //Post Parameters
