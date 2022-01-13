@@ -24,7 +24,10 @@ class AppCalendar extends React.Component {
       resEvents: [],
       studentEvents: [],
       eventBody: '',
-      eventTitle: ''
+      eventTitle: '',
+      totalResEvents: '',
+      upcomingResEvents: '',
+      chosenDate: null
     }
   }
   componentDidMount() {
@@ -58,6 +61,10 @@ class AppCalendar extends React.Component {
           console.log("Res Events: ", response.data.PostRubixUserData)
           //Popolate Events List
           this.populateEvents(response.data.PostRubixUserData)
+          this.setState({
+            totalResEvents: response.data.PostRubixUserData[0].TotalEvents,
+            upcomingResEvents: response.data.PostRubixUserData[0].UpcomingEvents
+          })
         }
 
         
@@ -93,6 +100,8 @@ class AppCalendar extends React.Component {
           console.log("Student Events: ", response.data.PostRubixUserData)
           //Popolate Events List
           this.populateStudentEvents(response.data.PostRubixUserData)
+          //Set events count
+          
           
         }
         
@@ -151,15 +160,32 @@ class AppCalendar extends React.Component {
   fetchData()
   }
 
+    //Convert Date and time
+    getDateFormated(date){
+      let newdate
+      const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+    const myDate = new Date(date).toISOString().replace(/T.*/,'').split('-').join('-')
+    const myTime = new Date(date).toLocaleTimeString('en-ZA')
+      newdate = {
+        date: myDate,
+        time: myTime
+      }
+      console.log("date", date)
+      return newdate
+    }
   //View Event Information
   viewEvent = (event) => {
-    console.log("I am called", event.event._def)
+    console.log("I am called", event.event._instance.range.start)
+    //Get date and time
+    let start = this.getDateFormated(event.event._instance.range.start)
+    let end = this.getDateFormated(event.event._instance.range.end)
     this.props.onPresPopUpEvent()
-    
      this.setState({
        eventTitle: event.event._def.title,
        eventBody: <>
-       <p>{event.event._def.extendedProps.desc}</p>
+       <p><strong>About Event: </strong>{event.event._def.extendedProps.desc}</p>
+       <span><strong>Start Date: </strong>{start.date} at {start.time}</span><br></br>
+       <span><strong>End Date: </strong>{end.date} at {end.time}</span>
       </>
     })
   }
@@ -239,7 +265,10 @@ class AppCalendar extends React.Component {
                         events={this.state.resEvents}
                         eventClick={(event)=> {
                           this.viewEvent(event)}}
-                        dateClick={() => {
+                        dateClick={(e) => {
+                          this.setState({
+                            chosenDate: e
+                          })
                           this.props.onPresAddEvent();
                         }}
                       />
@@ -268,6 +297,8 @@ class AppCalendar extends React.Component {
                     FirstName = {this.state.resDetails.ResidenceManagerName}
                     SecondName = {this.state.resDetails.ResidenceManagerSurname}
                     ProfilePicture = {this.state.resManagerPic}
+                    TotalEvents = {this.state.totalResEvents}
+                    UpcomingEvents = {this.state.upcomingResEvents}
                     />
                   </div>
                 </div>
@@ -275,7 +306,10 @@ class AppCalendar extends React.Component {
             </div>
           </div>
         </div>
-        <AddEventModal resID= {this.state.resDetails.RubixResidenceID}/>
+        <AddEventModal 
+        resID= {this.state.resDetails.RubixResidenceID}
+        StartDate= {this.state.chosenDate}
+        />
         <PopUpModal 
         Title= {this.state.eventTitle}
         Body = {this.state.eventBody}

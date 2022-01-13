@@ -154,7 +154,7 @@ getEventsData() {
         console.log("Add Student Event Response: ", response)
       })
     }
-    if(this.state.eventType == null || this.state.startDate == null || this.state.startDate == '' || this.state.endDate == '' || this.state.endDate == null  || document.getElementById('title').value == '' || document.getElementById('title').value == null  || document.getElementById('desc').value.value == '' ||document.getElementById('desc').value.value == null){
+    if(this.state.eventType == null || this.state.startDate == null || this.state.startDate == '' || this.state.endDate == '' || this.state.endDate == null  || document.getElementById('title').value == '' || document.getElementById('title').value == null  || document.getElementById('desc').value == '' ||document.getElementById('desc').value == null){
       alert("Please Fill Out All the information")
     } else {
       postData()
@@ -169,7 +169,7 @@ getEventsData() {
 
 
   render() {
-    const { isEventModal, resID } = this.props;
+    const { isEventModal, resID, StartDate } = this.props;
     return (
       <div
         className={isEventModal ? "modal fade show" : "modal fade"}
@@ -193,6 +193,7 @@ getEventsData() {
                     type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
+                    value={StartDate}
                     //name= "ResidenceEventStartDate"
                     onChange={this.handleChange}
                   />

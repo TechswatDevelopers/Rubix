@@ -8,7 +8,7 @@ import Avatar5 from "../assets/images/xs/avatar5.jpg";
 
 class ProfileHeaderCard extends React.Component {
   render() {
-    const { FirstName, SecondName, ProfilePicture, PastEvents, UpcomingEvents} = this.props;
+    const { FirstName, SecondName, ProfilePicture, PastEvents, UpcomingEvents, TotalEvents} = this.props;
     return (
       <div className="body">
         <div className="text-center">
@@ -29,11 +29,11 @@ class ProfileHeaderCard extends React.Component {
               <span>Past Events</span>
             </div>
             <div className="col-4">
-              <h6>0</h6>
+              <h6>{UpcomingEvents}</h6>
               <span>Upcoming Events</span>
             </div>
             <div className="col-4">
-              <h6>0</h6>
+              <h6>{TotalEvents}</h6>
               <span>Total Events</span>
             </div>
           </div>
@@ -43,7 +43,7 @@ class ProfileHeaderCard extends React.Component {
         <span className="badge badge-primary mb-2">Student Life Event</span>
         <span className="badge badge-success mb-2">Student Wellness</span>
         <hr />
-        <h6>The Awesome Company Team</h6>
+        {/* <h6>The Awesome Company Team</h6>
         <ul className="list-unstyled team-info m-t-20">
           <li>
             <img src={Avatar1} title="Avatar" alt="Avatar" />
@@ -60,7 +60,7 @@ class ProfileHeaderCard extends React.Component {
           <li>
             <img src={Avatar5} title="Avatar" alt="Avatar" />
           </li>
-        </ul>
+        </ul> */}
       </div>
     );
   }

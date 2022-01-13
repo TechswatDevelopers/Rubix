@@ -87,7 +87,7 @@ componentDidMount() {
                     this.props.history.push("/dashboard")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)
-                    this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
+                    this.setState({errorMessage: response.data.PostRubixUserData['0'].Message})
                   }
               })
           } else{
