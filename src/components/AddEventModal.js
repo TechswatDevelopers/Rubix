@@ -193,7 +193,6 @@ getEventsData() {
                     type="datetime-local"
                     className="form-control"
                     placeholder="Event Date"
-                    value={StartDate}
                     //name= "ResidenceEventStartDate"
                     onChange={this.handleChange}
                   />
