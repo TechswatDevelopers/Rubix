@@ -55,7 +55,10 @@ class ProfileV1Page extends React.Component {
       myLease: '',
       isSigned: false,
       tabKey: '',
-      fade: false
+      fade: false,
+      title: '',
+      popMessage: '',
+      myFunction: null
     }
   }
 
@@ -273,6 +276,7 @@ class ProfileV1Page extends React.Component {
       this.setState({
         isLoad: false
       })
+      
       this.props.onPresPopUpEvent()
       
     })
@@ -369,10 +373,15 @@ class ProfileV1Page extends React.Component {
   //Handle File Selection input
   changeHandler(event) {
     this.setState({ selectedFile: event.target.files[0] })
-    console.log("selcted file1", event.target.files[0])
-    this.onPressUpload(event.target.files[0], this.state.keyString, 'documents')
-    this.setState({ isSelected: true })
-    this.getBase64(event)
+    console.log("selcted file1", event.target.files[0].type)
+    if(event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg' || event.target.files[0].type == 'application/pdf'){
+      this.onPressUpload(event.target.files[0], this.state.keyString, 'documents')
+      this.setState({ isSelected: true })
+      this.getBase64(event)
+    } else {
+      alert("Please select proper file")
+    }
+    
   }
   handleUpdate(e) {
     const inputFile = document.getElementById('upload-button')
