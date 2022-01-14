@@ -14,7 +14,7 @@ constructor(props) {
 }
 
   render() {
-    const { isPopUpModal, Title, Body } = this.props;
+    const { isPopUpModal, Title, Body, Function} = this.props;
     return (
       <div
         className={isPopUpModal ? "modal fade show" : "modal fade"}
@@ -34,8 +34,9 @@ constructor(props) {
               
               <button
                 type="button"
-                onClick={() => {
+                onClick={(e) => {
                   this.props.onPresPopUpEvent();
+                  Function()
                 }}
                 className="btn btn-simple"
                 data-dismiss="modal"

@@ -5,6 +5,8 @@ import axios from "axios";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import {onPresPopUpEvent} from "../../actions";
+import PopUpModal from "../../components/PopUpModal"
 
 class NextOfKin extends React.Component {
   constructor(props) {
@@ -136,7 +138,7 @@ class NextOfKin extends React.Component {
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               //console.log(response)
-              alert("Registration complete")
+              //alert("Registration complete")
               this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
               
           })
@@ -179,7 +181,15 @@ class NextOfKin extends React.Component {
       this.setState({
         isLoad: false
       })
-      this.props.history.push("/login/" + localStorage.getItem('clientID'))
+      this.props.onPresPopUpEvent()
+      
+      
+      
+      /* setTimeout(() => {
+        
+        this.props.history.push("/login/" + localStorage.getItem('clientID'))
+      }, 5000); */
+      
       //window.location.reload()
       //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
     })
@@ -302,6 +312,12 @@ postData()
     //const user = useContext(MyProvider);
     return (
       <div className="theme-purple">
+        
+        <PopUpModal 
+        Title= "Registration Complete!"
+        Body = "Thank you for registering with Us. We have sent you an email to verify your account, please check your emails."
+        Function ={()=>this.props.history.push("/login/" + localStorage.getItem('clientID'))}
+        />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
@@ -436,11 +452,14 @@ placeholder: "Enter next of kin address"
 NextOfKin.propTypes = {
 };
 
-const mapStateToProps = ({ navigationReducer,  loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer,  loginReducer, mailInboxReducer }) => ({
   rubixStudentIDNo: navigationReducer.studentIDNo,
   rubixUserID: navigationReducer.userID,
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+  isPopUpModal: mailInboxReducer.isPopUpModal,
 });
 
-export default connect(mapStateToProps, {})(NextOfKin);
+export default connect(mapStateToProps, {
+  onPresPopUpEvent,
+})(NextOfKin);

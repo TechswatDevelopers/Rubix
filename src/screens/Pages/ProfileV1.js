@@ -544,9 +544,6 @@ class ProfileV1Page extends React.Component {
       }
       </>
 
-      if(this.state.progress != '80' || this.state.progress != 80){
-        myLease = null
-      } else {
         myLease = <Tab eventKey="signing" title="Lease Agreement">
         <div className="w-auto p-3">
           { !this.state.myLease
@@ -561,7 +558,7 @@ class ProfileV1Page extends React.Component {
               ? <>
                 <p>If you agree to the above document, please enter your signature:</p>
                 <div className="border border-primary border-2 p-3" style={{
-                  width: '33%'
+                  width: '40%'
                   }}>
                   <SignatureCanvas className="border border-primary border-2" penColor='black'
                   canvasProps={{  height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
@@ -579,7 +576,6 @@ class ProfileV1Page extends React.Component {
         </div>
 
       </Tab>
-      }
     return (
       <div
         style={{ flex: 1 }}
