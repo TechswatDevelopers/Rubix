@@ -55,6 +55,7 @@ export default (state = initialState, action) => {
       };
     }
 
+
     case ON_PRESS_ADD_CONTACT: {
       return {
         ...state,

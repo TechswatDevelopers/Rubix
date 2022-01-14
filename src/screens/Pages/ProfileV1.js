@@ -49,7 +49,7 @@ class ProfileV1Page extends React.Component {
       dateAndTime: null,
       testDoc: {},
       numPages: null,
-      progress: '',
+      progress: this.props.studentProgress,
       myLease: '',
       isSigned: false,
       tabKey: '',
@@ -62,7 +62,7 @@ class ProfileV1Page extends React.Component {
     const userID = localStorage.getItem('userID');
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
-    this.setState({ progress: userProgress });
+    //this.setState({ progress: userProgress });
     this.getUserBrowser()
     this.getUserWitnessData()
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
@@ -839,6 +839,7 @@ class ProfileV1Page extends React.Component {
 const mapStateToProps = ({ navigationReducer, ioTReducer }) => ({
   rubixUserID: navigationReducer.userID,
   isSecuritySystem: ioTReducer.isSecuritySystem,
+  studentProgress: navigationReducer.progressBar
 });
 
 export default connect(mapStateToProps, {})(ProfileV1Page);

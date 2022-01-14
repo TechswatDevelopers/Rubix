@@ -35,6 +35,7 @@ export const onPresPopUpEvent = () => (dispatch) => {
   });
 };
 
+
 export const onPressAddContact = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_ADD_CONTACT,

@@ -10,6 +10,7 @@ class ForgotPasswordPage extends React.Component {
   resetPassword(e){
     e.preventDefault();
     const form = document.getElementById('forgot-pass');
+    
     const data = {
       'UID': this.props.match.params.uid,
     };
@@ -19,11 +20,17 @@ class ForgotPasswordPage extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
     };
+    for (let i = 0; i < form.elements.length; i++) {
+      const elem = form.elements[i];
+      data[elem.name] = elem.value
+    }
     console.log(data)
     const postData = async() => {
-              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateForgetPasswordEmail', data, requestOptions)
+              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateForgetPassword', data, requestOptions)
             .then(response => {
                 console.log(response)
+                //Go to login screen
+                this.props.history.push("/login/" + localStorage.getItem('clientID'))
                 //alert(response.data.PostRubixUserData[0].ResponceMessage)
             })
     }

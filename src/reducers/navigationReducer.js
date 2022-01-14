@@ -16,6 +16,7 @@ import {
   UPDATE_CLIENTNAME,
   UPDATE_CLIENTLOGO,
   UPDATE_STUDENTID,
+  ON_UPDATE_PROGRESS_BAR,
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
   clientName: "",
   clientLogo: "",
   studentIDNo: null,
+  progressBar: '',
   addClassactive: [
     false,
     false,
@@ -466,6 +468,13 @@ export default (state = initialState, action) => {
         ...state,
         clientID: action.payload,
       }
+    }
+    
+    case ON_UPDATE_PROGRESS_BAR: {
+      return {
+        ...state,
+        progressBar: action.payload,
+      };
     }
     
     case UPDATE_CLIENTNAME: {

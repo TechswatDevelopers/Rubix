@@ -4,6 +4,7 @@ import imageuser from "../../assets/images/user.png";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
+import {onUpdateProgressBar} from '../../actions/NavigationAction';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
@@ -401,6 +402,7 @@ class ProfileV1Setting extends React.Component {
           this.setState({ myProfile: response.data.PostRubixUserData[0] })
 
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
+          this.props.onUpdateProgressBar(response.data.PostRubixUserData[1].InfoCount)
 
           //Set Documents progresses
           //this.setDocumentProgress()
@@ -1190,6 +1192,9 @@ class ProfileV1Setting extends React.Component {
 
 const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   rubixUserID: navigationReducer.userID,
+  studentProgress: navigationReducer.progressBar
 });
 
-export default connect(mapStateToProps, {})(ProfileV1Setting);
+export default connect(mapStateToProps, {
+  onUpdateProgressBar,
+})(ProfileV1Setting);
