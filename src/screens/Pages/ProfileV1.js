@@ -62,6 +62,7 @@ class ProfileV1Page extends React.Component {
     const userID = localStorage.getItem('userID');
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
+    console.log("Student Progress: ", this.props.studentProgress)
     //this.setState({ progress: userProgress });
     this.getUserBrowser()
     this.getUserWitnessData()
@@ -603,11 +604,11 @@ class ProfileV1Page extends React.Component {
             />
             <div
               className="progress-bar bg-success progress-bar-striped"
-              data-transitiongoal={this.state.progress}
-              aria-valuenow={this.state.progress}
-              style={{ width: this.state.progress + `%` }}
+              data-transitiongoal={this.props.studentProgress}
+              aria-valuenow={this.props.studentProgress}
+              style={{ width: this.props.studentProgress + `%` }}
             >
-              Profile is {this.state.progress}% complete
+              Profile is {this.props.studentProgress}% complete
             </div>
             <div className="row clearfix">
               <div className="col-lg-12">

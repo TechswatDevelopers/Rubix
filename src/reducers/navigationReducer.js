@@ -27,7 +27,7 @@ const initialState = {
   clientName: "",
   clientLogo: "",
   studentIDNo: null,
-  progressBar: '',
+  progressBar: 0,
   addClassactive: [
     false,
     false,
