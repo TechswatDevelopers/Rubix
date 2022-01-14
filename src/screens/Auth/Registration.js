@@ -11,9 +11,18 @@ import {Grid, Row, Col, Button} from "react-bootstrap";
 import MContext from "../../App";
 import MyProvider from "../../App";
 import navigationReducer from "../../reducers/navigationReducer";
-import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateClientID } from "../../actions";
+import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateClientID, onPresPopUpEvent } from "../../actions";
+import PopUpModal from "../../components/PopUpModal"
 
 class Registration extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: '',
+      popMessage: '',
+      myFunction: null,
+    }
+  }
     //Google response for testing
  responseGoogle = (response) => {
   localStorage.setItem('platformID', "2")
@@ -82,8 +91,11 @@ class Registration extends React.Component {
                   localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
                   this.props.history.push("/logInformation")
                  } else {
-                  console.log('User Already Exists')
-                  alert('User Already Exists')
+                  this.setState({
+                    title: "Error",
+                    popMessage: 'User Already Exists',
+                  })
+                  this.props.onPresPopUpEvent()
                  }
             })
       }
@@ -100,8 +112,11 @@ class Registration extends React.Component {
                   localStorage.setItem('platformID', "1")
                  this.props.history.push("/logInformation")
                  } else{
-               console.log('Email validation failed')
-               alert('Invalid email, please enter a valid email address')
+                  this.setState({
+                    title: "Email validation failed",
+                    popMessage: 'Invalid email, please enter a valid email address',
+                  })
+                  this.props.onPresPopUpEvent()
                  }
             })
           }
@@ -120,6 +135,11 @@ class Registration extends React.Component {
     return (
       <div className={this.props.rubixThemeColor}>
         <div >
+        <PopUpModal 
+        Title= {this.state.title}
+        Body = {this.state.popMessage}
+        Function = {()=>this.state.myFunction}
+        />
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
@@ -212,13 +232,14 @@ class Registration extends React.Component {
 
  Registration.propTypes = {
 };
-const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer, loginReducer, mailInboxReducer }) => ({
   rubixUserID: navigationReducer.userID,
   rubixPlatformID: navigationReducer.rubixPlatformID,
   email: loginReducer.email,
   password: loginReducer.password,
   rubixClientID: navigationReducer.clientID,
-  rubixThemeColor: navigationReducer.themeColor
+  rubixThemeColor: navigationReducer.themeColor,
+  isPopUpModal: mailInboxReducer.isPopUpModal,
 });
 
 export default connect(mapStateToProps, {
@@ -226,4 +247,5 @@ export default connect(mapStateToProps, {
   updatePlatformID,
   updatePassword,
   updateEmail,
+  onPresPopUpEvent
 })(Registration);

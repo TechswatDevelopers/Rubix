@@ -3,8 +3,19 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
 import axios from "axios";
+import {onPresPopUpEvent} from "../../actions";
+import PopUpModal from "../../components/PopUpModal"
 
 class ForgotPasswordPage extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: '',
+      popMessage: '',
+      myFunction: null,
+    }
+  }
+
   
   //Reset Password
   resetPassword(e){
@@ -30,7 +41,12 @@ class ForgotPasswordPage extends React.Component {
             .then(response => {
                 console.log(response)
                 //Go to login screen
-                this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                this.setState({
+                  title: "Password Reset",
+                  popMessage: response.data.PostRubixUserData[0].ResponceMessage,
+                  myFunction: this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                })
+                this.props.onPresPopUpEvent()
                 //alert(response.data.PostRubixUserData[0].ResponceMessage)
             })
     }
@@ -42,13 +58,18 @@ class ForgotPasswordPage extends React.Component {
     return (
       <div className={this.props.rubixThemeColor}>
         <div >
+        <PopUpModal 
+        Title= {this.state.title}
+        Body = {this.state.popMessage}
+        Function = {()=>this.props.history.push("/login/" + localStorage.getItem('clientID'))}
+        />
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
                 <div className="card">
                   <div className="header">
                 <div className="top">
-                  <img src={this.props.rubixClientLogo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+                  <img src={'CJ-Logo4.png'} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
                 </div>
                     <p className="lead">Password Reset</p>
                   </div>
@@ -76,11 +97,13 @@ class ForgotPasswordPage extends React.Component {
 ForgotPasswordPage.propTypes = {
 };
 
-const mapStateToProps = ({ navigationReducer }) => ({
+const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   rubixThemeColor: navigationReducer.themeColor,
   rubixClientName: navigationReducer.clientName,
   rubixClientLogo: navigationReducer.clientLogo,
+  isPopUpModal: mailInboxReducer.isPopUpModal,
 });
 
 export default connect(mapStateToProps, {
+  onPresPopUpEvent
 })(ForgotPasswordPage);

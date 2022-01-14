@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
 import axios from "axios";
 import { updateEmail, updatePassword,onLoggedin, updateUserID, 
-  updateClientID,onPressThemeColor,updateClientName, updateClientLogo } from "../../actions";
+  updateClientID,onPressThemeColor,updateClientName, updateClientLogo, onPresPopUpEvent } from "../../actions";
+  import PopUpModal from "../../components/PopUpModal"
 
 class ForgotPassword extends React.Component {
   constructor(props) {
@@ -16,6 +17,9 @@ class ForgotPassword extends React.Component {
       clientName: '',
       loginLink: '',
       errorMessage: '',
+      title: '',
+      popMessage: '',
+      myFunction: null,
     }
   }
 
@@ -52,10 +56,21 @@ class ForgotPassword extends React.Component {
             .then(response => {
                 console.log(response.data.PostRubixUserData[0].Response)
                 if(response.data.PostRubixUserData[0].Response === "Redirected"){
-                  alert("Your request has been received, please check your email for more information")
-                  this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                  this.setState({
+                    title: "Request Received",
+                    popMessage: "Your request has been received, please check your email for more information.",
+                    myFunction: this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                  })
+                  this.props.onPresPopUpEvent()
+                  //alert("Your request has been received, please check your email for more information")
+                  
                 } else {
-                  alert("The email you entered does not exist, please check try again.")
+                  this.setState({
+                    title: "Error Loading Request",
+                    popMessage: "The email you entered does not exist, please check try again.",
+                  })
+                  this.props.onPresPopUpEvent()
+                  //alert("The email you entered does not exist, please check try again.")
                   this.setState({errorMessage: "Please enter an email that exists."})
                 }
             })
@@ -68,6 +83,11 @@ class ForgotPassword extends React.Component {
     return (
       <div className={this.props.rubixThemeColor}>
         <div >
+        <PopUpModal 
+        Title= {this.state.title}
+        Body = {this.state.popMessage}
+        Function = {()=>this.state.myFunction}
+        />
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
               <div className="auth-box">
@@ -112,13 +132,15 @@ class ForgotPassword extends React.Component {
 ForgotPassword.propTypes = {
 };
 
-const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
+const mapStateToProps = ({ navigationReducer, loginReducer, mailInboxReducer }) => ({
   myMessage: loginReducer.customMessageOnLogin,
   rubixThemeColor: navigationReducer.themeColor,
   rubixClientName: navigationReducer.clientName,
   rubixClientLogo: navigationReducer.clientLogo,
+  isPopUpModal: mailInboxReducer.isPopUpModal,
 });
 
 export default connect(mapStateToProps, {
   onPressThemeColor,
+  onPresPopUpEvent
 })(ForgotPassword);
