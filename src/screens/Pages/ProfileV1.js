@@ -561,7 +561,7 @@ class ProfileV1Page extends React.Component {
                   width: '100%'
                   }}>
                   <SignatureCanvas className="border border-primary border-2" penColor='black'
-                  canvasProps={{  height: 200, className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
+                  canvasProps={{  height: '100%', width: '400px', className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
                   </div>
                 <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
                   Submit Signature
