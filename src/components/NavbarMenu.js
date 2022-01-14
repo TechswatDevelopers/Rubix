@@ -464,16 +464,16 @@ class NavbarMenu extends React.Component {
                   <Dropdown.Item href="profilev1page">
                     <i className="icon-user"></i>My Profile
                   </Dropdown.Item>
-                  <Dropdown.Item href="appinbox">
+                  {/* <Dropdown.Item href="appinbox">
                     {" "}
                     <i className="icon-envelope-open"></i>Messages
-                  </Dropdown.Item>
-                  <Dropdown.Item>
+                  </Dropdown.Item> */}
+                  {/* <Dropdown.Item>
                     {" "}
                     <i className="icon-settings"></i>Settings
-                  </Dropdown.Item>
+                  </Dropdown.Item> */}
                   <li className="divider"></li>
-                  <Dropdown.Item href="login">
+                  <Dropdown.Item href={"login/" + this.state.clientID}>
                     {" "}
                     <i className="icon-power"></i>Logout
                   </Dropdown.Item>

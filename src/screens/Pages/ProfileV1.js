@@ -10,6 +10,8 @@ import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
+import {onPresPopUpEvent} from '../../actions';
+import PopUpModal from '../../components/PopUpModal';
 //import tempfile from 'tempfile';
 //import DocViewer from "react-doc-viewer";
 
@@ -244,6 +246,7 @@ class ProfileV1Page extends React.Component {
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
+    this.setState({ isLoad: true, })
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
@@ -266,9 +269,12 @@ class ProfileV1Page extends React.Component {
     }
     postDocument().then(() => {
       localStorage.setItem('tab', currentActiveKey)
-      alert("Document uploaded successfully")
-      window.location.reload()
-      this.setDocumentProgress()
+      //alert("Document uploaded successfully")
+      this.setState({
+        isLoad: false
+      })
+      this.props.onPresPopUpEvent()
+      
     })
       
   }
@@ -583,10 +589,18 @@ class ProfileV1Page extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <PopUpModal 
+        Title= "Upload Complete!"
+        Body = "Your document has been uploaded successfully."
+        Function ={()=>{
+          window.location.reload()
+      this.setDocumentProgress()
+        }}
+        />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
-            <p>Please wait...</p>
+            <p>Uploading document...</p>
           </div>
         </div>
         <div>
@@ -833,10 +847,13 @@ class ProfileV1Page extends React.Component {
   }
 }
 
-const mapStateToProps = ({ navigationReducer, ioTReducer }) => ({
+const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) => ({
   rubixUserID: navigationReducer.userID,
   isSecuritySystem: ioTReducer.isSecuritySystem,
-  studentProgress: navigationReducer.progressBar
+  studentProgress: navigationReducer.progressBar,
+  isPopUpModal: mailInboxReducer.isPopUpModal,
 });
 
-export default connect(mapStateToProps, {})(ProfileV1Page);
+export default connect(mapStateToProps, {
+  onPresPopUpEvent
+})(ProfileV1Page);
