@@ -43,8 +43,8 @@ class ForgotPasswordPage extends React.Component {
                 //Go to login screen
                 this.setState({
                   title: "Password Reset",
-                  popMessage: response.data.PostRubixUserData[0].ResponceMessage,
-                  myFunction: this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                  popMessage: "Password Reset successfully, you will be redirected to login.",
+                  //myFunction: this.props.history.push("/login/" + localStorage.getItem('clientID'))
                 })
                 this.props.onPresPopUpEvent()
                 //alert(response.data.PostRubixUserData[0].ResponceMessage)

@@ -20,6 +20,7 @@ class ForgotPassword extends React.Component {
       title: '',
       popMessage: '',
       myFunction: null,
+      errorTest: false
     }
   }
 
@@ -59,7 +60,8 @@ class ForgotPassword extends React.Component {
                   this.setState({
                     title: "Request Received",
                     popMessage: "Your request has been received, please check your email for more information.",
-                    myFunction: this.props.history.push("/login/" + localStorage.getItem('clientID'))
+                    errorTest: true
+                    //myFunction: this.props.history.push("/login/" + localStorage.getItem('clientID'))
                   })
                   this.props.onPresPopUpEvent()
                   //alert("Your request has been received, please check your email for more information")
@@ -86,7 +88,7 @@ class ForgotPassword extends React.Component {
         <PopUpModal 
         Title= {this.state.title}
         Body = {this.state.popMessage}
-        Function = {()=>this.state.myFunction}
+        Function = {()=>this.state.errorTest ? this.props.history.push("/login/" + localStorage.getItem('clientID')) :null}
         />
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">
