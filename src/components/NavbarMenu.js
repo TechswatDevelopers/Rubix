@@ -52,7 +52,7 @@ class NavbarMenu extends React.Component {
         //console.log("image url", this.state.profile)
         });
       };
-      fetchUserData();
+     // fetchUserData();
 
       
     //Get User Profile Picture

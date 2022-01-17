@@ -132,8 +132,6 @@ class NextOfKin extends React.Component {
   };
   console.log(data)
   const postData = async() => {
-
-
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
@@ -145,11 +143,17 @@ class NextOfKin extends React.Component {
               
       } else{
         alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
+        this.setState({
+          isLoad: false
+        })
       }
   }
   postData()
 }else{
   alert("Please a valid home address")
+  this.setState({
+    isLoad: false
+  })
 }
 }
 
@@ -213,6 +217,7 @@ class NextOfKin extends React.Component {
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
+    console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,

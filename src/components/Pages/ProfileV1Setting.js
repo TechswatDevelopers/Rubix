@@ -507,7 +507,12 @@ class ProfileV1Setting extends React.Component {
     this.setState({ myUserID: userID });
 
     //Get All User Data
-    this.getAllUserData(localStorage.getItem('userID'))
+    if (localStorage.getItem('role') == 'student'){
+      this.getAllUserData(localStorage.getItem('userID'))
+    } else {
+      this.getAllUserData(this.props.currentStudentiD)
+    } 
+    
 
     //Get Year of study list
     this.fetchYearOfStudyData()
@@ -677,6 +682,7 @@ class ProfileV1Setting extends React.Component {
   }
 
   render() {
+    const { StudentID } = this.props;
     let myButton;
     //Select Image Url
     if (this.state.profilePicture != null && this.state.base64Image == null) {
@@ -1193,7 +1199,8 @@ class ProfileV1Setting extends React.Component {
 
 const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   rubixUserID: navigationReducer.userID,
-  studentProgress: navigationReducer.progressBar
+  studentProgress: navigationReducer.progressBar,
+  currentStudentiD: navigationReducer.studentID
 });
 
 export default connect(mapStateToProps, {

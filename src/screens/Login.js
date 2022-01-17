@@ -123,12 +123,12 @@ componentDidMount() {
                   console.log(response)
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
-                    localStorage.setItem('userID', response.data.PostRubixUserData['0']['RubixRegisterUserID'])
+                    localStorage.setItem('userCode', response.data.PostRubixUserData['0']['UserCode'])
                     localStorage.setItem('role','admin')
                     this.props.history.push("/blankpage")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)
-                    this.setState({errorMessage: 'You have entered an incorrect Email/Pasword.'})
+                    this.setState({errorMessage: response.data.PostRubixUserData['0']['message']})
                   }
               })
           } else{

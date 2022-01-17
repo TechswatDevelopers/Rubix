@@ -17,6 +17,7 @@ import {
   UPDATE_CLIENTLOGO,
   UPDATE_STUDENTID,
   ON_UPDATE_PROGRESS_BAR,
+  ON_STUDENT_RUBIX_ID,
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
   clientLogo: "",
   studentIDNo: null,
   progressBar: 0,
+  studentID: '',
   addClassactive: [
     false,
     false,
@@ -474,6 +476,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         progressBar: action.payload,
+      };
+    }
+    
+    case ON_STUDENT_RUBIX_ID: {
+      return {
+        ...state,
+        studentID: action.payload,
       };
     }
     

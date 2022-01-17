@@ -21,6 +21,7 @@ export const UPDATE_STUDENTID = "navigationReducer/UPDATE_STUDENTID";
 export const UPDATE_CLIENTNAME = "navigationReducer/UPDATE_CLIENTNAME";
 export const UPDATE_CLIENTLOGO = "navigationReducer/UPDATE_CLIENTLOGO";
 export const ON_UPDATE_PROGRESS_BAR = "navigationReducer/ON_UPDATE_PROGRESS_BAR";
+export const ON_STUDENT_RUBIX_ID = "navigationReducer/ON_STUDENT_RUBIX_ID";
 
 var toggle = false;
 var intervalId = "";
@@ -144,6 +145,13 @@ export const updateClientID = (val)=>(disptch) =>{
 export const onUpdateProgressBar = (val) => (dispatch) => {
   dispatch({
     type: ON_UPDATE_PROGRESS_BAR,
+    payload: val,
+  });
+};
+
+export const onUpdateStudentRubixID = (val) => (dispatch) => {
+  dispatch({
+    type: ON_STUDENT_RUBIX_ID,
     payload: val,
   });
 };

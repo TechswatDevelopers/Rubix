@@ -48,7 +48,8 @@ import profilev1page from "./screens/Pages/ProfileV1";
 import profilev2page from "./screens/Pages/ProfileV2";
 import imagegalleryprofile from "./screens/Pages/ImageGallery";
 import timeline from "./screens/Pages/TimeLine";
-import NewDashboard from "./screens/Pages/NewDashboard";
+import AdminDashboard from "./screens/Pages/AdminPortal";
+import Students from "./screens/Pages/Students";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
 import invoicesv2 from "./screens/Pages/InvoicesV2";
@@ -507,6 +508,16 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/residence`}
                 component={residence}
+              />
+                  <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/adminDash`}
+                component={AdminDashboard}
+              />
+                  <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/students`}
+                component={Students}
               />
                 </Switch>
               </div>
