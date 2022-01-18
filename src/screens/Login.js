@@ -125,7 +125,7 @@ componentDidMount() {
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userCode', response.data.PostRubixUserData['0']['UserCode'])
                     localStorage.setItem('role','admin')
-                    this.props.history.push("/blankpage")
+                    this.props.history.push("/students")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)
                     this.setState({errorMessage: response.data.PostRubixUserData['0']['message']})
