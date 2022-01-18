@@ -99,6 +99,7 @@ class NextOfKin extends React.Component {
 
 //final submit check
  Submit(e){
+   console.log("called")
    //Set timer for loading screen
   this.setState({
     isLoad: true
@@ -135,12 +136,11 @@ class NextOfKin extends React.Component {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              //console.log(response)
+              console.log(response)
               //alert("Registration complete")
               //this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
-              this.setState({
-                isLoad: false
-              })
+              
+              
           })
               
       } else{
@@ -150,7 +150,13 @@ class NextOfKin extends React.Component {
         })
       }
   }
-  postData()
+  postData().then(() => {
+    this.setState({
+      isLoad: false
+    })
+    this.props.onPresPopUpEvent()
+    //this.props.history.push("/login/" + localStorage.getItem('clientID'))
+  })
 }else{
   alert("Please a valid home address")
   this.setState({
