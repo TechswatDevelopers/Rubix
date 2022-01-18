@@ -562,9 +562,10 @@ class NavbarMenu extends React.Component {
                         <i className="icon-home"></i> <span>Dashboard</span>
                       </a>
                     </li>
-                  <li className="" id="myProfile">
+                    
+                  <li className="" id={localStorage.getItem('role') == 'admin' ? "students" : "myProfile"}>
                     <a
-                        href="profilev1page"
+                        href= {localStorage.getItem('role') == 'admin' ? "students" :"profilev1page"}
                         className=""
                         onClick={(e)=>{
                           //e.preventDefault()
@@ -572,14 +573,14 @@ class NavbarMenu extends React.Component {
                         }}
                       
                       >
-                        <i className="icon-user"></i> <span>My Profile</span>
+                        <i className="icon-user"></i> <span>{localStorage.getItem('role') == 'admin' ? "Students" : "myProfile"}</span>
                       </a>
                     </li>
 
 
-                  <li className="" id="Residence">
+                  <li className="" id={localStorage.getItem('role') == 'admin' ? 'communication' :"Residence"}>
                     <a
-                        href="residence"
+                        href={localStorage.getItem('role') == 'admin' ? 'communication' :"residence"}
                         className={
                           activeKey === "residence" ? "active" : ""
                         }
@@ -588,7 +589,7 @@ class NavbarMenu extends React.Component {
                           this.activeMenutabContainer("AppContainer");
                         }} */
                       >
-                        <i className="icon-home"></i> <span>Residence Information</span>
+                        <i className="icon-home"></i> <span> {localStorage.getItem('role') == 'admin' ? 'Communication' :"Residence Information"}</span>
                       </a>
                     </li>
 

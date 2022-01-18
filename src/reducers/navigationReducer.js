@@ -18,6 +18,10 @@ import {
   UPDATE_STUDENTID,
   ON_UPDATE_PROGRESS_BAR,
   ON_STUDENT_RUBIX_ID,
+  ON_NOK_PROGRESS,
+  ON_REG_PROGRESS,
+  ON_RES_PROGRESS,
+  ON_ID_PROGRESS
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -30,6 +34,10 @@ const initialState = {
   studentIDNo: null,
   progressBar: 0,
   studentID: '',
+  idProgress: '',
+  proofOfResProgress: '',
+  proofOfRegProgress: '',
+  nextOfKinProgress: '',
   addClassactive: [
     false,
     false,
@@ -483,6 +491,36 @@ export default (state = initialState, action) => {
       return {
         ...state,
         studentID: action.payload,
+      };
+    }
+    //Id Progress
+    case ON_ID_PROGRESS: {
+      return {
+        ...state,
+        idProgress: action.payload,
+      };
+    }
+    //Proof of Residence Progress
+    case ON_RES_PROGRESS: {
+      return {
+        ...state,
+        proofOfResProgress: action.payload,
+      };
+    }
+    
+    //Proof of Registration Progress
+    case ON_REG_PROGRESS: {
+      return {
+        ...state,
+        proofOfRegProgress: action.payload,
+      };
+    }
+
+    //Next of Kin ID Progress
+    case ON_NOK_PROGRESS: {
+      return {
+        ...state,
+        nextOfKinProgress: action.payload,
       };
     }
     

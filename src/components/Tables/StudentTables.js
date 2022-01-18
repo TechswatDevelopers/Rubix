@@ -1,14 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
-import {updateStudentID,onUpdateStudentRubixID} from "../../actions";
+import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile} from "../../actions";
 
 class SudentsTable extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentStudent: {},
+    }
+  }
   //Select Specific Student
   selectStudent(e){
-    //console.log("Student Data: ", e.RubixRegisterUserID)
-    this.props.onUpdateStudentRubixID(e.RubixRegisterUserID)
+    this.props.onUpdateStudentRubixID(this.state.currentStudent.RubixRegisterUserID)
+    this.props.onPresShowProfile()
   }
+
+  
   render() {
     const { StudentList } = this.props;
     return (
@@ -42,7 +50,9 @@ class SudentsTable extends React.Component {
                   aria-expanded="false"
                   aria-controls={"collapseComment" + index}
                   href={"#collapseComment" + index}
-                  onClick={(e)=>this.selectStudent(student)}
+                  onClick={(e)=>this.setState({
+                    currentStudent: student
+                  })}
                   >
                   <th scope="row">1</th>
                   <td>{student.Name} {student.MiddleName}</td>
@@ -61,7 +71,7 @@ class SudentsTable extends React.Component {
                       <br></br>
                       <span><strong>Gender: </strong>{student.Gender}</span></td>
                       <td><span><strong>Student Number: </strong>{student.StudentNumber}</span></td>
-                      <td><button class="btn btn-primary" >View Full Profile</button></td>
+                      <td><button class="btn btn-primary" onClick={(e)=>this.selectStudent(e)}>View Full Profile</button></td>
               </tr>
               
               </>
@@ -76,11 +86,13 @@ class SudentsTable extends React.Component {
 }
 
 const mapStateToProps = ({ mailInboxReducer, navigationReducer, }) => ({
-  currentStudentiD: navigationReducer.studentID
+  currentStudentiD: navigationReducer.studentID,
+  showProfile: mailInboxReducer.isProfileShowing,
 
 });
 
 export default connect(mapStateToProps, {
   updateStudentID,
-  onUpdateStudentRubixID
+  onUpdateStudentRubixID,
+  onPresShowProfile
 })(SudentsTable);

@@ -58,7 +58,9 @@ class ProfileV1Page extends React.Component {
       fade: false,
       title: '',
       popMessage: '',
-      myFunction: null
+      myFunction: null,
+      studentDocs: [],
+      topBarData: '',
     }
   }
 
@@ -75,8 +77,12 @@ class ProfileV1Page extends React.Component {
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate + myTime })
+    if (localStorage.getItem('role') == 'admin'){
+      this.loadDocuments(this.props.currentStudentiD)
+    } else {
+      this.loadDocuments(userID)
+    }
     
-    this.loadDocuments(userID)
     
 
     //Set tab 
@@ -193,22 +199,31 @@ class ProfileV1Page extends React.Component {
     switch (file) {
       case 'id-document':
         {
-          this.setState({ docType: "My ID Document" })
+          this.setState({ 
+            docType: "My ID Document",
+            topBarData: "Student ID is: " 
+            })
         }
         break
       case 'proof-of-res':
         {
-          this.setState({ docType: "My Proof of Residence" })
+          this.setState({ docType: "My Proof of Residence",
+          topBarData: "Student Address is: " 
+           })
         }
         break
       case 'proof-of-reg':
         {
-          this.setState({ docType: "My Proof of Registration" })
+          this.setState({ docType: "My Proof of Registration",
+          topBarData: "Student is registered at: " 
+           })
         }
         break
       case 'next-of-kin':
         {
-          this.setState({ docType: "Next of Kin ID" })
+          this.setState({ docType: "Next of Kin ID",
+          topBarData: "Next of Kin ID number is: " 
+           })
         }
     }
   }
@@ -302,8 +317,14 @@ class ProfileV1Page extends React.Component {
   
   //Get user document progress
   setDocumentProgress() {
+    let studentId
+    if (localStorage.getItem('role') == 'admin'){
+      studentId = this.props.currentStudentiD
+    } else {
+      studentId = localStorage.getItem('userID')
+    }
     const data = {
-      'RubixRegisterUserID': localStorage.getItem('userID'),
+      'RubixRegisterUserID':  studentId,
     };
 
     const requestOptions = {
@@ -363,6 +384,7 @@ class ProfileV1Page extends React.Component {
     }
     postData()
   }
+
 
   //When User Presses Cancel on Document Uploading
   onPressCancel() {
@@ -534,12 +556,28 @@ class ProfileV1Page extends React.Component {
       tabKey: e
     })
   }
+   //Set Message according to percentage
+   setMessage(percent) {
+    let message
+    switch (percent) {
+      case 0, '0':
+        message = 'No document uploaded'
+        break
+      case 50, '50':
+        message = 'Pending validation'
+        break
+      case 100, '100':
+        message = 'Approved'
+    }
+    return message
+  }
 
 
   render() {
     let myBody, myLease;
       myBody = <> {this.state.doc != null
         ? <>
+        {localStorage.getItem('role') == 'admin' ?<p>{this.state.topBarData}</p> : null}
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
           <iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
@@ -559,7 +597,9 @@ class ProfileV1Page extends React.Component {
       }
       </>
 
-        myLease = <Tab eventKey="signing" title="Lease Agreement">
+        myLease = null
+        
+        {/* <Tab eventKey="signing" title="Lease Agreement">
         <div className="w-auto p-3">
           { !this.state.myLease
             ? <>
@@ -590,7 +630,7 @@ class ProfileV1Page extends React.Component {
 
         </div>
 
-      </Tab>
+      </Tab> */}
     return (
       <div
         style={{ flex: 1 }}
@@ -614,13 +654,15 @@ class ProfileV1Page extends React.Component {
         </div>
         <div>
           <div className="container-fluid">
-            <PageHeader
+            {localStorage.getItem('role') == 'admin'
+            ? null
+            : <PageHeader
               HeaderText="Rubix User Profile"
               Breadcrumb={[
                 { name: "Page", navigate: "" },
                 { name: "My Profile", navigate: "" },
               ]}
-            />
+            />}
             <div
               className="progress-bar bg-success progress-bar-striped"
               data-transitiongoal={this.props.studentProgress}
@@ -810,6 +852,7 @@ class ProfileV1Page extends React.Component {
                                       onClick={() => this.changeDocument(data.FileType)}
                                       onAnimationEnd={() => this.setState({ fade: false })}
                                       >
+                                        
                                         <FileStorageStatusCard
                                           key={index + "sidjpidj"}
                                           TotalSize=''
@@ -821,6 +864,29 @@ class ProfileV1Page extends React.Component {
                                       </div>
                                     );
                                   })}
+                                  {/* {this.state.docs.map((data, index) => {
+                                    return (
+                                      <div 
+                                      key={index + "sidjpidj"} 
+                                      onClick={() => this.changeDocument(data.FileType)}
+                                      onAnimationEnd={() => this.setState({ fade: false })}
+                                      >
+                                        {
+                                          data.FileType != 'profile-pic'
+                                          ? <FileStorageStatusCard
+                                          key={index + "sidjpidj"}
+                                          TotalSize=''
+                                          UsedSize={data.FileType}
+                                          Type={data.status}...
+                                          UsedPer={data.UsedPer}
+                                          ProgressBarClass={`${data.ProgressBarClass}`}
+                                        />
+                                        : null
+                                        }
+                                        
+                                      </div>
+                                    );
+                                  })} */}
                                   <div>
                                   </div>
                                 </div>
@@ -861,8 +927,9 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   isSecuritySystem: ioTReducer.isSecuritySystem,
   studentProgress: navigationReducer.progressBar,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+  currentStudentiD: navigationReducer.studentID,
 });
 
 export default connect(mapStateToProps, {
-  onPresPopUpEvent
+  onPresPopUpEvent,
 })(ProfileV1Page);

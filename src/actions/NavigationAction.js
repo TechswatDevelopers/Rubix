@@ -23,6 +23,11 @@ export const UPDATE_CLIENTLOGO = "navigationReducer/UPDATE_CLIENTLOGO";
 export const ON_UPDATE_PROGRESS_BAR = "navigationReducer/ON_UPDATE_PROGRESS_BAR";
 export const ON_STUDENT_RUBIX_ID = "navigationReducer/ON_STUDENT_RUBIX_ID";
 
+export const ON_NOK_PROGRESS = "navigationReducer/ON_NOK_PROGRESS";
+export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
+export const ON_RES_PROGRESS = "navigationReducer/ON_RES_PROGRESS";
+export const ON_ID_PROGRESS = "navigationReducer/ON_ID_PROGRESS";
+
 var toggle = false;
 var intervalId = "";
 export const onPressDashbord = (index) => (dispatch) => {
@@ -152,6 +157,35 @@ export const onUpdateProgressBar = (val) => (dispatch) => {
 export const onUpdateStudentRubixID = (val) => (dispatch) => {
   dispatch({
     type: ON_STUDENT_RUBIX_ID,
+    payload: val,
+  });
+};
+
+//Next of Kin Progress Update
+export const onUpdateNOKProgress = (val) => (dispatch) => {
+  dispatch({
+    type: ON_NOK_PROGRESS,
+    payload: val,
+  });
+};
+//Proof of Registration Update
+export const onUpdateREGProgress = (val) => (dispatch) => {
+  dispatch({
+    type: ON_REG_PROGRESS,
+    payload: val,
+  });
+};
+//Proof of Residence Update
+export const onUpdateRESProgress = (val) => (dispatch) => {
+  dispatch({
+    type: ON_RES_PROGRESS,
+    payload: val,
+  });
+};
+//ID Document Update
+export const onUpdateIDProgress = (val) => (dispatch) => {
+  dispatch({
+    type: ON_ID_PROGRESS,
     payload: val,
   });
 };

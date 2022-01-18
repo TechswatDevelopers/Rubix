@@ -137,8 +137,10 @@ class NextOfKin extends React.Component {
           .then(response => {
               //console.log(response)
               //alert("Registration complete")
-              this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
-              
+              //this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
+              this.setState({
+                isLoad: false
+              })
           })
               
       } else{

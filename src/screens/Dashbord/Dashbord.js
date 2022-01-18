@@ -15,6 +15,7 @@ import PageHeader from "../../components/PageHeader";
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.min.js";
 import ReactList from 'react-list';
+import {linkResolver,RichText} from 'prismic-reactjs';
 import {
   topProductOption,
   topRevenueOption,
@@ -43,7 +44,7 @@ class Dashbord extends React.Component {
     super(props);
     this.state = {
       cardData: [],
-      notices: {},
+      notices: [],
       comments: [],
       likes: [],
       liked: false,
@@ -59,6 +60,21 @@ class Dashbord extends React.Component {
     this.getNoticies()
     //this.chartPlace();
   }
+
+//Convert Date and time
+getDateFormated(date){
+  let newdate
+  const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+const myDate = new Date(date).toISOString().replace(/T.*/,'').split('-').join('-')
+const myTime = new Date(date).toLocaleTimeString('en-ZA')
+  newdate = {
+    date: myDate,
+    time: myTime
+  }
+  console.log("date", date)
+  return newdate
+}
+
   async loadDataCard() {
     const { cardData } = this.state;
     var allCardData = cardData;
@@ -77,18 +93,18 @@ class Dashbord extends React.Component {
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
       console.log("Messages data", res.data.PostRubixUserData);
-      this.setState({ notices: res.data.PostRubixUserData[0] })
+      this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
     }
     getData()
   }
 
   //Submit Comment
-  submitComment() {
+  submitComment(mesageID) {
     const comment = document.getElementById('comment').value;
     const data = {
       'UserComments': comment,
-      'RubixRegisterUserMessageID': this.state.notices.RubixRegisterUserMessageID,
+      'RubixRegisterUserMessageID': mesageID,
       'RubixRegisterUserID': localStorage.getItem('userID')
     }
     const requestOptions = {
@@ -249,26 +265,31 @@ class Dashbord extends React.Component {
                   <div className="header">
                     <h2>Announcements</h2>
                   </div>
-                  <div className="body">
+                  {
+                    this.state.notices.map((message, index) => (
+                      <>
+                      <div className="body">
                     <div
                       className="timeline-item green"
-                      date-is="21-12-2021"
+                      date-is= {this.getDateFormated(message.RubixRegisterUserMessageDateAdded).date}
                     >
                       <h5>
-                        {this.state.notices.Title}
+                        {message.Title}
                       </h5>
                       <span>
-                        <a>{this.state.notices.Name}</a> {this.state.notices.Surname}
+                        <a>{message.Name}</a> {message.Surname}
                       </span>
                       <br></br>
                       <span>
-                        {this.state.notices.Residence}
+                        {message.Residence}
                       </span>
                       <div className="msg">
-                        <p>
-                          {this.state.notices.UserMessage}
-                        </p>
-                        <a onClick={() => { this.postLike(this.state.notices.RubixRegisterUserMessageID) }} className="m-r-20">
+                      <RichText render= 
+                          {message.UserMessage}/>
+                        <span>
+                          {message.UserMessage}
+                        </span>
+                        <a onClick={() => { this.postLike(message.RubixRegisterUserMessageID) }} className="m-r-20">
                           <i className="icon-heart" style={{color: this.state.liked ? 'red' : 'black'}}></i> {this.state.liked ? 'Unlike' : 'Like'}
                         </a>
                         <a
@@ -298,7 +319,7 @@ class Dashbord extends React.Component {
                                   id="comment"
                                 ></textarea>
                               </div>
-                              <button className="btn btn-primary" onClick={() => { this.submitComment() }}>
+                              <button className="btn btn-primary" onClick={() => { this.submitComment(message.RubixRegisterUserMessageID) }}>
                                 Submit
                               </button>
                             </form>
@@ -307,6 +328,9 @@ class Dashbord extends React.Component {
                       </div>
                     </div>
                   </div>
+                      </>
+                    ))
+                  }
                 </div>
               </div>
             </div>

@@ -32,6 +32,11 @@ export const fileFolderCardData = [
     file: "test2.pdf"
   },
 ];
+const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
+  rubixUserID: navigationReducer.userID,
+  studentProgress: navigationReducer.progressBar,
+  currentStudentiD: navigationReducer.studentID
+})
 
 export const fileStorageStatusCardData = [
   {

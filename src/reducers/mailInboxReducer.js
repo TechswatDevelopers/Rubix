@@ -5,6 +5,7 @@ import {
   ON_PRESS_ADD_EVENT,
   ON_PRESS_ADD_CONTACT,
   ON_PRESS_POP_UP_EVENT,
+  ON_PRESS_SHOW_PROFILE,
 } from "../actions/MailInboxAction";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   isEventModal: false,
   isPopUpModal: false,
   isContactModal: false,
+  isProfileShowing: false,
 };
 
 export default (state = initialState, action) => {
@@ -60,6 +62,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isContactModal: !state.isContactModal,
+      };
+    }
+
+    case ON_PRESS_SHOW_PROFILE: {
+      return {
+        ...state,
+        isProfileShowing: !state.isProfileShowing,
       };
     }
 

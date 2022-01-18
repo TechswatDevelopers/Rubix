@@ -5,7 +5,8 @@ import PageHeader from "../../components/PageHeader";
 import SudentsTable from "../../components/Tables/StudentTables";
 import axios from "axios";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
-import {updateStudentID} from "../../actions"
+import {updateStudentID, onPresShowProfile} from "../../actions"
+import ProfileV1Page from '../../screens/Pages/ProfileV1';
 
 class Students extends React.Component {
     constructor(props) {
@@ -62,7 +63,6 @@ class Students extends React.Component {
             <PageHeader
               HeaderText="Students Details Page"
               Breadcrumb={[
-                { name: "Page", navigate: "" },
                 { name: "Students Details Page", navigate: "" },
               ]}
             />
@@ -72,9 +72,14 @@ class Students extends React.Component {
               StudentList= {this.state.students}
               />
 
-<ProfileV1Setting 
+{
+  this.props.showProfile
+  ? <ProfileV1Page/> 
+
+: null}
+{/* <ProfileV1Setting 
 StudentID= {this.props.currentStudentiD}
-/>
+/> */}
               </div>
             </div>
           </div>
@@ -84,11 +89,13 @@ StudentID= {this.props.currentStudentiD}
   }
 }
 
-const mapStateToProps = ({ ioTReducer, navigationReducer, }) => ({
+const mapStateToProps = ({ ioTReducer, navigationReducer, mailInboxReducer}) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
-  currentStudentiD: navigationReducer.studentID
+  currentStudentiD: navigationReducer.studentID,
+  showProfile: mailInboxReducer.isProfileShowing,
 });
 
 export default connect(mapStateToProps, {
-    updateStudentID
+    updateStudentID,
+    onPresShowProfile,
 })(Students);

@@ -4,7 +4,7 @@ import imageuser from "../../assets/images/user.png";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
-import {onUpdateProgressBar} from '../../actions/NavigationAction';
+import {onUpdateProgressBar ,onUpdateIDProgress, onUpdateRESProgress, onUpdateREGProgress, onUpdateNOKProgress} from '../../actions/NavigationAction';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
@@ -400,6 +400,7 @@ class ProfileV1Setting extends React.Component {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
           console.log("All Student data", response)
+          this.setState({ myProfile: response.data.PostRubixUserData[0] })
 
         })
     }
@@ -498,23 +499,27 @@ class ProfileV1Setting extends React.Component {
               case 'id-document': {
                 //console.log('its an ID')
                 localStorage.setItem('idProgress', temp[i].Percentage)
+                this.props.onUpdateIDProgress(temp[i].Percentage)
                 localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-res": {
                 //console.log('its a Proof of res')
                 localStorage.setItem('proofOfResProgress', temp[i].Percentage)
+                this.props.onUpdateRESProgress(temp[i].Percentage)
                 localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-reg": {
-                //console.log('its a proof of res')
+                //console.log('its a proof of reg')
                 localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
+                this.props.onUpdateREGProgress(temp[i].Percentage)
                 localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "next-of-kin": {
                 //console.log('its a next of kin')
+                this.props.onUpdateNOKProgress(temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
               }
@@ -1230,4 +1235,8 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
 
 export default connect(mapStateToProps, {
   onUpdateProgressBar,
+  onUpdateIDProgress,
+  onUpdateRESProgress,
+  onUpdateREGProgress,
+  onUpdateNOKProgress
 })(ProfileV1Setting);

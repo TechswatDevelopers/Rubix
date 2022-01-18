@@ -42,6 +42,7 @@ import page403 from "./screens/Auth/Page403";
 import page500 from "./screens/Auth/Page500";
 import page503 from "./screens/Auth/Page503";
 import blankpage from "./screens/Pages/BlankPage";
+import Communication from "./screens/Pages/Communication";
 import verifyemail from "./screens/Pages/VerifyEmail";
 import residence from "./screens/Pages/Residence";
 import profilev1page from "./screens/Pages/ProfileV1";
@@ -518,6 +519,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/students`}
                 component={Students}
+              />
+                  <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/communication`}
+                component={Communication}
               />
                 </Switch>
               </div>
