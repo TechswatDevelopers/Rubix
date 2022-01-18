@@ -382,6 +382,30 @@ class ProfileV1Setting extends React.Component {
 
   };
 
+  //Get Specific User Data
+  getStudentData(userID){
+    console.log('Current Student Rubix ID: ', userID)
+    const data = {
+      'RubixRegisterUserID': userID,
+      "RubixClientID" : localStorage.getItem('clientID')
+    };
+    const requestOptions = {
+      title: 'Fetch User Profile Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+    console.log('Posted student data:', data)
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserData', data, requestOptions)
+        .then(response => {
+          console.log("All Student data", response)
+
+        })
+    }
+    postData()
+  }
+
   //Get All User Data
   getAllUserData(userId) {
     const data = {
@@ -394,7 +418,7 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('All student data:', data)
+    //console.log('All student data:', data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
@@ -505,12 +529,13 @@ class ProfileV1Setting extends React.Component {
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
+    console.log('My role is: ', localStorage.getItem('role'))
 
     //Get All User Data
     if (localStorage.getItem('role') == 'student'){
       this.getAllUserData(localStorage.getItem('userID'))
-    } else {
-      this.getAllUserData(this.props.currentStudentiD)
+    } else if (localStorage.getItem('role') == 'admin') {
+      this.getStudentData(this.props.currentStudentiD)
     } 
     
 

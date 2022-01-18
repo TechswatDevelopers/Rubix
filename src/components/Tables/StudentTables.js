@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
-import {updateStudentID} from "../../actions";
+import {updateStudentID,onUpdateStudentRubixID} from "../../actions";
 
 class SudentsTable extends React.Component {
   //Select Specific Student
   selectStudent(e){
-    //console.log("Student Data: ", e)
-    this.props.updateStudentID(e.RubixRegisterUserID)
+    //console.log("Student Data: ", e.RubixRegisterUserID)
+    this.props.onUpdateStudentRubixID(e.RubixRegisterUserID)
   }
   render() {
     const { StudentList } = this.props;
@@ -81,5 +81,6 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer, }) => ({
 });
 
 export default connect(mapStateToProps, {
-  updateStudentID
+  updateStudentID,
+  onUpdateStudentRubixID
 })(SudentsTable);

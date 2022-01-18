@@ -37,7 +37,7 @@ class Students extends React.Component {
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
-          console.log("All Students Data:", response)
+          console.log("Students Data List:", response)
           this.setState({
             students: response.data.PostRubixUserData
           })
