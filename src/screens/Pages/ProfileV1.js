@@ -10,8 +10,9 @@ import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
-import {onPresPopUpEvent} from '../../actions';
+import {onPresPopUpEvent, onPresPopUpConfirm} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
+import PopUpConfirm from '../../components/PopUpConfirm';
 //import tempfile from 'tempfile';
 //import DocViewer from "react-doc-viewer";
 
@@ -61,6 +62,8 @@ class ProfileV1Page extends React.Component {
       myFunction: null,
       studentDocs: [],
       topBarData: '',
+      currentDocID: '',
+      currentProgress: ''
     }
   }
 
@@ -130,7 +133,9 @@ class ProfileV1Page extends React.Component {
           if(tempList != null || tempList != undefined){
             //Set ID Document to initial Document
           const string = "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == currentDoc)[0].image
-          this.setState({ doc: data.post.filter(doc => doc.FileType == currentDoc)[0] })
+          this.setState({ doc: data.post.filter(doc => doc.FileType == currentDoc)[0],
+            currentDocID: data.post.filter(doc => doc.FileType == currentDoc)[0].ImageID
+          })
 
           //Convert base64 to file
           const image = this.dataURLtoFile(string, "document.pdf")
@@ -179,10 +184,22 @@ class ProfileV1Page extends React.Component {
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({ isSelected: false })
     this.setState({ selectedFile: null })
+    console.log('Doc: ', temp)
+    if(temp != undefined && temp.length != 0){
+      this.setState({
+        currentDocID: temp[0].ImageID
+      })
+    }
     
-    this.setState({ keyString: file })
+    this.setState({ keyString: file,
+    
+    })
     localStorage.setItem('docType', file)
+
+    //Set timer for loading screen
+  setTimeout(() => {
     this.changeHeading(file)
+  }, 2000);
 
     
     
@@ -199,30 +216,54 @@ class ProfileV1Page extends React.Component {
     switch (file) {
       case 'id-document':
         {
+          console.log("testing",this.props.currentStudentIDNo)
           this.setState({ 
             docType: "My ID Document",
-            topBarData: "Student ID is: " 
+            topBarData: <>
+            <span><strong>Student Full Name(s): </strong>{this.props.currentStudentname}</span>
+            <br></br>
+            <span><strong>Student ID is: </strong>{this.props.currentStudentIDNo}</span>
+            <br></br>
+            </>
             })
         }
         break
       case 'proof-of-res':
         {
           this.setState({ docType: "My Proof of Residence",
-          topBarData: "Student Address is: " 
+          topBarData: <>
+          <span><strong>Student Address is: </strong>{this.props.currentStudentAddress}</span>
+          <br></br>
+          </> 
            })
         }
         break
       case 'proof-of-reg':
         {
           this.setState({ docType: "My Proof of Registration",
-          topBarData: "Student is registered at: " 
+          topBarData:<>
+          <span><strong>Student Full Name(s): </strong>{this.props.currentStudentname}</span>
+          <br></br>
+          <span><strong>Student Number is: </strong>{this.props.currentStudentNo}</span>
+          <br></br>
+          <span><strong>Student is registered at: </strong>{this.props.currentStudentUniversity}</span>
+          <br></br>
+          <span><strong>Course Registerd for: </strong>{this.props.currentStudentCourse}</span>
+          <br></br>
+          <span><strong>Year of Study: </strong>{this.props.currentStudentYear}</span>
+          <br></br>
+          </> 
            })
         }
         break
       case 'next-of-kin':
         {
           this.setState({ docType: "Next of Kin ID",
-          topBarData: "Next of Kin ID number is: " 
+          topBarData: <>
+          <span><strong>Next of Kin ID number is: </strong>{this.props.nextOfKinId
+}</span>
+          <br></br>
+          </> 
            })
         }
     }
@@ -291,12 +332,15 @@ class ProfileV1Page extends React.Component {
       this.setState({
         isLoad: false
       })
+
+      //Populate Pop Up Event
       
       this.props.onPresPopUpEvent()
       
     })
       
   }
+
 
    //Set Message according to percentage
    setMessage(percent) {
@@ -577,9 +621,14 @@ class ProfileV1Page extends React.Component {
     let myBody, myLease;
       myBody = <> {this.state.doc != null
         ? <>
-        {localStorage.getItem('role') == 'admin' ?<p>{this.state.topBarData}</p> : null}
+        {localStorage.getItem('role') == 'admin' ? this.state.topBarData : null}
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
-        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
+        {
+          this.state.currentProgress != 100
+          ?<button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
+          : null
+        }
+          
           <iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
     </iframe>
         </>
@@ -645,6 +694,12 @@ class ProfileV1Page extends React.Component {
           window.location.reload()
       this.setDocumentProgress()
         }}
+        />
+        <PopUpConfirm 
+        Title= "Confirm Vetting!"
+        Body = "You are confirming that the document and information are in line."
+        FileType = {this.state.keyString} 
+        DocID = {this.state.currentDocID}
         />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
@@ -846,11 +901,14 @@ class ProfileV1Page extends React.Component {
                                 <div className="col-lg-3 col-md-5 col-sm-12">
                                   {/* <FileStorageCard TotalSize="Storage Used" UsedSize={90} /> */}
                                   {fileStorageStatusCardData.map((data, index) => {
+                                    
                                     return (
                                       <div 
                                       key={index + "sidjpidj"} 
                                       onClick={() => this.changeDocument(data.FileType)}
-                                      onAnimationEnd={() => this.setState({ fade: false })}
+                                      onAnimationEnd={() => this.setState({ fade: false,
+                                        currentProgress: data.UsedPer
+                                      })}
                                       >
                                         
                                         <FileStorageStatusCard
@@ -860,6 +918,7 @@ class ProfileV1Page extends React.Component {
                                           Type={data.status}
                                           UsedPer={data.UsedPer}
                                           ProgressBarClass={`${data.ProgressBarClass}`}
+                                          MyFunction = {()=>{this.props.onPresPopUpConfirm()}}
                                         />
                                       </div>
                                     );
@@ -927,9 +986,22 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   isSecuritySystem: ioTReducer.isSecuritySystem,
   studentProgress: navigationReducer.progressBar,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+
   currentStudentiD: navigationReducer.studentID,
+  currentStudentIDNo: navigationReducer.studentIDNo,
+  currentStudentname: navigationReducer.studentName,
+
+  currentStudentAddress: navigationReducer.studentAddress,
+  currentStudentUniversity: navigationReducer.studentUniversity,
+  currentStudentCourse: navigationReducer.studentCourse,
+  currentStudentYear: navigationReducer.studentYearOfStudy,
+  currentStudentNo: navigationReducer.studentStudentNo,
+
+  nextOfKinName: navigationReducer.nextofKinName,
+  nextOfKinId: navigationReducer.nextofKinID
 });
 
 export default connect(mapStateToProps, {
   onPresPopUpEvent,
+  onPresPopUpConfirm
 })(ProfileV1Page);

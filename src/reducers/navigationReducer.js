@@ -16,12 +16,21 @@ import {
   UPDATE_CLIENTNAME,
   UPDATE_CLIENTLOGO,
   UPDATE_STUDENTID,
+  UPDATE_NOK_ID,
+  UPDATE_NOK_NAME,
+  UPDATE_STUDENT_NAME,
   ON_UPDATE_PROGRESS_BAR,
   ON_STUDENT_RUBIX_ID,
   ON_NOK_PROGRESS,
   ON_REG_PROGRESS,
   ON_RES_PROGRESS,
-  ON_ID_PROGRESS
+  ON_ID_PROGRESS,
+  UPDATE_STUDENT_ADDRESS,
+  UPDATE_STUDENT_UNIVERRSITY,
+  UPDATE_STUDENT_COURSE,
+  UPDATE_STUDENT_YEAR_OF_STUDY,
+  UPDATE_STUDENT_STUDENT_NO,
+  UPDATE_DOC_ID
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -35,8 +44,18 @@ const initialState = {
   progressBar: 0,
   studentID: '',
   studentName: '',
+
+  studentAddress: '',
+  studentUniversity: '',
+  studentCourse: '',
+  studentStudentNo: '',
+  studentYearOfStudy: '',
+
   nextofKinID: '',
   nextofKinName: '',
+
+  currentDocID: '',
+
   idProgress: '',
   proofOfResProgress: '',
   proofOfRegProgress: '',
@@ -540,11 +559,80 @@ export default (state = initialState, action) => {
         clientLogo: action.payload,
       }
     }
-
+//Update Student Number
     case UPDATE_STUDENTID: {
       return{
         ...state,
         studentIDNo: action.payload,
+      }
+    }
+//Update Student Name
+    case UPDATE_STUDENT_NAME: {
+      return{
+        ...state,
+        studentName: action.payload,
+      }
+    }
+//Update Next of Kin Name
+    case UPDATE_NOK_NAME: {
+      return{
+        ...state,
+        nextofKinName: action.payload,
+      }
+    }
+//Update Next of Kin ID
+    case UPDATE_NOK_ID: {
+      return{
+        ...state,
+        nextofKinID: action.payload,
+      }
+    }
+
+//Update Student's Address
+    case UPDATE_STUDENT_ADDRESS: {
+      return{
+        ...state,
+        studentAddress: action.payload,
+      }
+    }
+
+//Update Student's University
+    case UPDATE_STUDENT_UNIVERRSITY: {
+      return{
+        ...state,
+        studentUniversity: action.payload,
+      }
+    }
+
+//Update Student's University Course
+    case UPDATE_STUDENT_COURSE: {
+      return{
+        ...state,
+        studentCourse: action.payload,
+      }
+    }
+
+//Update Student's University Year of Study
+    case UPDATE_STUDENT_YEAR_OF_STUDY: {
+      return{
+        ...state,
+        studentYearOfStudy: action.payload,
+      }
+    }
+
+//Update Student's Student Number
+    case UPDATE_STUDENT_STUDENT_NO: {
+      return{
+        ...state,
+        studentStudentNo: action.payload,
+      }
+    }
+
+//Update Document ID
+    case UPDATE_DOC_ID: {
+      return{
+        ...state,
+        currentDocID: action.payload,
       }
     }
 

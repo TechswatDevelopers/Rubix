@@ -34,7 +34,7 @@ class SudentsTable extends React.Component {
             <table className="table">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>Status</th>
                   <th>FIRST NAME</th>
                   <th>LAST NAME</th>
                   <th>Email</th>
@@ -54,7 +54,13 @@ class SudentsTable extends React.Component {
                     currentStudent: student
                   })}
                   >
-                  <th scope="row">1</th>
+                  <th scope="row">
+                    <div style={{
+                      height: '50px',
+                      width: '50px',
+                      backgroundColor: student.Color
+                    }}></div>
+                    </th>
                   <td>{student.Name} {student.MiddleName}</td>
                   <td>{student.Surname}</td>
                   <td>{student.UserEmail}</td>

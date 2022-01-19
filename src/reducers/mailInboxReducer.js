@@ -6,6 +6,7 @@ import {
   ON_PRESS_ADD_CONTACT,
   ON_PRESS_POP_UP_EVENT,
   ON_PRESS_SHOW_PROFILE,
+  ON_PRESS_POP_UP_CONFIRMATION,
 } from "../actions/MailInboxAction";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   isInbox: true,
   isEventModal: false,
   isPopUpModal: false,
+  isPopUpConfirm: false,
   isContactModal: false,
   isProfileShowing: false,
 };
@@ -54,6 +56,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isPopUpModal: !state.isPopUpModal,
+      };
+    }
+
+    case ON_PRESS_POP_UP_CONFIRMATION: {
+      return {
+        ...state,
+        isPopUpConfirm: !state.isPopUpConfirm,
       };
     }
 

@@ -123,9 +123,17 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
 
   //Load Comments from DB
   loadComments(postID) {
-    const data = {
-      'RubixRegisterUserMessageID': postID,
-      'RubixRegisterUserID': localStorage.getItem('userID')
+    let data
+    if(localStorage.getItem('role') == 'admin'){
+      data = {
+        'RubixRegisterUserMessageID': postID,
+        //'RubixRegisterUserID': localStorage.getItem('userID')
+      }
+    }else {
+      data = {
+        'RubixRegisterUserMessageID': postID,
+        'RubixRegisterUserID': localStorage.getItem('userID')
+      }
     }
     const requestOptions = {
       title: 'Get Comments Form',
@@ -284,8 +292,6 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                         {message.Residence}
                       </span>
                       <div className="msg">
-                      <RichText render= 
-                          {message.UserMessage}/>
                         <span>
                           {message.UserMessage}
                         </span>

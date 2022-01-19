@@ -20,8 +20,20 @@ export const UPDATE_CLIENTID = "navigationReducer/UPDATE_CLIENTID";
 export const UPDATE_STUDENTID = "navigationReducer/UPDATE_STUDENTID";
 export const UPDATE_CLIENTNAME = "navigationReducer/UPDATE_CLIENTNAME";
 export const UPDATE_CLIENTLOGO = "navigationReducer/UPDATE_CLIENTLOGO";
+
 export const ON_UPDATE_PROGRESS_BAR = "navigationReducer/ON_UPDATE_PROGRESS_BAR";
 export const ON_STUDENT_RUBIX_ID = "navigationReducer/ON_STUDENT_RUBIX_ID";
+export const UPDATE_STUDENT_NAME = "navigationReducer/UPDATE_STUDENT_NAME";
+export const UPDATE_NOK_NAME = "navigationReducer/UPDATE_NOK_NAME";
+export const UPDATE_NOK_ID = "navigationReducer/UPDATE_NOK_ID";
+
+export const UPDATE_STUDENT_ADDRESS = "navigationReducer/UPDATE_STUDENT_ADDRESS";
+export const UPDATE_STUDENT_UNIVERRSITY = "navigationReducer/UPDATE_STUDENT_UNIVERRSITY";
+export const UPDATE_STUDENT_COURSE = "navigationReducer/UPDATE_STUDENT_COURSE";
+export const UPDATE_STUDENT_YEAR_OF_STUDY = "navigationReducer/UPDATE_STUDENT_YEAR_OF_STUDY";
+export const UPDATE_STUDENT_STUDENT_NO = "navigationReducer/UPDATE_STUDENT_STUDENT_NO";
+
+export const UPDATE_DOC_ID = "navigationReducer/UPDATE_DOC_ID";
 
 export const ON_NOK_PROGRESS = "navigationReducer/ON_NOK_PROGRESS";
 export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
@@ -175,6 +187,8 @@ export const onUpdateREGProgress = (val) => (dispatch) => {
     payload: val,
   });
 };
+
+
 //Proof of Residence Update
 export const onUpdateRESProgress = (val) => (dispatch) => {
   dispatch({
@@ -182,6 +196,8 @@ export const onUpdateRESProgress = (val) => (dispatch) => {
     payload: val,
   });
 };
+
+
 //ID Document Update
 export const onUpdateIDProgress = (val) => (dispatch) => {
   dispatch({
@@ -190,14 +206,93 @@ export const onUpdateIDProgress = (val) => (dispatch) => {
   });
 };
 
+//Update Student ID
 export const updateStudentID = (val)=>(disptch) =>{
-  //console.log("Dispatch action is called with value ", val);
-  // alert("Hello Monkey");
   disptch({
     type:UPDATE_STUDENTID,
     payload: val,
   })
 };
+
+//Update Student Name
+export const updateStudentName = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_NAME,
+    payload: val,
+  })
+};
+
+//Update Student's Physical Address
+export const updateStudentAddress = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_ADDRESS,
+    payload: val,
+  })
+};
+
+//Update Student's University
+export const updateStudentUniversity = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_UNIVERRSITY,
+    payload: val,
+  })
+};
+
+//Update Student's University
+export const updateStudentStudentNo = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_STUDENT_NO,
+    payload: val,
+  })
+};
+
+
+//Update Student's Course
+export const updateStudentCourse = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_COURSE,
+    payload: val,
+  })
+};
+
+
+
+//Update Student's Year of Study
+export const updateStudentYear = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_YEAR_OF_STUDY,
+    payload: val,
+  })
+};
+
+
+//Update Next of Kin Name
+export const updateNOKName = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_NOK_NAME,
+    payload: val,
+  })
+};
+
+
+//Update Next of Kin ID
+export const updateNOKID = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_NOK_ID,
+    payload: val,
+  })
+};
+
+//Update Next of Kin ID
+export const updateDocID = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_DOC_ID,
+    payload: val,
+  })
+};
+
+
+//Update Client Name
 export const updateClientName = (val)=>(disptch) =>{
   //console.log("Dispatch action is called with value ", val);
   // alert("Hello Monkey");
@@ -206,6 +301,8 @@ export const updateClientName = (val)=>(disptch) =>{
     payload: val,
   })
 };
+
+//Update Client Logo
 export const updateClientLogo = (val)=>(disptch) =>{
   //console.log("Dispatch action is called with value ", val);
   // alert("Hello Monkey");

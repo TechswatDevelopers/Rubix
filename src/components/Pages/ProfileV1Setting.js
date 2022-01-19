@@ -4,7 +4,17 @@ import imageuser from "../../assets/images/user.png";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
-import {onUpdateProgressBar ,onUpdateIDProgress, onUpdateRESProgress, onUpdateREGProgress, onUpdateNOKProgress} from '../../actions/NavigationAction';
+import {onUpdateProgressBar,
+  onUpdateIDProgress, onUpdateRESProgress, 
+  onUpdateREGProgress, onUpdateNOKProgress, 
+  updateStudentID, updateStudentName, 
+  updateNOKName, updateNOKID,
+  updateStudentAddress,
+  updateStudentCourse,
+  updateStudentUniversity,
+  updateStudentStudentNo,
+  updateStudentYear
+  } from '../../actions/NavigationAction';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
@@ -401,6 +411,23 @@ class ProfileV1Setting extends React.Component {
         .then(response => {
           console.log("All Student data", response)
           this.setState({ myProfile: response.data.PostRubixUserData[0] })
+          //Load Vetting information to Redux Store
+this.props.updateStudentID(response.data.PostRubixUserData[0].IDNumber)
+this.props.updateStudentName(
+  response.data.PostRubixUserData[0].Name 
+  + ' ' 
+  + response.data.PostRubixUserData[0].MiddleName 
+  +  ' ' 
+   + this.state.myProfile.Surname)
+   this.props.updateNOKName(response.data.PostRubixUserData[0].RubixUserNextOfKinFirstName + ' ' + response.data.PostRubixUserData[0].RubixUserNextOfKinLastName)
+   this.props.updateNOKID(response.data.PostRubixUserData[0].RubixUserNextOfKinID)
+
+   this.props.updateStudentAddress(response.data.PostRubixUserData[0].RegisterUserStreetNameAndNumer)
+   this.props.updateStudentUniversity(response.data.PostRubixUserData[0].UniversityName)
+   this.props.updateStudentCourse(response.data.PostRubixUserData[0].RubixCourse)
+   this.props.updateStudentYear(response.data.PostRubixUserData[0].YearofStudy)
+   this.props.updateStudentStudentNo(response.data.PostRubixUserData[0].StudentNumber)
+         
 
         })
     }
@@ -430,6 +457,8 @@ class ProfileV1Setting extends React.Component {
           this.props.onUpdateProgressBar(response.data.PostRubixUserData[1].InfoCount)
           console.log("Student Progress: ", this.props.studentProgress)
 
+
+ console.log("testing",response.data.PostRubixUserData[0].Name)
         }).then(() => {
           localStorage.setItem('resName', this.state.myProfile.ResidenceName)
           localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)
@@ -437,6 +466,8 @@ class ProfileV1Setting extends React.Component {
           localStorage.setItem('resUni', this.state.myProfile.ResidenceUniversity)
           localStorage.setItem('resDescription', this.state.myProfile.ResidenceDescription)
           localStorage.setItem('resAmenities', this.state.myProfile.ResidenceAmenities)
+
+         
         })
     }
     postData()
@@ -1225,7 +1256,14 @@ class ProfileV1Setting extends React.Component {
 const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   rubixUserID: navigationReducer.userID,
   studentProgress: navigationReducer.progressBar,
-  currentStudentiD: navigationReducer.studentID
+  currentStudentiD: navigationReducer.studentID,
+
+  
+  currentStudentIDNo: navigationReducer.studentIDNo,
+  currentStudentname: navigationReducer.studentName,
+
+  nextOfKinName: navigationReducer.nextofKinName,
+  nextOfKinId: navigationReducer.nextofKinID
 });
 
 export default connect(mapStateToProps, {
@@ -1233,5 +1271,16 @@ export default connect(mapStateToProps, {
   onUpdateIDProgress,
   onUpdateRESProgress,
   onUpdateREGProgress,
-  onUpdateNOKProgress
+  onUpdateNOKProgress,
+  updateStudentID,
+  updateStudentName,
+  updateNOKName,
+  updateNOKID,
+
+  updateStudentAddress,
+  updateStudentCourse,
+  updateStudentUniversity,
+  updateStudentAddress,
+  updateStudentStudentNo,
+  updateStudentYear
 })(ProfileV1Setting);

@@ -6,6 +6,8 @@ export const ON_PRESS_ADD_CONTACT = "mailInboxReducer/ON_PRESS_ADD_CONTACT";
 export const ON_PRESS_POP_UP_EVENT = "mailInboxReducer/ON_PRESS_ADD_CONTACT";
 export const ON_PRESS_SHOW_PROFILE = "mailInboxReducer/ON_PRESS_SHOW_PROFILE";
 
+export const ON_PRESS_POP_UP_CONFIRMATION = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION";
+
 export const onPressTagDropdown = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_TAG_DROPDOWN,
@@ -33,6 +35,12 @@ export const onPresAddEvent = () => (dispatch) => {
 export const onPresPopUpEvent = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_POP_UP_EVENT,
+  });
+};
+
+export const onPresPopUpConfirm = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_POP_UP_CONFIRMATION,
   });
 };
 

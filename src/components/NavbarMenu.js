@@ -573,7 +573,7 @@ class NavbarMenu extends React.Component {
                         }}
                       
                       >
-                        <i className="icon-user"></i> <span>{localStorage.getItem('role') == 'admin' ? "Students" : "myProfile"}</span>
+                        <i className="icon-user"></i> <span>{localStorage.getItem('role') == 'admin' ? "Students" : "My Profile"}</span>
                       </a>
                     </li>
 
