@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
-import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile} from "../../actions";
+import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, updateStudentName} from "../../actions";
 
 class SudentsTable extends React.Component {
   constructor(props) {
@@ -12,8 +12,14 @@ class SudentsTable extends React.Component {
   }
   //Select Specific Student
   selectStudent(e){
-    this.props.onUpdateStudentRubixID(this.state.currentStudent.RubixRegisterUserID)
-    this.props.onPresShowProfile()
+    this.props.onUpdateStudentRubixID(e.RubixRegisterUserID)
+    console.log('student details: ', e)
+    this.props.updateStudentName(
+      e.Name 
+      + ' ' 
+      + e.MiddleName 
+      +  ' ' 
+       + e.Surname)
   }
 
   
@@ -39,7 +45,6 @@ class SudentsTable extends React.Component {
                   <th>LAST NAME</th>
                   <th>Email</th>
                   <th>ID NUMBER</th>
-                  <th>STUDENT NUMBER</th>
                   <th>QUICK ACTIONS</th>
                 </tr>
               </thead>
@@ -50,14 +55,17 @@ class SudentsTable extends React.Component {
                   aria-expanded="false"
                   aria-controls={"collapseComment" + index}
                   href={"#collapseComment" + index}
-                  onClick={(e)=>this.setState({
+                  onClick={(e)=>{
+                    this.setState({
                     currentStudent: student
                   })}
+                
+                }
                   >
                   <th scope="row">
                     <div style={{
-                      height: '50px',
-                      width: '50px',
+                      height: '30px',
+                      width: '30px',
                       backgroundColor: student.Color
                     }}></div>
                     </th>
@@ -65,11 +73,63 @@ class SudentsTable extends React.Component {
                   <td>{student.Surname}</td>
                   <td>{student.UserEmail}</td>
                   <td>{student.IDNumber}</td>
-                  <td>{student.StudentNumber}</td>
-                  <td><button>View Full Details</button></td>
+                  <td>
+                    <>
+                  <button className="btn btn-sm btn-outline-primary" 
+                  onClick={(e)=>{
+                    localStorage.setItem('tab', 'settings')
+                    this.setState({
+                      currentStudent: student
+                    })
+                    this.selectStudent(student)
+                    this.props.onPresShowProfile()
+                  }
+                    
+                    }>
+                    <span>
+                      <i className=" icon-user-following"></i> 
+                         Profile
+                      </span>
+                    </button>{" "}
+                &nbsp;&nbsp;
+                  <button className="btn btn-sm btn-outline-success" 
+                  onClick={(e)=>{
+                    localStorage.setItem('tab', 'documents')
+                    this.setState({
+                      currentStudent: student
+                    })
+                    this.selectStudent(student)
+                    this.props.onPresShowProfile()}}>
+                    <span>
+                      <i className=" icon-magnifier"></i> 
+                         Vet
+                      </span>
+                    </button>{" "}
+                &nbsp;&nbsp;
+                  <button className="btn btn-sm btn-outline-info" 
+                  onClick={(e)=>{
+                    e.preventDefault()
+                    this.setState({
+                      currentStudent: student
+                    })
+                    this.selectStudent(student)
+                    this.props.onPresRooms(e)
+                    if(this.props.showProfile){
+                      this.props.onPresShowProfile()
+                      
+                    }
+                    }}>
+                    <span>
+                      <i className=" icon-key"></i> 
+                         Room
+                      </span>
+                    </button>
+                  </></td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
                       <th scope="row"> </th>
+                      
+                      <td>{student.RequiredDocuments}</td>
                       <td><span><strong>Full Name: </strong>{student.Name} {student.MiddleName} {student.Surname}</span>
                       <br></br>
                       <span><strong>Email: </strong>{student.UserEmail}</span></td>
@@ -77,7 +137,7 @@ class SudentsTable extends React.Component {
                       <br></br>
                       <span><strong>Gender: </strong>{student.Gender}</span></td>
                       <td><span><strong>Student Number: </strong>{student.StudentNumber}</span></td>
-                      <td><button class="btn btn-primary" onClick={(e)=>this.selectStudent(e)}>View Full Profile</button></td>
+                      {/* <td><button class="btn btn-primary" onClick={(e)=>this.selectStudent(e)}>View Full Profile</button></td> */}
               </tr>
               
               </>
@@ -100,5 +160,7 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer, }) => ({
 export default connect(mapStateToProps, {
   updateStudentID,
   onUpdateStudentRubixID,
-  onPresShowProfile
+  onPresShowProfile,
+  onPresRooms,
+  updateStudentName
 })(SudentsTable);

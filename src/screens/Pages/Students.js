@@ -5,8 +5,10 @@ import PageHeader from "../../components/PageHeader";
 import SudentsTable from "../../components/Tables/StudentTables";
 import axios from "axios";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
-import {updateStudentID, onPresShowProfile} from "../../actions"
+import {updateStudentID, onPresShowProfile, onPresRooms, onPresPopUpAssign} from "../../actions"
 import ProfileV1Page from '../../screens/Pages/ProfileV1';
+import RoomAllocation from '../../screens/Pages/Rooms';
+import PopUpAssign from '../../components/PopUpAssignRoom'
 
 class Students extends React.Component {
     constructor(props) {
@@ -14,6 +16,7 @@ class Students extends React.Component {
         this.state = {
           searchKey: '',
           students: [],
+          showRooms: false,
         }
       }
   componentDidMount() {
@@ -58,6 +61,8 @@ class Students extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        
+        
         <div>
           <div className="container-fluid">
             <PageHeader
@@ -77,9 +82,12 @@ class Students extends React.Component {
   ? <ProfileV1Page/> 
 
 : null}
-{/* <ProfileV1Setting 
-StudentID= {this.props.currentStudentiD}
-/> */}
+{
+  this.props.showRooms
+  ? <RoomAllocation />
+:null
+}
+
               </div>
             </div>
           </div>
@@ -93,9 +101,12 @@ const mapStateToProps = ({ ioTReducer, navigationReducer, mailInboxReducer}) => 
   isSecuritySystem: ioTReducer.isSecuritySystem,
   currentStudentiD: navigationReducer.studentID,
   showProfile: mailInboxReducer.isProfileShowing,
+  showRooms: mailInboxReducer.isRoomshowing,
 });
 
 export default connect(mapStateToProps, {
     updateStudentID,
     onPresShowProfile,
+    onPresRooms,
+    onPresPopUpAssign
 })(Students);

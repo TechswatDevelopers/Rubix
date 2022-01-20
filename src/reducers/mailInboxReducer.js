@@ -7,6 +7,8 @@ import {
   ON_PRESS_POP_UP_EVENT,
   ON_PRESS_SHOW_PROFILE,
   ON_PRESS_POP_UP_CONFIRMATION,
+  ON_PRESS_SHOW_ROOMS,
+  ON_PRESS_POP_UP_ASSIGN_ROOM,
 } from "../actions/MailInboxAction";
 
 const initialState = {
@@ -18,6 +20,8 @@ const initialState = {
   isPopUpConfirm: false,
   isContactModal: false,
   isProfileShowing: false,
+  isRoomshowing: false,
+  isShowAssignModal: false,
 };
 
 export default (state = initialState, action) => {
@@ -78,6 +82,22 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isProfileShowing: !state.isProfileShowing,
+      };
+    }
+
+//Toggle Show Rooms
+    case ON_PRESS_SHOW_ROOMS: {
+      return {
+        ...state,
+        isRoomshowing: !state.isRoomshowing,
+      };
+    }
+
+//Toggle Assign Room Modal
+    case ON_PRESS_POP_UP_ASSIGN_ROOM: {
+      return {
+        ...state,
+        isShowAssignModal: !state.isShowAssignModal,
       };
     }
 

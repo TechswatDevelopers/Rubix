@@ -4,6 +4,7 @@ import { Dropdown, Nav, Toast } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import axios from "axios";
 import {
   onPressDashbord,
   onPressDashbordChild,
@@ -15,6 +16,7 @@ import {
   onPressMenuProfileDropdown,
   onPressSideMenuTab,
   tostMessageLoad,
+  updateResidenceID
 } from "../actions";
 import Avatar4 from "../assets/images/xs/avatar4.jpg";
 import Avatar5 from "../assets/images/xs/avatar5.jpg";
@@ -28,7 +30,8 @@ class NavbarMenu extends React.Component {
     profile: {},
     imageUrl: 'user.png',
     myClientogo: localStorage.getItem('clientLogo'),
-    clientID: localStorage.getItem('clientID')
+    clientID: localStorage.getItem('clientID'),
+    userFullName: '',
   };
 
 
@@ -36,11 +39,14 @@ class NavbarMenu extends React.Component {
     this.props.tostMessageLoad(true);
     var res = window.location.pathname;
     const userID = localStorage.getItem('userID');
+    const userCode = localStorage.getItem('userCode');
     this.props.onPressThemeColor(localStorage.getItem('clientTheme'))
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
     this.activeMenutabwhenNavigate("/" + activeKey);
+
+   
 
     //Fetch data from DB
     const fetchUserData = async() =>{
@@ -48,11 +54,23 @@ class NavbarMenu extends React.Component {
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
-        this.setState({profile: data})
-        //console.log("image url", this.state.profile)
+        this.setState({profile: data,
+        userFullName: data.Name + " " + data.Surname
+        })
+        //console.log("image url", data)
         });
       };
-     // fetchUserData();
+
+
+      if (localStorage.getItem('role') == 'admin'){
+         //Set timer for loading screen
+  setTimeout(() => {
+    this.getAdmin()
+  }, 2000);
+        
+      } else {
+        fetchUserData();
+      }
 
       
     //Get User Profile Picture
@@ -61,12 +79,12 @@ class NavbarMenu extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("Profile data:", data)
+          //console.log("Profile data:", data)
           const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-          console.log("Profile Picture data:", profilePic)
+          //console.log("Profile Picture data:", profilePic)
           //If Profile Picture Exists...
           if(profilePic != null && profilePic != undefined){
-            //this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
+            this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
             this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
           }
         });
@@ -75,6 +93,33 @@ class NavbarMenu extends React.Component {
     fetchData()
   }
 
+  //Get Admin User Data
+  getAdmin(){
+    const pingData = {
+        'UserCode': localStorage.getItem('userCode'),
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Get Admin User Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+      const postData = async () => {
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminGetUser', pingData, requestOptions)
+        .then(response => {
+          console.log("Admin User Details:", response)
+          this.setState({
+            profile: response.data.PostRubixUserData[0],
+            userFullName: response.data.PostRubixUserData[0].AdminUserName + " " + response.data.PostRubixUserData[0].AdminUserSurname
+          })
+
+          this.props.updateResidenceID(response.data.PostRubixUserData[0].RubixAdminUserID)
+  
+        })
+      }
+      postData()
+  }
   activeMenutabwhenNavigate(activeKey) {
     if (
       activeKey === "/dashboard" ||
@@ -457,13 +502,18 @@ class NavbarMenu extends React.Component {
                   id="dropdown-basic"
                   className="user-name"
                 >
-                  <strong>{this.state.profile.Name} {this.state.profile.Surname}</strong>
+                  <strong>{this.state.userFullName}</strong>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className="dropdown-menu-right account">
-                  <Dropdown.Item href="profilev1page">
+                  { localStorage.getItem('role') == 'admin'
+                  ? null
+                    :
+                    <><Dropdown.Item href="profilev1page">
                     <i className="icon-user"></i>My Profile
                   </Dropdown.Item>
+                  <li className="divider"></li>
+                  </>}
                   {/* <Dropdown.Item href="appinbox">
                     {" "}
                     <i className="icon-envelope-open"></i>Messages
@@ -472,7 +522,6 @@ class NavbarMenu extends React.Component {
                     {" "}
                     <i className="icon-settings"></i>Settings
                   </Dropdown.Item> */}
-                  <li className="divider"></li>
                   <Dropdown.Item href={"login/" + this.state.clientID}>
                     {" "}
                     <i className="icon-power"></i>Logout
@@ -518,7 +567,7 @@ class NavbarMenu extends React.Component {
                   <i className="icon-book-open"></i>
                 </a>
               </li> */}
-              <li className="nav-item">
+             {/*  <li className="nav-item">
                 <a
                   className={sideMenuTab[2] ? "nav-link active" : "nav-link"}
                   data-toggle="tab"
@@ -528,7 +577,7 @@ class NavbarMenu extends React.Component {
                 >
                   <i className="icon-settings"></i>
                 </a>
-              </li>
+              </li> */}
              {/*  <li className="nav-item">
                 <a
                   className={sideMenuTab[3] ? "nav-link active" : "nav-link"}
@@ -1700,4 +1749,5 @@ export default connect(mapStateToProps, {
   onPressMenuProfileDropdown,
   onPressSideMenuTab,
   tostMessageLoad,
+  updateResidenceID
 })(NavbarMenu);

@@ -34,6 +34,7 @@ export const UPDATE_STUDENT_YEAR_OF_STUDY = "navigationReducer/UPDATE_STUDENT_YE
 export const UPDATE_STUDENT_STUDENT_NO = "navigationReducer/UPDATE_STUDENT_STUDENT_NO";
 
 export const UPDATE_DOC_ID = "navigationReducer/UPDATE_DOC_ID";
+export const UPDATE_RES_ID = "navigationReducer/UPDATE_RES_ID";
 
 export const ON_NOK_PROGRESS = "navigationReducer/ON_NOK_PROGRESS";
 export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
@@ -298,6 +299,14 @@ export const updateClientName = (val)=>(disptch) =>{
   // alert("Hello Monkey");
   disptch({
     type:UPDATE_CLIENTNAME,
+    payload: val,
+  })
+};
+
+//Update Residence ID
+export const updateResidenceID = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_RES_ID,
     payload: val,
   })
 };

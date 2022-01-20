@@ -30,7 +30,8 @@ import {
   UPDATE_STUDENT_COURSE,
   UPDATE_STUDENT_YEAR_OF_STUDY,
   UPDATE_STUDENT_STUDENT_NO,
-  UPDATE_DOC_ID
+  UPDATE_DOC_ID,
+  UPDATE_RES_ID
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -50,6 +51,7 @@ const initialState = {
   studentCourse: '',
   studentStudentNo: '',
   studentYearOfStudy: '',
+  studentResID: '',
 
   nextofKinID: '',
   nextofKinName: '',
@@ -633,6 +635,14 @@ export default (state = initialState, action) => {
       return{
         ...state,
         currentDocID: action.payload,
+      }
+    }
+
+//Update Student Res ID
+    case UPDATE_RES_ID: {
+      return{
+        ...state,
+        studentResID: action.payload,
       }
     }
 

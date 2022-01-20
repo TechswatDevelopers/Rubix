@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, onPresPopUpEvent } from "../actions";
+import { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign, onPresRooms } from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
-class PopUpConfirm extends React.Component {
+
+class PopUpAssign extends React.Component {
     //Initial State
 constructor(props) {
   super(props)
@@ -14,21 +15,13 @@ constructor(props) {
 }
 
   //Send Vetted status
-  sendVettingStatus(filetype, docID, vet){
-    let vettedStatus
-    if(vet == 'correct') {
-      vettedStatus = 1
-    } else {
-      vettedStatus = 0
-    }
+  assignRoom(roomID){
+   
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
-      'RubixDocumentType': filetype,
-      'RubixDocumentID': docID,
-      'RubixVetted': vettedStatus,
-      'RubixVettedResult': vet,
-      'RubixVettedComment': document.getElementById('comment').value
+      'RubixClientID': localStorage.getItem('clientID'),
+      'RubixResidenceRoomsID': roomID,
     }
     
     const requestOptions = {
@@ -40,22 +33,20 @@ constructor(props) {
 
     console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminVettings', data, requestOptions)
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
         console.log("DB response: ", response)
       })
     }
-    postData().then(()=>{
-      window.location.reload()
-    })
+    postData()
   }
 
 
   render() {
-    const { isPopUpConfirm, Title, Body, FileType, DocID} = this.props;
+    const {isPopUpAssign, Title, Body, roomID} = this.props;
     return (
       <div
-        className={isPopUpConfirm ? "modal fade show" : "modal fade"}
+        className={isPopUpAssign ? "modal fade show" : "modal fade"}
         role="dialog"
       >
         <div className="modal-dialog" role="document">
@@ -67,33 +58,28 @@ constructor(props) {
             </div>
             <div className="modal-body">
               {Body}
-              <label className="control-label sr-only" >
-                          Vet Comment
-                            </label>
-                        <input
-                          className="form-control"
-                          id="comment"
-                          placeholder="Vetting comment..."
-                          type="email"
-                        />
+              
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
-                  this.sendVettingStatus(FileType, DocID, 'correct')
-                  this.props.onPresPopUpEvent();
+                  //this.sendVettingStatus(FileType, DocID, 'correct')
+                  this.assignRoom(roomID)
+                  this.props.onPresRooms();
+                  this.props.onPresPopUpAssign()
+                  //window.location.reload()
                 }}>
-                Vet as Correct
+                Assign
               </button>
               <button
                 type="button"
                 onClick={(e) => {
-                  this.sendVettingStatus(FileType, DocID, 'incorrect')
-                  this.props.onPresPopUpEvent();
+                  //On assign room cancel
+                  this.props.onPresPopUpAssign()
                 }}
                 className="btn btn-simple"
                 data-dismiss="modal"
               >
-                Vet as Incorrect
+                Cancel
               </button>
             </div>
           </div>
@@ -106,7 +92,8 @@ constructor(props) {
 const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
   isPopUpConfirm: mailInboxReducer.isPopUpConfirm,
+  isPopUpAssign: mailInboxReducer.isShowAssignModal,
   currentStudentiD: navigationReducer.studentID,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent  })(PopUpConfirm);
+export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign, onPresRooms  })(PopUpAssign);
