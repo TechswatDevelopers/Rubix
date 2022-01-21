@@ -38,9 +38,10 @@ class VarsityDetails extends React.Component {
      Submit(e){
         e.preventDefault();
         const form = document.getElementById('uniDetails');
+        console.log('Uni ID: ', this.state.uni)
         const data = {
             'RubixRegisterUserID': this.state.myUserID,
-            'ProvinceID': this.state.prov,
+            //'ProvinceID': this.state.prov,
             'UniversityID': this.state.uni,
             'CourseID': this.state.course,
             'ResidenceID': this.state.res,
@@ -90,18 +91,18 @@ async componentDidMount(){
     const fetchData = async() =>{
 
         //Populate university list
-        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities')
+        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities/' + localStorage.getItem('clientID'))
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            console.log("data is ", data.data)
             this.setState({uniList: data.data})
             });
 
             //Populate Residence list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences')
+            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            console.log("data is ", data)
             this.setState({resList: data.data})
             });
 

@@ -15,6 +15,7 @@ class Addresses extends React.Component {
       prov: null,
       myUserID: null,
       country: null,
+      showSearch: false,
       value: 0
 
     };
@@ -125,6 +126,12 @@ class Addresses extends React.Component {
 
   }
 
+  //Show Search
+  showSearch(e){
+    e.preventDefault() 
+    this.setState({showSearch: !this.state.showSearch})
+  }
+
   render() {
     return (
       <div className="theme-green">
@@ -146,7 +153,16 @@ class Addresses extends React.Component {
                         <label className="control-label sr-only" >
                           Home Address
                         </label>
-                        <GooglePlacesAutocomplete
+                        <input
+                          className="form-control"
+                          name= "RegisterUserStreetNameAndNumer"
+                          id="complex-name"
+                          placeholder="Enter your Physical Address"
+                          type="text"
+                        />
+                        <button className="btn btn-primary btn-sm" onClick={(e)=>this.showSearch(e)}><i className="icon-magnifier"/> Search</button>
+                        { this.state.showSearch
+                        ?  <GooglePlacesAutocomplete
                           apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange={(e) => this.setState({ location: e.target.value })}
                           selectProps={{
                             location: this.state.location,
@@ -154,6 +170,8 @@ class Addresses extends React.Component {
                             placeholder: "Enter your home Address"
                           }}
                         />
+                      : null
+                      }
                       </div>
 
                       <div className="form-group">

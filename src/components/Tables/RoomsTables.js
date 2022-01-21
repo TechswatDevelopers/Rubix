@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
-import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, onPresPopUpAssign} from "../../actions";
+import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, onPresPopUpAssign, onPresPopUpRemove} from "../../actions";
 import PopUpAssign from "../../components/PopUpAssignRoom"
+import PopUpRemove from "../../components/PopUpRemoveFromRoom"
 
 class RoomsTable extends React.Component {
   constructor(props) {
@@ -25,8 +26,13 @@ class RoomsTable extends React.Component {
         <div className="card">
         <PopUpAssign 
         roomID = {this.state.currentRoom.RubixResidenceRoomsID}
-        Title= "Confirm Room Assigning!"
+        Title= "Confirm Room Assigning"
         Body = {"You are about to assign " + this.props.currentStudentname + " to a room: " /* + this.state.currentRoom.RoomNumber */}
+        />
+        <PopUpRemove 
+        roomID = {this.state.currentRoom.RubixResidenceRoomsID}
+        Title= "Confirm Room Removal"
+        Body = {"You are about to remove " + this.props.currentStudentname + " from a room: " /* + this.state.currentRoom.RoomNumber */}
         />
           <div className="header">
             <h2>
@@ -73,7 +79,7 @@ class RoomsTable extends React.Component {
                     onClick={(e)=>{
                       e.preventDefault()
                       //this.props.onPresRooms(e)
-                      this.props.onPresPopUpAssign()
+                      this.props.onPresPopUpRemove()
                       
                       }}>
                       <span>
@@ -94,7 +100,8 @@ class RoomsTable extends React.Component {
                       <i className=" icon-key"></i> 
                          Assign to Room
                       </span>
-                    </button>}
+                    </button>
+                    }
                   </></td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
@@ -103,7 +110,6 @@ class RoomsTable extends React.Component {
                       <td><span><strong>Room Capacity: </strong>{room.Capacity} </span></td>
                       <td><span><strong>Available: </strong>{room.AvaibaleBeds}</span></td>
                       </tr>
-              
               </>
                 ))}
               </tbody>
@@ -128,5 +134,6 @@ export default connect(mapStateToProps, {
   onUpdateStudentRubixID,
   onPresShowProfile,
   onPresRooms,
-  onPresPopUpAssign
+  onPresPopUpAssign,
+  onPresPopUpRemove
 })(RoomsTable);

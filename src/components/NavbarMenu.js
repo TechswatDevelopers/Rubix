@@ -114,7 +114,7 @@ class NavbarMenu extends React.Component {
             userFullName: response.data.PostRubixUserData[0].AdminUserName + " " + response.data.PostRubixUserData[0].AdminUserSurname
           })
 
-          this.props.updateResidenceID(response.data.PostRubixUserData[0].RubixAdminUserID)
+          this.props.updateResidenceID(response.data.PostRubixUserData[0].RubixResidenceID)
   
         })
       }

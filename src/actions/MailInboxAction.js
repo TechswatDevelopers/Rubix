@@ -9,6 +9,7 @@ export const ON_PRESS_SHOW_ROOMS = "mailInboxReducer/ON_PRESS_SHOW_ROOMS";
 
 export const ON_PRESS_POP_UP_CONFIRMATION = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION";
 export const ON_PRESS_POP_UP_ASSIGN_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_ASSIGN_ROOM";
+export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REMOVE_ROOM";
 
 export const onPressTagDropdown = () => (dispatch) => {
   dispatch({
@@ -53,6 +54,14 @@ export const onPresPopUpConfirm = () => (dispatch) => {
 export const onPresPopUpAssign = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_POP_UP_ASSIGN_ROOM,
+  });
+};
+
+
+//Toggle Pop Up Remove Room
+export const onPresPopUpRemove = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_POP_UP_REMOVE_ROOM,
   });
 };
 

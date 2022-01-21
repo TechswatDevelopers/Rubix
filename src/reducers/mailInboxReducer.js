@@ -9,6 +9,7 @@ import {
   ON_PRESS_POP_UP_CONFIRMATION,
   ON_PRESS_SHOW_ROOMS,
   ON_PRESS_POP_UP_ASSIGN_ROOM,
+  ON_PRESS_POP_UP_REMOVE_ROOM,
 } from "../actions/MailInboxAction";
 
 const initialState = {
@@ -22,6 +23,7 @@ const initialState = {
   isProfileShowing: false,
   isRoomshowing: false,
   isShowAssignModal: false,
+  isShowRemoveModal: false,
 };
 
 export default (state = initialState, action) => {
@@ -90,6 +92,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isRoomshowing: !state.isRoomshowing,
+      };
+    }
+
+//Toggle Remove Rooms
+    case ON_PRESS_POP_UP_REMOVE_ROOM: {
+      return {
+        ...state,
+        isShowRemoveModal: !state.isShowRemoveModal,
       };
     }
 
