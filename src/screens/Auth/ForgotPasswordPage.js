@@ -15,8 +15,45 @@ class ForgotPasswordPage extends React.Component {
       myFunction: null,
     }
   }
-
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    this.setThemeColor(this.props.match.params.uid )
+  }
   
+  
+  //Set Theme Color
+  setThemeColor(client){
+    switch(client){
+      case '1':{
+        this.props.updateClientLogo('CJ-Logo4.png')
+        this.props.updateClientName('CJ Students')
+        this.props.onPressThemeColor('orange')
+        this.setState({
+          backImage: 'cj_bg.png'
+        })
+
+        localStorage.setItem('clientLogo', 'CJ-Logo4.png')
+        localStorage.setItem('clientName', 'CJ Students')
+        localStorage.setItem('clientTheme', 'orange')
+      }
+        break
+      case '2': { 
+      this.props.onPressThemeColor('purple')
+      this.props.updateClientLogo('opal.png')
+      this.props.updateClientName('Opal Students')
+      this.setState({
+        backImage: 'https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg'
+
+      })
+
+
+      localStorage.setItem('clientLogo', 'opal.png')
+      localStorage.setItem('clientName', 'Opal Students')
+      localStorage.setItem('clientTheme', 'purple')
+    }
+    }
+    console.log('client:', this.state.backImage)
+  }
   //Reset Password
   resetPassword(e){
     e.preventDefault();
