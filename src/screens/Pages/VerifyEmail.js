@@ -2,6 +2,8 @@ import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
+import {onPresPopUpEvent, updateEmail, updatePassword,onLoggedin, updateUserID, 
+  updateClientID,onPressThemeColor,updateClientName, updateClientLogo } from "../../actions";
 
 class VerifyEmail extends React.Component {
   //Initial State
@@ -20,8 +22,9 @@ constructor(props) {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    localStorage.setItem('clientID', this.state.currentClientId)
-    this.setThemeColor(this.state.currentClientId)
+    this.setThemeColor(this.props.match.params.clientID )
+    localStorage.setItem('clientID', this.props.match.params.clientID)
+    this.setThemeColor(this.props.match.params.clientID)
      //Set timer for loading screen
   setTimeout(() => {
     this.setState({
@@ -43,34 +46,42 @@ constructor(props) {
   }
   verify()
   }
+    
   
   //Set Theme Color
   setThemeColor(client){
     switch(client){
       case '1':{
-        /* this.props.updateClientLogo('CJ-Logo.png')
+        this.props.updateClientLogo('CJ-Logo4.png')
         this.props.updateClientName('CJ Students')
-        this.props.onPressThemeColor('orange') */
+        this.props.onPressThemeColor('orange')
+        this.setState({
+          backImage: 'cj_bg.png'
+        })
 
-        localStorage.setItem('clientLogo', 'CJ-Logo.png')
+        localStorage.setItem('clientLogo', 'CJ-Logo4.png')
         localStorage.setItem('clientName', 'CJ Students')
         localStorage.setItem('clientTheme', 'orange')
       }
         break
-      case '2': {
-      /* this.props.onPressThemeColor('purple')
+      case '2': { 
+      this.props.onPressThemeColor('purple')
       this.props.updateClientLogo('opal.png')
-      this.props.updateClientName('Opal Students') */
+      this.props.updateClientName('Opal Students')
+      this.setState({
+        backImage: 'https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg'
+
+      })
+
 
       localStorage.setItem('clientLogo', 'opal.png')
       localStorage.setItem('clientName', 'Opal Students')
       localStorage.setItem('clientTheme', 'purple')
     }
     }
-    //console.log('client:', this.props.rubixClientLogo)
+    console.log('client:', this.state.backImage)
   }
-
-
+  
   render() {
     return (
       <div className={localStorage.getItem('clientTheme')}
@@ -106,4 +117,12 @@ const mapStateToProps = ({ ioTReducer }) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
 });
 
-export default connect(mapStateToProps, {})(VerifyEmail);
+export default connect(mapStateToProps, {
+  
+  updateUserID,
+  updateClientID,
+  onPressThemeColor,
+  updateEmail,
+  updateClientLogo,
+  updateClientName,
+})(VerifyEmail);
