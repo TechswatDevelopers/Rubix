@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
 import axios from "axios";
-import {onPresPopUpEvent} from "../../actions";
+import {onPresPopUpEvent, updateEmail, updatePassword,onLoggedin, updateUserID, 
+  updateClientID,onPressThemeColor,updateClientName, updateClientLogo } from "../../actions";
 import PopUpModal from "../../components/PopUpModal"
 
 class ForgotPasswordPage extends React.Component {
@@ -17,7 +18,8 @@ class ForgotPasswordPage extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.setThemeColor(this.props.match.params.uid )
+    this.setThemeColor(this.props.match.params.clientID )
+    console.log("client ID:")
   }
   
   
@@ -142,5 +144,11 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
 });
 
 export default connect(mapStateToProps, {
-  onPresPopUpEvent
+  onPresPopUpEvent,
+  updateUserID,
+  updateClientID,
+  onPressThemeColor,
+  updateEmail,
+  updateClientLogo,
+  updateClientName,
 })(ForgotPasswordPage);
