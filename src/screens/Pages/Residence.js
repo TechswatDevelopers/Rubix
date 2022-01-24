@@ -114,6 +114,7 @@ class Residence extends React.Component {
       /* this.setState({
         gallery: data.post
       }) */
+      console.log('In the gallery: ', this.state.gallery)
     })
   }
   fetchData()
@@ -231,20 +232,30 @@ class Residence extends React.Component {
                         {this.state.amenities.map((amenity, index) => (
                           <>
                           <div className="col-3">
-                            <img src= {'icons/' + amenity.RubixResidencesAmenitieImageKey}
+                            {
+                              localStorage.getItem('clientID') != 1
+                              ? <img src= {amenity.RubixResidencesAmenitieDescription} style={{
+                                width: "120px",
+                                height: "120px"
+                              }}></img>
+
+                             : <img src= {'icons/' + amenity.RubixResidencesAmenitieImageKey}
                           style={{
                             width: "70px",
                             height: "70px"
                           }}
                           ></img>
+                          
+                          }
                           <br></br>
-                            <span>{amenity.RubixResidencesAmenitieDescription}</span>
+                            {
+                              localStorage.getItem('clientID') != 1
+                              ? null
+                              : <span>{amenity.RubixResidencesAmenitieDescription}</span>}
                             </div>
                             </>
                           ))}
                           </div>
-                          
-                        
                       </div>
                     </div>
                   </div>
@@ -358,7 +369,7 @@ class Residence extends React.Component {
                               width: "50px"
                             }}
                             ></img>
-                            <a  className="" href={social.ResidenceSocialLink}><span>CJ Students</span></a>
+                            <a  className="" href={social.ResidenceSocialLink}><span>{this.state.resDetails.ClientName}</span></a>
                           </div>
                           ))
                         }
@@ -379,7 +390,8 @@ class Residence extends React.Component {
                     alignContent: 'center'
                   }}>
                   <ImageGallery 
-                   items={this.state.gallery.length == 0
+                   items={
+                     this.state.gallery.length == 0
                    ? images
                    : this.state.gallery
                    } />

@@ -90,8 +90,17 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
 
   //Get noticies
   getNoticies() {
+    const data = {
+      'RubixClientID': localStorage.getItem('clientID')
+    }
+    const requestOptions = {
+      title: 'Login Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+  };
     const getData = async () => {
-      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes')
+      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
       console.log("Messages data", res.data.PostRubixUserData);
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
@@ -174,7 +183,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserLikesGet', data, requestOptions)
       console.log("List of likes data",res.data);
       const tempLikes = res.data.PostRubixUserData
-      if (tempLikes.length == 0 || tempLikes == undefined) {
+      if (tempLikes.length == 0 || tempLikes == undefined || tempLikes == false) {
 
       } else {
         this.setState({
