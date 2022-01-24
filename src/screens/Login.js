@@ -23,6 +23,7 @@ constructor(props) {
     currentClientId: '1',
     errorMessage: '',
     isAdmin: false,
+    backImage: '',
   }
 }
 
@@ -201,6 +202,9 @@ componentDidMount() {
         this.props.updateClientLogo('CJ-Logo4.png')
         this.props.updateClientName('CJ Students')
         this.props.onPressThemeColor('orange')
+        this.setState({
+          backImage: 'cj_bg.png'
+        })
 
         localStorage.setItem('clientLogo', 'CJ-Logo4.png')
         localStorage.setItem('clientName', 'CJ Students')
@@ -211,6 +215,11 @@ componentDidMount() {
       this.props.onPressThemeColor('purple')
       this.props.updateClientLogo('opal.png')
       this.props.updateClientName('Opal Students')
+      this.setState({
+        backImage: 'https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg'
+
+      })
+
 
       localStorage.setItem('clientLogo', 'opal.png')
       localStorage.setItem('clientName', 'Opal Students')
@@ -242,7 +251,17 @@ componentDidMount() {
         </div>
         <div className="hide-border">
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+              backgroundImage: localStorage.getItem('clientID') == 1 ? this.state.backImage
+              :'url(' + this.state.backImage + ')',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',   
+              width: '100% !important',
+              height: '100% !important',
+            }}
+            >
               <div className="auth-box">
 
                 <form id='login' onSubmit = {(e) => this.Submit(this)}>

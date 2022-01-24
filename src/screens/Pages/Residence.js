@@ -44,7 +44,7 @@ class Residence extends React.Component {
       isLoad: false,
       currentClientId: this.props.match.params.clientID
     })
-  }, 2000);
+  }, 3000);
 
     const pingData = {
       'RubixRegisterUserID': localStorage.getItem('userID'),
@@ -61,7 +61,7 @@ class Residence extends React.Component {
       //Ping email address
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
         .then(response => {
-          console.log("Student Res Details", response.data.PostRubixUserData)
+          console.log("Student Res Details", response)
           const temp = response.data.PostRubixUserData;
           this.setState({
             resDetails: response.data.PostRubixUserData[0],
@@ -83,7 +83,10 @@ class Residence extends React.Component {
           this.fetchImages(response.data.PostRubixUserData[0].RubixResidenceID)
         })
     }
+    setTimeout(() => {
+      
     postData()
+    }, 2000);
     //console.log('amenities', this.state.amenities)
   }
 
