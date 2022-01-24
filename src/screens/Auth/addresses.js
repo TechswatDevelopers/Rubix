@@ -25,7 +25,7 @@ class Addresses extends React.Component {
   AddressSubmit(e) {
     e.preventDefault();
     const form = document.getElementById('addresses');
-    if (this.state.location != null) {
+    if (this.state.location != null || document.getElementById('streetAddress') != null) {
       const locations = document.getElementById('location');
       const street_address = this.state.location['value']['structured_formatting']['main_text']
       const data = {
@@ -156,7 +156,7 @@ class Addresses extends React.Component {
                         <input
                           className="form-control"
                           name= "RegisterUserStreetNameAndNumer"
-                          id="complex-name"
+                          id="streetAddress"
                           placeholder="Enter your Physical Address"
                           type="text"
                         />
