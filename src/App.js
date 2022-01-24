@@ -170,7 +170,7 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path={`${process.env.PUBLIC_URL}/verifyemail/:activeCode&:clientI`}
+                path={`${process.env.PUBLIC_URL}/verifyemail/:activeCode&:clientID`}
                 component={verifyemail}
               />
               <Route
