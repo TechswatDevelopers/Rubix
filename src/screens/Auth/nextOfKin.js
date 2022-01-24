@@ -343,7 +343,7 @@ postData()
               <div className="auth-box">
                 <div className="card">
                 <div className="top">
-                  <img src="CJ-Logo.png" alt="Lucid" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                  <img src={localStorage.getItem('clientLogo')} alt="Lucid" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
                     <p className="lead">Next of Kin Details</p>

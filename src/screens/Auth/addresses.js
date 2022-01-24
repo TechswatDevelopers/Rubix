@@ -25,7 +25,7 @@ class Addresses extends React.Component {
   AddressSubmit(e) {
     e.preventDefault();
     const form = document.getElementById('addresses');
-    if (this.state.location != null || document.getElementById('streetAddress') != null) {
+    if (this.state.location != null ) {
       const locations = document.getElementById('location');
       const street_address = this.state.location['value']['structured_formatting']['main_text']
       const data = {
@@ -61,7 +61,44 @@ class Addresses extends React.Component {
         }
       }
       postData()
-    } else {
+    } else if( document.getElementById('streetAddress') != null) {
+      const data = {
+        'RubixRegisterUserID': this.state.myUserID,
+        'RegisterUserProvince': this.state.prov,
+        'RegisterUserCountry': this.state.country,
+      };
+
+      for (let i = 0; i < form.elements.length; i++) {
+        const elem = form.elements[i];
+        data[elem.name] = elem.value
+      }
+
+      console.log("posted Data: ", data)
+      const requestOptions = {
+        title: 'Address Form',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: data
+      };
+
+      const postData = async () => {
+
+        if ( this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
+          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
+            .then(response => {
+              console.log(response)
+              this.props.history.push("/varsityDetails")
+            })
+
+        } else {
+          alert("Please ensure that you entered all required information")
+          console.log("checkValidity ", document.getElementById('addresses').checkValidity())
+        }
+      }
+      postData()
+    }
+    
+    else {
       alert("Please a valid home address")
     }
 
@@ -141,7 +178,7 @@ class Addresses extends React.Component {
               <div className="auth-box">
                 <div className="card">
                   <div className="top">
-                    <img src="CJ-Logo.png" alt="Logo" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                    <img src={localStorage.getItem('clientLogo')} alt="Logo" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
                     <p className="lead">Student Address Details</p>

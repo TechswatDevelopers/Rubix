@@ -23,7 +23,7 @@ constructor(props) {
     currentClientId: '1',
     errorMessage: '',
     isAdmin: false,
-    backImage: '',
+    backImage: 'cj_bg.png',
   }
 }
 
@@ -62,6 +62,7 @@ componentDidMount() {
       e.preventDefault();
       const form = document.getElementById('login');
       const data = {
+        'RubixClientID': localStorage.getItem('clientID'),
       };
       for (let i=0; i < form.elements.length; i++) {
           const elem = form.elements[i];
@@ -143,7 +144,8 @@ componentDidMount() {
   //Login Using Social Media
    SocialMediaLogin(userId){
     const data = {
-      'RubixUserPlatformID': userId
+      'RubixUserPlatformID': userId,
+      'RubixClientID': localStorage.getItem('clientID'),
     };
     const requestOptions = {
       title: 'Login Form',
@@ -211,7 +213,7 @@ componentDidMount() {
         localStorage.setItem('clientTheme', 'orange')
       }
         break
-      case '2': {
+      case '2': { 
       this.props.onPressThemeColor('purple')
       this.props.updateClientLogo('opal.png')
       this.props.updateClientName('Opal Students')
@@ -226,7 +228,7 @@ componentDidMount() {
       localStorage.setItem('clientTheme', 'purple')
     }
     }
-    console.log('client:', this.props.rubixClientLogo)
+    console.log('client:', this.state.backImage)
   }
 
   //Admin Toggle
