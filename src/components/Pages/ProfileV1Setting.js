@@ -114,7 +114,8 @@ class ProfileV1Setting extends React.Component {
     e.preventDefault();
     const form = document.getElementById('password');
     const data = {
-      'RubixRegisterUserID': this.state.myUserID
+      'RubixRegisterUserID': this.state.myUserID,
+      'RubixClientID': localStorage.getItem('clientID'),
     };
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];

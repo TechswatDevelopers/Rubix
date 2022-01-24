@@ -39,6 +39,7 @@ class ForgotPassword extends React.Component {
     e.preventDefault();
     const form = document.getElementById('forgot-pass');
     const data = {
+      'RubixClientID': localStorage.getItem('clientID'),
     };
     for (let i=0; i < form.elements.length; i++) {
         const elem = form.elements[i];

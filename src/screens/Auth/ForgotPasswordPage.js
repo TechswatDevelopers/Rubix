@@ -69,7 +69,7 @@ class ForgotPasswordPage extends React.Component {
                 <div className="card">
                   <div className="header">
                 <div className="top">
-                  <img src={'CJ-Logo4.png'} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+                  <img src={localStorage.getItem('clientLogo')} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
                 </div>
                     <p className="lead">Password Reset</p>
                   </div>
