@@ -73,7 +73,7 @@ class Addresses extends React.Component {
         data[elem.name] = elem.value
       }
 
-      console.log("posted Data: ", data)
+      //console.log("posted Data: ", data)
       const requestOptions = {
         title: 'Address Form',
         method: 'POST',

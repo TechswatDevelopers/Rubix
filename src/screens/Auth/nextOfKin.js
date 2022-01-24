@@ -19,6 +19,7 @@ class NextOfKin extends React.Component {
         userIPAddress: null,
         dateAndTime: null,
         isLoad: false,
+        showSearch: false,
         value: 0
 
     };
@@ -157,7 +158,50 @@ class NextOfKin extends React.Component {
     this.props.onPresPopUpEvent()
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
-}else{
+} else if(document.getElementById('streetAddress') != null)  {
+  const data = {
+    'RubixRegisterUserID': this.state.myUserID,
+};
+for (let i=0; i < form.elements.length; i++) {
+    const elem = form.elements[i];
+    data[elem.name] = elem.value
+}
+
+const requestOptions = {
+    title: 'Next of Kin Form',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+};
+
+const postData = async() => {
+  if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
+      .then(response => {
+          console.log(response)
+          //alert("Registration complete")
+          //this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
+          
+          
+      })
+          
+  } else{
+    alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
+    this.setState({
+      isLoad: false
+    })
+  }
+}
+postData().then(() => {
+this.setState({
+  isLoad: false
+})
+this.props.onPresPopUpEvent()
+//this.props.history.push("/login/" + localStorage.getItem('clientID'))
+})
+}
+
+else{
   alert("Please a valid home address")
   this.setState({
     isLoad: false
@@ -319,6 +363,11 @@ postData()
       })
     }, time);
   }
+  //Show Search
+  showSearch(e){
+    e.preventDefault() 
+    this.setState({showSearch: !this.state.showSearch})
+  }
 
 
   render() {
@@ -410,14 +459,25 @@ postData()
                         <label className="control-label sr-only" >
                           Home Address
                             </label>
-                            <GooglePlacesAutocomplete
+                            <input
+                          className="form-control"
+                          name= "RubixUserNextOfKinAddress"
+                          id= "streetAddress"
+                          placeholder="Enter your Physical Address"
+                          type="text"
+                        />
+                         <button className="btn btn-primary btn-sm" onClick={(e)=>this.showSearch(e)}><i className="icon-magnifier"/> Search</button>
+                            {
+                              !this.state.showSearch
+                              ? null
+                              :<GooglePlacesAutocomplete
 apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange = {(e)=>this.setState({location: e.target.value})}
 selectProps={{
 location: this.state.location,
 onChange: (e)=>this.setState({location: e}),
 placeholder: "Enter next of kin address"
 }}
-/>
+/>}
 <br/>
 <div className="form-group">
                         <label className="control-label sr-only" >
