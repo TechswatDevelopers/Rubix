@@ -19,6 +19,7 @@ class ForgotPasswordPage extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     this.setThemeColor(this.props.match.params.clientID )
+    localStorage.setItem('clientID', this.props.match.params.clientID)
     console.log("client ID:")
   }
   

@@ -14,7 +14,7 @@ constructor(props) {
     activationCode: null,
     errorMessage: '',
     errorMessage: '',
-    rubixClientLogo: localStorage.getItem('clientLogo'),
+    rubixClientLogo: this.props.match.params.clientID,
     currentClientId: '1',
     userData: {}
   }
@@ -24,7 +24,6 @@ constructor(props) {
     window.scrollTo(0, 0);
     this.setThemeColor(this.props.match.params.clientID )
     localStorage.setItem('clientID', this.props.match.params.clientID)
-    this.setThemeColor(this.props.match.params.clientID)
      //Set timer for loading screen
   setTimeout(() => {
     this.setState({
