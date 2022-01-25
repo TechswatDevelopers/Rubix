@@ -10,6 +10,7 @@ class RoomAllocation extends React.Component {
   //Initial State
   constructor(props) {
     super(props)
+    this.testRef = React.createRef();
     this.state = {
       studentRoomDetails: {},
       availableRooms: []
@@ -20,6 +21,8 @@ class RoomAllocation extends React.Component {
     window.scrollTo(0, 0);
 
     this.getStudentRoomDetails(this.props.currentStudentiD)
+    const scrollToElement = () => this.testRef.current.scrollIntoView();
+    scrollToElement()
   }
 
   //Fetch User Res Data
@@ -28,7 +31,7 @@ class RoomAllocation extends React.Component {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
         'ResidenceName': "",
-        'RubixResidenceID': this.props.currentResID,
+        'RubixResidenceID': localStorage.getItem('resID'),
         'BuildingNumber': "",
         'FloorNumber': "",
         'RoomNumber': "",
@@ -68,7 +71,7 @@ class RoomAllocation extends React.Component {
   render() {
     const { Student } = this.props;
     return (
-      <div
+      <div ref={this.testRef}
         style={{ flex: 1 }}
         onClick={() => {
           document.body.classList.remove("offcanvas-active");

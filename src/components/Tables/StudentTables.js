@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
+import {Grid, Row, Col, Button} from "react-bootstrap";
 import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, updateStudentName} from "../../actions";
 
 class SudentsTable extends React.Component {
@@ -8,7 +9,28 @@ class SudentsTable extends React.Component {
     super(props)
     this.state = {
       currentStudent: {},
+      colors: [],
     }
+  }
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    this.getColors()
+  }
+
+
+  //Get rubix color codes
+  getColors(){
+    const fetchData = async () => {
+      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixGetColor')
+      .then(response => response.json())
+      .then(data => {
+        console.log("colors data: ", data.data)
+        this.setState({
+          colors: data.data
+        })
+      })
+    }
+    fetchData()
   }
   //Select Specific Student
   selectStudent(e){
@@ -22,19 +44,58 @@ class SudentsTable extends React.Component {
        + e.Surname)
   }
 
+  //Split String into list
+  splitString(given) {
+    var string = given.split(',').map(function (element, index) {
+        return <p key={index}>{ element }</p>; 
+    });
+    return string
+  }
+
   
   render() {
-    const { StudentList } = this.props;
+    const { StudentList, Form } = this.props;
     return (
       <div className="col-lg-12">
         <div className="card">
           <div className="header">
+            <Row>
             <h2>
               Student Details{" "}
               <small>
                List of all students
               </small>
             </h2>
+            <div style={{
+              width: '50px'
+            }}></div>
+            {Form}
+            
+              </Row>
+            <div data-toggle="collapse" 
+                  aria-expanded="false"
+                  aria-controls={"colors"}
+                  href={"#colors"}>
+
+                    <p>Show color codes key</p>
+                  </div>
+            {
+              this.state.colors.map((color, index) =>(
+                <>
+                
+                <Row className="collapse multi-collapse m-t-10" id={"colors"}>
+                <div style={{
+                      height: '20px',
+                      width: '20px',
+                      backgroundColor: color.Color
+                    }}>
+
+                  </div>
+                    <p >{" = " + color.ColorDescription}</p>
+                    </Row>
+                </>
+              ))
+            }
           </div>
           <div className="body table-responsive table-hover">
             <table className="table">
@@ -43,7 +104,6 @@ class SudentsTable extends React.Component {
                   <th>Status</th>
                   <th>FIRST NAME</th>
                   <th>LAST NAME</th>
-                  <th>Email</th>
                   <th>ID NUMBER</th>
                   <th>QUICK ACTIONS</th>
                 </tr>
@@ -71,7 +131,6 @@ class SudentsTable extends React.Component {
                     </th>
                   <td>{student.Name} {student.MiddleName}</td>
                   <td>{student.Surname}</td>
-                  <td>{student.UserEmail}</td>
                   <td>{student.IDNumber}</td>
                   <td>
                     <>
@@ -129,14 +188,17 @@ class SudentsTable extends React.Component {
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
                       <th scope="row"> </th>
                       
-                      <td>{student.RequiredDocuments}</td>
+                      <td>{this.splitString(student.RequiredDocuments)}</td>
                       <td><span><strong>Full Name: </strong>{student.Name} {student.MiddleName} {student.Surname}</span>
                       <br></br>
-                      <span><strong>Email: </strong>{student.UserEmail}</span></td>
-                      <td><span><strong>Phone Number: </strong>{student.PhoneNumber}</span>
+                      <span><strong>Email: </strong>{student.UserEmail}</span>
                       <br></br>
-                      <span><strong>Gender: </strong>{student.Gender}</span></td>
-                      <td><span><strong>Student Number: </strong>{student.StudentNumber}</span></td>
+                      <span><strong>Phone Number: </strong>{student.PhoneNumber}</span>
+                      <br></br>
+                      <span><strong>Gender: </strong>{student.Gender}</span>
+                      <br></br>
+                      <span><strong>Student Number: </strong>{student.StudentNumber}</span>
+                      </td>
                       {/* <td><button class="btn btn-primary" onClick={(e)=>this.selectStudent(e)}>View Full Profile</button></td> */}
               </tr>
               

@@ -398,7 +398,8 @@ class ProfileV1Setting extends React.Component {
     console.log('Current Student Rubix ID: ', userID)
     const data = {
       'RubixRegisterUserID': userID,
-      "RubixClientID" : localStorage.getItem('clientID')
+      "RubixClientID" : localStorage.getItem('clientID'),
+      'UserCode': localStorage.getItem('userCode')
     };
     const requestOptions = {
       title: 'Fetch User Profile Form',

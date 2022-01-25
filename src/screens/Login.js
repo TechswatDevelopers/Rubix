@@ -122,11 +122,12 @@ componentDidMount() {
           if (document.getElementById('login').checkValidity() == true){
               await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserLogin', data, requestOptions)
               .then(response => {
-                  console.log(response)
+                  console.log("Logging info: ",response)
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userCode', response.data.PostRubixUserData['0']['UserCode'])
                     localStorage.setItem('role','admin')
+                    localStorage.setItem('resID', response.data.PostRubixUserData['0']['RubixResidenceID'])
                     this.props.history.push("/dashboard")
                   } else {
                     this.props.history.push("/login/" +  this.state.currentClientId)

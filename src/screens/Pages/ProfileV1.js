@@ -10,7 +10,11 @@ import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
-import {onPresPopUpEvent, onPresPopUpConfirm} from '../../actions';
+import {onPresPopUpEvent, onPresPopUpConfirm, 
+  onUpdateNOKProgress,
+  onUpdateIDProgress,
+  onUpdateRESProgress,
+  onUpdateREGProgress} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
 //import tempfile from 'tempfile';
@@ -30,6 +34,7 @@ class ProfileV1Page extends React.Component {
 
   constructor(props) {
     super(props);
+    this.testRef = React.createRef();
     this.state = {
       residence: {},
       numPages: null,
@@ -105,6 +110,8 @@ class ProfileV1Page extends React.Component {
     if(localStorage.getItem('docType') != null){
       this.changeDocument(localStorage.getItem('docType'))
     }
+    const scrollToElement = () => this.testRef.current.scrollIntoView();
+    scrollToElement()
   }
 
   //Fetch All documents from DB
@@ -155,7 +162,11 @@ class ProfileV1Page extends React.Component {
     };
     fetchData()
     .then(()=>{
-      this.setDocumentProgress()
+      //Set timer for loading screen
+  setTimeout(() => {
+    this.setDocumentProgress()
+  }, 1000);
+      
     })
     
   }
@@ -216,7 +227,6 @@ class ProfileV1Page extends React.Component {
     switch (file) {
       case 'id-document':
         {
-          console.log("testing",this.props.currentStudentIDNo)
           this.setState({ 
             docType: "My ID Document",
             topBarData: <>
@@ -399,24 +409,28 @@ class ProfileV1Page extends React.Component {
             switch (temp[i].FileType) {
               case 'id-document': {
                 //console.log('its an ID')
+                this.props.onUpdateIDProgress(temp[i].Percentage)
                 localStorage.setItem('idProgress', temp[i].Percentage)
                 localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-res": {
                 //console.log('its a Proof of res')
+                this.props.onUpdateRESProgress(temp[i].Percentage)
                 localStorage.setItem('proofOfResProgress', temp[i].Percentage)
                 localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-reg": {
                 //console.log('its a proof of res')
+                this.props.onUpdateREGProgress(temp[i].Percentage)
                 localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
                 localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "next-of-kin": {
                 //console.log('its a next of kin')
+                this.props.onUpdateNOKProgress(temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
               }
@@ -427,6 +441,33 @@ class ProfileV1Page extends React.Component {
 
     }
     postData()
+  }
+
+  //Get Progress
+  getProgress(doc){
+    let progress;
+    switch(doc){
+      case 'id-document':
+        {
+          progress = this.props.idProgress
+        }
+        break;
+      case 'proof-of-res':
+        {
+          progress = this.props.resProgress
+        }
+        break;
+      case 'proof-of-reg':
+        {
+          progress = this.props.regProgress
+        }
+        break;
+      case 'next-of-kin':
+        {
+          progress = this.props.nokProgress
+        }
+    }
+    return progress
   }
 
 
@@ -617,6 +658,7 @@ class ProfileV1Page extends React.Component {
   }
 
 
+
   render() {
     let myBody, myLease;
       myBody = <> {this.state.doc != null
@@ -681,7 +723,7 @@ class ProfileV1Page extends React.Component {
 
       </Tab> */}
     return (
-      <div
+      <div ref={this.testRef}
         style={{ flex: 1 }}
         onClick={() => {
           document.body.classList.remove("offcanvas-active");
@@ -708,7 +750,7 @@ class ProfileV1Page extends React.Component {
           </div>
         </div>
         <div>
-          <div className="container-fluid">
+          <div className="container-fluid" >
             {localStorage.getItem('role') == 'admin'
             ? null
             : <PageHeader
@@ -729,14 +771,14 @@ class ProfileV1Page extends React.Component {
             <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
-                  <div className="body">
+                  <div className="body" >
                     <Tabs
                       activeKey={this.state.tabKey}
                       onSelect={(e) => this.setKey(e)}
                       id="controlled-tab-example"
                     >
                       <Tab eventKey="settings" title="Personal Information">
-                        <ProfileV1Setting />
+                        <ProfileV1Setting  />
                       </Tab>
                       {/* <Tab eventKey="Billing" title="Billing">
                         <div className="tab-pane active show" id="billings">
@@ -888,7 +930,7 @@ class ProfileV1Page extends React.Component {
                           </div>
                         </div>
                       </Tab> */}
-                      <Tab eventKey="documents" title="Documents">
+                      <Tab  eventKey="documents" title="Documents">
                         <div
                           style={{ flex: 1 }}
                           onClick={() => {
@@ -916,14 +958,14 @@ class ProfileV1Page extends React.Component {
                                           TotalSize=''
                                           UsedSize={data.UsedSize}
                                           Type={data.status}
-                                          UsedPer={data.UsedPer}
+                                          UsedPer={this.getProgress(data.FileType)}
                                           ProgressBarClass={`${data.ProgressBarClass}`}
                                           MyFunction = {()=>{this.props.onPresPopUpConfirm()}}
                                         />
                                       </div>
                                     );
                                   })}
-                                  {/* {this.state.docs.map((data, index) => {
+                                 {/*  {this.state.docs.map((data, index) => {
                                     return (
                                       <div 
                                       key={index + "sidjpidj"} 
@@ -936,7 +978,7 @@ class ProfileV1Page extends React.Component {
                                           key={index + "sidjpidj"}
                                           TotalSize=''
                                           UsedSize={data.FileType}
-                                          Type={data.status}...
+                                          Type={data.status}
                                           UsedPer={data.UsedPer}
                                           ProgressBarClass={`${data.ProgressBarClass}`}
                                         />
@@ -998,10 +1040,19 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   currentStudentNo: navigationReducer.studentStudentNo,
 
   nextOfKinName: navigationReducer.nextofKinName,
-  nextOfKinId: navigationReducer.nextofKinID
+  nextOfKinId: navigationReducer.nextofKinID,
+
+  idProgress: navigationReducer.idProgress,
+  resProgress: navigationReducer.proofOfResProgress,
+  regProgress: navigationReducer.proofOfRegProgress,
+  nokProgress: navigationReducer.nextOfKinProgress,
 });
 
 export default connect(mapStateToProps, {
   onPresPopUpEvent,
-  onPresPopUpConfirm
+  onPresPopUpConfirm,
+  onUpdateNOKProgress,
+  onUpdateIDProgress,
+  onUpdateRESProgress,
+  onUpdateREGProgress
 })(ProfileV1Page);

@@ -517,6 +517,8 @@ export default (state = initialState, action) => {
         studentID: action.payload,
       };
     }
+
+
     //Id Progress
     case ON_ID_PROGRESS: {
       return {
@@ -524,6 +526,8 @@ export default (state = initialState, action) => {
         idProgress: action.payload,
       };
     }
+
+    
     //Proof of Residence Progress
     case ON_RES_PROGRESS: {
       return {

@@ -17,19 +17,20 @@ class Students extends React.Component {
           searchKey: '',
           students: [],
           showRooms: false,
+          colors: [],
         }
       }
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.getStudents()
+    this.getStudents('')
   }
 
   //Fetch all students Data
-  getStudents(){
+  getStudents(search){
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
-        'Search': this.state.searchKey
+        'Search': search
       };
       //Ping Request Headers
       const requestOptions = {
@@ -38,6 +39,7 @@ class Students extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
+      console.log('Posted data: ', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
@@ -45,14 +47,27 @@ class Students extends React.Component {
           this.setState({
             students: response.data.PostRubixUserData
           })
-  
-          //this.fetchImages(response.data.PostRubixUserData[0].RubixResidenceID)
-          //Get Events Data
-      //this.getResEvents()
+
         })
       }
       postData()
   }
+
+  //Post Search Student
+  searchStudent(e){
+    e.preventDefault();
+    console.log('I am called for: ', document.getElementById('search').value)
+    
+    //Set Search key state
+    this.setState({
+      searchKey: document.getElementById('search').value
+    })
+
+    //Do post
+    this.getStudents(document.getElementById('search').value)
+  }
+
+
   render() {
     return (
       <div
@@ -61,8 +76,6 @@ class Students extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
-        
-        
         <div>
           <div className="container-fluid">
             <PageHeader
@@ -75,6 +88,19 @@ class Students extends React.Component {
               <div className="col-lg-12 col-md-12">
               <SudentsTable
               StudentList= {this.state.students}
+              Form = {
+                <form id="navbar-search" className="navbar-form search-form d-flex p-2">
+                <input
+                  className="form-control"
+                  placeholder="Search here..."
+                  type="text"
+                  id='search'
+                />
+                <button className="btn btn-default" onClick={(e)=> this.searchStudent(e)}>
+                  <i className="icon-magnifier"></i>
+                </button>
+              </form>
+              }
               />
 
 {

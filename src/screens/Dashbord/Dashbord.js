@@ -209,6 +209,14 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     getData()
   }
 
+    //Split String into list
+    splitString(given) {
+      var string = given.split(',').map(function (element, index) {
+          return <p key={index}>{ element }</p>; 
+      });
+      return string
+    }
+
   //Post Like
   postLike(postID) {
     let liked;
@@ -302,7 +310,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                       </span>
                       <div className="msg">
                         <span>
-                          {message.UserMessage}
+                          {this.splitString(message.UserMessage)}
                         </span>
                         <a onClick={() => { this.postLike(message.RubixRegisterUserMessageID) }} className="m-r-20">
                           <i className="icon-heart" style={{color: this.state.liked ? 'red' : 'black'}}></i> {this.state.liked ? 'Unlike' : 'Like'}
