@@ -20,7 +20,7 @@ class RoomsTable extends React.Component {
 
   
   render() {
-    const { RoomList, Student } = this.props;
+    const { RoomList, Student, Body } = this.props;
     return (
       <div className="col-lg-12">
         <div className="card">
@@ -41,6 +41,7 @@ class RoomsTable extends React.Component {
                List of all Rooms Available
               </small>
             </h2>
+            {Body}
           </div>
           <div className="body table-responsive table-hover">
             <table className="table">

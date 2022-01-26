@@ -54,7 +54,7 @@ class SudentsTable extends React.Component {
 
   
   render() {
-    const { StudentList, Form } = this.props;
+    const { StudentList, Form, Colors } = this.props;
     return (
       <div className="col-lg-12">
         <div className="card">
@@ -72,30 +72,8 @@ class SudentsTable extends React.Component {
             {Form}
             
               </Row>
-            <div data-toggle="collapse" 
-                  aria-expanded="false"
-                  aria-controls={"colors"}
-                  href={"#colors"}>
-
-                    <p>Show color codes key</p>
-                  </div>
-            {
-              this.state.colors.map((color, index) =>(
-                <>
-                
-                <Row className="collapse multi-collapse m-t-10" id={"colors"}>
-                <div style={{
-                      height: '20px',
-                      width: '20px',
-                      backgroundColor: color.Color
-                    }}>
-
-                  </div>
-                    <p >{" = " + color.ColorDescription}</p>
-                    </Row>
-                </>
-              ))
-            }
+              {Colors}
+            
           </div>
           <div className="body table-responsive table-hover">
             <table className="table">

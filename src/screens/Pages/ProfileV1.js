@@ -14,7 +14,11 @@ import {onPresPopUpEvent, onPresPopUpConfirm,
   onUpdateNOKProgress,
   onUpdateIDProgress,
   onUpdateRESProgress,
-  onUpdateREGProgress} from '../../actions';
+  onUpdateREGProgress,
+  onUpdateNOKMessage,
+  onUpdateREGMessage,
+  onUpdateRESMessage,
+  onUpdateIDMessage} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
 //import tempfile from 'tempfile';
@@ -410,6 +414,7 @@ class ProfileV1Page extends React.Component {
               case 'id-document': {
                 //console.log('its an ID')
                 this.props.onUpdateIDProgress(temp[i].Percentage)
+                this.props.onUpdateIDMessage(this.setMessage(temp[i].Percentage))
                 localStorage.setItem('idProgress', temp[i].Percentage)
                 localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
               }
@@ -417,6 +422,7 @@ class ProfileV1Page extends React.Component {
               case "proof-of-res": {
                 //console.log('its a Proof of res')
                 this.props.onUpdateRESProgress(temp[i].Percentage)
+                this.props.onUpdateRESMessage(this.setMessage(temp[i].Percentage))
                 localStorage.setItem('proofOfResProgress', temp[i].Percentage)
                 localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
               }
@@ -424,6 +430,7 @@ class ProfileV1Page extends React.Component {
               case "proof-of-reg": {
                 //console.log('its a proof of res')
                 this.props.onUpdateREGProgress(temp[i].Percentage)
+                this.props.onUpdateREGMessage(this.setMessage(temp[i].Percentage))
                 localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
                 localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
               }
@@ -431,6 +438,7 @@ class ProfileV1Page extends React.Component {
               case "next-of-kin": {
                 //console.log('its a next of kin')
                 this.props.onUpdateNOKProgress(temp[i].Percentage)
+                this.props.onUpdateNOKMessage(this.setMessage(temp[i].Percentage))
                 localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
               }
@@ -468,6 +476,32 @@ class ProfileV1Page extends React.Component {
         }
     }
     return progress
+  }
+  //Get Progress
+  getMessage(doc){
+    let message;
+    switch(doc){
+      case 'id-document':
+        {
+          message = this.props.idMessage
+        }
+        break;
+      case 'proof-of-res':
+        {
+          message = this.props.resMessage
+        }
+        break;
+      case 'proof-of-reg':
+        {
+          message = this.props.regMessage
+        }
+        break;
+      case 'next-of-kin':
+        {
+          message = this.props.nokMessage
+        }
+    }
+    return message
   }
 
 
@@ -666,7 +700,7 @@ class ProfileV1Page extends React.Component {
         {localStorage.getItem('role') == 'admin' ? this.state.topBarData : null}
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         {
-          this.state.currentProgress != 100
+          this.getProgress(this.state.doc.FileType) != 100
           ?<button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
           : null
         }
@@ -957,7 +991,7 @@ class ProfileV1Page extends React.Component {
                                           key={index + "sidjpidj"}
                                           TotalSize=''
                                           UsedSize={data.UsedSize}
-                                          Type={data.status}
+                                          Type={this.getMessage(data.FileType)}
                                           UsedPer={this.getProgress(data.FileType)}
                                           ProgressBarClass={`${data.ProgressBarClass}`}
                                           MyFunction = {()=>{this.props.onPresPopUpConfirm()}}
@@ -1043,9 +1077,16 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   nextOfKinId: navigationReducer.nextofKinID,
 
   idProgress: navigationReducer.idProgress,
+  idMessage: navigationReducer.idMessage,
+
   resProgress: navigationReducer.proofOfResProgress,
+  resMessage: navigationReducer.proofOfResMessage,
+
   regProgress: navigationReducer.proofOfRegProgress,
+  regMessage: navigationReducer.proofOfRegMessage,
+
   nokProgress: navigationReducer.nextOfKinProgress,
+  nokMessage: navigationReducer.nextOfKinMessage,
 });
 
 export default connect(mapStateToProps, {
@@ -1054,5 +1095,9 @@ export default connect(mapStateToProps, {
   onUpdateNOKProgress,
   onUpdateIDProgress,
   onUpdateRESProgress,
-  onUpdateREGProgress
+  onUpdateREGProgress,
+  onUpdateNOKMessage,
+  onUpdateREGMessage,
+  onUpdateRESMessage,
+  onUpdateIDMessage
 })(ProfileV1Page);

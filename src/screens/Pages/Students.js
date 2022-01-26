@@ -8,7 +8,9 @@ import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
 import {updateStudentID, onPresShowProfile, onPresRooms, onPresPopUpAssign} from "../../actions"
 import ProfileV1Page from '../../screens/Pages/ProfileV1';
 import RoomAllocation from '../../screens/Pages/Rooms';
-import PopUpAssign from '../../components/PopUpAssignRoom'
+import PopUpAssign from '../../components/PopUpAssignRoom';
+
+import {Grid, Row, Col, Button} from "react-bootstrap";
 
 class Students extends React.Component {
     constructor(props) {
@@ -50,13 +52,29 @@ class Students extends React.Component {
 
         })
       }
-      postData()
+      postData().then(() =>{
+        this.getColors()
+      })
+  }
+  //Get rubix color codes
+  getColors(){
+    const fetchData = async () => {
+      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixGetColor')
+      .then(response => response.json())
+      .then(data => {
+        console.log("colors data: ", data.data)
+        this.setState({
+          colors: data.data
+        })
+      })
+    }
+    fetchData()
   }
 
   //Post Search Student
   searchStudent(e){
     e.preventDefault();
-    console.log('I am called for: ', document.getElementById('search').value)
+    //console.log('I am called for: ', document.getElementById('search').value)
     
     //Set Search key state
     this.setState({
@@ -88,7 +106,35 @@ class Students extends React.Component {
               <div className="col-lg-12 col-md-12">
               <SudentsTable
               StudentList= {this.state.students}
-              Form = {
+              Colors = {
+                <>
+                <div data-toggle="collapse" 
+                  aria-expanded="false"
+                  aria-controls={"colors"}
+                  href={"#colors"}>
+
+                    <p>Show color codes key</p>
+                  </div>
+            {
+              this.state.colors.map((color, index) =>(
+                <>
+                
+                <Row onClick={()=> this.getStudents(color.Color)} className="collapse multi-collapse m-t-10" id={"colors"}>
+                <div style={{
+                      height: '20px',
+                      width: '20px',
+                      backgroundColor: color.Color
+                    }}>
+
+                  </div>
+                    <p >{" = " + color.ColorDescription}</p>
+                    </Row>
+                </>
+              ))
+            }
+                </>
+              }
+              Form = {<>
                 <form id="navbar-search" className="navbar-form search-form d-flex p-2">
                 <input
                   className="form-control"
@@ -100,6 +146,8 @@ class Students extends React.Component {
                   <i className="icon-magnifier"></i>
                 </button>
               </form>
+              <button className="btn btn-primary" onClick={()=>this.getStudents('')}>Clear</button>
+              </>
               }
               />
 

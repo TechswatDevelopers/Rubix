@@ -41,6 +41,12 @@ export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
 export const ON_RES_PROGRESS = "navigationReducer/ON_RES_PROGRESS";
 export const ON_ID_PROGRESS = "navigationReducer/ON_ID_PROGRESS";
 
+
+export const ON_ID_MESSAGE = "navigationReducer/ON_ID_MESSAGE";
+export const ON_RES_MESSAGE = "navigationReducer/ON_RES_MESSAGE";
+export const ON_REG_MESSAGE = "navigationReducer/ON_REG_MESSAGE";
+export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
+
 var toggle = false;
 var intervalId = "";
 export const onPressDashbord = (index) => (dispatch) => {
@@ -174,14 +180,23 @@ export const onUpdateStudentRubixID = (val) => (dispatch) => {
   });
 };
 
-//Next of Kin Progress Update
+//Next of Kin Progress Update and Message
 export const onUpdateNOKProgress = (val) => (dispatch) => {
   dispatch({
     type: ON_NOK_PROGRESS,
     payload: val,
   });
 };
-//Proof of Registration Update
+
+export const onUpdateNOKMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_NOK_MESSAGE,
+    payload: val,
+  });
+};
+
+
+//Proof of Registration Update and Message
 export const onUpdateREGProgress = (val) => (dispatch) => {
   dispatch({
     type: ON_REG_PROGRESS,
@@ -189,8 +204,15 @@ export const onUpdateREGProgress = (val) => (dispatch) => {
   });
 };
 
+export const onUpdateREGMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_REG_MESSAGE,
+    payload: val,
+  });
+};
 
-//Proof of Residence Update
+
+//Proof of Residence Update and Message
 export const onUpdateRESProgress = (val) => (dispatch) => {
   dispatch({
     type: ON_RES_PROGRESS,
@@ -198,11 +220,24 @@ export const onUpdateRESProgress = (val) => (dispatch) => {
   });
 };
 
+export const onUpdateRESMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_RES_MESSAGE,
+    payload: val,
+  });
+};
 
-//ID Document Update
+
+//ID Document Update and Message
 export const onUpdateIDProgress = (val) => (dispatch) => {
   dispatch({
     type: ON_ID_PROGRESS,
+    payload: val,
+  });
+};
+export const onUpdateIDMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_ID_MESSAGE,
     payload: val,
   });
 };

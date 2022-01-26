@@ -22,9 +22,13 @@ import {
   ON_UPDATE_PROGRESS_BAR,
   ON_STUDENT_RUBIX_ID,
   ON_NOK_PROGRESS,
+  ON_NOK_MESSAGE,
   ON_REG_PROGRESS,
+  ON_REG_MESSAGE,
   ON_RES_PROGRESS,
+  ON_RES_MESSAGE,
   ON_ID_PROGRESS,
+  ON_ID_MESSAGE,
   UPDATE_STUDENT_ADDRESS,
   UPDATE_STUDENT_UNIVERRSITY,
   UPDATE_STUDENT_COURSE,
@@ -59,7 +63,11 @@ const initialState = {
   currentDocID: '',
 
   idProgress: '',
+  idMessage: '',
+
   proofOfResProgress: '',
+  proofOfResMessage: '',
+
   proofOfRegProgress: '',
   nextOfKinProgress: '',
   addClassactive: [
@@ -519,7 +527,7 @@ export default (state = initialState, action) => {
     }
 
 
-    //Id Progress
+    //Id Progress and Message
     case ON_ID_PROGRESS: {
       return {
         ...state,
@@ -527,8 +535,15 @@ export default (state = initialState, action) => {
       };
     }
 
+    case ON_ID_MESSAGE: {
+      return {
+        ...state,
+        idMessage: action.payload,
+      };
+    }
+
     
-    //Proof of Residence Progress
+    //Proof of Residence Progress and Message
     case ON_RES_PROGRESS: {
       return {
         ...state,
@@ -536,19 +551,40 @@ export default (state = initialState, action) => {
       };
     }
     
-    //Proof of Registration Progress
+    case ON_RES_MESSAGE: {
+      return {
+        ...state,
+        proofOfResMessage: action.payload,
+      };
+    }
+    
+    //Proof of Registration Progress and Message
     case ON_REG_PROGRESS: {
       return {
         ...state,
         proofOfRegProgress: action.payload,
       };
     }
+    
+    case ON_REG_MESSAGE: {
+      return {
+        ...state,
+        proofOfRegMessage: action.payload,
+      };
+    }
 
-    //Next of Kin ID Progress
+    //Next of Kin ID Progress and Message
     case ON_NOK_PROGRESS: {
       return {
         ...state,
         nextOfKinProgress: action.payload,
+      };
+    }
+    
+    case ON_NOK_MESSAGE: {
+      return {
+        ...state,
+        nextOfKinMessage: action.payload,
       };
     }
     
