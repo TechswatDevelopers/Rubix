@@ -20,6 +20,7 @@ class Students extends React.Component {
           students: [],
           showRooms: false,
           colors: [],
+          isEmpty: false,
         }
       }
   componentDidMount() {
@@ -29,6 +30,10 @@ class Students extends React.Component {
 
   //Fetch all students Data
   getStudents(search){
+    this.setState({
+      isEmpty: false,
+    })
+    document.getElementById('search').value = search
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
@@ -46,9 +51,17 @@ class Students extends React.Component {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
           console.log("Students Data List:", response)
-          this.setState({
-            students: response.data.PostRubixUserData
-          })
+          if(!response.data.PostRubixUserData){
+            this.setState({
+              isEmpty: true,
+              students: []
+            })
+          } else {
+            this.setState({
+              students: response.data.PostRubixUserData
+            })
+          }
+          
 
         })
       }
@@ -113,7 +126,7 @@ class Students extends React.Component {
                   aria-controls={"colors"}
                   href={"#colors"}>
 
-                    <p>Show color codes key</p>
+                    <div className="btn btn-primary m-3">Filter by color codes</div>
                   </div>
             {
               this.state.colors.map((color, index) =>(
@@ -132,6 +145,10 @@ class Students extends React.Component {
                 </>
               ))
             }
+            
+            {this.state.isEmpty ? <p style={{
+              color: 'Red'
+            }}>No records found</p> : null}
                 </>
               }
               Form = {<>
@@ -146,7 +163,7 @@ class Students extends React.Component {
                   <i className="icon-magnifier"></i>
                 </button>
               </form>
-              <button className="btn btn-primary" onClick={()=>this.getStudents('')}>Clear</button>
+              <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('')}>Clear Search</button>
               </>
               }
               />

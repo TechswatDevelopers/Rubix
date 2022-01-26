@@ -9,6 +9,8 @@ class SudentsTable extends React.Component {
     super(props)
     this.state = {
       currentStudent: {},
+      currentIndex: null,
+      isOpen: false,
       colors: [],
     }
   }
@@ -95,7 +97,9 @@ class SudentsTable extends React.Component {
                   href={"#collapseComment" + index}
                   onClick={(e)=>{
                     this.setState({
-                    currentStudent: student
+                    currentStudent: student,
+                    currentIndex: index,
+                    isOpen: !this.state.isOpen
                   })}
                 
                 }

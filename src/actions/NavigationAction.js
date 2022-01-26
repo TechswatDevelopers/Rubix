@@ -47,6 +47,9 @@ export const ON_RES_MESSAGE = "navigationReducer/ON_RES_MESSAGE";
 export const ON_REG_MESSAGE = "navigationReducer/ON_REG_MESSAGE";
 export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
 
+
+export const UPDATE_STUDENT_INDEX = "navigationReducer/UPDATE_STUDENT_INDEX";
+
 var toggle = false;
 var intervalId = "";
 export const onPressDashbord = (index) => (dispatch) => {
@@ -342,6 +345,14 @@ export const updateClientName = (val)=>(disptch) =>{
 export const updateResidenceID = (val)=>(disptch) =>{
   disptch({
     type:UPDATE_RES_ID,
+    payload: val,
+  })
+};
+
+//Update Student Index
+export const updateStudentIndex = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_INDEX,
     payload: val,
   })
 };

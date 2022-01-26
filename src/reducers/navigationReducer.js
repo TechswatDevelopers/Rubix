@@ -35,7 +35,8 @@ import {
   UPDATE_STUDENT_YEAR_OF_STUDY,
   UPDATE_STUDENT_STUDENT_NO,
   UPDATE_DOC_ID,
-  UPDATE_RES_ID
+  UPDATE_RES_ID,
+  UPDATE_STUDENT_INDEX
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -70,6 +71,8 @@ const initialState = {
 
   proofOfRegProgress: '',
   nextOfKinProgress: '',
+
+  studentIndex: null,
   addClassactive: [
     false,
     false,
@@ -683,6 +686,14 @@ export default (state = initialState, action) => {
       return{
         ...state,
         studentResID: action.payload,
+      }
+    }
+
+//Update Student Res ID
+    case UPDATE_STUDENT_INDEX: {
+      return{
+        ...state,
+        studentIndex: action.payload,
       }
     }
 

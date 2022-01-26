@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, onPresPopUpEvent } from "../actions";
+import { onPresAddEvent, onPresPopUpEvent, onPresPopUpConfirm } from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -80,7 +80,7 @@ constructor(props) {
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
                   this.sendVettingStatus(FileType, DocID, 'correct')
-                  this.props.onPresPopUpEvent();
+                  this.props.onPresPopUpConfirm();
                 }}>
                 Vet as Correct
               </button>
@@ -88,12 +88,23 @@ constructor(props) {
                 type="button"
                 onClick={(e) => {
                   this.sendVettingStatus(FileType, DocID, 'incorrect')
-                  this.props.onPresPopUpEvent();
+                  this.props.onPresPopUpConfirm();
                 }}
                 className="btn btn-simple"
                 data-dismiss="modal"
               >
                 Vet as Incorrect
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  console.log('pressed')
+                  this.props.onPresPopUpConfirm();
+                }}
+                className="btn btn-danger"
+                data-dismiss="modal"
+              >
+                Cancel
               </button>
             </div>
           </div>
@@ -109,4 +120,4 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   currentStudentiD: navigationReducer.studentID,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent  })(PopUpConfirm);
+export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent, onPresPopUpConfirm  })(PopUpConfirm);
