@@ -37,7 +37,7 @@ class SudentsTable extends React.Component {
   //Select Specific Student
   selectStudent(e){
     this.props.onUpdateStudentRubixID(e.RubixRegisterUserID)
-    console.log('student details: ', e)
+    //console.log('student details: ', e)
     this.props.updateStudentName(
       e.Name 
       + ' ' 
@@ -52,6 +52,22 @@ class SudentsTable extends React.Component {
         return <p key={index}>{ element }</p>; 
     });
     return string
+  }
+
+  //On Student Press
+  onPressStudent(index){
+    if(this.currentIndex == null){
+      document.getElementById('student').href = "#collapseComment" + index
+    } else if(this.currentIndex == index) {
+      document.getElementById('student').href = "#collapseComment" + index
+     
+    } else {
+      document.getElementById('student').href = "#collapseComment" + this.currentIndex
+       //Set timer for loading screen
+  setTimeout(() => {
+    document.getElementById('student').href = "#collapseComment" + index
+  }, 2000);
+    }
   }
 
   
@@ -92,6 +108,7 @@ class SudentsTable extends React.Component {
                 {StudentList.map((student, index) => (
                   <>
                   <tr data-toggle="collapse" 
+                  id="student"
                   aria-expanded="false"
                   aria-controls={"collapseComment" + index}
                   href={"#collapseComment" + index}
@@ -100,7 +117,9 @@ class SudentsTable extends React.Component {
                     currentStudent: student,
                     currentIndex: index,
                     isOpen: !this.state.isOpen
-                  })}
+                  })
+                  this.onPressStudent(index)
+                }
                 
                 }
                   >
@@ -118,12 +137,23 @@ class SudentsTable extends React.Component {
                     <>
                   <button className="btn btn-sm btn-outline-primary" 
                   onClick={(e)=>{
+                    e.preventDefault()
                     localStorage.setItem('tab', 'settings')
                     this.setState({
                       currentStudent: student
                     })
                     this.selectStudent(student)
-                    this.props.onPresShowProfile()
+                    if(this.props.showProfile && this.state.currentStudent == student){
+                      this.props.onPresShowProfile()
+                    } else if(this.props.showProfile && this.state.currentStudent != student){
+                      this.props.onPresShowProfile()
+                      //Set timer for loading screen
+                      setTimeout(() => {
+                        this.props.onPresShowProfile()
+                      }, 2000);
+                    } else {
+                      this.props.onPresShowProfile()
+                    }
                   }
                     
                     }>

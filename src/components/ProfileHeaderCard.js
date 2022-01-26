@@ -25,7 +25,7 @@ class ProfileHeaderCard extends React.Component {
 
           <div className="row">
             <div className="col-4">
-              <h6>0</h6>
+              <h6>{PastEvents}</h6>
               <span>Past Events</span>
             </div>
             <div className="col-4">

@@ -22,6 +22,7 @@ componentDidMount() {
 
   //Get Events Type Data
   this.getEventsData()
+  console.log('userCode', localStorage.getItem('userCode'))
 }
 
 //Get Events Types List
@@ -80,9 +81,11 @@ getEventsData() {
     //Populate Posting Data
     const data = {
       'RubixResidenceID': resID,
-      'RubixResidenceManagerID': localStorage.getItem('userID'),
+      'UserCode': localStorage.getItem('userCode'),
       'ResidenceEventStartDate': this.state.startDate,
-      'ResidenceEventEndDate': this.state.endDate
+      'ResidenceEventEndDate': this.state.endDate,
+      'ResidenceEventTypeID': document.getElementById('desc').value,
+      'ResidenceEventTypeID': this.state.eventType
     }
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];

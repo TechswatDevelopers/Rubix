@@ -27,6 +27,7 @@ class AppCalendar extends React.Component {
       eventTitle: '',
       totalResEvents: '',
       upcomingResEvents: '',
+      pastEvents: '',
       chosenDate: null
     }
   }
@@ -41,7 +42,7 @@ class AppCalendar extends React.Component {
   getResEvents() {
     //Post Request Data
     const data = {
-
+      'RubixResidenceID': localStorage.getItem('resID')
     }
     const requestOptions = {
       title: 'Get Residence Events Details',
@@ -63,7 +64,8 @@ class AppCalendar extends React.Component {
           this.populateEvents(response.data.PostRubixUserData)
           this.setState({
             totalResEvents: response.data.PostRubixUserData[0].TotalEvents,
-            upcomingResEvents: response.data.PostRubixUserData[0].UpcomingEvents
+            upcomingResEvents: response.data.PostRubixUserData[0].UpcomingEvents,
+            pastEvents:response.data.PostRubixUserData[0].PastEvents
           })
         }
 
@@ -299,6 +301,7 @@ class AppCalendar extends React.Component {
                     ProfilePicture = {this.state.resManagerPic}
                     TotalEvents = {this.state.totalResEvents}
                     UpcomingEvents = {this.state.upcomingResEvents}
+                    PastEvents = {this.state.pastEvents}
                     />
                   </div>
                 </div>

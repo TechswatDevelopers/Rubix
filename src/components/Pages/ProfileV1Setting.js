@@ -785,7 +785,7 @@ this.props.updateStudentName(
                 className="user-photo media-object"
                 width="150px"
                 src={this.state.imageUrl} />
-              {myButton}
+              {localStorage.getItem('role') == 'admin' ?null : myButton}
             </div>
             <div className="media-body">
               <input className="sr-only" id="filePhoto" type="file" />
@@ -918,7 +918,9 @@ this.props.updateStudentName(
 
         {//Change Password Section
         }
-        <div className="body">
+        { localStorage.getItem('role') == 'admin'
+        ? null
+          : <div className="body">
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
               <form id="password">
@@ -956,7 +958,7 @@ this.props.updateStudentName(
           &nbsp;&nbsp;
           <button className="btn btn-default">Cancel</button>
         </div>
-
+}
         {//Residential Address Section
         }
         <div className="body">
