@@ -46,10 +46,49 @@ constructor(props) {
       })
     }
     postData().then(()=>{
-      window.location.reload()
+      this.sendAuttingStatus(filetype, docID, vet)
+      //window.location.reload()
     })
   }
 
+
+  //Send Auditted status
+  sendAuttingStatus(filetype, docID, vet){
+    let vettedStatus
+    if(vet == 'correct') {
+      vettedStatus = 1
+    } else {
+      vettedStatus = 0
+    }
+    const data = {
+      'UserCode':  localStorage.getItem('userCode'),
+      'RubixRegisterUserID': this.props.currentStudentiD,
+      'RubixDocumentID': docID,
+      'RubixDocumentType': filetype,
+      'RubixDocumentVettedResult': vettedStatus,
+      'RubixRoomAllocationResult': '',
+      'RubixRoomID': '',
+      'RubixDocumentVettedResultComment': document.getElementById('comment').value
+    }
+    
+    const requestOptions = {
+      title: 'Sending Auditted Status Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+
+    console.log("Posted Vetting Data: ", data)
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
+      .then(response=>{
+        console.log("DB response: ", response)
+      })
+    }
+    postData().then(()=>{
+      window.location.reload()
+    })
+  }
 
   render() {
     const { isPopUpConfirm, Title, Body, FileType, DocID} = this.props;

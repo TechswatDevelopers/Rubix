@@ -64,8 +64,45 @@ constructor(props) {
         console.log("DB response: ", response)
       })
     }
-    postData()
+    postData().then(()=>{
+      this.sendAuttingStatus(roomID)
+    })
   }
+
+      //Send Auditted status
+      sendAuttingStatus(roomID){
+      
+        const data = {
+          'UserCode':  localStorage.getItem('userCode'),
+          'RubixRegisterUserID': this.props.currentStudentiD,
+          'RubixDocumentType': '',
+          'RubixDocumentID': '',
+          'RubixVetted': '',
+          'RubixVettedResult': '',
+          'RubixRoomAllocationResult': 'Remove',
+          'RubixRoomID': roomID,
+          'RubixDocumentVettedResultComment': ''
+        }
+        
+        const requestOptions = {
+          title: 'Sending Auditted Status Form',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: data
+        };
+    
+        console.log("Posted Vetting Data: ", data)
+        const postData = async () => {
+          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
+          .then(response=>{
+            console.log("DB response: ", response)
+          })
+        }
+        postData().then(()=>{
+         window.location.reload()
+        })
+      }
+  
 
   render() {
     const {isPopUpRemove, Title, Body, roomID} = this.props;

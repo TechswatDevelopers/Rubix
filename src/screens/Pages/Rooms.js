@@ -102,7 +102,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].BuildingNumber)){
-              console.log('found', roomList[i].BuildingNumber)
+              //console.log('found', roomList[i].BuildingNumber)
               
             } else {
               newList.push(roomList[i].BuildingNumber)
@@ -115,7 +115,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].FloorNumber)){
-              console.log('found')
+              //console.log('found')
             } else {
               newList.push(roomList[i].FloorNumber)
             }
@@ -127,7 +127,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].RoomNumber)){
-              console.log('found')
+              //console.log('found')
             } else {
               newList.push(roomList[i].RoomNumber)
             }
@@ -135,7 +135,7 @@ class RoomAllocation extends React.Component {
         }
     }
 
-    console.log('New List: ', newList)
+    //console.log('New List: ', newList)
     /* this.setState({
       destination: newList
     }) */
@@ -143,7 +143,7 @@ class RoomAllocation extends React.Component {
   }
 
   //Get Romms Filters
-  getRoomsFilters(buildingNumber, floorNumber, roomNumber){
+  getRoomsFilters(buildingNumber, floorNumber, roomNumber, studentID){
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
@@ -152,7 +152,7 @@ class RoomAllocation extends React.Component {
         'BuildingNumber': buildingNumber,
         'FloorNumber': floorNumber,
         'RoomNumber': roomNumber,
-        'RubixRegisterUserID': ''
+        'RubixRegisterUserID': studentID
 
       };
       //Ping Request Headers
@@ -217,7 +217,7 @@ class RoomAllocation extends React.Component {
               {  <>
               <label>Buiding Number</label>
         <select className="form-control" onChange={(e)=>{
-          this.getRoomsFilters(e.target.value, '', '')
+          this.getRoomsFilters(e.target.value, '', '', this.props.currentStudentiD)
           this.setState({buildingNumber: e.target.value})}} value={this.state.buildingNumber}>
         {
             
@@ -231,7 +231,7 @@ class RoomAllocation extends React.Component {
     { <> 
               <label>Floor Number</label>
         <select className="form-control" onChange={(e)=>{
-          this.getRoomsFilters('', e.target.value, '')
+          this.getRoomsFilters('', e.target.value, '', this.props.currentStudentiD)
           this.setState({floorNumber: e.target.value})}} value={this.state.floorNumberList}>
         {
             
@@ -246,7 +246,7 @@ class RoomAllocation extends React.Component {
     {   <> 
               <label>Room Number</label>
         <select className="form-control" onChange={(e)=>{
-          this.getRoomsFilters('', '', e.target.value)
+          this.getRoomsFilters('', '', e.target.value, this.props.currentStudentiD)
           this.setState({roomNumber: e.target.value})}} value={this.state.roomNumberList}>
         {
             
@@ -255,7 +255,7 @@ class RoomAllocation extends React.Component {
         ))   
         }
     </select> </>}
-              <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '')}>Reset</button>
+              <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '', this.props.currentStudentiD)}>Reset</button>
               </Row>
               </>}
               />

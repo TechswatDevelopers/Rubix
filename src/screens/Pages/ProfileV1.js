@@ -94,9 +94,7 @@ class ProfileV1Page extends React.Component {
     } else {
       this.loadDocuments(userID)
     }
-    
-    
-
+  
     //Set tab 
     if(localStorage.getItem('tab') == '' || localStorage.getItem('tab') == null){
       this.setState({
