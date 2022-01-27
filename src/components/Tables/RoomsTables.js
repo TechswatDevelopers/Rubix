@@ -109,7 +109,7 @@ class RoomsTable extends React.Component {
                       <th scope="row"> </th>
                     
                       <td><span><strong>Room Capacity: </strong>{room.Capacity} </span></td>
-                      <td><span><strong>Available: </strong>{room.AvaibaleBeds}</span></td>
+                      <td><span><strong>Occupancy: </strong>{room.AvaibaleBeds}</span></td>
                       </tr>
               </>
                 ))}

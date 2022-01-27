@@ -140,7 +140,7 @@ class Students extends React.Component {
                     }}>
 
                   </div>
-                    <p >{"  " + color.ColorDescription}</p>
+                    <p className="pl-3">{"  " + color.ColorDescription}</p>
                     </Row>
                 </>
               ))

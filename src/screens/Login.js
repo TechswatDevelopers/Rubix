@@ -34,7 +34,7 @@ componentDidMount() {
     this.setState({
       isLoad: false,
     })
-  }, 2000);
+  }, 3000);
 
   //Add redirect
   if(this.props.match.params.clientID != null || this.props.match.params.clientID != undefined){
