@@ -3,6 +3,7 @@ import {
   ON_PRESS_MORE_DROPDOWN,
   ON_PRESS_COMPOSE,
   ON_PRESS_ADD_EVENT,
+  ON_PRESS_POP_UP_NOTICE,
   ON_PRESS_ADD_CONTACT,
   ON_PRESS_POP_UP_EVENT,
   ON_PRESS_SHOW_PROFILE,
@@ -24,6 +25,7 @@ const initialState = {
   isRoomshowing: false,
   isShowAssignModal: false,
   isShowRemoveModal: false,
+  isPopUpNewNotice: false,
 };
 
 export default (state = initialState, action) => {
@@ -55,6 +57,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isEventModal: !state.isEventModal,
+      };
+    }
+
+    case ON_PRESS_POP_UP_NOTICE: {
+      return {
+        ...state,
+        isPopUpNewNotice: !state.isPopUpNewNotice,
       };
     }
 

@@ -317,12 +317,18 @@ class ProfileV1Page extends React.Component {
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
+    let userID
+    if(localStorage.getItem('role') == 'admin'){
+      userID = this.props.currentStudentiD
+    } else {
+      userID = this.state.myUserID
+    }
     this.setState({ isLoad: true, })
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
       data.append('FileType', filetype)
-      data.append('RubixRegisterUserID', this.state.myUserID)
+      data.append('RubixRegisterUserID', userID)
       const requestOptions = {
         title: 'Student Document Upload',
         method: 'POST',
@@ -396,7 +402,7 @@ class ProfileV1Page extends React.Component {
           console.log("document progress", response)
           const temp = response.data.PostRubixUserData
           //Set local storage to default values
-          localStorage.setItem('idProgress', 0)
+          /* localStorage.setItem('idProgress', 0)
           localStorage.setItem('proofOfResProgress', 0)
           localStorage.setItem('proofOfRegProgress', 0)
           localStorage.setItem('nextOfKinProgress', 0)
@@ -405,7 +411,7 @@ class ProfileV1Page extends React.Component {
           localStorage.setItem('proofOfResProgressMsg', 'No document uploaded')
           localStorage.setItem('proofOfRegProgressMsg', 'No document uploaded')
           localStorage.setItem('nextOfKinProgressMsg', 'No document uploaded')
-
+ */
 
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
@@ -413,32 +419,24 @@ class ProfileV1Page extends React.Component {
                 //console.log('its an ID')
                 this.props.onUpdateIDProgress(temp[i].Percentage)
                 this.props.onUpdateIDMessage(this.setMessage(temp[i].Percentage))
-                localStorage.setItem('idProgress', temp[i].Percentage)
-                localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-res": {
                 //console.log('its a Proof of res')
                 this.props.onUpdateRESProgress(temp[i].Percentage)
                 this.props.onUpdateRESMessage(this.setMessage(temp[i].Percentage))
-                localStorage.setItem('proofOfResProgress', temp[i].Percentage)
-                localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-reg": {
                 //console.log('its a proof of res')
                 this.props.onUpdateREGProgress(temp[i].Percentage)
                 this.props.onUpdateREGMessage(this.setMessage(temp[i].Percentage))
-                localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
-                localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "next-of-kin": {
                 //console.log('its a next of kin')
                 this.props.onUpdateNOKProgress(temp[i].Percentage)
                 this.props.onUpdateNOKMessage(this.setMessage(temp[i].Percentage))
-                localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
-                localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
               }
               
             }
@@ -698,7 +696,7 @@ class ProfileV1Page extends React.Component {
         {localStorage.getItem('role') == 'admin' ? this.state.topBarData : null}
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         {
-          this.getProgress(this.state.doc.FileType) != 100
+          this.getProgress(this.state.doc.FileType) != 100 || localStorage.getItem('role') == 'admin'
           ?<button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
           : null
         }

@@ -11,6 +11,8 @@ export const ON_PRESS_POP_UP_CONFIRMATION = "mailInboxReducer/ON_PRESS_POP_UP_CO
 export const ON_PRESS_POP_UP_ASSIGN_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_ASSIGN_ROOM";
 export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REMOVE_ROOM";
 
+export const ON_PRESS_POP_UP_NOTICE = "mailInboxReducer/ON_PRESS_POP_UP_NOTICE";
+
 export const onPressTagDropdown = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_TAG_DROPDOWN,
@@ -35,6 +37,14 @@ export const onPresAddEvent = () => (dispatch) => {
   });
 };
 
+//Toggle Pop Up Add New Notice
+export const onPresPopNewNotice = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_POP_UP_NOTICE,
+  });
+};
+
+//Toggle Pop Up Event Modal
 export const onPresPopUpEvent = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_POP_UP_EVENT,

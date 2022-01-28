@@ -16,6 +16,9 @@ import axios from "axios";
 import "bootstrap/dist/js/bootstrap.min.js";
 import ReactList from 'react-list';
 import {linkResolver,RichText} from 'prismic-reactjs';
+import {Grid, Row, Col, Button} from "react-bootstrap";
+import PopUpAddNewNotice from "../../components/PopUpAddNewEvent"
+import {onPresPopNewNotice} from "../../actions"
 import {
   topProductOption,
   topRevenueOption,
@@ -278,6 +281,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <PopUpAddNewNotice></PopUpAddNewNotice>
         <div>
           <div className="container-fluid">
             <PageHeader
@@ -288,7 +292,13 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
               <div className="col-lg-12">
                 <div className="card">
                   <div className="header">
-                    <h2>Announcements</h2>
+                    <Row>
+                      <h2>Announcements</h2>
+                      <button onClick={()=>this.props.onPresPopNewNotice()} className="btn btn-outline-success ml-5"> 
+                      <i className="icon-bell pr-2"></i>
+                      Add New Announcement
+                      </button>
+                      </Row>
                   </div>
                   {
                     this.state.notices.map((message, index) => (
@@ -383,6 +393,7 @@ const mapStateToProps = ({
 });
 
 export default connect(mapStateToProps, {
+  onPresPopNewNotice
   /*  toggleMenuArrow,
    loadSparcleCard,
    onPressTopProductDropDown,
