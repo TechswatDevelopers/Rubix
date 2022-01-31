@@ -41,9 +41,7 @@ class RoomsTable extends React.Component {
                List of all Rooms Available
               </small>
             </h2>
-            {RoomList.length == 1 
-            ? Body
-          : null}
+            {Body}
           </div>
           <div className="body table-responsive table-hover">
             <table className="table">

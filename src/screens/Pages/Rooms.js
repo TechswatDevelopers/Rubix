@@ -212,7 +212,11 @@ class RoomAllocation extends React.Component {
                   <div className="body">
                     <RoomsTable
               RoomList= {this.state.availableRooms}
-              Body = {<>
+              Body = {
+                this.state.availableRooms.length === 1
+                ? null
+              :
+              <>
               <Row>
               {  <>
               <label>Buiding Number</label>

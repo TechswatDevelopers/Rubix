@@ -975,14 +975,26 @@ this.props.updateStudentName(
                   <label>
                     Street Address: {this.state.myProfile.RegisterUserStreetNameAndNumer}, {this.state.myProfile.RegisterUserProvince}
                   </label>
-                  <GooglePlacesAutocomplete
-                    apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange={(e) => this.setState({ location: e.target.value })}
-                    selectProps={{
-                      location: this.state.location,
-                      onChange: (e) => this.setState({ location: e }),
-                      placeholder: "Update home address"
-                    }}
-                  />
+                  <input
+                          className="form-control"
+                          name= "RegisterUserStreetNameAndNumer"
+                          id="streetAddress"
+                          placeholder="Enter your Physical Address"
+                          type="text"
+                        />
+                        <button className="btn btn-primary btn-sm" onClick={(e)=>this.showSearch(e)}><i className="icon-magnifier"/> Search</button>
+                        { this.state.showSearch
+                        ?  <GooglePlacesAutocomplete
+                          apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange={(e) => this.setState({ location: e.target.value })}
+                          selectProps={{
+                            location: this.state.location,
+                            onChange: (e) => this.setState({ location: e }),
+                            placeholder: "Enter your home Address"
+                          }}
+                        />
+                      : null
+                      }
+                  
                 </div>
                 {/* <div className="form-group">
                   

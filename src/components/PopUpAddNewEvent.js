@@ -18,7 +18,7 @@ constructor(props) {
     const form = document.getElementById('add-event');
     const data = {
       'RubixClientID': localStorage.getItem('clientID'),
-      'UserCode': localStorage.getItem('userID'),
+      'UserCode': localStorage.getItem('userCode'),
       "Name": '',
       "Surname": '',
       "ResidenceID": localStorage.getItem('resID'),
@@ -89,13 +89,15 @@ constructor(props) {
               </form>
             </div>
             <div className="modal-footer">
-            <button type="button" className="btn btn-primary" >
+            <button onClick={(e) => {
+                  this.postNoticies()
+                  this.props.onPresPopNewNotice();
+                }} type="button" className="btn btn-primary" >
                 Add Announcement
               </button>
               <button
                 type="button"
                 onClick={(e) => {
-                  this.postNoticies()
                   this.props.onPresPopNewNotice();
                 }}
                 className="btn btn-danger"
