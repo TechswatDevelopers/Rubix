@@ -95,7 +95,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
   getNoticies() {
     const data = {
       'RubixClientID': localStorage.getItem('clientID'),
-      "RubixResidenceID": localStorage.getItem('resID')
+      'RubixResidenceID': localStorage.getItem('resID')
     }
     const requestOptions = {
       title: 'Login Form',
@@ -103,6 +103,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
+  console.log('Posted data: ', data)
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
       console.log("Messages data", res.data.PostRubixUserData);
