@@ -102,6 +102,7 @@ class ProfileV1Setting extends React.Component {
         .then(response => {
           console.log(response)
           alert(response.data[0].ResponceMessage)
+          window.location.reload()
         })
     }
     postData()
@@ -135,6 +136,7 @@ class ProfileV1Setting extends React.Component {
         .then(response => {
           //console.log(response)
           alert(response.data.PostRubixUserData[0].Response)
+          window.location.reload()
         })
     }
     postData()
@@ -166,6 +168,7 @@ class ProfileV1Setting extends React.Component {
         .then(response => {
           console.log("Next of Kin Post Response", response)
           alert("Information Updated")
+          window.location.reload()
         })
     }
     postData()
@@ -197,6 +200,7 @@ class ProfileV1Setting extends React.Component {
         .then(response => {
           console.log("Update Varsity information Response: ", response)
           alert("Information Updated")
+          window.location.reload()
         })
     }
     postData()

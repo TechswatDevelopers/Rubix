@@ -42,7 +42,7 @@ class RoomsTable extends React.Component {
               </small>
             </h2>
             {RoomList.length == 1 
-            ?Body
+            ? Body
           : null}
           </div>
           <div className="body table-responsive table-hover">
