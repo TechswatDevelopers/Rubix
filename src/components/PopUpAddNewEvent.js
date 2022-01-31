@@ -13,6 +13,35 @@ constructor(props) {
   }
 }
 
+  //Admin Post new notice
+  postNoticies() {
+    const form = document.getElementById('add-event');
+    const data = {
+      'RubixClientID': localStorage.getItem('clientID'),
+      'UserCode': localStorage.getItem('userID'),
+      "Name": '',
+      "Surname": '',
+      "ResidenceID": localStorage.getItem('resID'),
+    }
+    for (let i=0; i < form.elements.length; i++) {
+        const elem = form.elements[i];
+        data[elem.name] = elem.value
+    }
+    const requestOptions = {
+      title: 'Login Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+  };
+    const getData = async () => {
+      const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserMessages', data, requestOptions)
+      console.log("Add notice response data", res.data.PostRubixUserData);
+      this.setState({ notices: res.data.PostRubixUserData })
+      this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
+    }
+    getData()
+  }
+
   render() {
     const { isPopUpModal, Title, Body, Function} = this.props;
     return (
@@ -28,12 +57,13 @@ constructor(props) {
               </h4>
             </div>
             <div className="modal-body">
-              <form>
+              <form id="add-event">
               <div className="form-group">
                 <div className="form-line">
                   <label>Announcement Title</label>
                   <input
                     required
+                    name="Title"
                     id="start"
                     type="text"
                     className="form-control"
@@ -47,6 +77,7 @@ constructor(props) {
                   <label>Announcement Body</label>
                   <input
                     required
+                    name="UserMessage"
                     id="start"
                     type="text"
                     className="form-control"
@@ -64,6 +95,7 @@ constructor(props) {
               <button
                 type="button"
                 onClick={(e) => {
+                  this.postNoticies()
                   this.props.onPresPopNewNotice();
                 }}
                 className="btn btn-danger"

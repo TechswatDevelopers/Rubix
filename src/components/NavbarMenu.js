@@ -113,6 +113,8 @@ class NavbarMenu extends React.Component {
             profile: response.data.PostRubixUserData[0],
             userFullName: response.data.PostRubixUserData[0].AdminUserName + " " + response.data.PostRubixUserData[0].AdminUserSurname
           })
+          localStorage.setItem('adminName', response.data.PostRubixUserData[0].AdminUserName)
+          localStorage.setItem('adminSurname', response.data.PostRubixUserData[0].AdminUserSurname)
 
           this.props.updateResidenceID(response.data.PostRubixUserData[0].RubixResidenceID)
   
