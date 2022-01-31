@@ -170,7 +170,6 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     }
     getData()
   }
-
   //Get post likes
   getLikes(postID) {
     const data = {
