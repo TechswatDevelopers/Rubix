@@ -94,7 +94,8 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
   //Get noticies
   getNoticies() {
     const data = {
-      'RubixClientID': localStorage.getItem('clientID')
+      'RubixClientID': localStorage.getItem('clientID'),
+      "RubixResidenceID": localStorage.getItem('resID')
     }
     const requestOptions = {
       title: 'Login Form',
