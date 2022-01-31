@@ -68,6 +68,7 @@ class ProfileV1Setting extends React.Component {
   //Reset password
   updateAddressInformation(e) {
     const locations = document.getElementById('location');
+    let id;
     console.log("location:", this.state.location)
     let street_address
     if (Object.keys(this.state.location).length != 0) {
@@ -79,7 +80,7 @@ class ProfileV1Setting extends React.Component {
     e.preventDefault();
     const form = document.getElementById('addresses');
     const data = {
-      'RubixRegisterUserID': this.props.rubixUserID,
+      'RubixRegisterUserID': localStorage.getItem('role') == 'admin' ? this.props.currentStudentiD : localStorage.getItem('userID'),
       'RegisterUserStreetNameAndNumer': street_address,
       'RegisterUserProvince': this.state.prov,
       'RegisterUserCountry': this.state.country,

@@ -300,7 +300,11 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                       </Row>
                   </div>
                   {
-                    this.state.notices.map((message, index) => (
+                    this.state.notices == undefined || this.state.notices.length == 0
+                    ? <>
+                    <p>No Notices available</p>
+                    </>
+                    : this.state.notices.map((message, index) => (
                       <>
                       <div className="body">
                     <div
