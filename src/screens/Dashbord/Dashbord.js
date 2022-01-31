@@ -295,10 +295,14 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                   <div className="header">
                     <Row>
                       <h2>Announcements</h2>
-                      <button onClick={()=>this.props.onPresPopNewNotice()} className="btn btn-outline-success ml-5"> 
+                      {localStorage.getItem('role') == 'admin'
+                        ?
+                        <button onClick={()=>this.props.onPresPopNewNotice()} className="btn btn-outline-success ml-5"> 
                       <i className="icon-bell pr-2"></i>
                       Add New Announcement
                       </button>
+                    : null  
+                    }
                       </Row>
                   </div>
                   {
