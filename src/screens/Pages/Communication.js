@@ -2,6 +2,7 @@ import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
+import {Helmet} from "react-helmet";
 
 class Communication extends React.Component {
   componentDidMount() {
@@ -17,6 +18,10 @@ class Communication extends React.Component {
       >
         <div>
           <div className="container-fluid">
+          <Helmet>
+                <meta charSet="utf-8" />
+                <title>{"Communication"}</title>
+            </Helmet>
             <PageHeader
               HeaderText="Communications"
               Breadcrumb={[

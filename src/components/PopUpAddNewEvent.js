@@ -39,7 +39,9 @@ constructor(props) {
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
     }
-    getData()
+    getData().then(()=>{
+      window.location.reload()
+    })
   }
 
   render() {

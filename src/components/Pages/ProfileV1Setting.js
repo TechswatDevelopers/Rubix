@@ -150,7 +150,7 @@ class ProfileV1Setting extends React.Component {
 
     //Request Data
     const data = {
-      'RubixRegisterUserID': this.state.myUserID,
+      'RubixRegisterUserID': localStorage.getItem('role') == 'admin' ? this.props.currentStudentiD : localStorage.getItem('userID'),
     }
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -168,11 +168,11 @@ class ProfileV1Setting extends React.Component {
         .then(response => {
           console.log("Next of Kin Post Response", response)
           alert("Information Updated")
-          window.location.reload()
+          
         })
     }
     postData()
-    window.location.reload()
+   // window.location.reload()
   }
 
   //Update Varsity details
