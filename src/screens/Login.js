@@ -50,6 +50,7 @@ componentDidMount() {
     this.setThemeColor(this.state.currentClientId)
     //this.props.history.push('/login/1')
   }
+
   
   document.body.classList.remove("theme-cyan");
   document.body.classList.remove("theme-purple");
@@ -210,7 +211,7 @@ componentDidMount() {
         this.props.updateClientName('CJ Students')
         this.props.onPressThemeColor('orange')
         this.setState({
-          backImage: 'cj_bg.png',
+          backImage: 'https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png',
           pageTitle: 'CJ Students'
         })
 
@@ -235,6 +236,8 @@ componentDidMount() {
       localStorage.setItem('clientTheme', 'purple')
     }
     }
+
+    
     console.log('client:', this.state.backImage)
   }
 
@@ -266,8 +269,7 @@ componentDidMount() {
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main"
             style={{
-              backgroundImage: localStorage.getItem('clientID') == 1 ? this.state.backImage
-              :'url(' + this.state.backImage + ')',
+              backgroundImage: 'url(' + this.state.backImage + ')',
               backgroundPosition: 'center',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',   
