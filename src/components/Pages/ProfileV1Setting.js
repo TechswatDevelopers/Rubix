@@ -171,8 +171,10 @@ class ProfileV1Setting extends React.Component {
           
         })
     }
-    postData()
-   // window.location.reload()
+    postData().then(()=>{
+      window.location.reload()
+    })
+   // 
   }
 
   //Update Varsity details
