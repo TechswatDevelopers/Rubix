@@ -10,6 +10,7 @@ import FileFolderCard from "../../components/FileManager/FileFolderCard";
 import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
+import {Helmet} from "react-helmet";
 import {onPresPopUpEvent, onPresPopUpConfirm, 
   onUpdateNOKProgress,
   onUpdateIDProgress,
@@ -72,7 +73,8 @@ class ProfileV1Page extends React.Component {
       studentDocs: [],
       topBarData: '',
       currentDocID: '',
-      currentProgress: ''
+      currentProgress: '',
+      pageTitle: 'User Profile',
     }
   }
 
@@ -759,6 +761,10 @@ class ProfileV1Page extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+         <Helmet>
+                <meta charSet="utf-8" />
+                <title>{this.state.pageTitle}</title>
+            </Helmet>
         <PopUpModal 
         Title= "Upload Complete!"
         Body = "Your document has been uploaded successfully."

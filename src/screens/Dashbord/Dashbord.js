@@ -19,6 +19,7 @@ import {linkResolver,RichText} from 'prismic-reactjs';
 import {Grid, Row, Col, Button} from "react-bootstrap";
 import PopUpAddNewNotice from "../../components/PopUpAddNewEvent"
 import {onPresPopNewNotice} from "../../actions"
+import {Helmet} from "react-helmet";
 import {
   topProductOption,
   topRevenueOption,
@@ -51,6 +52,7 @@ class Dashbord extends React.Component {
       comments: [],
       likes: [],
       liked: false,
+      pageTitle: 'Dashboard',
     };
   }
   componentDidMount() {
@@ -282,6 +284,10 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>{this.state.pageTitle}</title>
+            </Helmet>
         <PopUpAddNewNotice></PopUpAddNewNotice>
         <div>
           <div className="container-fluid">

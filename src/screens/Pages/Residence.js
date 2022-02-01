@@ -8,6 +8,7 @@ import echarts from "echarts";
 import axios from "axios";
 import ImageGallery from "react-image-gallery";
 import ResManagerCard from "../../components/ResManagerCard";
+import {Helmet} from "react-helmet";
 import {
   topProductOption,
   topRevenueOption,
@@ -34,6 +35,7 @@ class Residence extends React.Component {
       gallery: [],
       socials: [],
       resManagerPic: '',
+      pageTitle: 'Residence Info.',
     }
   }
   componentDidMount() {
@@ -154,6 +156,10 @@ class Residence extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>{this.state.pageTitle}</title>
+            </Helmet>
         <div>
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">

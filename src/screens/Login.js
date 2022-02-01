@@ -12,6 +12,7 @@ import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import InstagramLogin from "react-instagram-login";
 import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
+import {Helmet} from "react-helmet";
 
 class Login extends React.Component {
 
@@ -24,6 +25,7 @@ constructor(props) {
     errorMessage: '',
     isAdmin: false,
     backImage: 'cj_bg.png',
+    pageTitle: 'Rubix System',
   }
 }
 
@@ -208,7 +210,8 @@ componentDidMount() {
         this.props.updateClientName('CJ Students')
         this.props.onPressThemeColor('orange')
         this.setState({
-          backImage: 'cj_bg.png'
+          backImage: 'cj_bg.png',
+          pageTitle: 'CJ Students'
         })
 
         localStorage.setItem('clientLogo', 'CJ-Logo4.png')
@@ -221,7 +224,8 @@ componentDidMount() {
       this.props.updateClientLogo('opal.png')
       this.props.updateClientName('Opal Students')
       this.setState({
-        backImage: 'https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg'
+        backImage: 'https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg',
+        pageTitle: 'Opal Students'
 
       })
 
@@ -248,6 +252,10 @@ componentDidMount() {
     const { email, password } = this.props;
     return (
       <div className={this.props.rubixThemeColor}>
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>{this.state.pageTitle}</title>
+            </Helmet>
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src={this.props.rubixClientLogo} width="20%" height="20%" alt="Lucid" /></div>

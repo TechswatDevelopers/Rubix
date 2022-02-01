@@ -11,6 +11,7 @@ import RoomAllocation from '../../screens/Pages/Rooms';
 import PopUpAssign from '../../components/PopUpAssignRoom';
 
 import {Grid, Row, Col, Button} from "react-bootstrap";
+import {Helmet} from "react-helmet";
 
 class Students extends React.Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class Students extends React.Component {
           showRooms: false,
           colors: [],
           isEmpty: false,
+          pageTitle: 'Students',
         }
       }
   componentDidMount() {
@@ -109,6 +111,10 @@ class Students extends React.Component {
       >
         <div>
           <div className="container-fluid">
+          <Helmet>
+                <meta charSet="utf-8" />
+                <title>{this.state.pageTitle}</title>
+            </Helmet>
             <PageHeader
               HeaderText="Students Details Page"
               Breadcrumb={[

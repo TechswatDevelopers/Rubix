@@ -14,6 +14,7 @@ import PopUpModal from "../../components/PopUpModal";
 import { events } from "../../Data/AppData";
 import { onPresAddEvent, onPresPopUpEvent } from "../../actions";
 import axios from "axios";
+import {Helmet} from "react-helmet";
 
 class AppCalendar extends React.Component {
   constructor(props) {
@@ -28,7 +29,8 @@ class AppCalendar extends React.Component {
       totalResEvents: '',
       upcomingResEvents: '',
       pastEvents: '',
-      chosenDate: null
+      chosenDate: null,
+      pageTitle: 'My Calendar',
     }
   }
   componentDidMount() {
@@ -241,6 +243,10 @@ class AppCalendar extends React.Component {
         <div style={{ opacity: isEventModal ? 0.3 : 1 }}>
           <div className="ng-star-inserted">
             <div className="container-fluid">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{this.state.pageTitle}</title>
+            </Helmet>
               <PageHeader
                 HeaderText="Calendar"
                 Breadcrumb={[{ name: "App" }, { name: "Calendar" }]}
