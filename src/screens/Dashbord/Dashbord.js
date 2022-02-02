@@ -63,9 +63,9 @@ class Dashbord extends React.Component {
     });
 
     this.getNoticies()
-    //this.chartPlace();
   }
-
+  
+ 
 //Convert Date and time
 getDateFormated(date){
   let newdate

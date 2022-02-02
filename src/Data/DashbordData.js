@@ -429,7 +429,475 @@ export const visitorsSparcalOption = {
   ],
 };
 
+
 export const saleGaugeOption = {
+  title: {
+    text: "75",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(0, 0, 0)",
+      fontFamily: "Arial",
+      fontSize: 20,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 360,
+      clockWise: 1,
+      radius: [40, 50],
+      itemStyle: {
+        normal: {
+          label: { show: true },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: 85,
+          itemStyle: {
+            color: "#212121",
+            emphasis: {
+              color: "#212121",
+            },
+          },
+        },
+        {
+          value: 14,
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+        /* {
+          value: 69,
+          itemStyle: {
+            normal: {
+              color: "rgba(0,0,0,0)",
+              label: { show: false },
+              labelLine: { show: false },
+              tooltip: { show: false },
+            },
+          },
+        }, */
+      ],
+    },
+  ],
+};
+
+export const studentIDGaugeOption = {
+  title: {
+    text: "75",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(0, 0, 0)",
+      fontFamily: "Arial",
+      fontSize: 20,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 270,
+      clockWise: 1,
+      radius: [40, 50],
+      itemStyle: {
+        normal: {
+          label: { show: true },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resIdDocs'),
+          itemStyle: {
+            color: "#1ebbd7",
+            emphasis: {
+              color: "#1ebbd7",
+            },
+          },
+        },
+        {
+          value: 100 - localStorage.getItem('resIdDocs'),
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+        /* {
+          value: 69,
+          itemStyle: {
+            normal: {
+              color: "rgba(0,0,0,0)",
+              label: { show: false },
+              labelLine: { show: false },
+              tooltip: { show: false },
+            },
+          },
+        }, */
+      ],
+    },
+  ],
+};
+
+
+export const totalStudents = {
+  title: {
+    text: localStorage.getItem('resTotal'),
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(255, 255, 255)",
+      fontFamily: "Arial",
+      fontSize: 15,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 215,
+      clockWise: 1,
+      radius: [0, 30],
+      itemStyle: {
+        normal: {
+          label: { show: false },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resTotal'),
+          itemStyle: {
+            color: "#ffa500",
+            emphasis: {
+              color: "#ffa500",
+            },
+          },
+        },
+       
+      ],
+    },
+  ],
+};
+
+export const ResGaugeOption = {
+  title: {
+    text: "63",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(255, 255, 255)",
+      fontFamily: "Arial",
+      fontSize: 15,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 270,
+      clockWise: 1,
+      radius: [80, 90],
+      itemStyle: {
+        normal: {
+          label: { show: false },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resProofOfResDocs'),
+          itemStyle: {
+            color: "#5743bb",
+            emphasis: {
+              color: "#5743bb",
+            },
+          },
+        },
+        {
+          value: 100 - localStorage.getItem('resProofOfResDocs'),
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
+
+export const regGaugeOption = {
+  title: {
+    text: "63",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(255, 255, 255)",
+      fontFamily: "Arial",
+      fontSize: 15,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 270,
+      clockWise: 1,
+      radius: [60, 70],
+      itemStyle: {
+        normal: {
+          label: { show: false },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resProofOfRegDocs'),
+          itemStyle: {
+            color: "#0000ff",
+            emphasis: {
+              color: "#0000ff",
+            },
+          },
+        },
+        {
+          value: 100 - localStorage.getItem('resProofOfRegDocs'),
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
+
+export const nokGaugeOption = {
+  title: {
+    text: "63",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(255, 255, 255)",
+      fontFamily: "Arial",
+      fontSize: 15,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 270,
+      clockWise: 1,
+      radius: [100, 110],
+      itemStyle: {
+        normal: {
+          label: { show: false },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resNOKDocs'),
+          itemStyle: {
+            color: "#e69138",
+            emphasis: {
+              color: "#e69138",
+            },
+          },
+        },
+        {
+          value: 100 - localStorage.getItem('resNOKDocs'),
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
+
+export const leaseGaugeOption = {
+  title: {
+    text: "63",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(255, 255, 255)",
+      fontFamily: "Arial",
+      fontSize: 15,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 270,
+      clockWise: 1,
+      radius: [120, 130],
+      itemStyle: {
+        normal: {
+          label: { show: false },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resLeaseDocs'),
+          itemStyle: {
+            color: "#f603a3",
+            emphasis: {
+              color: "#f603a3",
+            },
+          },
+        },
+        
+        {
+          value: 100 - localStorage.getItem('resLeaseDocs'),
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+      ],
+    },
+  ],
+};
+
+
+export const saleGaugeOption3 = {
   title: {
     text: "63",
     x: "center",

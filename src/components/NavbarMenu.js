@@ -66,7 +66,7 @@ class NavbarMenu extends React.Component {
          //Set timer for loading screen
   setTimeout(() => {
     this.getAdmin()
-  }, 2000);
+  }, 3000);
         
       } else {
         fetchUserData();

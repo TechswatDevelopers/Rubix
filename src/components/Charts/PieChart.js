@@ -17,10 +17,10 @@ class PieChart extends React.Component {
   };
   render() {
     return (
-      <div className="col-lg-6 col-md-6 col-sm-12">
+      <div className="">
         <div className="card">
           <div className="header">
-            <h2>Pie Chart</h2>
+            <h2>Residence Data</h2>
           </div>
           <div className="body">
             <div id="PieChart" style={{ height: 300 }}></div>

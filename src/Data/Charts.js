@@ -118,6 +118,51 @@ export const optionLineEchart = {
 
 export const optionPieEchart = {
   title: {
+    text: "Documents Statistics",
+    subtext: "Percentages of Documents Uploaded",
+    left: "center",
+  },
+  color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff"],
+  tooltip: {
+    trigger: "item",
+    formatter: "{a} <br/>{b} : {c} ({d}%)",
+  },
+  legend: {
+    orient: "vertical",
+    left: "left",
+    data: [
+      "Student ID",
+      "Proof of Residence",
+      "Proof of Registration",
+      "Next of Kin ID",
+      "Lease Agreement",
+    ],
+  },
+  series: [
+    {
+      name: "Documents",
+      type: "pie",
+      radius: "55%",
+      center: ["50%", "60%"],
+      data: [
+        { value: 112, name: "Student ID" },
+        { value: 54, name: "Proof of Residence" },
+        { value: 38, name: "Proof of Registration" },
+        { value: 82, name: "Next of Kin ID" },
+        { value: 1, name: "Lease Agreement" },
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+        },
+      },
+    },
+  ],
+};
+export const optionPieEchart2 = {
+  title: {
     text: "User access source",
     subtext: "Purely fictitious",
     left: "center",
