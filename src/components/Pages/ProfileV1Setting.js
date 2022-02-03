@@ -13,8 +13,10 @@ import {onUpdateProgressBar,
   updateStudentCourse,
   updateStudentUniversity,
   updateStudentStudentNo,
-  updateStudentYear
+  updateStudentYear,
   } from '../../actions/NavigationAction';
+  import {
+    onPresLease} from '../../actions/MailInboxAction';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 
 class ProfileV1Setting extends React.Component {
@@ -464,10 +466,15 @@ this.props.updateStudentName(
 
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
           this.props.onUpdateProgressBar(response.data.PostRubixUserData[1].InfoCount)
-          console.log("Student Progress: ", this.props.studentProgress)
+          //console.log("Student Progress: ", this.props.studentProgress)
+        //isShowLease: !state.isShowLease,
+          
+          if(response.data.PostRubixUserData[0].LeaseShow == 1){
+            this.props.onPresLease()
+          } 
 
 
- console.log("testing",response.data.PostRubixUserData[0].Name)
+ //console.log("testing",response.data.PostRubixUserData[0].Name)
         }).then(() => {
           localStorage.setItem('resName', this.state.myProfile.ResidenceName)
           localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)
@@ -1286,7 +1293,8 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   currentStudentname: navigationReducer.studentName,
 
   nextOfKinName: navigationReducer.nextofKinName,
-  nextOfKinId: navigationReducer.nextofKinID
+  nextOfKinId: navigationReducer.nextofKinID,
+
 });
 
 export default connect(mapStateToProps, {
@@ -1305,5 +1313,6 @@ export default connect(mapStateToProps, {
   updateStudentUniversity,
   updateStudentAddress,
   updateStudentStudentNo,
-  updateStudentYear
+  updateStudentYear,
+  onPresLease
 })(ProfileV1Setting);

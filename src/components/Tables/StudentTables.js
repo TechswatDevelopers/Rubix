@@ -177,7 +177,11 @@ class SudentsTable extends React.Component {
                       </span>
                     </button>{" "}
                 &nbsp;&nbsp;
-                  <button className="btn btn-sm btn-outline-info" 
+
+
+                { student.Color == "Purple" || student.Color == "blue"
+                
+                ? <button className="btn btn-sm btn-outline-info" 
                   onClick={(e)=>{
                     e.preventDefault()
                     this.setState({
@@ -195,6 +199,10 @@ class SudentsTable extends React.Component {
                          Room
                       </span>
                     </button>
+                  : null  
+                  }
+
+
                   </></td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >

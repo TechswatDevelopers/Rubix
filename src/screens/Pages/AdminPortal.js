@@ -190,8 +190,8 @@ chartPlaceLease = () => {
               ]}
             />
             <div className="row clearfix">
-              <div className="col-lg-12 col-md-12">
-                <div className="card planned_task">
+              <div className=" col-lg-12 col-md-12">
+                <div className=" planned_task">
                   <div className="header">
                     <h2>Admin Dashboard</h2>
                     
@@ -203,7 +203,7 @@ chartPlaceLease = () => {
 
                 
               <div className=''>
-                <div className="card">
+                <div className="">
                   <div className="header">
                     {/* <h2>Total Revenue</h2> */}
                     {/* <Dropdown as="ul" className="header-dropdown">
@@ -229,9 +229,10 @@ chartPlaceLease = () => {
                       </Dropdown.Toggle>
                     </Dropdown> */}
                   </div>
-                  <div className="body text-center">
+                  <div className="body">
                     <h4 className="margin-0">Documents Data</h4>
-                  <Row>
+                  <div className="row">
+                    <div className="col-3">
                     <div className="outer m-3">
                        <div
                       id="LeaseDonut"
@@ -264,7 +265,48 @@ chartPlaceLease = () => {
                       style={{ height: 285, width: "100%", position: "absolute" }}
                     ></div>
                     </div>
-                  </Row>
+                    </div>
+                    
+                    
+                    
+                    <div className="col-7">
+                    <div className="outer m-7">
+                       <div
+                      id="LeaseDonut"
+                      className="inner"
+                      style={{ height: 385, width: "100%", position: "absolute" }}
+                    ></div>
+                       <div
+                      id="NOKDonut"
+                      className="inner"
+                      style={{ height: 385, width: "100%", position: "absolute" }}
+                    ></div>
+                       <div
+                      id="resDonut"
+                      className="inner"
+                      style={{ height: 385, width: "100%", position: "absolute" }}
+                    ></div>
+                    <div 
+                      id="RegDonut"
+                      className="inner"
+                      style={{ height: 385, width: "100%", position: "absolute"}}
+                    ></div>
+                    <div 
+                      id="studentID"
+                      className="inner"
+                      style={{ height: 385, width: "100%", position: "absolute"}}
+                    ></div>
+                    <div
+                      id="totalStudentsDonut"
+                      className="inner"
+                      style={{ height: 385, width: "100%", position: "absolute" }}
+                    ></div>
+                   
+                    </div>
+                    </div>
+                  </div>
+
+
                   </div>
                 </div>
               </div>

@@ -475,6 +475,8 @@ class ProfileV1Page extends React.Component {
     }
     return progress
   }
+
+
   //Get Progress
   getMessage(doc){
     let message;
@@ -647,6 +649,8 @@ class ProfileV1Page extends React.Component {
     }
     postDocument()
   }
+
+
   //On Press loading data
   setLoadingPage(time,) {
     this.setState({ isLoad: true, })
@@ -656,6 +660,8 @@ class ProfileV1Page extends React.Component {
       })
     }, time);
   }
+
+  
   //On Press loading data
   setLoadingDocumentPage() {
     this.setState({ isDocLoad: true, })
@@ -666,6 +672,7 @@ class ProfileV1Page extends React.Component {
     }, 700);
   }
 
+
   //Set Key
   setKey(e){
     localStorage.setItem('tab', e)
@@ -673,6 +680,9 @@ class ProfileV1Page extends React.Component {
       tabKey: e
     })
   }
+
+
+
    //Set Message according to percentage
    setMessage(percent) {
     let message
@@ -688,8 +698,6 @@ class ProfileV1Page extends React.Component {
     }
     return message
   }
-
-
 
   render() {
     let myBody, myLease;
@@ -720,40 +728,43 @@ class ProfileV1Page extends React.Component {
       }
       </>
 
-        myLease = null
-        
-        {/* <Tab eventKey="signing" title="Lease Agreement">
-        <div className="w-auto p-3">
-          { !this.state.myLease
-            ? <>
-            <p>Loading document...</p>
-          </>
-          :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
-         </iframe>}
-          
-          {
-            this.state.showPad
+        if (this.props.showLease){
+          myLease =
+        <Tab eventKey="signing" title="Lease Agreement">
+          <div className="w-auto p-3">
+            { !this.state.myLease
               ? <>
-                <p>If you agree to the above document, please enter your signature:</p>
-                <div className="border border-primary border-2 p-3" style={{
-                  width: '100%'
-                  }}>
-                  <SignatureCanvas className="border border-primary border-2" penColor='black'
-                  canvasProps={{  height: '100%', width: '400px', className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
-                  </div>
-                <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
-                  Submit Signature
-                </button>
-                <button className="btn btn-default" onClick={this.clear}>
-                  Clear
-                </button>
-              </>
-              : null
-          }
-
-        </div>
-
-      </Tab> */}
+              <p>Loading document...</p>
+            </>
+            :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
+           </iframe>}
+            
+            {
+              this.state.showPad
+                ? <>
+                  <p>If you agree to the above document, please enter your signature:</p>
+                  <div className="border border-primary border-2 p-3" style={{
+                    width: '100%'
+                    }}>
+                    <SignatureCanvas className="border border-primary border-2" penColor='black'
+                    canvasProps={{  height: '100%', width: '400px', className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
+                    </div>
+                  <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
+                    Submit Signature
+                  </button>
+                  <button className="btn btn-default" onClick={this.clear}>
+                    Clear
+                  </button>
+                </>
+                : null
+            }
+  
+          </div>
+  
+        </Tab>
+        } else {
+          myLease = null
+        }
     return (
       <div ref={this.testRef}
         style={{ flex: 1 }}
@@ -1089,6 +1100,8 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
 
   nokProgress: navigationReducer.nextOfKinProgress,
   nokMessage: navigationReducer.nextOfKinMessage,
+  
+  showLease: mailInboxReducer.isShowLease
 });
 
 export default connect(mapStateToProps, {

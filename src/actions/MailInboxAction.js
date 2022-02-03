@@ -6,6 +6,7 @@ export const ON_PRESS_ADD_CONTACT = "mailInboxReducer/ON_PRESS_ADD_CONTACT";
 export const ON_PRESS_POP_UP_EVENT = "mailInboxReducer/ON_PRESS_ADD_CONTACT";
 export const ON_PRESS_SHOW_PROFILE = "mailInboxReducer/ON_PRESS_SHOW_PROFILE";
 export const ON_PRESS_SHOW_ROOMS = "mailInboxReducer/ON_PRESS_SHOW_ROOMS";
+export const ON_PRESS_SHOW_LEASE = "mailInboxReducer/ON_PRESS_SHOW_LEASE";
 
 export const ON_PRESS_POP_UP_CONFIRMATION = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION";
 export const ON_PRESS_POP_UP_ASSIGN_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_ASSIGN_ROOM";
@@ -86,6 +87,14 @@ export const onPresShowProfile = () => (dispatch) => {
 export const onPresRooms = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_SHOW_ROOMS,
+  });
+};
+
+
+//Toggle Show Lease Tab
+export const onPresLease = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_SHOW_LEASE,
   });
 };
 
