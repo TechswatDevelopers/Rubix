@@ -10,10 +10,18 @@ class PopUpAssign extends React.Component {
 constructor(props) {
   super(props)
   this.state = {
-    
+    dateAndTime: ''
   }
 }
-
+componentDidMount() {
+  window.scrollTo(0, 0);
+ 
+  this.getUserWitnessData()
+  const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({ dateAndTime: myDate + myTime })
+}
 
 
   //Send Vetted status
@@ -74,7 +82,16 @@ constructor(props) {
         })
       }
       postData().then(()=>{
-        this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
+        if(localStorage.getItem('clientID') == 1){
+
+          this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
+        
+        } else if(localStorage.getItem('clientID') == 2){
+          
+        this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/OPAL%20STUDENTS%20LEASE%20AGREEMENT%2020211101v1.pdf', this.props.currentStudentiD, 0)
+        
+        }
+        
         window.location.reload()
       })
     }
@@ -87,7 +104,7 @@ constructor(props) {
       const data = new FormData()
       data.append('image', image)
       data.append('FileType', filetype)
-      data.append('RubixRegisterUserID', this.state.myUserID)
+      data.append('RubixRegisterUserID', this.props.currentStudentiD)
       const requestOptions = {
         title: 'Student Document Upload',
         method: 'POST',
@@ -140,7 +157,7 @@ constructor(props) {
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
-    //console.log("I am called incorrectly")
+    console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
@@ -155,7 +172,7 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
+      console.log("Posted Data:", data)
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
