@@ -37,7 +37,14 @@ class AppCalendar extends React.Component {
     window.scrollTo(0, 0);
 
     //Get Residence Data
-    this.getResData()
+    //If Admin: Only fetch Res events
+    if(localStorage.getItem('role') == 'admin'){
+      //Get Events Data
+    this.getResEvents()
+      this.fetchImages(localStorage.getItem('resID'))
+    } else {
+      this.getResData()
+    }
   }
 
   //Get Events
@@ -302,8 +309,8 @@ class AppCalendar extends React.Component {
                   </div>
                   <div className="card profile-header">
                     <ProfileHeaderCard 
-                    FirstName = {this.state.resDetails.ResidenceManagerName}
-                    SecondName = {this.state.resDetails.ResidenceManagerSurname}
+                    FirstName = {localStorage.getItem('role') == 'admin'? localStorage.getItem('adminName') : this.state.resDetails.ResidenceManagerName}
+                    SecondName = {localStorage.getItem('role') == 'admin'? localStorage.getItem('adminSurname') :this.state.resDetails.ResidenceManagerSurname}
                     ProfilePicture = {this.state.resManagerPic}
                     TotalEvents = {this.state.totalResEvents}
                     UpcomingEvents = {this.state.upcomingResEvents}
