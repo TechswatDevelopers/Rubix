@@ -85,14 +85,14 @@ componentDidMount() {
         if(localStorage.getItem('clientID') == 1){
 
           this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
-        
+          //window.location.reload()
         } else if(localStorage.getItem('clientID') == 2){
           
         this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/OPAL%20STUDENTS%20LEASE%20AGREEMENT%2020211101v1.pdf', this.props.currentStudentiD, 0)
-        
+        //window.location.reload()
         }
         
-        window.location.reload()
+        //window.location.reload()
       })
     }
 
@@ -134,7 +134,7 @@ componentDidMount() {
         this.props.history.push("/login/" + localStorage.getItem('clientID'))
       }, 5000); */
       
-      //window.location.reload()
+      window.location.reload()
       //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
     })
   }
@@ -157,7 +157,7 @@ componentDidMount() {
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
-    console.log("I am called incorrectly")
+    //console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,

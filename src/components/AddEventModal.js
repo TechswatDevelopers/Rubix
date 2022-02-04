@@ -22,7 +22,7 @@ componentDidMount() {
 
   //Get Events Type Data
   this.getEventsData()
-  console.log('userCode', localStorage.getItem('userCode'))
+  //console.log('userCode', localStorage.getItem('userCode'))
 }
 
 //Get Events Types List

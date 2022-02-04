@@ -40,8 +40,8 @@ class AppCalendar extends React.Component {
     //If Admin: Only fetch Res events
     if(localStorage.getItem('role') == 'admin'){
       //Get Events Data
-    this.getResEvents()
-      this.fetchImages(localStorage.getItem('resID'))
+      this.getAdminResData()
+      
     } else {
       this.getResData()
     }
@@ -68,7 +68,7 @@ class AppCalendar extends React.Component {
         if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
 
         } else {
-          console.log("Res Events: ", response.data.PostRubixUserData)
+          //console.log("Res Events: ", response.data.PostRubixUserData)
           //Popolate Events List
           this.populateEvents(response.data.PostRubixUserData)
           this.setState({
@@ -86,6 +86,7 @@ class AppCalendar extends React.Component {
     }
     postData()
   }
+
 
   //Get Events
   getStudentEvents() {
@@ -149,6 +150,33 @@ class AppCalendar extends React.Component {
     }
     postData()
   }
+
+  getAdminResData(){
+    const pingData = {
+      'RubixResidenceID': localStorage.getItem('resID'),
+    };
+    //Ping Request Headers
+    const requestOptions = {
+      title: 'Get Residence Admin Details',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: pingData
+    };
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResDetails', pingData, requestOptions)
+      .then(response => {
+        console.log("Res Admin Data:", response.data.PostRubixUserData[0])
+        this.setState({
+          resDetails: response.data.PostRubixUserData[0]
+        })
+
+        //this.fetchImages(localStorage.getItem('resID'))
+        this.fetchImages(response.data.PostRubixUserData[0].RubixResidenceID)
+    this.getResEvents()
+      })
+    }
+    postData()
+  }
   
   //Fetch Res Gallery Images
   fetchImages(resID) {
@@ -181,7 +209,7 @@ class AppCalendar extends React.Component {
         date: myDate,
         time: myTime
       }
-      console.log("date", date)
+      //console.log("date", date)
       return newdate
     }
   //View Event Information
@@ -309,8 +337,8 @@ class AppCalendar extends React.Component {
                   </div>
                   <div className="card profile-header">
                     <ProfileHeaderCard 
-                    FirstName = {localStorage.getItem('role') == 'admin'? localStorage.getItem('adminName') : this.state.resDetails.ResidenceManagerName}
-                    SecondName = {localStorage.getItem('role') == 'admin'? localStorage.getItem('adminSurname') :this.state.resDetails.ResidenceManagerSurname}
+                    FirstName = {this.state.resDetails.ResidenceManagerName}
+                    SecondName = {this.state.resDetails.ResidenceManagerSurname}
                     ProfilePicture = {this.state.resManagerPic}
                     TotalEvents = {this.state.totalResEvents}
                     UpcomingEvents = {this.state.upcomingResEvents}

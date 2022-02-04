@@ -108,7 +108,7 @@ class NavbarMenu extends React.Component {
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminGetUser', pingData, requestOptions)
         .then(response => {
-          console.log("Admin User Details:", response)
+          //console.log("Admin User Details:", response)
           this.setState({
             profile: response.data.PostRubixUserData[0],
             userFullName: response.data.PostRubixUserData[0].AdminUserName + " " + response.data.PostRubixUserData[0].AdminUserSurname
