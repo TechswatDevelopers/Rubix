@@ -74,6 +74,7 @@ class ProfileV1Page extends React.Component {
       topBarData: '',
       currentDocID: '',
       currentProgress: '',
+      filename: '',
       pageTitle: 'User Profile',
     }
   }
@@ -241,6 +242,13 @@ class ProfileV1Page extends React.Component {
             </>
             })
         }
+        break
+        case 'lease-agreement':
+          {
+            this.setState({ 
+              docType: "My Lease Agreement",
+              })
+          }
         break
       case 'proof-of-res':
         {
@@ -789,6 +797,7 @@ class ProfileV1Page extends React.Component {
         Body = "You are confirming that the document and information are in line."
         FileType = {this.state.keyString} 
         DocID = {this.state.currentDocID}
+        Filename = {'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease}
         />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
@@ -996,10 +1005,9 @@ class ProfileV1Page extends React.Component {
                                       key={index + "sidjpidj"} 
                                       onClick={() => this.changeDocument(data.FileType)}
                                       onAnimationEnd={() => this.setState({ fade: false,
-                                        currentProgress: data.UsedPer
+                                        currentProgress: data.UsedPer,
                                       })}
                                       >
-                                        
                                         <FileStorageStatusCard
                                           key={index + "sidjpidj"}
                                           TotalSize=''

@@ -126,7 +126,7 @@ componentDidMount() {
         isLoad: false
       })
       this.props.onPresPopUpEvent()
-      
+      window.location.reload()
       
       
       /* setTimeout(() => {
@@ -134,7 +134,6 @@ componentDidMount() {
         this.props.history.push("/login/" + localStorage.getItem('clientID'))
       }, 5000); */
       
-      window.location.reload()
       //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
     })
   }

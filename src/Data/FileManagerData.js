@@ -79,6 +79,16 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-yellow mb-0",
   },
+   {
+    UsedSize: "Lease Agreement",
+    Type: "Documents",
+    status: localStorage.getItem('leaseProgressMsg'),
+    FileType: "lease-agreement",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('leaseProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-yellow mb-0",
+  },
 ];
 
 export const areaChartFileReport = {

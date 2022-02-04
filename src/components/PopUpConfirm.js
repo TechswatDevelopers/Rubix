@@ -9,9 +9,61 @@ class PopUpConfirm extends React.Component {
 constructor(props) {
   super(props)
   this.state = {
+    dateAndTime: '',
+    userIPAddress: '',
     
   }
 }
+componentDidMount() {
+  window.scrollTo(0, 0);
+ 
+  this.getUserWitnessData()
+  const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({ dateAndTime: myDate + myTime })
+}
+//Coleect User Signing Info
+getUserWitnessData() {
+  //Fetch IP Address
+  const getData = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/')
+    //console.log("my IP", res.data);
+    this.setState({userIPAddress: res.data.IPv4 })
+  }
+  getData()
+}
+
+
+  //Send Lease for Signing
+  sendFinalLease(filename){
+    console.log("I am called")
+    //Request Data
+    const data = {
+   "PDFDocumentUrl" : filename,
+   "UserCode" : localStorage.getItem('userCode'),
+   "ClientId" : localStorage.getItem('clientID'),
+   "IP_Address" : '',//this.state.userIPAddress,
+   "Time_and_Date" : '',//this.state.dateAndTime,
+   "Browser" : ""
+    }
+
+    const requestOptions = {
+      title: 'Sending Final Signature Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+    console.log('My data: ', data)
+    const postData = async () => {
+      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFFinalSignature', data, requestOptions)
+      .then(response=>{
+        console.log("Final Lease Response: ", response)
+      })
+    }
+    postData()
+
+  }
 
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
@@ -38,7 +90,7 @@ constructor(props) {
       body: data
     };
 
-    console.log("Posted Vetting Data: ", data)
+    //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminVettings', data, requestOptions)
       .then(response=>{
@@ -86,12 +138,12 @@ constructor(props) {
       })
     }
     postData().then(()=>{
-      window.location.reload()
+      //window.location.reload()
     })
   }
 
   render() {
-    const { isPopUpConfirm, Title, Body, FileType, DocID} = this.props;
+    const { isPopUpConfirm, Title, Body, FileType, DocID, Filename} = this.props;
     return (
       <div
         className={isPopUpConfirm ? "modal fade show" : "modal fade"}
@@ -119,6 +171,9 @@ constructor(props) {
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
                   this.sendVettingStatus(FileType, DocID, 'correct')
+                  if(FileType == 'lease-agreement'){
+                    this.sendFinalLease(Filename)
+                  }
                   this.props.onPresPopUpConfirm();
                 }}>
                 Vet as Correct
@@ -127,6 +182,9 @@ constructor(props) {
                 type="button"
                 onClick={(e) => {
                   this.sendVettingStatus(FileType, DocID, 'incorrect')
+                  if(FileType == 'lease-agreement'){
+                    this.sendFinalLease(Filename)
+                  }
                   this.props.onPresPopUpConfirm();
                 }}
                 className="btn btn-simple"

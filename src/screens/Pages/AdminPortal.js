@@ -267,9 +267,11 @@ chartPlaceLease = () => {
                     </div>
                     </div>
                     
+                  </div>
+
                     
                     
-                    <div className="col-7">
+                  <div className="col-7">
                     <div className="outer m-7">
                        <div
                       id="LeaseDonut"
@@ -304,8 +306,6 @@ chartPlaceLease = () => {
                    
                     </div>
                     </div>
-                  </div>
-
 
                   </div>
                 </div>
