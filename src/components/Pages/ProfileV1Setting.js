@@ -581,6 +581,7 @@ this.props.updateStudentName(
     //Get All User Data
     if (localStorage.getItem('role') == 'student'){
       this.getAllUserData(localStorage.getItem('userID'))
+      fetchData()
     } else if (localStorage.getItem('role') == 'admin') {
       this.getStudentData(this.props.currentStudentiD)
     } 
@@ -608,7 +609,6 @@ this.props.updateStudentName(
         });
 
     };
-    fetchData()
   }
 
   //Populate data from DB

@@ -1010,7 +1010,7 @@ class ProfileV1Page extends React.Component {
                                       >
                                         <FileStorageStatusCard
                                           key={index + "sidjpidj"}
-                                          TotalSize=''
+                                          TotalSize={data.RubixVettedResult}
                                           UsedSize={data.UsedSize}
                                           Type={this.getMessage(data.FileType)}
                                           UsedPer={this.getProgress(data.FileType)}

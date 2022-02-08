@@ -23,22 +23,48 @@ class Students extends React.Component {
           colors: [],
           isEmpty: false,
           pageTitle: 'Students',
+          resList: [],
+          res: '',
+          isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
         }
       }
+
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.getStudents('')
+
+    if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
+
+    } else {
+
+      this.getStudents('', localStorage.getItem('resID'))
+    }
+
+    const fetchData = async() =>{
+    //Populate Residence list
+    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+    .then(response => response.json())
+    .then(data => {
+        console.log("data is ", data)
+        this.setState({resList: data.data})
+        });
+    } 
+    fetchData();
   }
 
   //Fetch all students Data
-  getStudents(search){
+  getStudents(search, resID){
     this.setState({
       isEmpty: false,
     })
-    document.getElementById('search').value = search
+    if(localStorage.getItem('role') == 'admin'){
+
+    } else {
+      document.getElementById('search').value = search
+    }
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
-        'RubixClientID': localStorage.getItem('clientID'),
+        'RubixClientID':  localStorage.getItem('clientID'),
+        'RubixResidenceID': resID,
         'Search': search
       };
       //Ping Request Headers
@@ -97,7 +123,7 @@ class Students extends React.Component {
     })
 
     //Do post
-    this.getStudents(document.getElementById('search').value)
+    this.getStudents(document.getElementById('search').value, this.state.res)
   }
 
 
@@ -121,7 +147,31 @@ class Students extends React.Component {
                 { name: "Students Details Page", navigate: "" },
               ]}
             />
-            <div className="row clearfix">
+
+            { localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
+            ? <>
+            <p> <strong>Please Select a Residence to view: </strong></p>
+            {  
+        <select className="form-control" onChange={(e)=>{
+          this.setState({res: e.target.value,
+          isShow: true
+          })
+          this.getStudents('', e.target.value)
+          }} value={this.state.res}>
+        {
+            
+            this.state.resList.map((res, index)=> (
+            <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
+        ))   
+        }
+    </select> }
+            </>
+              
+              : null}
+
+{this.state.isShow 
+?             
+<div className="row clearfix">
               <div className="col-lg-12 col-md-12">
               <SudentsTable
               StudentList= {this.state.students}
@@ -138,7 +188,7 @@ class Students extends React.Component {
               this.state.colors.map((color, index) =>(
                 <>
                 
-                <Row onClick={()=> this.getStudents(color.Color)} className="collapse multi-collapse m-t-10" id={"colors"}>
+                <Row onClick={()=> this.getStudents(color.Color, this.state.res)} className="collapse multi-collapse m-t-10" id={"colors"}>
                 <div style={{
                       height: '20px',
                       width: '20px',
@@ -169,7 +219,7 @@ class Students extends React.Component {
                   <i className="icon-magnifier"></i>
                 </button>
               </form>
-              <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('')}>Clear Search</button>
+              <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('', this.state.res)}>Clear Search</button>
               </>
               }
               />
@@ -187,6 +237,8 @@ class Students extends React.Component {
 
               </div>
             </div>
+            : null
+}
           </div>
         </div>
       </div>

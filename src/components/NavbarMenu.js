@@ -70,6 +70,7 @@ class NavbarMenu extends React.Component {
         
       } else {
         fetchUserData();
+        fetchData()
       }
 
       
@@ -90,7 +91,6 @@ class NavbarMenu extends React.Component {
         });
 
     };
-    fetchData()
   }
 
     //Fetch Res Gallery Images

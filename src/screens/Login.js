@@ -130,6 +130,7 @@ componentDidMount() {
                   if(response.data.PostRubixUserData['0']['Response'] == 1){
                     this.props.updateUserID(response.data.PostRubixUserData['0']['RubixRegisterUserID'])
                     localStorage.setItem('userCode', response.data.PostRubixUserData['0']['UserCode'])
+                    localStorage.setItem('adminLevel', response.data.PostRubixUserData['0']['AdminUserLevel'])
                     localStorage.setItem('role','admin')
                     localStorage.setItem('resID', response.data.PostRubixUserData['0']['RubixResidenceID'])
                     this.props.history.push("/dashboard")
