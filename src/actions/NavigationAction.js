@@ -357,6 +357,7 @@ export const updateStudentIndex = (val)=>(disptch) =>{
   })
 };
 
+
 //Update Client Logo
 export const updateClientLogo = (val)=>(disptch) =>{
   //console.log("Dispatch action is called with value ", val);

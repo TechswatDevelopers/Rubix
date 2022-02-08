@@ -41,7 +41,9 @@ class RoomAllocation extends React.Component {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
         'ResidenceName': "",
-        'RubixResidenceID': localStorage.getItem('resID'),
+        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
+        ? this.props.currentRES
+        : localStorage.getItem('resID'),
         'BuildingNumber': "",
         'FloorNumber': "",
         'RoomNumber': "",
@@ -148,7 +150,9 @@ class RoomAllocation extends React.Component {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
         'ResidenceName': "",
-        'RubixResidenceID': localStorage.getItem('resID'),
+        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
+        ? this.props.currentRES
+        : localStorage.getItem('resID'),
         'BuildingNumber': buildingNumber,
         'FloorNumber': floorNumber,
         'RoomNumber': roomNumber,
@@ -278,6 +282,9 @@ const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
   currentStudentiD: navigationReducer.studentID,
   currentResID: navigationReducer.studentResID,
+
+  
+  currentRES: navigationReducer.studentResID,
 });
 
 export default connect(mapStateToProps, {})(RoomAllocation);

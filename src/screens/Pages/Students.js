@@ -5,7 +5,7 @@ import PageHeader from "../../components/PageHeader";
 import SudentsTable from "../../components/Tables/StudentTables";
 import axios from "axios";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
-import {updateStudentID, onPresShowProfile, onPresRooms, onPresPopUpAssign} from "../../actions"
+import {updateStudentID, onPresShowProfile, onPresRooms, onPresPopUpAssign, updateResidenceID} from "../../actions"
 import ProfileV1Page from '../../screens/Pages/ProfileV1';
 import RoomAllocation from '../../screens/Pages/Rooms';
 import PopUpAssign from '../../components/PopUpAssignRoom';
@@ -157,6 +157,8 @@ class Students extends React.Component {
           isShow: true
           })
           this.getStudents('', e.target.value)
+          this.props.updateResidenceID(e.target.value)
+          console.log('ResID1: ', e.target.value)
           }} value={this.state.res}>
         {
             
@@ -249,6 +251,7 @@ class Students extends React.Component {
 const mapStateToProps = ({ ioTReducer, navigationReducer, mailInboxReducer}) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
   currentStudentiD: navigationReducer.studentID,
+  currentRES: navigationReducer.studentResID,
   showProfile: mailInboxReducer.isProfileShowing,
   showRooms: mailInboxReducer.isRoomshowing,
 });
@@ -257,5 +260,6 @@ export default connect(mapStateToProps, {
     updateStudentID,
     onPresShowProfile,
     onPresRooms,
-    onPresPopUpAssign
+    onPresPopUpAssign,
+    updateResidenceID
 })(Students);
