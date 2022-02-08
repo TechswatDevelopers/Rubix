@@ -64,7 +64,7 @@ class Students extends React.Component {
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID':  localStorage.getItem('clientID'),
-        'RubixResidenceID': resID,
+        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' ? resID : localStorage.getItem('resID'),
         'Search': search
       };
       //Ping Request Headers
