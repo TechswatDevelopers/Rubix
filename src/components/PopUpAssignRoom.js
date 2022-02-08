@@ -82,16 +82,7 @@ componentDidMount() {
         })
       }
       postData().then(()=>{
-        if(localStorage.getItem('clientID') == 1){
-
-          this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
-          //window.location.reload()
-        } else if(localStorage.getItem('clientID') == 2){
-          
-        this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/OPAL%20STUDENTS%20LEASE%20AGREEMENT%2020211101v1.pdf', this.props.currentStudentiD, 0)
-        //window.location.reload()
-        }
-        
+        this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
         //window.location.reload()
       })
     }

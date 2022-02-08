@@ -165,7 +165,7 @@ getUserWitnessData() {
     }
     postData().then(()=>{
       this.sendAuttingStatus(filetype, docID, vet)
-      window.location.reload()
+      //window.location.reload()
     })
   }
 
