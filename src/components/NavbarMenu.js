@@ -45,7 +45,23 @@ class NavbarMenu extends React.Component {
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
     this.activeMenutabwhenNavigate("/" + activeKey);
+ //Get User Profile Picture
+ const fetchData = async () => {
+  //Get documents from DB
+  await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
+    .then(response => response.json())
+    .then(data => {
+      //console.log("Profile data:", data)
+      const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
+      console.log("Profile Picture data:", profilePic)
+      //If Profile Picture Exists...
+      if(profilePic != null && profilePic != undefined){
+        this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
+        this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
+      }
+    });
 
+};
    
 
     //Fetch data from DB
@@ -74,23 +90,7 @@ class NavbarMenu extends React.Component {
       }
 
       
-    //Get User Profile Picture
-    const fetchData = async () => {
-      //Get documents from DB
-      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
-        .then(response => response.json())
-        .then(data => {
-          //console.log("Profile data:", data)
-          const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-          console.log("Profile Picture data:", profilePic)
-          //If Profile Picture Exists...
-          if(profilePic != null && profilePic != undefined){
-            this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
-            this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
-          }
-        });
-
-    };
+   
   }
 
     //Fetch Res Gallery Images

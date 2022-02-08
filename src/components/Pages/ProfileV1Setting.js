@@ -578,19 +578,6 @@ this.props.updateStudentName(
     this.setState({ myUserID: userID });
     console.log('My role is: ', localStorage.getItem('role'))
 
-    //Get All User Data
-    if (localStorage.getItem('role') == 'student'){
-      this.getAllUserData(localStorage.getItem('userID'))
-      fetchData()
-    } else if (localStorage.getItem('role') == 'admin') {
-      this.getStudentData(this.props.currentStudentiD)
-    } 
-    
-
-    //Get Year of study list
-    this.fetchYearOfStudyData()
-
-
 
     //Get User Profile Picture
     const fetchData = async () => {
@@ -609,6 +596,19 @@ this.props.updateStudentName(
         });
 
     };
+    //Get All User Data
+    if (localStorage.getItem('role') == 'student'){
+      this.getAllUserData(localStorage.getItem('userID'))
+      fetchData()
+    } else if (localStorage.getItem('role') == 'admin') {
+      this.getStudentData(this.props.currentStudentiD)
+    } 
+    
+
+    //Get Year of study list
+    this.fetchYearOfStudyData()
+
+
   }
 
   //Populate data from DB
