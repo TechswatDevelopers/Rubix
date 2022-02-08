@@ -583,6 +583,83 @@ export const studentIDGaugeOption = {
 };
 
 
+export const paymentGaugeOption = {
+  title: {
+    text: "75",
+    x: "center",
+    y: "center",
+    textStyle: {
+      color: "rgb(0, 0, 0)",
+      fontFamily: "Arial",
+      fontSize: 20,
+      fontWeight: "bolder",
+    },
+  },
+  grid: {
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  tooltip: {
+    show: false,
+    formatter: function (params, ticket, callback) {
+      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>';
+    },
+  },
+  series: [
+    {
+      type: "pie",
+      startAngle: 270,
+      clockWise: 1,
+      radius: [40, 50],
+      itemStyle: {
+        normal: {
+          label: { show: true },
+          labelLine: { show: false },
+        },
+      },
+      data: [
+        {
+          value: localStorage.getItem('resIdDocs'),
+          itemStyle: {
+            color: "#1ebbd7",
+            emphasis: {
+              color: "#1ebbd7",
+            },
+          },
+        },
+        {
+          value: 100 - localStorage.getItem('resIdDocs'),
+          itemStyle: {
+            normal: {
+              color: "#EEEEEE",
+              label: { show: true },
+              labelLine: { show: false },
+              tooltip: { show: true },
+            },
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        },
+        /* {
+          value: 69,
+          itemStyle: {
+            normal: {
+              color: "rgba(0,0,0,0)",
+              label: { show: false },
+              labelLine: { show: false },
+              tooltip: { show: false },
+            },
+          },
+        }, */
+      ],
+    },
+  ],
+};
+
+
 export const totalStudents = {
   title: {
     text: localStorage.getItem('resTotal'),
@@ -615,7 +692,7 @@ export const totalStudents = {
       radius: [0, 30],
       itemStyle: {
         normal: {
-          label: { show: false },
+          label: { show: true },
           labelLine: { show: false },
         },
       },
@@ -654,7 +731,7 @@ export const ResGaugeOption = {
     left: 0,
   },
   tooltip: {
-    show: false,
+    show: true,
     formatter: function (params, ticket, callback) {
       return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
     },
@@ -667,7 +744,7 @@ export const ResGaugeOption = {
       radius: [80, 90],
       itemStyle: {
         normal: {
-          label: { show: false },
+          label: { show: true },
           labelLine: { show: false },
         },
       },

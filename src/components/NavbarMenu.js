@@ -81,7 +81,7 @@ class NavbarMenu extends React.Component {
         .then(data => {
           //console.log("Profile data:", data)
           const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-          //console.log("Profile Picture data:", profilePic)
+          console.log("Profile Picture data:", profilePic)
           //If Profile Picture Exists...
           if(profilePic != null && profilePic != undefined){
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
@@ -92,6 +92,27 @@ class NavbarMenu extends React.Component {
     };
     fetchData()
   }
+
+    //Fetch Res Gallery Images
+    fetchImages() {
+      const fetchData = async () => {
+      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + localStorage.getItem('resID'))
+      .then(response => response.json())
+      .then(data => {
+        console.log("Images:", data.post)
+        for(let i = 0; i <= data.post.length - 1; ++i){
+  
+         if(data.post[i].FileType == "ResManager"){ 
+          
+          this.setState({
+            imageUrl: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
+          })
+          }
+        }
+      })
+    }
+    fetchData()
+    }
 
   //Get Admin User Data
   getAdmin(){
@@ -108,7 +129,7 @@ class NavbarMenu extends React.Component {
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminGetUser', pingData, requestOptions)
         .then(response => {
-          //console.log("Admin User Details:", response)
+          console.log("Admin User Details:", response)
           this.setState({
             profile: response.data.PostRubixUserData[0],
             userFullName: response.data.PostRubixUserData[0].AdminUserName + " " + response.data.PostRubixUserData[0].AdminUserSurname
@@ -120,8 +141,12 @@ class NavbarMenu extends React.Component {
   
         })
       }
-      postData()
+      postData().then(() => {
+        this.fetchImages()
+      })
   }
+
+
   activeMenutabwhenNavigate(activeKey) {
     if (
       activeKey === "/dashboard" ||
