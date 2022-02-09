@@ -17,7 +17,7 @@ class PieChart extends React.Component {
   };
   render() {
     return (
-      <div className="">
+      <div className="col-lg-6 col-md-6 col-sm-12">
         <div className="card">
           <div className="header">
             <h2>Residence Data</h2>

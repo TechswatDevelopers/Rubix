@@ -99,7 +99,8 @@ class NavbarMenu extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + localStorage.getItem('resID'))
       .then(response => response.json())
       .then(data => {
-        console.log("Images:", data.post)
+       /*  console.log("Res ID:", localStorage.getItem('resID'))
+        console.log("Images:", data.post) */
         for(let i = 0; i <= data.post.length - 1; ++i){
   
          if(data.post[i].FileType == "ResManager"){ 
@@ -111,7 +112,11 @@ class NavbarMenu extends React.Component {
         }
       })
     }
-    fetchData()
+    if(localStorage.getItem('resID') == 0){
+
+    }else {
+      fetchData()
+    }
     }
 
   //Get Admin User Data

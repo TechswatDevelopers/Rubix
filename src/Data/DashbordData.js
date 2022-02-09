@@ -595,6 +595,17 @@ export const paymentGaugeOption = {
       fontWeight: "bolder",
     },
   },
+  legend: {
+    orient: "vertical",
+    left: "left",
+    data: [
+      "Student ID",
+      "Proof of Residence",
+      "Proof of Registration",
+      "Next of Kin ID",
+      "Lease Agreement",
+    ],
+  },
   grid: {
     top: 0,
     bottom: 0,
@@ -602,10 +613,8 @@ export const paymentGaugeOption = {
     left: 0,
   },
   tooltip: {
-    show: false,
-    formatter: function (params, ticket, callback) {
-      return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>';
-    },
+    trigger: "item",
+    formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
   series: [
     {
@@ -639,7 +648,11 @@ export const paymentGaugeOption = {
               tooltip: { show: true },
             },
             emphasis: {
-              color: "#EEEEEE",
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
             },
           },
         },
@@ -655,6 +668,13 @@ export const paymentGaugeOption = {
           },
         }, */
       ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+        },
+      },
     },
   ],
 };

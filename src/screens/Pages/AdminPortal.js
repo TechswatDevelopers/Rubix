@@ -72,6 +72,7 @@ class AdminDashboard extends React.Component {
           fontWeight: "bolder",
         },
       },
+      color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff"],
       grid: {
         top: 0,
         bottom: 0,
@@ -79,15 +80,24 @@ class AdminDashboard extends React.Component {
         left: 0,
       },
       tooltip: {
-        show: false,
-        formatter: function (params, ticket, callback) {
-          return '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#212121;"></span>63';
-        },
+        trigger: "item",
+        formatter: "{a} <br/>{b} : {c} ({d}%)",
+      },
+      legend: {
+        orient: "vertical",
+        left: "left",
+        data: [
+          "Student ID",
+          "Proof of Residence",
+          "Proof of Registration",
+          "Next of Kin ID",
+          "Lease Agreement",
+        ],
       },
       series: [
         {
           type: "pie",
-          startAngle: 215,
+          startAngle: 270,
           clockWise: 1,
           radius: radius,
           itemStyle: {
@@ -97,6 +107,13 @@ class AdminDashboard extends React.Component {
             },
           },
           data: data,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
         },
       ],
     }
