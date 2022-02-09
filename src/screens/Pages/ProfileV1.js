@@ -709,13 +709,15 @@ class ProfileV1Page extends React.Component {
 
   render() {
     let myBody, myLease;
-      myBody = <> {this.state.doc != null
+      myBody = <> {this.state.doc != null 
         ? <>
         {localStorage.getItem('role') == 'admin' ? this.state.topBarData : null}
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         {
           this.getProgress(this.state.doc.FileType) != 100 || localStorage.getItem('role') == 'admin'
+          ?this.state.keyString != 'lease-agreement'
           ?<button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
+          : null
           : null
         }
           
@@ -724,14 +726,16 @@ class ProfileV1Page extends React.Component {
         </>
 
         : <>
-          <div></div>
-          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+          {this.state.keyString != 'lease-agreement'
+          ? <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
             <p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
             <div>
               <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => { this.changeHandler(e) }} />
               <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
             </div>
           </div>
+          :<p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not Any active lease, please make sure all documents are uploaded and you are assigned to a room.</p>
+        }
         </>
       }
       </>

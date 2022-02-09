@@ -301,7 +301,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                   <div className="header">
                     <Row>
                       <h2>Announcements</h2>
-                      {localStorage.getItem('role') == 'admin'
+                      {localStorage.getItem('role') == 'admin' && localStorage.getItem('adminLevel') == '1'
                         ?
                         <button onClick={()=>this.props.onPresPopNewNotice()} className="btn btn-outline-success ml-5"> 
                       <i className="icon-bell pr-2"></i>
