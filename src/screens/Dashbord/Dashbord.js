@@ -18,7 +18,9 @@ import ReactList from 'react-list';
 import {linkResolver,RichText} from 'prismic-reactjs';
 import {Grid, Row, Col, Button} from "react-bootstrap";
 import PopUpAddNewNotice from "../../components/PopUpAddNewEvent"
-import {onPresPopNewNotice} from "../../actions"
+import {onPresPopNewNotice, 
+  updateLoadingMessage,
+  updateLoadingController,} from "../../actions"
 import {Helmet} from "react-helmet";
 import {
   topProductOption,
@@ -95,6 +97,9 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
 
   //Get noticies
   getNoticies() {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Details, Please wait...");
     const data = {
       'RubixClientID': localStorage.getItem('clientID'),
       'RubixResidenceID': localStorage.getItem('resID')
@@ -112,7 +117,12 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
     }
-    getData()
+    getData().then(()=>{
+      //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 5000);
+    })
   }
 
   //Submit Comment
@@ -266,18 +276,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
   render() {
     const { loadingPage } = this.props;
     const { cardData } = this.state;
-    if (loadingPage) {
-      return (
-        <div className="page-loader-wrapper">
-          <div className="loader">
-            <div className="m-t-30">
-              <img src={LogoiCON} width="170" height="70" alt="Lucid" />
-            </div>
-            <p>Please wait...</p>
-          </div>
-        </div>
-      );
-    }
+    
     return (
       <div
         onClick={() => {
@@ -288,6 +287,22 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
+            <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt="Rubix System"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
         <PopUpAddNewNotice></PopUpAddNewNotice>
         <div>
           <div className="container-fluid">
@@ -405,18 +420,13 @@ const mapStateToProps = ({
   affiliatesShowProgressBar: analyticalReducer.affiliatesShowProgressBar,
   searchShowProgressBar: analyticalReducer.searchShowProgressBar,
   loadingPage: analyticalReducer.loadingPage,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
 export default connect(mapStateToProps, {
-  onPresPopNewNotice
-  /*  toggleMenuArrow,
-   loadSparcleCard,
-   onPressTopProductDropDown,
-   onPressReferralsDropDown,
-   onPressRecentChatDropDown,
-   onPressDataManagedDropDown,
-   facebookProgressBar,
-   twitterProgressBar,
-   affiliatesProgressBar,
-   searchProgressBar, */
+  onPresPopNewNotice,
+  updateLoadingMessage,
+  updateLoadingController,
 })(Dashbord);

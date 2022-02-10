@@ -17,6 +17,9 @@ import {
   dataManagetOption,
   sparkleCardData,
 } from "../../Data/DashbordData";
+import {
+  updateLoadingMessage,
+  updateLoadingController,} from '../../actions';
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 const images = [
   {
@@ -40,13 +43,15 @@ class Residence extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Residence Information...");
+
     //Set timer for loading screen
-  setTimeout(() => {
-    this.setState({
-      isLoad: false,
-      currentClientId: this.props.match.params.clientID
-    })
-  }, 3000);
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 3000);
+
 
     const pingData = {
       'RubixRegisterUserID': localStorage.getItem('userID'),
@@ -161,12 +166,24 @@ class Residence extends React.Component {
                 <title>{this.state.pageTitle}</title>
             </Helmet>
         <div>
-        <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
+        
+        <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
           <div className="loader">
-            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
-            <p>Please wait...</p>
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt="Rubix System"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
           </div>
         </div>
+
           <div className="container-fluid">
             <div className="row clearfix">
               <div className="w-100 p-3">
@@ -417,8 +434,13 @@ class Residence extends React.Component {
   }
 }
 
-const mapStateToProps = ({ ioTReducer }) => ({
+const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
-export default connect(mapStateToProps, {})(Residence);
+export default connect(mapStateToProps, {
+  updateLoadingMessage,
+  updateLoadingController,})(Residence);

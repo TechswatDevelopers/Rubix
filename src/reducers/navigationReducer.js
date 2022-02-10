@@ -36,7 +36,9 @@ import {
   UPDATE_STUDENT_STUDENT_NO,
   UPDATE_DOC_ID,
   UPDATE_RES_ID,
-  UPDATE_STUDENT_INDEX
+  UPDATE_STUDENT_INDEX,
+  UPDATE_LOADING_MSG,
+  UPDATE_LOADING_CONTROLLER,
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -73,6 +75,9 @@ const initialState = {
   nextOfKinProgress: '',
 
   studentIndex: null,
+
+  loadingMessage: '',
+  loadingController: false,
   addClassactive: [
     false,
     false,
@@ -694,6 +699,22 @@ export default (state = initialState, action) => {
       return{
         ...state,
         studentIndex: action.payload,
+      }
+    }
+
+//Update Loading Message
+    case UPDATE_LOADING_MSG: {
+      return{
+        ...state,
+        loadingMessage: action.payload,
+      }
+    }
+
+//Update Loading Controller
+    case UPDATE_LOADING_CONTROLLER: {
+      return{
+        ...state,
+        loadingController: action.payload,
       }
     }
 

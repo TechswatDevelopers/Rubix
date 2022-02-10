@@ -19,7 +19,9 @@ import {onPresPopUpEvent, onPresPopUpConfirm,
   onUpdateNOKMessage,
   onUpdateREGMessage,
   onUpdateRESMessage,
-  onUpdateIDMessage} from '../../actions';
+  onUpdateIDMessage,
+  updateLoadingMessage,
+  updateLoadingController,} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
 //import tempfile from 'tempfile';
@@ -92,6 +94,8 @@ class ProfileV1Page extends React.Component {
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate + myTime })
+
+    //Load Documents
     if (localStorage.getItem('role') == 'admin'){
       this.loadDocuments(this.props.currentStudentiD)
     } else {
@@ -121,6 +125,9 @@ class ProfileV1Page extends React.Component {
 
   //Fetch All documents from DB
   loadDocuments(userID) {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Details...");
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
@@ -170,6 +177,7 @@ class ProfileV1Page extends React.Component {
       //Set timer for loading screen
   setTimeout(() => {
     this.setDocumentProgress()
+    this.props.updateLoadingController(false);
   }, 1000);
       
     })
@@ -178,16 +186,27 @@ class ProfileV1Page extends React.Component {
 
   //Check Lease Agreement Doc
   checkLease(userId) {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Checking Lease...");
     const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
     const temp2 = this.state.docs.filter(doc => doc.FileType == 'unsigned-agreement')
     //console.log(temp[0].image)
     if (temp.length != 0) {
       this.setState({ docUrl: temp[0].image, myLease: temp[0].filename })
       this.setState({ showPad: false })
+      //Set timer for loading screen
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 2000);
     }
     else if(temp2.length != 0){
       this.setState({ docUrl: temp2[0].image, myLease: temp2[0].filename })
       this.setState({ showPad: true })
+      //Set timer for loading screen
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 2000);
     }
     
     
@@ -197,6 +216,9 @@ class ProfileV1Page extends React.Component {
   //Switch to different Document type
   changeDocument = (file) => {
     this.setLoadingDocumentPage()
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Changing Document...");
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({ isSelected: false })
     this.setState({ selectedFile: null })
@@ -215,7 +237,8 @@ class ProfileV1Page extends React.Component {
     //Set timer for loading screen
   setTimeout(() => {
     this.changeHeading(file)
-  }, 2000);
+    this.props.updateLoadingController(false);
+  }, 1000);
 
     
     
@@ -247,6 +270,10 @@ class ProfileV1Page extends React.Component {
           {
             this.setState({ 
               docType: "My Lease Agreement",
+              topBarData: <>
+          <span><strong> </strong> </span>
+          <br></br>
+          </>
               })
           }
         break
@@ -788,6 +815,25 @@ class ProfileV1Page extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
+
+            
+            <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt="Rubix System"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+
         <PopUpModal 
         Title= "Upload Complete!"
         Body = "Your document has been uploaded successfully."
@@ -1113,7 +1159,10 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   nokProgress: navigationReducer.nextOfKinProgress,
   nokMessage: navigationReducer.nextOfKinMessage,
   
-  showLease: mailInboxReducer.isShowLease
+  showLease: mailInboxReducer.isShowLease,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
 export default connect(mapStateToProps, {
@@ -1126,5 +1175,7 @@ export default connect(mapStateToProps, {
   onUpdateNOKMessage,
   onUpdateREGMessage,
   onUpdateRESMessage,
-  onUpdateIDMessage
+  onUpdateIDMessage,
+  updateLoadingMessage,
+  updateLoadingController,
 })(ProfileV1Page);

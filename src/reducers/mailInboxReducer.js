@@ -12,6 +12,7 @@ import {
   ON_PRESS_SHOW_LEASE,
   ON_PRESS_POP_UP_ASSIGN_ROOM,
   ON_PRESS_POP_UP_REMOVE_ROOM,
+  ON_CHANGE_LOADER,
 } from "../actions/MailInboxAction";
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
   isShowRemoveModal: false,
   isPopUpNewNotice: false,
   isShowLease: false,
+  isShowLoader: false,
 };
 
 export default (state = initialState, action) => {
@@ -111,6 +113,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isShowLease: !state.isShowLease,
+      };
+    }
+
+    //Toggle Show Rooms
+    case ON_CHANGE_LOADER: {
+      return {
+        ...state,
+        isShowLoader: !state.isShowLoader,
       };
     }
 

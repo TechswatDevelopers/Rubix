@@ -13,6 +13,7 @@ export const ON_PRESS_POP_UP_ASSIGN_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_ASS
 export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REMOVE_ROOM";
 
 export const ON_PRESS_POP_UP_NOTICE = "mailInboxReducer/ON_PRESS_POP_UP_NOTICE";
+export const ON_CHANGE_LOADER = "mailInboxReducer/ON_CHANGE_LOADER";
 
 export const onPressTagDropdown = () => (dispatch) => {
   dispatch({
@@ -95,6 +96,14 @@ export const onPresRooms = () => (dispatch) => {
 export const onPresLease = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_SHOW_LEASE,
+  });
+};
+
+
+//Toggle Show Loading Screen
+export const onChangeLoader = () => (dispatch) => {
+  dispatch({
+    type: ON_CHANGE_LOADER,
   });
 };
 

@@ -12,7 +12,9 @@ import listPlugin from "@fullcalendar/list";
 import AddEventModal from "../../components/AddEventModal";
 import PopUpModal from "../../components/PopUpModal";
 import { events } from "../../Data/AppData";
-import { onPresAddEvent, onPresPopUpEvent } from "../../actions";
+import { onPresAddEvent, onPresPopUpEvent,
+  updateLoadingMessage,
+  updateLoadingController, } from "../../actions";
 import axios from "axios";
 import {Helmet} from "react-helmet";
 
@@ -35,6 +37,15 @@ class AppCalendar extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Residence Information...");
+
+    //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 3000);
+
 
     //Get Residence Data
     //If Admin: Only fetch Res events
@@ -49,6 +60,9 @@ class AppCalendar extends React.Component {
 
   //Get Events
   getResEvents() {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Residence Events...");
     //Post Request Data
     const data = {
       'RubixResidenceID': localStorage.getItem('resID')
@@ -79,6 +93,7 @@ class AppCalendar extends React.Component {
         }
 
         
+    this.props.updateLoadingController(false);
     //Get Student Events
     this.getStudentEvents()
         
@@ -90,6 +105,9 @@ class AppCalendar extends React.Component {
 
   //Get Events
   getStudentEvents() {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Events...");
     //Post Request Data
     const data = {
       'RubixRegisterUserID': localStorage.getItem('userID')
@@ -107,12 +125,19 @@ class AppCalendar extends React.Component {
       .then(response => {
 
         if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
-
+           //Set timer for loading screen
+           setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 4000);
         } else {
           console.log("Student Events: ", response.data.PostRubixUserData)
           //Popolate Events List
           this.populateStudentEvents(response.data.PostRubixUserData)
-          //Set events count
+          
+     //Set timer for loading screen
+     setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 4000);
           
           
         }
@@ -152,6 +177,10 @@ class AppCalendar extends React.Component {
   }
 
   getAdminResData(){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Res Admin Information...");
+
     const pingData = {
       'RubixResidenceID': localStorage.getItem('resID'),
     };
@@ -162,10 +191,11 @@ class AppCalendar extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: pingData
     };
+    console.log('Posted Data: ', pingData)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResDetails', pingData, requestOptions)
       .then(response => {
-        console.log("Res Admin Data:", response.data.PostRubixUserData[0])
+        console.log("Res Admin Data:", response)
         this.setState({
           resDetails: response.data.PostRubixUserData[0]
         })
@@ -269,6 +299,10 @@ class AppCalendar extends React.Component {
     this.setState({
       resEvents: temp2
     })
+    //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 3000);
   }
 
   render() {
@@ -282,6 +316,25 @@ class AppCalendar extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
+
+            
+        <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt="Rubix System"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+
               <PageHeader
                 HeaderText="Calendar"
                 Breadcrumb={[{ name: "App" }, { name: "Calendar" }]}
@@ -363,9 +416,17 @@ class AppCalendar extends React.Component {
   }
 }
 
-const mapStateToProps = ({ mailInboxReducer }) => ({
+const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent })(AppCalendar);
+export default connect(mapStateToProps, { 
+  onPresAddEvent, 
+  onPresPopUpEvent,
+  updateLoadingMessage,
+  updateLoadingController,
+ })(AppCalendar);

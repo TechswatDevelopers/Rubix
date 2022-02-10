@@ -49,6 +49,8 @@ export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
 
 
 export const UPDATE_STUDENT_INDEX = "navigationReducer/UPDATE_STUDENT_INDEX";
+export const UPDATE_LOADING_MSG = "navigationReducer/UPDATE_LOADING_MSG";
+export const UPDATE_LOADING_CONTROLLER = "navigationReducer/UPDATE_LOADING_CONTROLLER";
 
 var toggle = false;
 var intervalId = "";
@@ -353,6 +355,22 @@ export const updateResidenceID = (val)=>(disptch) =>{
 export const updateStudentIndex = (val)=>(disptch) =>{
   disptch({
     type:UPDATE_STUDENT_INDEX,
+    payload: val,
+  })
+};
+
+//Update Student Index
+export const updateLoadingMessage = (val)=>(disptch) =>{
+  disptch({
+    type: UPDATE_LOADING_MSG,
+    payload: val,
+  })
+};
+
+//Update Student Index
+export const updateLoadingController = (val)=>(disptch) =>{
+  disptch({
+    type: UPDATE_LOADING_CONTROLLER,
     payload: val,
   })
 };

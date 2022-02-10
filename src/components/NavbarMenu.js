@@ -60,10 +60,7 @@ class NavbarMenu extends React.Component {
         this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
       }
     });
-
 };
-   
-
     //Fetch data from DB
     const fetchUserData = async() =>{
     //Get Rubix User Details

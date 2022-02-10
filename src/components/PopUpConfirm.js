@@ -1,6 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, onPresPopUpEvent, onPresPopUpConfirm } from "../actions";
+import { onPresAddEvent, 
+  onPresPopUpEvent, 
+  onPresPopUpConfirm,
+  updateLoadingMessage,
+  updateLoadingController,
+} from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -26,6 +31,9 @@ componentDidMount() {
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
+    //Set Loading Screen OFF
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Uploading Lease Document...");
     
     const postDocument = async () => {
       const data = new FormData()
@@ -52,6 +60,8 @@ componentDidMount() {
       this.setState({
         isLoad: false
       })
+      //Set Loading Screen OFF
+      this.props.updateLoadingController(false);
       this.props.onPresPopUpEvent()
       
       
@@ -98,7 +108,9 @@ getUserWitnessData() {
 
   //Send Lease for Signing
   sendFinalLease(filename){
-    console.log("I am called")
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Generating Lease...");
     //Request Data
     const data = {
    "PDFDocumentUrl" : filename,
@@ -124,6 +136,8 @@ getUserWitnessData() {
         //Send documents API
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
         const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement')
+        //Set Loading Screen OFF
+        this.props.updateLoadingController(false);
         this.onPressUpload(temp, 'lease-agreement', 'signing')
       })
     }
@@ -286,6 +300,15 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
   isPopUpConfirm: mailInboxReducer.isPopUpConfirm,
   currentStudentiD: navigationReducer.studentID,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent, onPresPopUpConfirm  })(PopUpConfirm);
+export default connect(mapStateToProps, {
+   onPresAddEvent, 
+   onPresPopUpEvent, 
+   onPresPopUpConfirm,
+   updateLoadingMessage,
+   updateLoadingController,
+  })(PopUpConfirm);

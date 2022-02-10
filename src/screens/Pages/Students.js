@@ -5,7 +5,10 @@ import PageHeader from "../../components/PageHeader";
 import SudentsTable from "../../components/Tables/StudentTables";
 import axios from "axios";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
-import {updateStudentID, onPresShowProfile, onPresRooms, onPresPopUpAssign, updateResidenceID} from "../../actions"
+import {updateStudentID, onPresShowProfile, onPresRooms, 
+  onPresPopUpAssign, updateResidenceID,
+  updateLoadingMessage,
+  updateLoadingController,} from "../../actions"
 import ProfileV1Page from '../../screens/Pages/ProfileV1';
 import RoomAllocation from '../../screens/Pages/Rooms';
 import PopUpAssign from '../../components/PopUpAssignRoom';
@@ -34,6 +37,13 @@ class Students extends React.Component {
 
     if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
 
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Details, Please wait...");
+            //Set timer for loading screen
+            setTimeout(() => {
+              this.props.updateLoadingController(false);
+            }, 4000);
     } else {
 
       this.getStudents('', localStorage.getItem('resID'))
@@ -53,6 +63,9 @@ class Students extends React.Component {
 
   //Fetch all students Data
   getStudents(search, resID){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Details, Please wait...");
     this.setState({
       isEmpty: false,
     })
@@ -84,10 +97,18 @@ class Students extends React.Component {
               isEmpty: true,
               students: []
             })
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
           } else {
             this.setState({
               students: response.data.PostRubixUserData
             })
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
           }
           
 
@@ -141,6 +162,24 @@ class Students extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
+
+            <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt="Rubix System"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+
             <PageHeader
               HeaderText="Students Details Page"
               Breadcrumb={[
@@ -254,6 +293,9 @@ const mapStateToProps = ({ ioTReducer, navigationReducer, mailInboxReducer}) => 
   currentRES: navigationReducer.studentResID,
   showProfile: mailInboxReducer.isProfileShowing,
   showRooms: mailInboxReducer.isRoomshowing,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
 export default connect(mapStateToProps, {
@@ -261,5 +303,7 @@ export default connect(mapStateToProps, {
     onPresShowProfile,
     onPresRooms,
     onPresPopUpAssign,
-    updateResidenceID
+    updateResidenceID,
+    updateLoadingMessage,
+    updateLoadingController,
 })(Students);
