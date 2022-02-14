@@ -65,14 +65,14 @@ const initialState = {
 
   currentDocID: '',
 
-  idProgress: '',
+  idProgress: '0',
   idMessage: '',
 
-  proofOfResProgress: '',
+  proofOfResProgress: '0',
   proofOfResMessage: '',
 
-  proofOfRegProgress: '',
-  nextOfKinProgress: '',
+  proofOfRegProgress: '0',
+  nextOfKinProgress: '0',
 
   studentIndex: null,
 

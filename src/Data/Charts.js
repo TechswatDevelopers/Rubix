@@ -122,7 +122,7 @@ export const optionPieEchart = {
     subtext: "Percentages of Documents Uploaded",
     left: "center",
   },
-  color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff"],
+  color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff", "#FF7F50", "#F0F8FF", "#B22222", "#FF69B4", "#FFFACD"],
   tooltip: {
     trigger: "item",
     formatter: "{a} <br/>{b} : {c} ({d}%)",

@@ -205,14 +205,32 @@ class RoomAllocation extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+
+        
+<div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={this.props.rubixClientLogo}
+                width="20%"
+                height="20%"
+                alt="Lucid"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+        
         
         <div>
           <div className="container-fluid">
-           
+           <div><strong>Student:</strong> {this.props.currentStudentName}</div>
             <div className="row clearfix">
               <div className="col-lg-12 col-md-12">
                 <div className="card planned_task">
-                
                   <div className="body">
                     <RoomsTable
               RoomList= {this.state.availableRooms}
@@ -285,6 +303,10 @@ const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
 
   
   currentRES: navigationReducer.studentResID,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
+  currentStudentName: navigationReducer.studentName,
 });
 
 export default connect(mapStateToProps, {})(RoomAllocation);

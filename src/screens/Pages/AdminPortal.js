@@ -3,7 +3,7 @@ import { Dropdown, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
 import navigationReducer from "../../reducers/navigationReducer";
-import PieChart from "../../components/Charts/PieChart";
+import DocumentsChart from "../../components/Charts/DocumentsChart";
 import axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
@@ -32,13 +32,6 @@ class AdminDashboard extends React.Component {
     }, 5000);
 
     //Load First Donut
-    this.chartPlaceID();
-    this.chartTotalStudents();
-    this.chartPlaceReg();
-    this.chartPlaceRes();
-    this.chartPlaceNOK();
-    this.chartPlaceLease();
-
     //Load Second Donut
     //this.chartPaymentDonut();
   }
@@ -58,7 +51,7 @@ class AdminDashboard extends React.Component {
   }
 
   //Create Donut
-  createDonutInfoCard(data, centerValue, chartDOM, radius){
+  createDonutInfoCard(data, centerValue, chartDOM, radius, legend, position){
     //console.log("Creating pie chart for: ", data, "Center: ", centerValue, "Chart DOM: ", chartDOM)
     const donut  = {
       title: {
@@ -72,7 +65,7 @@ class AdminDashboard extends React.Component {
           fontWeight: "bolder",
         },
       },
-      color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff"],
+      color: ["#FF7F50", "#FF69B4", "#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff", "#F0F8FF", "#B22222", "#FFFACD"],
       grid: {
         top: 0,
         bottom: 0,
@@ -81,19 +74,9 @@ class AdminDashboard extends React.Component {
       },
       tooltip: {
         trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)",
+        formatter: "{b} : {c} ({d}%)",
       },
-      legend: {
-        orient: "vertical",
-        left: "left",
-        data: [
-          "Student ID",
-          "Proof of Residence",
-          "Proof of Registration",
-          "Next of Kin ID",
-          "Lease Agreement",
-        ],
-      },
+      legend: legend,
       series: [
         {
           type: "pie",
@@ -102,7 +85,7 @@ class AdminDashboard extends React.Component {
           radius: radius,
           itemStyle: {
             normal: {
-              label: { show: true },
+              label: { show: false },
               labelLine: { show: false },
             },
           },
@@ -142,60 +125,7 @@ class AdminDashboard extends React.Component {
     option && myChart.setOption(option);
   };
 
-  chartPlaceID = () => {
-    var chartDom = document.getElementById("studentID");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = studentIDGaugeOption;
-
-    option && myChart.setOption(option);
-  };
-
-
-  chartTotalStudents = () => {
-    var chartDom = document.getElementById("totalStudentsDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = totalStudents;
-
-    option && myChart.setOption(option);
-  };
-
-  chartPlaceRes = () => {
-    var chartDom = document.getElementById("resDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = ResGaugeOption;
-
-    option && myChart.setOption(option);
-  };
-
-
-  chartPlaceReg = () => {
-    var chartDom = document.getElementById("RegDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = regGaugeOption;
-
-    option && myChart.setOption(option);
-  };
-
-  chartPlaceNOK = () => {
-    var chartDom = document.getElementById("NOKDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = nokGaugeOption;
-
-    option && myChart.setOption(option);
-  };
-  chartPlaceLease = () => {
-    var chartDom = document.getElementById("LeaseDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = leaseGaugeOption;
-
-    option && myChart.setOption(option);
-  };
+ 
 
 
   //Get Admin Report
@@ -233,12 +163,7 @@ class AdminDashboard extends React.Component {
             [
             {
               value: response.data.PostRubixUserData[2].TotalRegistrationsPerYear,
-              itemStyle: {
-                color: "#ffa500",
-                emphasis: {
-                  color: "#ffa500",
-                },
-              },
+              name: 'Total Students'
             },
            
           ],
@@ -249,33 +174,43 @@ class AdminDashboard extends React.Component {
          'TotalDonut',
 
          //Radius
-         [0, 30]
+         [0, 30],
 
+         //Legend
+        null 
+     /*  {
+        orient: "vertical",
+        left: "left",
+        data: [
+          'Total Students'
+        ],
+      }, */
+         
           )
-          
 
           //Payment Method Chart
-
           let tempPayment = response.data.PostRubixUserData.filter(doc => doc.PaymentMethod !== undefined)
           let tempPyamentChartData = []
+          let tempPaymentLegendData = []
           tempPayment.forEach((payment, index) =>{
+            //Add to Legend
+            tempPaymentLegendData.push(
+              payment.PaymentMethod
+            )
             //Add entry to data  List
             tempPyamentChartData.push(
               {
                 value: payment.PMCountPerResCountPerRESPercentage,
-                itemStyle: {
-                  color: this.state.colors[index],
-                  emphasis: {
-                    color: this.state.colors[index],
-                  },
-                },
+                name: payment.PaymentMethod
               },
 
             )
           })
+          console.log('TempPaymentsLegend: ', tempPaymentLegendData)
           this.createDonutInfoCard(
             //Data
             tempPyamentChartData,
+
           //Center
           response.data.PostRubixUserData[2].PMCountPerResCountPerRESPercentage,
 
@@ -283,23 +218,29 @@ class AdminDashboard extends React.Component {
          'PaymentDonut',
 
          //Radius
-         [45, 55]
-
+         [45, 55],
+         
+         //Legend
+         {
+          orient: "vertical",
+          left: "right",
+          data: tempPaymentLegendData,
+        },
+         
           )
 
           let tempProvince = response.data.PostRubixUserData.filter(doc => doc.RegisterUserProvince !== undefined)
-
           let tempProvinceChartData = []
+          let tempProvinceLegendData = []
           tempProvince.forEach((province, index) =>{
+            //Add to Legend
+            tempProvinceLegendData.push(
+              province.RegisterUserProvince
+            )
             tempProvinceChartData.push(
               {
                 value: province.ProvinceCountPerResCountPerRESPercentage,
-                itemStyle: {
-                  color: this.state.colors[index],
-                  emphasis: {
-                    color: this.state.colors[index],
-                  },
-                },
+                name: province.RegisterUserProvince
               },)
           })
           this.createDonutInfoCard(
@@ -312,22 +253,31 @@ class AdminDashboard extends React.Component {
          'ProvinceDonut',
 
          //Radius
-         [65, 75]
+         [65, 75],
+         
+         //Legend
+         {
+          orient: "vertical",
+          left: "left",
+          data: tempProvinceLegendData,
+        },
+         
 
           )
+          console.log('TempProvinceLegend: ', tempProvinceLegendData)
 
           let tempYearofStudy = response.data.PostRubixUserData.filter(doc => doc.YearofStudy !== undefined)
           let tempYOSChartData = []
+          let tempYOSLegend = []
           tempYearofStudy.forEach((year, index) =>{
+            //Add to Legend
+            tempYOSLegend.push(
+              year.YearofStudy
+            )
             tempYOSChartData.push(
               {
                 value: year.YoSCountPerResCountPerRESPercentage,
-                itemStyle: {
-                  color: this.state.colors[index],
-                  emphasis: {
-                    color: this.state.colors[index],
-                  },
-                },
+                name: year.YearofStudy,
               },)
           })
           this.createDonutInfoCard(
@@ -340,21 +290,31 @@ class AdminDashboard extends React.Component {
          'YearOfStudyDonut',
 
          //Radius
-         [85, 95]
+         [85, 95],
+         
+         //Legend
+         {
+          orient: "horizontal",
+          top: "top",
+          data: tempYOSLegend,
+        },
+         
+         
           )
+          console.log('TempYOSLegend: ', tempYOSLegend)
 
           let tempUniversity = response.data.PostRubixUserData.filter(doc => doc.UniversityName !== undefined)
           let universiyChart = []
+          let universiyLegend = []
           tempUniversity.forEach((university, index) =>{
+            //Add to Legend
+            universiyLegend.push(
+              university.UniversityName
+            )
             universiyChart.push(
               {
                 value: university.UniCountPerResCountPerRESPercentage,
-                itemStyle: {
-                  color: this.state.colors[index],
-                  emphasis: {
-                    color: this.state.colors[index],
-                  },
-                },
+                name: university.UniversityName,
               },)
           })
           this.createDonutInfoCard(
@@ -367,21 +327,31 @@ class AdminDashboard extends React.Component {
          'GenderDonut',
 
          //Radius
-         [125, 135]
+         [125, 135],
+         
+         //Legend
+         {
+          orient: "vertical",
+          //left: "right",
+          bottom: 'bottom',
+          data: universiyLegend,
+        },
+         
           )
+          console.log('TempUniLegend: ', universiyLegend)
 
           let tempGender = response.data.PostRubixUserData.filter(doc => doc.Gender !== undefined)
           let genderChart = []
+          let genderLegend = []
           tempGender.forEach((gender, index) =>{
+            //Add to Legend
+            genderLegend.push(
+              gender.Gender
+            )
             genderChart.push(
               {
                 value: gender.GenderCountPerResCountPerRESPercentage,
-                itemStyle: {
-                  color: this.state.colors[index],
-                  emphasis: {
-                    color: this.state.colors[index],
-                  },
-                },
+                name: gender.Gender,
               },)
           })
           this.createDonutInfoCard(
@@ -394,8 +364,17 @@ class AdminDashboard extends React.Component {
          'UniversityDonut',
 
          //Radius
-         [105, 115]
+         [105, 115],
+         
+         //Legend
+         {
+          orient: "horizontal",
+          left: "right",
+          data: genderLegend,
+        },
+         
           )
+          console.log('TempGenderLegend: ', genderLegend)
 
           if (tempPayment.length != 0) {
             this.setState({
@@ -428,14 +407,8 @@ class AdminDashboard extends React.Component {
 
   render() {
     return (
-      <div
-        style={{ flex: 1 }}
-        onClick={() => {
-          document.body.classList.remove("offcanvas-active");
-        }}
-      >
-        <div>
-          <div className="container-fluid">
+        <div className="container-fluid">
+          <div >
             <PageHeader
               HeaderText="Admin Dashboard"
               Breadcrumb={[
@@ -447,91 +420,50 @@ class AdminDashboard extends React.Component {
                 <div className="header">
                   <h2>Admin Dashboard</h2>
                 </div>
-
                 <div className="body">
                   <h4 className="margin-0">Documents Data</h4>
-                  <div className="row">
-                    <div className="col-3">
-                      <div className="outer m-3">
-                        <div
-                          id="LeaseDonut"
-                          className="inner"
-                          style={{ height: 285, width: "100%", position: "absolute" }}
-                        ></div>
-                        <div
-                          id="NOKDonut"
-                          className="inner"
-                          style={{ height: 285, width: "100%", position: "absolute" }}
-                        ></div>
-                        <div
-                          id="resDonut"
-                          className="inner"
-                          style={{ height: 285, width: "100%", position: "absolute" }}
-                        ></div>
-                        <div
-                          id="RegDonut"
-                          className="inner"
-                          style={{ height: 285, width: "100%", position: "absolute" }}
-                        ></div>
-                        <div
-                          id="studentID"
-                          className="inner"
-                          style={{ height: 285, width: "100%", position: "absolute" }}
-                        ></div>
-                        <div
-                          id="totalStudentsDonut"
-                          className="inner"
-                          style={{ height: 285, width: "100%", position: "absolute" }}
-                        ></div>
-                      </div>
-                    </div>
-
-                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="row clearfix">
-              <div className="body content-center">
-                <div className="">
-                  <div className="outer m-7">
+              <div className="col-lg-12 col-md-12">
+                  <div className="card" style={{ height: 485, width: "100%", }}>
                     <div
                       id="PaymentDonut"
-                      className="inner"
+                      className=""
                       style={{ height: 485, width: "100%", position: "absolute" }}
                     ></div>
                     <div
                       id="ProvinceDonut"
-                      className="inner"
+                      className=""
                       style={{ height: 485, width: "100%", position: "absolute" }}
                     ></div>
                     <div
                       id="YearOfStudyDonut"
-                      className="inner"
+                      className=""
                       style={{ height: 485, width: "100%", position: "absolute" }}
                     ></div>
                     <div
                       id="UniversityDonut"
-                      className="inner"
+                      className=""
                       style={{ height: 485, width: "100%", position: "absolute" }}
                     ></div>
                     <div
                       id="GenderDonut"
-                      className="inner"
+                      className=""
                       style={{ height: 485, width: "100%", position: "absolute" }}
                     ></div>
                     <div
                       id="TotalDonut"
-                      className="inner"
+                      className=""
                       style={{ height: 485, width: "100%", position: "absolute" }}
                     ></div>
                   </div>
                 </div>
-              </div>
+
+                <DocumentsChart/>
+
             </div>
           </div>
         </div>
-      </div>
     );
   }
 }

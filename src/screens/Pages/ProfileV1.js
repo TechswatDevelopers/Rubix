@@ -413,6 +413,13 @@ class ProfileV1Page extends React.Component {
     return message
   }
 
+  resetProgressBars(){
+    this.props.onUpdateIDProgress(0)
+    this.props.onUpdateRESProgress(0)
+    this.props.onUpdateREGProgress(0)
+    this.props.onUpdateNOKProgress(0)
+  }
+
   
   //Get user document progress
   setDocumentProgress() {
@@ -438,6 +445,7 @@ class ProfileV1Page extends React.Component {
         .then(response => {
           console.log("document progress", response)
           const temp = response.data.PostRubixUserData
+          this.resetProgressBars()
           //Set local storage to default values
           /* localStorage.setItem('idProgress', 0)
           localStorage.setItem('proofOfResProgress', 0)

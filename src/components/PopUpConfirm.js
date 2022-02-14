@@ -91,9 +91,6 @@ componentDidMount() {
 
   return new File([u8arr], filename, { type: mime });
 }
-
-
-
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
