@@ -674,7 +674,18 @@ class NavbarMenu extends React.Component {
              { 
                     
                      localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
-                      ? null    
+                      ? <li className="" id="adminDash">
+                      <a
+                          href="adminDash"
+                          className=""
+                          /* onClick={(e) => {
+                            e.preventDefault();
+                            this.activeMenutabContainer("AppContainer");
+                          }} */
+                        >
+                          <i className="icon-home"></i> <span>Admin Dashboard</span>
+                        </a>
+                      </li>    
                   : <li className="" id="Calendar" >
                     <a 
                     style=
