@@ -8,6 +8,7 @@ import axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
 import echarts from "echarts";
+import {updateResidenceID} from "../../actions"
 import {
   topProductOption,
   topRevenueOption,
@@ -27,10 +28,23 @@ class AdminDashboard extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
 
-    setTimeout(() => {
-      this.getReport()
-    }, 5000);
+    if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
 
+    } else {
+      setTimeout(() => {
+        this.getReport(localStorage.getItem('resID'))
+      }, 5000);
+    }
+    const fetchData = async() =>{
+      //Populate Residence list
+      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      .then(response => response.json())
+      .then(data => {
+          console.log("data is ", data)
+          this.setState({resList: data.data})
+          });
+      } 
+      fetchData();
     //Load First Donut
     //Load Second Donut
     //this.chartPaymentDonut();
@@ -48,6 +62,8 @@ class AdminDashboard extends React.Component {
       documentStats: [],
       legend: [],
       studentDocSeriess: [],
+      resList: [],
+      isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
       colors: ['#1ebbd7', '#212121', '#ffa500', '#5743bb', '#0000ff', '#e69138', '#f603a3'],
     }
   }
@@ -180,11 +196,11 @@ class AdminDashboard extends React.Component {
   }
 
   //Get Admin Report
-  getReport() {
+  getReport(resID) {
     const data = {
       'UserCode': localStorage.getItem('userCode'),
       'RubixClientID': localStorage.getItem('clientID'),
-      'RubixResidenceID': localStorage.getItem('resID'),
+      'RubixResidenceID': resID,
     }
 
     const requestOptions = {
@@ -803,7 +819,6 @@ class AdminDashboard extends React.Component {
     postData()
   }
 
-
   render() {
     return (
         <div className="container-fluid">
@@ -819,6 +834,30 @@ class AdminDashboard extends React.Component {
                 <div className="header">
                   <h2>Admin Dashboard</h2>
                 </div>
+
+                {localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
+                ? <>
+                <p> <strong>Please Select a Residence to view: </strong></p>
+                {  
+        <select className="form-control" onChange={(e)=>{
+          this.setState({res: e.target.value,
+          isShow: true
+          })
+          
+        this.getReport(e.target.value)
+          this.props.updateResidenceID(e.target.value)
+          console.log('ResID1: ', e.target.value)
+          }} value={this.state.res}>
+        {
+            
+            this.state.resList.map((res, index)=> (
+            <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
+        ))   
+        }
+    </select> }
+                </>
+                : null
+                }
                 <div className="body">
                   
                 </div>
@@ -866,4 +905,6 @@ const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
   resID: navigationReducer.studentResID
 });
 
-export default connect(mapStateToProps, {})(AdminDashboard);
+export default connect(mapStateToProps, {
+  updateResidenceID,
+})(AdminDashboard);
