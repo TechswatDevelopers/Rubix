@@ -397,6 +397,53 @@ class AdminDashboard extends React.Component {
           },
         }
     )
+//Student Lease
+          const tempStudentLease = [
+            {
+              value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage,
+              name: 'Lease Agreement',
+              itemStyle: {
+                color: "#660099",
+                emphasis: {
+                  color: "#660099",
+                },
+              },
+            },
+            {
+              value: 100 - response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage,
+              name: 'No Lease Agreement',
+              itemStyle: {
+                color: "#EEEEEE",
+                emphasis: {
+                  color: "#EEEEEE",
+                },
+              },
+            }
+           
+          ]
+
+          this.state.studentDocSeriess.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [160, 180],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempStudentLease,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
 //Student Next of Kin ID
           const tempStudentNOKID = [
             {
@@ -680,8 +727,6 @@ class AdminDashboard extends React.Component {
           let genderChart = []
           let genderLegend = []
           const genderPallete = ["#FF3333", "#CC0033", "#990033"]
-
-          
           tempGender.forEach((gender, index) =>{
             //Add to Legend
             genderLegend.push(
@@ -775,11 +820,14 @@ class AdminDashboard extends React.Component {
                   <h2>Admin Dashboard</h2>
                 </div>
                 <div className="body">
-                  <h4 className="margin-0">Student Data</h4>
+                  
                 </div>
               </div>
               <div className="col-lg-12 col-md-12">
-                  <div className="card p-4" style={{ height: 520, width: "100%", position: "relative" }}>
+                  <div className="card" style={{ height: 520, width: "100%", position: "relative" }}>
+                  <div className="header">
+              <h4 className="margin-0">Student Data</h4>
+                </div>
                   <div
                           id="TestDocDonut"
                           className="inner"
@@ -789,7 +837,7 @@ class AdminDashboard extends React.Component {
                 </div>
 
                 <div className="col-lg-12 col-md-12">
-        <div className="card" style={{ height: 520, width: "100%", position: "relative" }}>
+        <div className="card" style={{ height: 580, width: "100%", position: "relative" }}>
         <div className="header">
                   <h4>Documents Data</h4>
                 </div>
