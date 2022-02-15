@@ -94,7 +94,14 @@ class AdminDashboard extends React.Component {
         trigger: "item",
         formatter: "{b} : {c} ({d}%)",
       },
-      legend: legend,
+      
+      legend: {
+    orient: "vertical",
+    left: "left",
+        item: {
+          paddingY: 20
+      },
+        legend},
       series: [
         {
           type: "pie",
@@ -146,9 +153,17 @@ class AdminDashboard extends React.Component {
       },
       tooltip: {
         trigger: "item",
-        formatter: "{b} : {c} ({d}%)",
+        formatter: "{b} : {d}%",
       },
-      legend: legend,
+      legend: {
+        onClick: function(event, legendItem) {},
+        orient: "vertical",
+        left: "left",
+            item: {
+              onChange:  null,
+              paddingY: 20
+          },
+            legend},
       series: series,
     }
     this.createChart(attributeID, donut)
@@ -176,9 +191,20 @@ class AdminDashboard extends React.Component {
       },
       tooltip: {
         trigger: "item",
-        formatter: "{b} : {c} ({d}%)",
+        formatter: "{b} : {c}",
       },
-      legend: legend,
+      legend: {
+        onClick:  (e)=> {
+          e.stopPropagation();
+      },
+      spacing: 30,
+        orient: "vertical",
+        left: "left",
+            item: {
+              paddingX: 10,
+              
+          },
+            legend},
       series: series,
     }
     
@@ -369,7 +395,7 @@ class AdminDashboard extends React.Component {
       const tempStudentPOReg = [
         {
           value: response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage,
-          name: 'Proof of Regitration',
+          name: 'Proof of Registration',
           itemStyle: {
             color: "#3399FF",
             emphasis: {
@@ -380,7 +406,7 @@ class AdminDashboard extends React.Component {
         {
           
           value: 100 - response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage,
-          name: 'No Proof of Regitration',
+          name: 'No Proof of Registration',
           itemStyle: {
             color: "#EEEEEE",
             emphasis: {
@@ -463,7 +489,7 @@ class AdminDashboard extends React.Component {
 //Student Next of Kin ID
           const tempStudentNOKID = [
             {
-              value: response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              value: response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage,
               name: 'Next of Kin ID',
               itemStyle: {
                 color: "#FF3333",
@@ -473,7 +499,7 @@ class AdminDashboard extends React.Component {
               },
             },
             {
-              value: 100 - response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              value: 100 - response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage,
               name: 'No Next of Kin ID',
               itemStyle: {
                 color: "#EEEEEE",
@@ -554,7 +580,7 @@ class AdminDashboard extends React.Component {
             //Add entry to data  List
             tempPyamentChartData.push(
               {
-                value: payment.PMCountPerResCountPerRESPercentage,
+                value: payment.PMCountPerRes,
                 name: payment.PaymentMethod,
                 itemStyle: {
                   color: PaymentPallete[index],
@@ -607,7 +633,7 @@ class AdminDashboard extends React.Component {
            // tempLegendList.push({tempProvinceLegendData})
             tempProvinceChartData.push(
               {
-                value: province.ProvinceCountPerResCountPerRESPercentage,
+                value: province.ProvinceCountPerRes,
                 name: province.RegisterUserProvince,
                 itemStyle: {
                   color: ProvincePallete[index],
@@ -654,7 +680,7 @@ class AdminDashboard extends React.Component {
             )
             tempYOSChartData.push(
               {
-                value: year.YoSCountPerResCountPerRESPercentage,
+                value: year.YoSCountPerRes,
                 name: year.YearofStudy,
                 itemStyle: {
                   color: YOSColorPallete[index],
@@ -703,7 +729,7 @@ class AdminDashboard extends React.Component {
             )
             universiyChart.push(
               {
-                value: university.UniCountPerResCountPerRESPercentage,
+                value: university.UniCountPerRes,
                 name: university.UniversityName,
                 itemStyle: {
                   color: UniPallete[index],
@@ -750,7 +776,7 @@ class AdminDashboard extends React.Component {
             )
             genderChart.push(
               {
-                value: gender.GenderCountPerResCountPerRESPercentage,
+                value: gender.GenderCountPerRes,
                 name: gender.Gender,
                 itemStyle: {
                   color: genderPallete[index],
@@ -863,7 +889,7 @@ class AdminDashboard extends React.Component {
                 </div>
               </div>
               <div className="col-lg-12 col-md-12">
-                  <div className="card" style={{ height: 520, width: "100%", position: "relative" }}>
+                  <div className="card" style={{ height: 580, width: "100%", position: "relative" }}>
                   <div className="header">
               <h4 className="margin-0">Student Data</h4>
                 </div>

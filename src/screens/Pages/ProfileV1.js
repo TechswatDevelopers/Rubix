@@ -420,10 +420,10 @@ class ProfileV1Page extends React.Component {
     this.props.onUpdateNOKProgress(0)
 
     //Reset Messages
-    this.props.onUpdateIDMessage(0)
-    this.props.onUpdateRESMessage(0)
-    this.props.onUpdateREGMessage(0)
-    this.props.onUpdateNOKMessage(0)
+    this.props.onUpdateIDMessage(this.setMessage(0))
+    this.props.onUpdateRESMessage(this.setMessage(0))
+    this.props.onUpdateREGMessage(this.setMessage(0))
+    this.props.onUpdateNOKMessage(this.setMessage(0))
   }
 
   
