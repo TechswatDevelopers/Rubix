@@ -418,6 +418,12 @@ class ProfileV1Page extends React.Component {
     this.props.onUpdateRESProgress(0)
     this.props.onUpdateREGProgress(0)
     this.props.onUpdateNOKProgress(0)
+
+    //Reset Messages
+    this.props.onUpdateIDMessage(0)
+    this.props.onUpdateRESMessage(0)
+    this.props.onUpdateREGMessage(0)
+    this.props.onUpdateNOKMessage(0)
   }
 
   

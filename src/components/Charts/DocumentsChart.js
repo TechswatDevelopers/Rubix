@@ -68,7 +68,6 @@ class DocumentsChart extends React.Component {
 
     option && myChart.setOption(option);
   };
-
   chartTotalStudents = () => {
     var chartDom = document.getElementById("totalStudentsDonut");
     var myChart = echarts.init(chartDom);
@@ -77,20 +76,22 @@ class DocumentsChart extends React.Component {
 
     option && myChart.setOption(option);
   };
-
+  
   render() {
     return (
       <div className="col-lg-12 col-md-12">
-        <div className="card" style={{ height: 305, width: "100%", position: "relative" }}>
+        <div className="card" style={{ height: 375, width: "100%", position: "relative" }}>
+        <div className="header">
+                  <h4>Documents Data</h4>
+                </div>
           <div className="body">
             <div
               id="LeaseDonut"
               className="inner"
-              style={{ height: 285, width: "100%", position: "absolute", bottom: 0}}
+              style={{ height: 285, width: "100%", position: "absolute",}}
             ></div>
             
-            <div
-                          id="NOKDonut"
+            <div id="NOKDonut"
                           className="inner"
                           style={{ height: 285, width: "100%", position: "absolute" }}
                         ></div>

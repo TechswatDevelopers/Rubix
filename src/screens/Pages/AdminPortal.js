@@ -46,12 +46,14 @@ class AdminDashboard extends React.Component {
       yearOfStudyStats: [],
       genderStats: [],
       documentStats: [],
+      legend: [],
+      studentDocSeriess: [],
       colors: ['#1ebbd7', '#212121', '#ffa500', '#5743bb', '#0000ff', '#e69138', '#f603a3'],
     }
   }
 
   //Create Donut
-  createDonutInfoCard(data, centerValue, chartDOM, radius, legend, position){
+  createDonutInfoCard(data, centerValue, chartDOM, radius, legend, colors){
     //console.log("Creating pie chart for: ", data, "Center: ", centerValue, "Chart DOM: ", chartDOM)
     const donut  = {
       title: {
@@ -65,7 +67,7 @@ class AdminDashboard extends React.Component {
           fontWeight: "bolder",
         },
       },
-      color: ["#FF7F50", "#FF69B4", "#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff", "#F0F8FF", "#B22222", "#FFFACD"],
+      color: colors,
       grid: {
         top: 0,
         bottom: 0,
@@ -105,6 +107,68 @@ class AdminDashboard extends React.Component {
     return donut
   }
 
+  //Add Series
+  createSeriesGraph(key, series, attributeID, legend){
+    const donut  = {
+      title: {
+        text: key,
+        x: "center",
+        y: "center",
+        textStyle: {
+          color: "rgb(255, 255, 255)",
+          fontFamily: "Arial",
+          fontSize: 15,
+          fontWeight: "bolder",
+        },
+      },
+      //color: colors,
+      grid: {
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+      },
+      tooltip: {
+        trigger: "item",
+        formatter: "{b} : {c} ({d}%)",
+      },
+      legend: legend,
+      series: series,
+    }
+    this.createChart(attributeID, donut)
+  }
+  //Add Series
+  createMultipleSeriesGraph(key, series, attributeID, legend, colors){
+    const donut  = {
+      title: {
+        text: key,
+        x: "center",
+        y: "center",
+        textStyle: {
+          color: "rgb(255, 255, 255)",
+          fontFamily: "Arial",
+          fontSize: 15,
+          fontWeight: "bolder",
+        },
+      },
+      color: colors,
+      grid: {
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+      },
+      tooltip: {
+        trigger: "item",
+        formatter: "{b} : {c} ({d}%)",
+      },
+      legend: legend,
+      series: series,
+    }
+    
+    this.createChart(attributeID, donut)
+  }
+
   //Create Chart
   createChart(chartDOM, gauge) {
     var chartDom = document.getElementById(chartDOM);
@@ -114,19 +178,6 @@ class AdminDashboard extends React.Component {
 
     option && myChart.setOption(option);
   }
-
-  //Load Donuts
-  chartPaymentDonut = () => {
-    var chartDom = document.getElementById("PaymentDonut");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = paymentGaugeOption;
-
-    option && myChart.setOption(option);
-  };
-
- 
-
 
   //Get Admin Report
   getReport() {
@@ -157,118 +208,382 @@ class AdminDashboard extends React.Component {
           localStorage.setItem('resNOKDocs', response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage)
           localStorage.setItem('resLeaseDocs', response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage)
 
-          //Create Donuts
-          this.createDonutInfoCard(
-            //Data
-            [
+          //Create Student Documents Series Chart
+          //Add Total Students
+
+
+          //Create Documents Data Donuts
+          //Create Student Data Donuts
+          let tempDocLegendList = []
+          const tempData = [
             {
-              value: response.data.PostRubixUserData[2].TotalRegistrationsPerYear,
-              name: 'Total Students'
+              value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear,
+              name: 'Total Students',
+              itemStyle: {
+                color: "#FF3366",
+                emphasis: {
+                  color: "#FF3366",
+                },
+              },
             },
            
-          ],
-          //Center
-          response.data.PostRubixUserData[2].TotalRegistrationsPerYear,
+          ]
+          this.state.studentDocSeriess.push(
+              {
+                type: "pie",
+                startAngle: 270,
+                clockWise: 1,
+                radius: [0, 30],
+                itemStyle: {
+                  normal: {
+                    label: { show: false },
+                    labelLine: { show: false },
+                  },
+                },
+                data: tempData,
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: "rgba(0, 0, 0, 0.5)",
+                  },
+                },
+              }
+          )
 
-          //Attribute ID
-         'TotalDonut',
+          //Add StudentID Info
+          const tempStudentIDLegend = ['Student ID Document', 'No Student ID Document']
+          const tempStudentID = [
+            {
+              value: response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              name: 'Student ID Document',
+              itemStyle: {
+                color: "#FFCC00",
+                emphasis: {
+                  color: "#FFCC00",
+                },
+              },
+            },
+            {
+              value: 100 - response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              name: 'No Student ID Document',
+              itemStyle: {
+                color: "#EEEEEE",
+                emphasis: {
+                  color: "#EEEEEE",
+                },
+              },
+            }
+           
+          ]
+          this.state.studentDocSeriess.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [40, 60],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempStudentID,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
+        tempDocLegendList.push(tempStudentIDLegend)
 
-         //Radius
-         [0, 30],
-
-         //Legend
-        null 
-     /*  {
-        orient: "vertical",
-        left: "left",
-        data: [
-          'Total Students'
-        ],
-      }, */
+        //Student Proof of Residence
+        const tempStudentPORes = [
+          {
+            value: response.data.PostRubixUserData[0].ProofOfResCountPerRESPercentage,
+            name: 'Proof of Residence',
+            itemStyle: {
+              color: "#00FF33",
+              emphasis: {
+                color: "#00FF33",
+              },
+            },
+          },
+          {
+            
+            value: 100 - response.data.PostRubixUserData[0].ProofOfResCountPerRESPercentage,
+            name: 'No Proof of Residence',
+            itemStyle: {
+              color: "#EEEEEE",
+              emphasis: {
+                color: "#EEEEEE",
+              },
+            },
+          }
          
+        ]
+        
+        this.state.studentDocSeriess.push(
+          {
+            type: "pie",
+            startAngle: 270,
+            clockWise: 1,
+            radius: [70, 90],
+            itemStyle: {
+              normal: {
+                label: { show: false },
+                labelLine: { show: false },
+              },
+            },
+            data: tempStudentPORes,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          }
+      )
+
+      //Student Proof of Registration
+      const tempStudentPOReg = [
+        {
+          value: response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage,
+          name: 'Proof of Regitration',
+          itemStyle: {
+            color: "#3399FF",
+            emphasis: {
+              color: "#3399FF",
+            },
+          },
+        },
+        {
+          
+          value: 100 - response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage,
+          name: 'No Proof of Regitration',
+          itemStyle: {
+            color: "#EEEEEE",
+            emphasis: {
+              color: "#EEEEEE",
+            },
+          },
+        }
+       
+      ]
+
+      this.state.studentDocSeriess.push(
+        {
+          type: "pie",
+          startAngle: 270,
+          clockWise: 1,
+          radius: [100, 120],
+          itemStyle: {
+            normal: {
+              label: { show: false },
+              labelLine: { show: false },
+            },
+          },
+          data: tempStudentPOReg,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        }
+    )
+//Student Next of Kin ID
+          const tempStudentNOKID = [
+            {
+              value: response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              name: 'Next of Kin ID',
+              itemStyle: {
+                color: "#FF3333",
+                emphasis: {
+                  color: "#FF3333",
+                },
+              },
+            },
+            {
+              value: 100 - response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              name: 'No Next of Kin ID',
+              itemStyle: {
+                color: "#EEEEEE",
+                emphasis: {
+                  color: "#EEEEEE",
+                },
+              },
+            }
+           
+          ]
+
+          this.state.studentDocSeriess.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [130, 150],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempStudentNOKID,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
+
+          this.createSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, this.state.studentDocSeriess, 'NewDocDonut', tempDocLegendList)
+
+          //Res Information Chart
+          let tempSeriesList = []
+          let tempColorsList = []
+          let tempLegendList = []
+
+          //Total Student
+          tempSeriesList.push(
+              {
+                type: "pie",
+                startAngle: 270,
+                clockWise: 1,
+                radius: [0, 30],
+                itemStyle: {
+                  normal: {
+                    label: { show: false },
+                    labelLine: { show: false },
+                  },
+                },
+                data: tempData,
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: "rgba(0, 0, 0, 0.5)",
+                  },
+                },
+              }
           )
 
           //Payment Method Chart
           let tempPayment = response.data.PostRubixUserData.filter(doc => doc.PaymentMethod !== undefined)
           let tempPyamentChartData = []
           let tempPaymentLegendData = []
+          const PaymentPallete = 
+          ["#99FF66", "#66CC66", "#00FF33", "#00CC66", "#009900", "#33EE33"]
           tempPayment.forEach((payment, index) =>{
             //Add to Legend
             tempPaymentLegendData.push(
               payment.PaymentMethod
             )
+            tempLegendList.push(tempPaymentLegendData)
             //Add entry to data  List
             tempPyamentChartData.push(
               {
                 value: payment.PMCountPerResCountPerRESPercentage,
-                name: payment.PaymentMethod
+                name: payment.PaymentMethod,
+                itemStyle: {
+                  color: PaymentPallete[index],
+                  emphasis: {
+                    color: PaymentPallete[index],
+                  },
+                },
               },
 
             )
           })
-          console.log('TempPaymentsLegend: ', tempPaymentLegendData)
-          this.createDonutInfoCard(
-            //Data
-            tempPyamentChartData,
+          tempColorsList.push({PaymentPallete})
+          
+          //Total Student
+          tempSeriesList.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [40, 60],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempPyamentChartData,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
 
-          //Center
-          response.data.PostRubixUserData[2].PMCountPerResCountPerRESPercentage,
-
-          //Attribute ID
-         'PaymentDonut',
-
-         //Radius
-         [45, 55],
-         
-         //Legend
-         {
-          orient: "vertical",
-          left: "right",
-          data: tempPaymentLegendData,
-        },
-         
-          )
-
-          let tempProvince = response.data.PostRubixUserData.filter(doc => doc.RegisterUserProvince !== undefined)
+        //Provinces
+        let tempProvince = response.data.PostRubixUserData.filter(doc => doc.RegisterUserProvince !== undefined)
           let tempProvinceChartData = []
           let tempProvinceLegendData = []
+          const ProvincePallete = 
+          ["#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
+
           tempProvince.forEach((province, index) =>{
             //Add to Legend
             tempProvinceLegendData.push(
               province.RegisterUserProvince
             )
+           // tempLegendList.push({tempProvinceLegendData})
             tempProvinceChartData.push(
               {
                 value: province.ProvinceCountPerResCountPerRESPercentage,
-                name: province.RegisterUserProvince
+                name: province.RegisterUserProvince,
+                itemStyle: {
+                  color: ProvincePallete[index],
+                  emphasis: {
+                    color: ProvincePallete[index],
+                  },
+                },
               },)
           })
-          this.createDonutInfoCard(
-            //Data
-            tempProvinceChartData,
-          //Center
-          '',
+          tempColorsList.push({ProvincePallete})
+          tempSeriesList.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [70, 90],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempProvinceChartData,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
 
-          //Attribute ID
-         'ProvinceDonut',
-
-         //Radius
-         [65, 75],
-         
-         //Legend
-         {
-          orient: "vertical",
-          left: "left",
-          data: tempProvinceLegendData,
-        },
-         
-
-          )
-          console.log('TempProvinceLegend: ', tempProvinceLegendData)
-
+        //Year of Study
           let tempYearofStudy = response.data.PostRubixUserData.filter(doc => doc.YearofStudy !== undefined)
           let tempYOSChartData = []
           let tempYOSLegend = []
+          const YOSColorPallete = ["#FFCC00", "#FF9933", "#FF6633", "#CC6600", "#CC6633"]
+
           tempYearofStudy.forEach((year, index) =>{
             //Add to Legend
             tempYOSLegend.push(
@@ -278,34 +593,46 @@ class AdminDashboard extends React.Component {
               {
                 value: year.YoSCountPerResCountPerRESPercentage,
                 name: year.YearofStudy,
+                itemStyle: {
+                  color: YOSColorPallete[index],
+                  emphasis: {
+                    color: YOSColorPallete[index],
+                  },
+                },
               },)
           })
-          this.createDonutInfoCard(
-            //Data
-            tempYOSChartData,
-          //Center
-          '',
+          tempColorsList.push({YOSColorPallete})
 
-          //Attribute ID
-         'YearOfStudyDonut',
+          tempSeriesList.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [100, 120],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempYOSChartData,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
 
-         //Radius
-         [85, 95],
-         
-         //Legend
-         {
-          orient: "horizontal",
-          top: "top",
-          data: tempYOSLegend,
-        },
-         
-         
-          )
-          console.log('TempYOSLegend: ', tempYOSLegend)
 
-          let tempUniversity = response.data.PostRubixUserData.filter(doc => doc.UniversityName !== undefined)
+        //Universities
+        let tempUniversity = response.data.PostRubixUserData.filter(doc => doc.UniversityName !== undefined)
           let universiyChart = []
           let universiyLegend = []
+          const UniPallete = ["#FFCCFF", "#FF66FF", "#FF00FF", "#FF3399", "#FF00CC", "#9933CC", "#990099", "#9966CC", "#9933FF", "#663399"]
+
           tempUniversity.forEach((university, index) =>{
             //Add to Legend
             universiyLegend.push(
@@ -315,66 +642,93 @@ class AdminDashboard extends React.Component {
               {
                 value: university.UniCountPerResCountPerRESPercentage,
                 name: university.UniversityName,
+                itemStyle: {
+                  color: UniPallete[index],
+                  emphasis: {
+                    color: UniPallete[index],
+                  },
+                },
               },)
           })
-          this.createDonutInfoCard(
-            //Data
-            universiyChart,
-          //Center
-          '',
+          tempColorsList.push({UniPallete})
 
-          //Attribute ID
-         'GenderDonut',
+          tempSeriesList.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [130, 150],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: universiyChart,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
 
-         //Radius
-         [125, 135],
-         
-         //Legend
-         {
-          orient: "vertical",
-          //left: "right",
-          bottom: 'bottom',
-          data: universiyLegend,
-        },
-         
-          )
-          console.log('TempUniLegend: ', universiyLegend)
-
-          let tempGender = response.data.PostRubixUserData.filter(doc => doc.Gender !== undefined)
+        //Gender Chart
+        let tempGender = response.data.PostRubixUserData.filter(doc => doc.Gender !== undefined)
           let genderChart = []
           let genderLegend = []
+          const genderPallete = ["#FF3333", "#CC0033", "#990033"]
+
+          
           tempGender.forEach((gender, index) =>{
             //Add to Legend
             genderLegend.push(
-              gender.Gender
+              gender.Gender 
             )
             genderChart.push(
               {
                 value: gender.GenderCountPerResCountPerRESPercentage,
                 name: gender.Gender,
+                itemStyle: {
+                  color: genderPallete[index],
+                  emphasis: {
+                    color: genderPallete[index],
+                  },
+                },
               },)
           })
-          this.createDonutInfoCard(
-            //Data
-            genderChart,
-          //Center
-          '',
+          tempColorsList.push({genderPallete})
 
-          //Attribute ID
-         'UniversityDonut',
+          tempSeriesList.push(
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [160, 180],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: genderChart,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            }
+        )
 
-         //Radius
-         [105, 115],
-         
-         //Legend
-         {
-          orient: "horizontal",
-          left: "right",
-          data: genderLegend,
-        },
-         
-          )
-          console.log('TempGenderLegend: ', genderLegend)
+          this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, 
+            tempSeriesList, 'TestDocDonut',
+             tempLegendList, 
+             tempColorsList)
+
 
           if (tempPayment.length != 0) {
             this.setState({
@@ -421,45 +775,36 @@ class AdminDashboard extends React.Component {
                   <h2>Admin Dashboard</h2>
                 </div>
                 <div className="body">
-                  <h4 className="margin-0">Documents Data</h4>
+                  <h4 className="margin-0">Student Data</h4>
                 </div>
               </div>
               <div className="col-lg-12 col-md-12">
-                  <div className="card" style={{ height: 485, width: "100%", }}>
-                    <div
-                      id="PaymentDonut"
-                      className=""
-                      style={{ height: 485, width: "100%", position: "absolute" }}
-                    ></div>
-                    <div
-                      id="ProvinceDonut"
-                      className=""
-                      style={{ height: 485, width: "100%", position: "absolute" }}
-                    ></div>
-                    <div
-                      id="YearOfStudyDonut"
-                      className=""
-                      style={{ height: 485, width: "100%", position: "absolute" }}
-                    ></div>
-                    <div
-                      id="UniversityDonut"
-                      className=""
-                      style={{ height: 485, width: "100%", position: "absolute" }}
-                    ></div>
-                    <div
-                      id="GenderDonut"
-                      className=""
-                      style={{ height: 485, width: "100%", position: "absolute" }}
-                    ></div>
-                    <div
-                      id="TotalDonut"
-                      className=""
-                      style={{ height: 485, width: "100%", position: "absolute" }}
-                    ></div>
+                  <div className="card p-4" style={{ height: 520, width: "100%", position: "relative" }}>
+                  <div
+                          id="TestDocDonut"
+                          className="inner"
+                          style={{ height: 485, width: "100%", position: "absolute" }}
+                        ></div>
                   </div>
                 </div>
 
-                <DocumentsChart/>
+                <div className="col-lg-12 col-md-12">
+        <div className="card" style={{ height: 520, width: "100%", position: "relative" }}>
+        <div className="header">
+                  <h4>Documents Data</h4>
+                </div>
+          <div className="body content-center">
+          <div
+                          id="NewDocDonut"
+                          className="inner"
+                          style={{ height: 485, width: "100%", position: "absolute" }}
+                        ></div>
+          </div>
+        </div>
+      </div>
+
+
+    
 
             </div>
           </div>
