@@ -7,6 +7,7 @@ import DocumentsChart from "../../components/Charts/DocumentsChart";
 import axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
+import StackedAreaChart from "../../components/Charts/StackedAreaChart";
 import echarts from "echarts";
 import {updateResidenceID,
   updateLoadingMessage,
@@ -36,8 +37,11 @@ class AdminDashboard extends React.Component {
     } else {
       setTimeout(() => {
         this.getReport(localStorage.getItem('resID'))
-      }, 5000);
+        this.getGraph(localStorage.getItem('resID'))
+      }, 4000);
     }
+
+
     const fetchData = async() =>{
       //Populate Residence list
       await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
@@ -57,6 +61,9 @@ class AdminDashboard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      resCapacity: null,
+      resBedsLeft: null,
+      resBedsAllocated: null,
       resStats: [],
       paymentStats: [],
       provinceStats: [],
@@ -71,66 +78,129 @@ class AdminDashboard extends React.Component {
     }
   }
 
-  //Create Donut
-  createDonutInfoCard(data, centerValue, chartDOM, radius, legend, colors){
-    //console.log("Creating pie chart for: ", data, "Center: ", centerValue, "Chart DOM: ", chartDOM)
-    const donut  = {
+
+  //Get Line Graph Stats
+  getGraph(resID){
+    const data = {
+      'UserCode': localStorage.getItem('userCode'),
+      'RubixClientID': localStorage.getItem('clientID'),
+      'RubixResidenceID': resID,
+    }
+
+    const requestOptions = {
+      title: 'Sending Vetted Status Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    }
+    console.log("Posted Data: ", data)
+
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReport', data, requestOptions)
+      .then(response =>{
+        console.log("Response: ", response)
+        let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
+        console.log("Registration per year: ", registrationPerYear)
+        let registrationLegend = [], regMonth = [], registrationChartData = [], dataset = []
+        //Populate Graph Info
+        registrationPerYear.forEach((registration, index) =>{
+          //Add to Legend
+         /*  registrationLegend.push(
+            registration.dayofweek
+          ) */
+          regMonth.push(
+            registration.Month
+          )
+          //Add entry to data  List
+          dataset.push(registration.TotalRegistrationsPerDay)
+          
+        })
+
+        registrationChartData = {
+          name: "Students Registered",
+          type: "line",
+          stack: "",
+          areaStyle: {},
+          data: dataset,
+        }
+        console.log('Legend: ', registrationChartData)
+        this.createLineGraph(registrationLegend, registrationChartData)
+      })
+    } 
+    postData()
+  }
+
+  //Create Line Graph
+  createLineGraph(legend, series){
+    const LineEchart = {
       title: {
-        text: centerValue,
-        x: "center",
-        y: "center",
-        textStyle: {
-          color: "rgb(255, 255, 255)",
-          fontFamily: "Arial",
-          fontSize: 15,
-          fontWeight: "bolder",
+        text: "",
+      },
+      color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff"],
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "cross",
+          label: {
+            backgroundColor: "#6a7985",
+          },
         },
       },
-      color: colors,
+      legend: legend,
+      toolbox: {
+        // feature: {
+        //     saveAsImage: {}
+        // }
+      },
       grid: {
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
+        left: "3%",
+        right: "1%",
+        bottom: "2%",
+        containLabel: true,
       },
-      tooltip: {
-        trigger: "item",
-        formatter: "{b} : {c} ({d}%)",
-      },
-      
-      legend: {
-    orient: "vertical",
-    left: "left",
-        item: {
-          paddingY: 20
-      },
-        legend},
-      series: [
+      xAxis: [
         {
-          type: "pie",
-          startAngle: 270,
-          clockWise: 1,
-          radius: radius,
-          itemStyle: {
-            normal: {
-              label: { show: false },
-              labelLine: { show: false },
+          type: "category",
+          boundaryGap: false,
+          axisLabel: {
+            color: "rgba(0,0,0,0.4)",
+          },
+          axisLine: {
+            lineStyle: {
+              color: "rgba(0,0,0,0.5)",
             },
           },
-          data: data,
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
+          data: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thersday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ],
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+          axisLabel: {
+            color: "rgba(0,0,0,0.4)",
+          },
+          axisLine: {
+            lineStyle: {
+              color: "rgba(0,0,0,0.5)",
             },
+          },
+          splitLine: {
+            show: false,
           },
         },
       ],
+      series: series,
     }
-    
-    this.createChart(chartDOM, donut)
-    return donut
+    //this.createChart("LineChart", LineEchart)
+
   }
 
   //Add Series
@@ -156,7 +226,7 @@ class AdminDashboard extends React.Component {
       },
       tooltip: {
         trigger: "item",
-        formatter: "{b} : {d}%",
+        formatter: "{b} : {c}",
       },
       legend: {
         onClick: function(event, legendItem) {},
@@ -236,7 +306,7 @@ class AdminDashboard extends React.Component {
     }
 
     const requestOptions = {
-      title: 'Sending Vetted Status Form',
+      title: 'Fetch Reports Form',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: data
@@ -256,6 +326,11 @@ class AdminDashboard extends React.Component {
           localStorage.setItem('resNOKDocs', response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage)
           localStorage.setItem('resLeaseDocs', response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage)
 
+          this.setState({
+            resCapacity: response.data.PostRubixUserData[41].TotalCapacityPerRes,
+            resBedsAllocated: response.data.PostRubixUserData[42].TotalbedsTaken,
+            resBedsLeft: response.data.PostRubixUserData[41].TotalCapacityPerRes - response.data.PostRubixUserData[42].TotalbedsTaken,
+          })
           //Create Student Documents Series Chart
           //Add Total Students
 
@@ -266,7 +341,7 @@ class AdminDashboard extends React.Component {
           const tempData = [
             {
               value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear,
-              name: 'Total Students',
+              name: 'Total Students on Rubix',
               itemStyle: {
                 color: "#FF3366",
                 emphasis: {
@@ -303,7 +378,7 @@ class AdminDashboard extends React.Component {
           const tempStudentIDLegend = ['Student ID Document', 'No Student ID Document']
           const tempStudentID = [
             {
-              value: response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              value: response.data.PostRubixUserData[0].IDDocumentCountPerRES,
               name: 'Student ID Document',
               itemStyle: {
                 color: "#FFCC00",
@@ -313,7 +388,7 @@ class AdminDashboard extends React.Component {
               },
             },
             {
-              value: 100 - response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage,
+              value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].IDDocumentCountPerRES,
               name: 'No Student ID Document',
               itemStyle: {
                 color: "#EEEEEE",
@@ -351,7 +426,7 @@ class AdminDashboard extends React.Component {
         //Student Proof of Residence
         const tempStudentPORes = [
           {
-            value: response.data.PostRubixUserData[0].ProofOfResCountPerRESPercentage,
+            value: response.data.PostRubixUserData[0].ProofOfResCountPerRES,
             name: 'Proof of Residence',
             itemStyle: {
               color: "#00FF33",
@@ -362,7 +437,7 @@ class AdminDashboard extends React.Component {
           },
           {
             
-            value: 100 - response.data.PostRubixUserData[0].ProofOfResCountPerRESPercentage,
+            value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].ProofOfResCountPerRES,
             name: 'No Proof of Residence',
             itemStyle: {
               color: "#EEEEEE",
@@ -400,7 +475,7 @@ class AdminDashboard extends React.Component {
       //Student Proof of Registration
       const tempStudentPOReg = [
         {
-          value: response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage,
+          value: response.data.PostRubixUserData[0].ProofOfRegCountPerRES,
           name: 'Proof of Registration',
           itemStyle: {
             color: "#3399FF",
@@ -411,7 +486,7 @@ class AdminDashboard extends React.Component {
         },
         {
           
-          value: 100 - response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage,
+          value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].ProofOfRegCountPerRES,
           name: 'No Proof of Registration',
           itemStyle: {
             color: "#EEEEEE",
@@ -448,7 +523,7 @@ class AdminDashboard extends React.Component {
 //Student Lease
           const tempStudentLease = [
             {
-              value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage,
+              value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
               name: 'Lease Agreement',
               itemStyle: {
                 color: "#660099",
@@ -458,7 +533,7 @@ class AdminDashboard extends React.Component {
               },
             },
             {
-              value: 100 - response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage,
+              value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
               name: 'No Lease Agreement',
               itemStyle: {
                 color: "#EEEEEE",
@@ -495,7 +570,7 @@ class AdminDashboard extends React.Component {
 //Student Next of Kin ID
           const tempStudentNOKID = [
             {
-              value: response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage,
+              value: response.data.PostRubixUserData[0].NextOfKinCountPerRES,
               name: 'Next of Kin ID',
               itemStyle: {
                 color: "#FF3333",
@@ -505,7 +580,7 @@ class AdminDashboard extends React.Component {
               },
             },
             {
-              value: 100 - response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage,
+              value:  response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].NextOfKinCountPerRES,
               name: 'No Next of Kin ID',
               itemStyle: {
                 color: "#EEEEEE",
@@ -852,6 +927,7 @@ class AdminDashboard extends React.Component {
       //Set timer for loading screen
       setTimeout(() => {
         this.props.updateLoadingController(false);
+        this.getGraph(resID)
       }, 2000);
     })
   }
@@ -861,7 +937,7 @@ class AdminDashboard extends React.Component {
         <div className="container-fluid">
           <div >
             <PageHeader
-              HeaderText="Admin Dashboard"
+              HeaderText="Admin Stats"
               Breadcrumb={[
                 { name: "Page", navigate: "" },
               ]}
@@ -886,10 +962,6 @@ class AdminDashboard extends React.Component {
 
             <div className="row clearfix">
               <div className=" col-lg-12 col-md-15">
-                <div className="header">
-                  <h2>Admin Dashboard</h2>
-                </div>
-
                 {localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
                 ? <>
                 <p> <strong>Please Select a Residence to view: </strong></p>
@@ -913,10 +985,28 @@ class AdminDashboard extends React.Component {
                 </>
                 : null
                 }
-                <div className="body">
-                  
+              </div>
+
+              <div className="col-lg-12 col-md-12">
+                <div className="p-4">
+                  <h4>Ressidence Stats</h4>
+                  <div className="row">
+                    <div className="card p-2 m-2 col-lg-2 col-md-2">
+                      <strong>Total Capacity:</strong>
+                      <p style={{fontSize: "60px"}}>{this.state.resCapacity}</p>
+                    </div>
+                    <div className="card p-2 m-2 col-lg-2 col-md-2">
+                      <strong>Beds Allocated:</strong>
+                      <p style={{fontSize: "60px"}}>{this.state.resBedsAllocated}</p>
+                    </div>
+                    <div className="card p-2 m-2 col-lg-2 col-md-2">
+                      <strong>Beds Remaining:</strong>
+                      <p style={{fontSize: "60px"}}>{this.state.resBedsLeft}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div className="col-lg-12 col-md-12">
                   <div className="card" style={{ height: 580, width: "100%", position: "relative" }}>
                   <div className="header">
@@ -944,6 +1034,19 @@ class AdminDashboard extends React.Component {
           </div>
         </div>
       </div>
+                {/* <div className="col-lg-12 col-md-12">
+        <div className="card" style={{ height: 580, width: "100%", position: "relative" }}>
+        <div className="header">
+                  <h4>Daily Data</h4>
+                </div>
+                <div
+                          id="LineChart"
+                          className="inner"
+                          style={{ height: 485, width: "100%", position: "absolute" }}
+                        ></div>
+          
+        </div>
+      </div> */}
 
 
     
