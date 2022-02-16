@@ -157,8 +157,8 @@ class ProfileV1Page extends React.Component {
           })
 
           //Convert base64 to file
-          const image = this.dataURLtoFile(string, "document.pdf")
-          this.setState({ testDoc: image })
+          //const image = this.dataURLtoFile(string, "document.pdf")
+          //this.setState({ testDoc: image })
           }
           else {
             this.setState({doc: null})
@@ -174,9 +174,9 @@ class ProfileV1Page extends React.Component {
     };
     fetchData()
     .then(()=>{
+      this.setDocumentProgress()
       //Set timer for loading screen
   setTimeout(() => {
-    this.setDocumentProgress()
     this.props.updateLoadingController(false);
   }, 1000);
       

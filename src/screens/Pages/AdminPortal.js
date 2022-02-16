@@ -62,7 +62,7 @@ class AdminDashboard extends React.Component {
     super(props)
     this.state = {
       resCapacity: null,
-      resBedsLeft: null,
+      signedLease: null,
       resBedsAllocated: null,
       resStats: [],
       paymentStats: [],
@@ -329,7 +329,7 @@ class AdminDashboard extends React.Component {
           this.setState({
             resCapacity: response.data.PostRubixUserData[41].TotalCapacityPerRes,
             resBedsAllocated: response.data.PostRubixUserData[42].TotalbedsTaken,
-            resBedsLeft: response.data.PostRubixUserData[41].TotalCapacityPerRes - response.data.PostRubixUserData[42].TotalbedsTaken,
+            signedLease: response.data.PostRubixUserData[43].lease_agreement_Count,
           })
           //Create Student Documents Series Chart
           //Add Total Students
@@ -989,7 +989,7 @@ class AdminDashboard extends React.Component {
 
               <div className="col-lg-12 col-md-12">
                 <div className="p-4">
-                  <h4>Ressidence Stats</h4>
+                  <h4>Residence Stats</h4>
                   <div className="row">
                     <div className="card p-2 m-2 col-lg-2 col-md-2">
                       <strong>Total Capacity:</strong>
@@ -1000,8 +1000,8 @@ class AdminDashboard extends React.Component {
                       <p style={{fontSize: "60px"}}>{this.state.resBedsAllocated}</p>
                     </div>
                     <div className="card p-2 m-2 col-lg-2 col-md-2">
-                      <strong>Beds Remaining:</strong>
-                      <p style={{fontSize: "60px"}}>{this.state.resBedsLeft}</p>
+                      <strong>Signed Leases:</strong>
+                      <p style={{fontSize: "60px"}}>{this.state.signedLease}</p>
                     </div>
                   </div>
                 </div>
