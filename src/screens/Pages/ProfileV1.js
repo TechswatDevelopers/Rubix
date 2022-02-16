@@ -429,6 +429,8 @@ class ProfileV1Page extends React.Component {
   
   //Get user document progress
   setDocumentProgress() {
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Documents...");
     let studentId
     if (localStorage.getItem('role') == 'admin'){
       studentId = this.props.currentStudentiD
@@ -495,7 +497,12 @@ class ProfileV1Page extends React.Component {
         })
 
     }
-    postData()
+    postData().then(()=>{
+      //Set timer for loading screen
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 3000);
+    })
   }
 
   //Get Progress

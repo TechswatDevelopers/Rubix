@@ -8,7 +8,10 @@ import axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
 import echarts from "echarts";
-import {updateResidenceID} from "../../actions"
+import {updateResidenceID,
+  updateLoadingMessage,
+  updateLoadingController,
+} from "../../actions"
 import {
   topProductOption,
   topRevenueOption,
@@ -223,6 +226,9 @@ class AdminDashboard extends React.Component {
 
   //Get Admin Report
   getReport(resID) {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Data, Please wait...");
     const data = {
       'UserCode': localStorage.getItem('userCode'),
       'RubixClientID': localStorage.getItem('clientID'),
@@ -623,7 +629,7 @@ class AdminDashboard extends React.Component {
           let tempProvinceChartData = []
           let tempProvinceLegendData = []
           const ProvincePallete = 
-          ["#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
+          ["#66FFFF","#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
 
           tempProvince.forEach((province, index) =>{
             //Add to Legend
@@ -680,7 +686,7 @@ class AdminDashboard extends React.Component {
             )
             tempYOSChartData.push(
               {
-                value: year.YoSCountPerRes,
+                value: year.YearofStudyCountPerRes,
                 name: year.YearofStudy,
                 itemStyle: {
                   color: YOSColorPallete[index],
@@ -842,7 +848,12 @@ class AdminDashboard extends React.Component {
 
         })
     }
-    postData()
+    postData().then(()=>{
+      //Set timer for loading screen
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 2000);
+    })
   }
 
   render() {
@@ -855,6 +866,24 @@ class AdminDashboard extends React.Component {
                 { name: "Page", navigate: "" },
               ]}
             />
+            
+            <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt="Rubix System"
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+
             <div className="row clearfix">
               <div className=" col-lg-12 col-md-15">
                 <div className="header">
@@ -928,9 +957,14 @@ class AdminDashboard extends React.Component {
 
 const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
-  resID: navigationReducer.studentResID
+  resID: navigationReducer.studentResID,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
 export default connect(mapStateToProps, {
   updateResidenceID,
+  updateLoadingMessage,
+  updateLoadingController,
 })(AdminDashboard);

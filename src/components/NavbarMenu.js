@@ -637,10 +637,24 @@ class NavbarMenu extends React.Component {
                           this.activeMenutabContainer("AppContainer");
                         }} */
                       >
-                        <i className="icon-home"></i> <span>Dashboard</span>
+                        <i className="icon-pin"></i> <span>Announcement</span>
                       </a>
                     </li>
-                    
+                    { localStorage.getItem('role') == 'admin'
+                    ?
+                    <li className="" id="adminDash">
+                      <a
+                          href="adminDash"
+                          className=""
+                          /* onClick={(e) => {
+                            e.preventDefault();
+                            this.activeMenutabContainer("AppContainer");
+                          }} */
+                        >
+                          <i className="icon-speedometer"></i> <span>Admin Stats</span>
+                        </a>
+                      </li>
+                      : null}
                   <li className="" id={localStorage.getItem('role') == 'admin' ? "students" : "myProfile"}>
                     <a
                         href= {localStorage.getItem('role') == 'admin' ? "students" :"profilev1page"}
@@ -667,25 +681,14 @@ class NavbarMenu extends React.Component {
                           this.activeMenutabContainer("AppContainer");
                         }} */
                       >
-                        <i className="icon-home"></i> <span> {localStorage.getItem('role') == 'admin' ? 'Communication' :"Residence Information"}</span>
+                        <i className= {localStorage.getItem('role') == 'admin' ? 'icon-bubbles' : "icon-home"}></i> <span> {localStorage.getItem('role') == 'admin' ? 'Communication' :"Residence Information"}</span>
                       </a>
                     </li>
 
              { 
                     
                      localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
-                      ? <li className="" id="adminDash">
-                      <a
-                          href="adminDash"
-                          className=""
-                          /* onClick={(e) => {
-                            e.preventDefault();
-                            this.activeMenutabContainer("AppContainer");
-                          }} */
-                        >
-                          <i className="icon-home"></i> <span>Admin Dashboard</span>
-                        </a>
-                      </li>    
+                      ? null    
                   : <li className="" id="Calendar" >
                     <a 
                     style=
