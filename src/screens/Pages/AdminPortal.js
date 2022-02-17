@@ -37,15 +37,14 @@ class AdminDashboard extends React.Component {
     //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
-    }, 5000);
+    }, 6000);
 
     if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
 
     } else {
       setTimeout(() => {
         this.getReport(localStorage.getItem('resID'))
-        this.getGraph(localStorage.getItem('resID'))
-      }, 4000);
+      }, 2000);
     }
 
 
