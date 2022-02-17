@@ -31,6 +31,13 @@ import {
 class AdminDashboard extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
+    this.props.updateLoadingMessage("Loading Data, Please wait...");
+    this.props.updateLoadingController(true);
+
+    //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 5000);
 
     if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
 
