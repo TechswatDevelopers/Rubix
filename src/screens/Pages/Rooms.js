@@ -217,7 +217,7 @@ class RoomAllocation extends React.Component {
                 src={this.props.rubixClientLogo}
                 width="20%"
                 height="20%"
-                alt="Lucid"
+                alt=" "
               />
             </div>
             <p>{this.props.loadingMessage}</p>

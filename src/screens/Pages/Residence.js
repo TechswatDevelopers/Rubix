@@ -177,7 +177,7 @@ class Residence extends React.Component {
                 src={localStorage.getItem('clientLogo')}
                 width="20%"
                 height="20%"
-                alt="Rubix System"
+                alt=" "
               />
             </div>
             <p>{this.props.loadingMessage}</p>

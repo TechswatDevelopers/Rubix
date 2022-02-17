@@ -366,7 +366,7 @@ class Login extends React.Component {
                 src={this.props.rubixClientLogo}
                 width="20%"
                 height="20%"
-                alt="Rubix System"
+                alt=" "
               />
             </div>
             <p>{this.props.loadingMessage}</p>
@@ -523,6 +523,14 @@ class Login extends React.Component {
                             />{" "}
                             Instagram
                           </InstagramLogin>
+                          <span className=" bottom helper-text m-b-10">
+                            <i className="fa fa-lock"></i>{" "}
+                            <a
+                              href={`${process.env.PUBLIC_URL}/forgotpassword`}
+                            >
+                              Forgot password?
+                            </a>
+                          </span>
                         </div>
 
                         <span
@@ -545,14 +553,7 @@ class Login extends React.Component {
                         </span>
 
                         <div className="bottom">
-                          <span className="helper-text m-b-10">
-                            <i className="fa fa-lock"></i>{" "}
-                            <a
-                              href={`${process.env.PUBLIC_URL}/forgotpassword`}
-                            >
-                              Forgot password?
-                            </a>
-                          </span>
+                          
 
                           <span
                             style={{

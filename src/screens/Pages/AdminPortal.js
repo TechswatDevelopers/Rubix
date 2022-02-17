@@ -7,8 +7,9 @@ import DocumentsChart from "../../components/Charts/DocumentsChart";
 import axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import "echarts-gl";
-import StackedAreaChart from "../../components/Charts/StackedAreaChart";
+import LargeScaleAreaChart from "../../components/Charts/LargeScaleAreaChart";
 import echarts from "echarts";
+import { format } from 'date-fns';
 import {updateResidenceID,
   updateLoadingMessage,
   updateLoadingController,
@@ -61,6 +62,7 @@ class AdminDashboard extends React.Component {
     //Load First Donut
     //Load Second Donut
     //this.chartPaymentDonut();
+    
   }
 
   //Initial State
@@ -108,12 +110,31 @@ class AdminDashboard extends React.Component {
         let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
         console.log("Registration per year: ", registrationPerYear)
         let registrationLegend = [], regMonth = [], registrationChartData = [], dataset = []
+
+        var base =  new Date(2022, 1, 1);
+var oneDay = 24 * 3600 * 1000;
+var date = [];
+
+
+/* for (var i = 0; i <= registrationPerYear.length - 1; i++) {
+  var now = format(new Date((base += oneDay)), 'yyyy/MM/dd');
+  date.push(now);
+} */
+/* date.forEach((currentdate, index) => {
+  registrationPerYear.forEach((reg, index)=>{
+    console.log('date: ',  currentdate, "vs", reg.daydate)
+    if(currentdate == reg.daydate){
+      dataset.push(registrationPerYear[index].TotalRegistrationsPerDay)
+    }
+  })
+}) */
         //Populate Graph Info
         registrationPerYear.forEach((registration, index) =>{
           //Add to Legend
          /*  registrationLegend.push(
             registration.dayofweek
           ) */
+            date.push(registration.daydate);
           regMonth.push(
             registration.Month
           )
@@ -121,91 +142,107 @@ class AdminDashboard extends React.Component {
           dataset.push(registration.TotalRegistrationsPerDay)
           
         })
+        console.log("DataSet: ", dataset)
 
         registrationChartData = {
           name: "Students Registered",
           type: "line",
-          stack: "",
-          areaStyle: {},
+          smooth: true,
+          symbol: "none",
+          sampling: "average",
+          itemStyle: {
+            color: "rgb(255, 70, 131)",
+          },
+          areaStyle: {
+            color:
+              (0,
+              0,
+              0,
+              1,
+              [
+                {
+                  offset: 0,
+                  color: "rgba(255, 158, 68,0.2)",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(255, 70, 131)",
+                },
+              ]),
+          },
           data: dataset,
         }
-        console.log('Legend: ', registrationChartData)
-        this.createLineGraph(registrationLegend, registrationChartData)
+        console.log('Legend: ', date)
+        this.createLineGraph(registrationLegend, registrationChartData, date)
       })
     } 
     postData()
   }
 
   //Create Line Graph
-  createLineGraph(legend, series){
-    const LineEchart = {
-      title: {
-        text: "",
-      },
-      color: ["#20c997", "#e83e8c", "#6f42c1", "#ffc107", "#007bff"],
+  createLineGraph(legend, series, date){
+
+    const optionAreaEchart = {
       tooltip: {
         trigger: "axis",
-        axisPointer: {
-          type: "cross",
-          label: {
-            backgroundColor: "#6a7985",
-          },
+        position: function (pt) {
+          return [pt[0], "10%"];
         },
       },
-      legend: legend,
-      toolbox: {
-        // feature: {
-        //     saveAsImage: {}
-        // }
+      title: {
+        left: "center",
+        text: "",
       },
       grid: {
-        left: "3%",
-        right: "1%",
-        bottom: "2%",
-        containLabel: true,
+        top: 10,
+        left: 45,
+        right: 35,
       },
-      xAxis: [
+      toolbox: {
+        show: false,
+        feature: {
+          dataZoom: {
+            yAxisIndex: "none",
+          },
+          restore: {},
+          saveAsImage: {},
+        },
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: date,
+      },
+      yAxis: {
+        type: "value",
+        boundaryGap: [0, "100%"],
+      },
+      dataZoom: [
         {
-          type: "category",
-          boundaryGap: false,
-          axisLabel: {
-            color: "rgba(0,0,0,0.4)",
+          type: "inside",
+          start: 0,
+          end: 100,
+        },
+        {
+          start: 0,
+          end: 10,
+          handleIcon:
+            "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+          handleSize: "80%",
+          handleStyle: {
+            color: "#fff",
+            shadowBlur: 3,
+            shadowColor: "rgba(0, 0, 0, 0.6)",
+            shadowOffsetX: 2,
+            shadowOffsetY: 2,
           },
-          axisLine: {
-            lineStyle: {
-              color: "rgba(0,0,0,0.5)",
-            },
-          },
-          data: [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thersday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-          ],
         },
       ],
-      yAxis: [
-        {
-          type: "value",
-          axisLabel: {
-            color: "rgba(0,0,0,0.4)",
-          },
-          axisLine: {
-            lineStyle: {
-              color: "rgba(0,0,0,0.5)",
-            },
-          },
-          splitLine: {
-            show: false,
-          },
-        },
+      series: [
+        series,
       ],
-      series: series,
     }
-    //this.createChart("LineChart", LineEchart)
+    this.createChart("LineChart", optionAreaEchart)
 
   }
 
@@ -247,6 +284,7 @@ class AdminDashboard extends React.Component {
     }
     this.createChart(attributeID, donut)
   }
+
   //Add Series
   createMultipleSeriesGraph(key, series, attributeID, legend, colors){
     const donut  = {
@@ -340,16 +378,28 @@ class AdminDashboard extends React.Component {
             this.setState({
               resCapacity: totalCapList[0].TotalCapacityPerRes,
             })
+          } else {
+            this.setState({
+              resCapacity: 0,
+            })
           }
           if(bedsTakenList != null && bedsTakenList.length != 0){
             this.setState({
               resBedsAllocated: bedsTakenList[0].TotalbedsTaken,
+            })
+          } else {
+            this.setState({
+              resBedsAllocated: 0,
             })
           }
           if (signedLease != null && signedLease.length != 0){
 
             this.setState({
               signedLease: signedLease[0].lease_agreement_Count,
+            })
+          } else {
+            this.setState({
+              signedLease: 0,
             })
           }
           //Create Student Documents Series Chart
@@ -947,9 +997,9 @@ class AdminDashboard extends React.Component {
     postData().then(()=>{
       //Set timer for loading screen
       setTimeout(() => {
-        this.props.updateLoadingController(false);
         this.getGraph(resID)
-      }, 2000);
+        this.props.updateLoadingController(false);
+      }, 3000);
     })
   }
 
@@ -1055,7 +1105,7 @@ class AdminDashboard extends React.Component {
           </div>
         </div>
       </div>
-                {/* <div className="col-lg-12 col-md-12">
+                <div className="col-lg-12 col-md-12">
         <div className="card" style={{ height: 580, width: "100%", position: "relative" }}>
         <div className="header">
                   <h4>Daily Data</h4>
@@ -1065,9 +1115,10 @@ class AdminDashboard extends React.Component {
                           className="inner"
                           style={{ height: 485, width: "100%", position: "absolute" }}
                         ></div>
+                        {/* <LargeScaleAreaChart/> */}
           
         </div>
-      </div> */}
+      </div>
 
 
     

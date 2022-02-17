@@ -87,13 +87,6 @@ class ProfileV1Page extends React.Component {
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
     console.log("Student Progress: ", this.props.studentProgress)
-    //this.setState({ progress: userProgress });
-    this.getUserBrowser()
-    this.getUserWitnessData()
-    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
-    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
-    const myTime = new Date().toLocaleTimeString('en-ZA')
-    this.setState({ dateAndTime: myDate + myTime })
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
@@ -101,6 +94,13 @@ class ProfileV1Page extends React.Component {
     } else {
       this.loadDocuments(userID)
     }
+    //this.setState({ progress: userProgress });
+    //this.getUserBrowser()
+    this.getUserWitnessData()
+    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({ dateAndTime: myDate + myTime })
   
     //Set tab 
     if(localStorage.getItem('tab') == '' || localStorage.getItem('tab') == null){
@@ -127,7 +127,8 @@ class ProfileV1Page extends React.Component {
   loadDocuments(userID) {
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
-    this.props.updateLoadingMessage("Loading Student Details...");
+    this.props.updateLoadingMessage("Loading Student Documents...");
+    console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
@@ -168,17 +169,19 @@ class ProfileV1Page extends React.Component {
           //Check the lease
           const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
           const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
-          this.checkLease(userID)
+          
         });
 
     };
     fetchData()
     .then(()=>{
+      setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000)
+      this.checkLease(userID)
       this.setDocumentProgress()
       //Set timer for loading screen
-  setTimeout(() => {
-    this.props.updateLoadingController(false);
-  }, 1000);
+  ;
       
     })
     
@@ -389,7 +392,6 @@ class ProfileV1Page extends React.Component {
       })
 
       //Populate Pop Up Event
-      
       this.props.onPresPopUpEvent()
       
     })
@@ -872,7 +874,7 @@ class ProfileV1Page extends React.Component {
         />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt=" " /></div>
             <p>Uploading document...</p>
           </div>
         </div>

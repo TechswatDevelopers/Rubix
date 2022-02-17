@@ -141,7 +141,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     };
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserComments', data, requestOptions)
-      //console.log("Comment Respinse",res.data);
+      console.log("Comment Respinse",res.data);
     }
     getData()
     window.location.reload()
@@ -297,7 +297,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                 src={localStorage.getItem('clientLogo')}
                 width="20%"
                 height="20%"
-                alt="Rubix System"
+                alt=" "
               />
             </div>
             <p>{this.props.loadingMessage}</p>
