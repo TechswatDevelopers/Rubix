@@ -61,9 +61,9 @@ class AdminDashboard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      resCapacity: null,
-      signedLease: null,
-      resBedsAllocated: null,
+      resCapacity: 0,
+      signedLease: 0,
+      resBedsAllocated: 0,
       resStats: [],
       paymentStats: [],
       provinceStats: [],
@@ -226,7 +226,7 @@ class AdminDashboard extends React.Component {
       },
       tooltip: {
         trigger: "item",
-        formatter: "{b} : {c}",
+        formatter: "{b} : {c} Students ({d}%)",
       },
       legend: {
         onClick: function(event, legendItem) {},
@@ -264,7 +264,7 @@ class AdminDashboard extends React.Component {
       },
       tooltip: {
         trigger: "item",
-        formatter: "{b} : {c}",
+        formatter: "{b} : {c} Students ({d}%)",
       },
       legend: {
         onClick:  (e)=> {
@@ -326,11 +326,26 @@ class AdminDashboard extends React.Component {
           localStorage.setItem('resNOKDocs', response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage)
           localStorage.setItem('resLeaseDocs', response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage)
 
-          this.setState({
-            resCapacity: response.data.PostRubixUserData[41].TotalCapacityPerRes,
-            resBedsAllocated: response.data.PostRubixUserData[42].TotalbedsTaken,
-            signedLease: response.data.PostRubixUserData[43].lease_agreement_Count,
-          })
+          let totalCapList = response.data.PostRubixUserData.filter(doc => doc.TotalCapacityPerRes !== undefined)
+          let bedsTakenList = response.data.PostRubixUserData.filter(doc => doc.TotalbedsTaken !== undefined)
+          let signedLease = response.data.PostRubixUserData.filter(doc => doc.lease_agreement_Count !== undefined)
+
+          if(totalCapList != null && totalCapList.length != 0){
+            this.setState({
+              resCapacity: totalCapList[0].TotalCapacityPerRes,
+            })
+          }
+          if(bedsTakenList != null && bedsTakenList.length != 0){
+            this.setState({
+              resBedsAllocated: bedsTakenList[0].TotalbedsTaken,
+            })
+          }
+          if (signedLease != null && signedLease.length != 0){
+
+            this.setState({
+              signedLease: signedLease[0].lease_agreement_Count,
+            })
+          }
           //Create Student Documents Series Chart
           //Add Total Students
 
