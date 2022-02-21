@@ -637,7 +637,7 @@ class NavbarMenu extends React.Component {
                           this.activeMenutabContainer("AppContainer");
                         }} */
                       >
-                        <i className="icon-pin"></i> <span>Announcement</span>
+                        <i className="icon-pin"></i> <span>Announcements</span>
                       </a>
                     </li>
                     { localStorage.getItem('role') == 'admin'
@@ -689,7 +689,9 @@ class NavbarMenu extends React.Component {
                     
                      localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
                       ? null    
-                  : <li className="" id="Calendar" >
+                  : localStorage.getItem('adminLevel') == 1 || localStorage.getItem('adminLevel') == '1' || localStorage.getItem('role') == 'student'
+                  
+                  ? <li className="" id="Calendar" >
                     <a 
                     style=
                     {{
@@ -703,6 +705,7 @@ class NavbarMenu extends React.Component {
                         <i className="icon-calendar"></i> <span>Calendar</span>
                       </a>
                     </li>
+                    : null
                   }
 
                   </ul>

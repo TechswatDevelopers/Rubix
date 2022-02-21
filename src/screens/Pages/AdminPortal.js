@@ -103,46 +103,113 @@ class AdminDashboard extends React.Component {
     }
     console.log("Posted Data: ", data)
 
+    
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
         console.log("Response: ", response)
+
+        //Load data
         let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
-        console.log("Registration per year: ", registrationPerYear)
+        
+        //Load Students Registered
+        //console.log("Registration per year: ", registrationPerYear)
         let registrationLegend = [], regMonth = [], registrationChartData = [], dataset = []
 
-        var base =  new Date(2022, 1, 1);
-var oneDay = 24 * 3600 * 1000;
-var date = [];
+        let statsID = response.data.PostRubixUserData.filter(doc => doc.FileType === "id-document")
+        let statsLease = response.data.PostRubixUserData.filter(doc => doc.FileType === "lease-agreement")
+        let statsNOK = response.data.PostRubixUserData.filter(doc => doc.FileType === "next-of-kin")
+        let statsREG = response.data.PostRubixUserData.filter(doc => doc.FileType === "proof-of-reg")
+        let statsRES = response.data.PostRubixUserData.filter(doc => doc.FileType === "proof-of-res")
 
+        //Datasets
+       let IdDataSets = [], leaseDataSet = [], nokDataSet = [], regDataSet = [], resDataSet = [], documentsLegend =[],
+       IdDataSetsChartData = [],  leaseDataSetChartData = [],  nokDataSetChartData = [],  regDataSetChartData = [],  resDataSetChartData = []
 
-/* for (var i = 0; i <= registrationPerYear.length - 1; i++) {
-  var now = format(new Date((base += oneDay)), 'yyyy/MM/dd');
-  date.push(now);
-} */
-/* date.forEach((currentdate, index) => {
-  registrationPerYear.forEach((reg, index)=>{
-    console.log('date: ',  currentdate, "vs", reg.daydate)
-    if(currentdate == reg.daydate){
-      dataset.push(registrationPerYear[index].TotalRegistrationsPerDay)
-    }
-  })
-}) */
-        //Populate Graph Info
-        registrationPerYear.forEach((registration, index) =>{
-          //Add to Legend
-         /*  registrationLegend.push(
-            registration.dayofweek
-          ) */
-            date.push(registration.daydate);
-          regMonth.push(
-            registration.Month
-          )
-          //Add entry to data  List
-          dataset.push(registration.TotalRegistrationsPerDay)
+       let seriesData = []
+        var base =  new Date(2021, 12, 1).getTime();
+        var base2 =  new Date(2021, 12, 1);
+        var oneDay = 24 * 3600 * 1000;
+        var date = [];
+        var tempdate = [];
+
+        var diff =Math.ceil(Math.abs( new Date() - base2)/oneDay)
+        console.log('Difference: ', diff)
+        
+
+        for (var i = 1; i <= diff; i++) {
+          var now =  new Date(base += oneDay);
+          var newDate = format(now, 'yyyy/MM/dd')
+          tempdate.push(newDate)
           
+        }
+
+        //For each date add all relevant Data
+        tempdate.forEach((currentDate, index) => {
+          //Load Registration Stats
+          let tempStudents = registrationPerYear.filter(doc => doc.daydate == currentDate)
+          if(tempStudents != null && tempStudents != undefined && tempStudents.length != 0){
+            //console.log("It's a match!", tempStudents)
+            dataset.push(tempStudents[0].TotalRegistrationsPerDay)
+          } else {
+            //console.log("It's NOT a match!", tempStudents)
+            dataset.push(0)
+          }
+
+
+          //Load ID Documents
+          let tempID = statsID.filter(doc => doc.Documnetdaydate == currentDate)
+          if(tempID != null && tempID != undefined && tempID.length != 0){
+            //console.log("It's a match!", tempID)
+            IdDataSets.push(tempID[0].DocumentCountPerDayPerTypePerDay)
+          } else {
+            //console.log("It's NOT a match!", tempID)
+            IdDataSets.push(0)
+          }
+
+          //Load Lease Documents
+          let tempLease = statsLease.filter(doc => doc.Documnetdaydate == currentDate)
+          if(tempLease != null && tempLease != undefined && tempLease.length != 0){
+            //console.log("It's a match!", tempID)
+            leaseDataSet.push(tempLease[0].DocumentCountPerDayPerTypePerDay)
+          } else {
+            //console.log("It's NOT a match!", tempID)
+            leaseDataSet.push(0)
+          }
+
+          //Load Next of Kin ID Documents
+          let tempNOK = statsNOK.filter(doc => doc.Documnetdaydate == currentDate)
+          if(tempNOK != null && tempNOK != undefined && tempNOK.length != 0){
+            //console.log("It's a match!", tempID)
+            nokDataSet.push(tempNOK[0].DocumentCountPerDayPerTypePerDay)
+          } else {
+            //console.log("It's NOT a match!", tempID)
+            nokDataSet.push(0)
+          }
+
+          //Load Proof of Registration Documents
+          let tempREG = statsREG.filter(doc => doc.Documnetdaydate == currentDate)
+          if(tempREG != null && tempREG != undefined && tempREG.length != 0){
+            //console.log("It's a match!", tempID)
+            regDataSet.push(tempREG[0].DocumentCountPerDayPerTypePerDay)
+          } else {
+            //console.log("It's NOT a match!", tempID)
+            regDataSet.push(0)
+          }
+
+          //Load Proof of Residence Documents
+          let tempRES = statsRES.filter(doc => doc.Documnetdaydate == currentDate)
+          if(tempRES != null && tempRES != undefined && tempRES.length != 0){
+            //console.log("It's a match!", tempID)
+            resDataSet.push(tempRES[0].DocumentCountPerDayPerTypePerDay)
+          } else {
+            //console.log("It's NOT a match!", tempID)
+            resDataSet.push(0)
+          }
         })
-        console.log("DataSet: ", dataset)
+
+      
+        //Populate Registration Graph Info
 
         registrationChartData = {
           name: "Students Registered",
@@ -154,29 +221,110 @@ var date = [];
             color: "rgb(255, 70, 131)",
           },
           areaStyle: {
-            color:
-              (0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: "rgba(255, 158, 68,0.2)",
-                },
-                {
-                  offset: 1,
-                  color: "rgba(255, 70, 131)",
-                },
-              ]),
           },
           data: dataset,
         }
-        console.log('Legend: ', date)
-        this.createLineGraph(registrationLegend, registrationChartData, date)
+        seriesData.push(registrationChartData)
+        documentsLegend.push('Students Registered')
+        
+        //Add Documents to lists
+        
+        IdDataSetsChartData = {
+          name: "Student ID Documents",
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          sampling: "average",
+          itemStyle: {
+            color: "rgb(255, 171, 0)",
+          },
+          areaStyle: {
+          },
+          data: IdDataSets,
+        }
+        seriesData.push(IdDataSetsChartData)
+        documentsLegend.push('Student ID Documents')
+
+
+
+       
+        leaseDataSetChartData = {
+          name: "Lease Documents",
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          sampling: "average",
+          itemStyle: {
+            color: "rgb(76, 0, 153)",
+          },
+          areaStyle: {
+          },
+          data: leaseDataSet,
+        }
+        seriesData.push(leaseDataSetChartData)
+        documentsLegend.push('Lease Documents')
+
+        
+        nokDataSetChartData = {
+          name: "Next of Kin ID",
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          sampling: "average",
+          itemStyle: {
+            color: "rgb(47, 80, 243)",
+          },
+          areaStyle: {
+          },
+          data: nokDataSet,
+        }
+        seriesData.push(nokDataSetChartData)
+        documentsLegend.push('Next of Kin ID')
+        
+
+        regDataSetChartData = {
+          name: "Proof of Registration",
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          sampling: "average",
+          itemStyle: {
+            color: "rgb(224, 243, 47)",
+          },
+          areaStyle: {
+          },
+          data: regDataSet,
+        }
+        seriesData.push(regDataSetChartData)
+        documentsLegend.push('Proof of Registration')
+
+        
+        resDataSetChartData = {
+          name: "Proof of Residence",
+          type: "line",
+          smooth: true,
+          symbol: "none",
+          sampling: "average",
+          itemStyle: {
+            color: "rgb(6, 229, 66)",
+          },
+          areaStyle: {
+          },
+          data: resDataSet,
+        }
+        seriesData.push(resDataSetChartData)
+        documentsLegend.push('Proof of Residence')
+        
+        this.createLineGraph(documentsLegend, seriesData, tempdate)
       })
     } 
-    postData()
+    if(resID == 0 || resID == 'Please Select Residence'){
+      this.props.updateLoadingController(false);
+      
+    } else {
+      postData()
+
+    }
   }
 
   //Create Line Graph
@@ -194,10 +342,11 @@ var date = [];
         text: "",
       },
       grid: {
-        top: 10,
+        top: 30,
         left: 45,
         right: 35,
       },
+      legend: {data:legend},
       toolbox: {
         show: false,
         feature: {
@@ -238,9 +387,7 @@ var date = [];
           },
         },
       ],
-      series: [
-        series,
-      ],
+      series: series,
     }
     this.createChart("LineChart", optionAreaEchart)
 
@@ -994,13 +1141,19 @@ var date = [];
 
         })
     }
-    postData().then(()=>{
-      //Set timer for loading screen
-      setTimeout(() => {
-        this.getGraph(resID)
-        this.props.updateLoadingController(false);
-      }, 3000);
-    })
+    if (resID == 0 || resID == 'Please Select Residence'){
+      this.props.updateLoadingController(false);
+
+    } else {
+      postData().then(()=>{
+        //Set timer for loading screen
+        setTimeout(() => {
+          this.getGraph(resID)
+          this.props.updateLoadingController(false);
+        }, 3000);
+      })
+    }
+    
   }
 
   render() {
