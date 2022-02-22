@@ -24,7 +24,9 @@ import {
   ON_NOK_PROGRESS,
   ON_NOK_MESSAGE,
   ON_REG_PROGRESS,
+  ON_LEASE_PROGRESS,
   ON_REG_MESSAGE,
+  ON_LEASE_MESSAGE,
   ON_RES_PROGRESS,
   ON_RES_MESSAGE,
   ON_ID_PROGRESS,
@@ -70,6 +72,9 @@ const initialState = {
 
   proofOfResProgress: '0',
   proofOfResMessage: '',
+
+  leaseProgress: '0',
+  leaseMessage: '',
 
   proofOfRegProgress: '0',
   nextOfKinProgress: '0',
@@ -578,6 +583,21 @@ export default (state = initialState, action) => {
       return {
         ...state,
         proofOfRegMessage: action.payload,
+      };
+    }
+
+    //Lease Document Progress and Message
+    case ON_LEASE_PROGRESS: {
+      return {
+        ...state,
+        leaseProgress: action.payload,
+      };
+    }
+    
+    case ON_LEASE_MESSAGE: {
+      return {
+        ...state,
+        leaseMessage: action.payload,
       };
     }
 

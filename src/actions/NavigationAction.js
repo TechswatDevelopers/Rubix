@@ -40,12 +40,14 @@ export const ON_NOK_PROGRESS = "navigationReducer/ON_NOK_PROGRESS";
 export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
 export const ON_RES_PROGRESS = "navigationReducer/ON_RES_PROGRESS";
 export const ON_ID_PROGRESS = "navigationReducer/ON_ID_PROGRESS";
+export const ON_LEASE_PROGRESS = "navigationReducer/ON_LEASE_PROGRESS";
 
 
 export const ON_ID_MESSAGE = "navigationReducer/ON_ID_MESSAGE";
 export const ON_RES_MESSAGE = "navigationReducer/ON_RES_MESSAGE";
 export const ON_REG_MESSAGE = "navigationReducer/ON_REG_MESSAGE";
 export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
+export const ON_LEASE_MESSAGE = "navigationReducer/ON_LEASE_MESSAGE";
 
 
 export const UPDATE_STUDENT_INDEX = "navigationReducer/UPDATE_STUDENT_INDEX";
@@ -196,6 +198,21 @@ export const onUpdateNOKProgress = (val) => (dispatch) => {
 export const onUpdateNOKMessage = (val) => (dispatch) => {
   dispatch({
     type: ON_NOK_MESSAGE,
+    payload: val,
+  });
+};
+
+//Next of Kin Progress Update and Message
+export const onUpdateLeaseProgress = (val) => (dispatch) => {
+  dispatch({
+    type: ON_LEASE_PROGRESS,
+    payload: val,
+  });
+};
+
+export const onUpdateLeaseMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_LEASE_MESSAGE,
     payload: val,
   });
 };

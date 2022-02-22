@@ -21,6 +21,8 @@ import {onPresPopUpEvent, onPresPopUpConfirm,
   onUpdateRESMessage,
   onUpdateIDMessage,
   updateLoadingMessage,
+  onUpdateLeaseProgress,
+  onUpdateLeaseMessage,
   updateLoadingController,} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
@@ -420,12 +422,14 @@ class ProfileV1Page extends React.Component {
     this.props.onUpdateRESProgress(0)
     this.props.onUpdateREGProgress(0)
     this.props.onUpdateNOKProgress(0)
+    this.props.onUpdateLeaseProgress(0)
 
     //Reset Messages
     this.props.onUpdateIDMessage(this.setMessage(0))
     this.props.onUpdateRESMessage(this.setMessage(0))
     this.props.onUpdateREGMessage(this.setMessage(0))
     this.props.onUpdateNOKMessage(this.setMessage(0))
+    this.props.onUpdateLeaseMessage(this.setMessage(0))
   }
 
   
@@ -456,18 +460,7 @@ class ProfileV1Page extends React.Component {
           console.log("document progress", response)
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
-          //Set local storage to default values
-          /* localStorage.setItem('idProgress', 0)
-          localStorage.setItem('proofOfResProgress', 0)
-          localStorage.setItem('proofOfRegProgress', 0)
-          localStorage.setItem('nextOfKinProgress', 0)
-
-          localStorage.setItem('idProgressMsg', 'No document uploaded')
-          localStorage.setItem('proofOfResProgressMsg', 'No document uploaded')
-          localStorage.setItem('proofOfRegProgressMsg', 'No document uploaded')
-          localStorage.setItem('nextOfKinProgressMsg', 'No document uploaded')
- */
-
+         
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
               case 'id-document': {
@@ -492,6 +485,12 @@ class ProfileV1Page extends React.Component {
                 //console.log('its a next of kin')
                 this.props.onUpdateNOKProgress(temp[i].Percentage)
                 this.props.onUpdateNOKMessage(this.setMessage(temp[i].Percentage))
+              }
+                break;
+              case "lease-agreement": {
+                //console.log('its a lease')
+                this.props.onUpdateLeaseProgress(temp[i].Percentage)
+                this.props.onUpdateLeaseMessage(this.setMessage(temp[i].Percentage))
               }
               
             }
@@ -530,6 +529,11 @@ class ProfileV1Page extends React.Component {
         {
           progress = this.props.nokProgress
         }
+        break;
+      case "lease-agreement":
+        {
+          progress = this.props.myLeaseProgress
+        }
     }
     return progress
   }
@@ -557,6 +561,11 @@ class ProfileV1Page extends React.Component {
       case 'next-of-kin':
         {
           message = this.props.nokMessage
+        }
+        break;
+      case 'lease-agreement':
+        {
+          message = this.props.myLeaseMessage
         }
     }
     return message
@@ -617,59 +626,6 @@ class ProfileV1Page extends React.Component {
     getData()
     
   }
-
-  //Get user browser information
-  getUserBrowser() {
-    var browser
-    // Opera 8.0+
-    var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    console.log("Opera:", isOpera)
-    // Firefox 1.0+
-    var isFirefox = typeof InstallTrigger !== 'undefined';
-    console.log("Firefox:", isFirefox)
-
-    // Safari 3.0+ "[object HTMLElementConstructor]" 
-    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] /* || (typeof safari !== 'undefined' && safari.pushNotification) */);
-    console.log("Safari:", isSafari)
-
-    // Internet Explorer 6-11
-    var isIE = /*@cc_on!@*/false || !!document.documentMode;
-    console.log("Internet Explorer:", isIE)
-
-    // Edge 20+
-    var isEdge = !isIE && !!window.StyleMedia;
-    console.log("Edge:", isEdge)
-
-    // Chrome 1 - 71
-    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    console.log("Chrome:", isChrome)
-
-    // Blink engine detection
-    var isBlink = (isChrome || isOpera) && !!window.CSS;
-    console.log("Blink:", isBlink)
-
-    if (isChrome) {
-      this.setState({ userBrowser: 'Chrome' })
-      console.log("is chrome", isChrome)
-    }
-    else if (isEdge) {
-      this.setState({ userBrowser: 'Edge' })
-    }
-    else if (isIE) {
-      this.setState({ userBrowser: 'Internet Explorer' })
-    }
-    else if (isSafari) {
-      this.setState({ userBrowser: 'Safari' })
-    }
-    else if (isFirefox) {
-      this.setState({ userBrowser: 'Firefox' })
-    }
-    else if (isOpera) {
-      this.setState({ userBrowser: 'Opera' })
-    }
-
-  }
-
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
@@ -746,10 +702,10 @@ class ProfileV1Page extends React.Component {
     let message
     switch (percent) {
       case 0, '0':
-        message = 'No document uploaded'
+        message = 'No Document Uploaded'
         break
       case 50, '50':
-        message = 'Pending validation'
+        message = 'Pending Vetting'
         break
       case 100, '100':
         message = 'Approved'
@@ -1181,6 +1137,9 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
 
   nokProgress: navigationReducer.nextOfKinProgress,
   nokMessage: navigationReducer.nextOfKinMessage,
+
+  myLeaseProgress: navigationReducer.leaseProgress,
+  myLeaseMessage: navigationReducer.leaseMessage,
   
   showLease: mailInboxReducer.isShowLease,
 
@@ -1201,4 +1160,6 @@ export default connect(mapStateToProps, {
   onUpdateIDMessage,
   updateLoadingMessage,
   updateLoadingController,
+  onUpdateLeaseProgress,
+  onUpdateLeaseMessage,
 })(ProfileV1Page);

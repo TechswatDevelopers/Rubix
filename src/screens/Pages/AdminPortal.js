@@ -320,6 +320,7 @@ class AdminDashboard extends React.Component {
     } 
     if(resID == 0 || resID == 'Please Select Residence'){
       this.props.updateLoadingController(false);
+      window.location.reload();
       
     } else {
       postData()
@@ -432,6 +433,35 @@ class AdminDashboard extends React.Component {
     this.createChart(attributeID, donut)
   }
 
+
+
+  //Add Series
+  createStatsSeriesGraph(key, series, attributeID, legend){
+    const donut  = {
+      title: {
+        text: key,
+        x: "center",
+        y: "center",
+        textStyle: {
+          color: "rgb(0, 0, 0)",
+          fontFamily: "Arial",
+          fontSize: 35,
+          fontWeight: "bolder",
+        },
+      },
+      //color: colors,
+      grid: {
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+      },
+     
+      series: series,
+    }
+    this.createChart(attributeID, donut)
+  }
+
   //Add Series
   createMultipleSeriesGraph(key, series, attributeID, legend, colors){
     const donut  = {
@@ -522,15 +552,92 @@ class AdminDashboard extends React.Component {
           let signedLease = response.data.PostRubixUserData.filter(doc => doc.lease_agreement_Count !== undefined)
 
           if(totalCapList != null && totalCapList.length != 0){
+            //Create Total Capacity Pie Chart
+            let tempStatsLegendList = []
+          const tempData = [
+            {
+              value: totalCapList[0].TotalCapacityPerRes,
+              name: 'Total Residence Capacity',
+              itemStyle: {
+                color: "rgba(255, 255, 255)",
+                emphasis: {
+                  color: "rgba(255, 255, 255)",
+                },
+              },
+            },
+           
+          ]
+         var totalCapSeries = 
+              {
+                type: "pie",
+                startAngle: 270,
+                clockWise: 1,
+                radius: [0, 30],
+                itemStyle: {
+                  normal: {
+                    label: { show: false },
+                    labelLine: { show: false },
+                  },
+                },
+                data: tempData,
+                emphasis: {
+                  itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: "rgba(0, 0, 0, 0.2)",
+                  },
+                },
+              }
             this.setState({
               resCapacity: totalCapList[0].TotalCapacityPerRes,
             })
+
           } else {
+
             this.setState({
               resCapacity: 0,
             })
           }
+          this.createStatsSeriesGraph(this.state.resCapacity, totalCapSeries, 'totalCap', ['Total Capacity'])
+
+
+
           if(bedsTakenList != null && bedsTakenList.length != 0){
+            //Create Beds Allocated Pie Chart
+            const bedsAllocStats = [
+              {
+                value: bedsTakenList[0].TotalbedsTaken,
+                name: 'Total Beds Allocated',
+                itemStyle: {
+                  color: "rgba(255, 255, 255)",
+                  emphasis: {
+                    color: "rgba(255, 255, 255)",
+                  },
+                },
+              },
+             
+            ]
+           var bedsAllocSeries = 
+                {
+                  type: "pie",
+                  startAngle: 270,
+                  clockWise: 1,
+                  radius: [0, 30],
+                  itemStyle: {
+                    normal: {
+                      label: { show: false },
+                      labelLine: { show: false },
+                    },
+                  },
+                  data: bedsAllocStats,
+                  emphasis: {
+                    itemStyle: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: "rgba(0, 0, 0, 0.2)",
+                    },
+                  },
+                }
             this.setState({
               resBedsAllocated: bedsTakenList[0].TotalbedsTaken,
             })
@@ -539,8 +646,45 @@ class AdminDashboard extends React.Component {
               resBedsAllocated: 0,
             })
           }
-          if (signedLease != null && signedLease.length != 0){
+          this.createStatsSeriesGraph(this.state.resBedsAllocated, bedsAllocSeries, 'bedsAlloc', ['Beds Allocated'])
 
+
+          if (signedLease != null && signedLease.length != 0){
+            //Create leases Signed Pie Chart
+            const LeaseSignedStats = [
+              {
+                value: signedLease[0].lease_agreement_Count,
+                name: 'Total Signed Leases',
+                itemStyle: {
+                  color: "rgba(255, 255, 255)",
+                  emphasis: {
+                    color: "rgba(255, 255, 255)",
+                  },
+                },
+              },
+             
+            ]
+           var leaseSeries =
+                {
+                  type: "pie",
+                  startAngle: 270,
+                  clockWise: 1,
+                  radius: [0, 30],
+                  itemStyle: {
+                    normal: {
+                      label: { show: false },
+                      labelLine: { show: false },
+                    },
+                  },
+                  data: LeaseSignedStats,
+                  emphasis: {
+                    itemStyle: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: "rgba(0, 0, 0, 0.2)",
+                    },
+                  },
+                }
             this.setState({
               signedLease: signedLease[0].lease_agreement_Count,
             })
@@ -549,6 +693,14 @@ class AdminDashboard extends React.Component {
               signedLease: 0,
             })
           }
+          this.createStatsSeriesGraph(this.state.signedLease, leaseSeries, 'signedLease', ['Signed Lease'])
+
+
+
+
+
+
+
           //Create Student Documents Series Chart
           //Add Total Students
 
@@ -1143,6 +1295,7 @@ class AdminDashboard extends React.Component {
     }
     if (resID == 0 || resID == 'Please Select Residence'){
       this.props.updateLoadingController(false);
+      window.location.reload();
 
     } else {
       postData().then(()=>{
@@ -1155,6 +1308,7 @@ class AdminDashboard extends React.Component {
     }
     
   }
+
 
   render() {
     return (
@@ -1215,17 +1369,20 @@ class AdminDashboard extends React.Component {
                 <div className="p-4">
                   <h4>Residence Stats</h4>
                   <div className="row">
-                    <div className="card p-2 m-2 col-lg-2 col-md-2">
+                    <div className="card p-2 m-2 col-lg-2 col-md-2" style={{ height: 120, width: "100%", position: "relative" }}>
                       <strong>Total Capacity:</strong>
-                      <p style={{fontSize: "60px"}}>{this.state.resCapacity}</p>
+                      <div id="totalCap" style={{ height: 85, width: "100%", position: "absolute" }}></div>
+                     {/*  <p style={{fontSize: "60px"}}>{this.state.resCapacity}</p> */}
                     </div>
-                    <div className="card p-2 m-2 col-lg-2 col-md-2">
+                    <div className="card p-2 m-2 col-lg-2 col-md-2" style={{ height: 120, width: "100%", position: "relative" }}>
                       <strong>Beds Allocated:</strong>
-                      <p style={{fontSize: "60px"}}>{this.state.resBedsAllocated}</p>
+                      <div id="bedsAlloc" style={{ height: 85, width: "100%", position: "absolute" }}></div>
+                     {/*  <p style={{fontSize: "60px"}}>{this.state.resBedsAllocated}</p> */}
                     </div>
-                    <div className="card p-2 m-2 col-lg-2 col-md-2">
+                    <div className="card p-2 m-2 col-lg-2 col-md-2" style={{ height: 120, width: "100%", position: "relative" }}>
                       <strong>Signed Leases:</strong>
-                      <p style={{fontSize: "60px"}}>{this.state.signedLease}</p>
+                      <div id="signedLease" style={{ height: 85, width: "100%", position: "absolute" }}></div>
+                     {/*  <p style={{fontSize: "60px"}}>{this.state.signedLease}</p> */}
                     </div>
                   </div>
                 </div>
