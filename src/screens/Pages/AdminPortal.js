@@ -695,12 +695,6 @@ class AdminDashboard extends React.Component {
           }
           this.createStatsSeriesGraph(this.state.signedLease, leaseSeries, 'signedLease', ['Signed Lease'])
 
-
-
-
-
-
-
           //Create Student Documents Series Chart
           //Add Total Students
 
@@ -1365,6 +1359,10 @@ class AdminDashboard extends React.Component {
                 }
               </div>
 
+
+
+{ this.state.isShow
+? <>
               <div className="col-lg-12 col-md-12">
                 <div className="p-4">
                   <h4>Residence Stats</h4>
@@ -1429,8 +1427,9 @@ class AdminDashboard extends React.Component {
           
         </div>
       </div>
-
-
+</>
+: null
+}
     
 
             </div>

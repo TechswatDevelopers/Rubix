@@ -126,12 +126,19 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
   }
 
   //Submit Comment
-  submitComment(mesageID) {
+  submitComment(mesageID, e, message) {
+    let id
+    if(localStorage.getItem('role') === 'admin'){
+      id = message.RubixRegisterAdminID
+    } else {
+      id = localStorage.getItem('userID')
+    }
+    e.preventDefault()
     const comment = document.getElementById('comment').value;
     const data = {
       'UserComments': comment,
       'RubixRegisterUserMessageID': mesageID,
-      'RubixRegisterUserID': localStorage.getItem('userID')
+      'RubixRegisterUserID': id
     }
     const requestOptions = {
       title: 'Post Comment Form',
@@ -139,12 +146,13 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
+    console.log("Data: ", data)
     const getData = async () => {
       const res = await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserComments', data, requestOptions)
       console.log("Comment Respinse",res.data);
     }
     getData()
-    window.location.reload()
+   window.location.reload()
   }
 
   //Load Comments from DB
@@ -234,7 +242,8 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     }
 
   //Post Like
-  postLike(postID) {
+  postLike(postID, e) {
+    e.preventDefault()
     let liked;
     if (this.state.liked) {
       liked = '0'
@@ -352,9 +361,12 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                         <span>
                           {this.splitString(message.UserMessage)}
                         </span>
-                        <a onClick={() => { this.postLike(message.RubixRegisterUserMessageID) }} className="m-r-20">
+                        { localStorage.getItem('role') === 'admin'
+                        ? null
+                          
+                         : <a onClick={(e) => { this.postLike(message.RubixRegisterUserMessageID, e) }} className="m-r-20">
                           <i className="icon-heart" style={{color: this.state.liked ? 'red' : 'black'}}></i> {this.state.liked ? 'Unlike' : 'Like'}
-                        </a>
+                        </a>}
                         <a
                           role="button"
                           data-toggle="collapse"
@@ -382,7 +394,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                                   id="comment"
                                 ></textarea>
                               </div>
-                              <button className="btn btn-primary" onClick={() => { this.submitComment(message.RubixRegisterUserMessageID) }}>
+                              <button className="btn btn-primary" onClick={(e) => { this.submitComment(message.RubixRegisterUserMessageID, e, message) }}>
                                 Submit
                               </button>
                             </form>
