@@ -1,6 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign, onPresRooms, onPresPopUpRemove } from "../actions";
+import { onPresAddEvent, onPresPopUpEvent, 
+  onPresPopUpAssign, onPresRooms, 
+  onPresPopUpRemove,updateLoadingMessage,
+  updateLoadingController} from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -23,9 +26,11 @@ componentDidMount() {
     this.setState({ dateAndTime: myDate + myTime })
 }
 
-
-  //Send Vetted status
+//Send Vetted status
   assignRoom(roomID){
+    
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Assigning to room...");
    
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
@@ -55,6 +60,7 @@ componentDidMount() {
 
     //Send Auditted status
     sendAuttingStatus(roomID){
+      this.props.updateLoadingMessage("Sending Audit Data..");
       const data = {
         'UserCode':  localStorage.getItem('userCode'),
         'RubixRegisterUserID': this.props.currentStudentiD,
@@ -90,6 +96,7 @@ componentDidMount() {
     
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
+    this.props.updateLoadingMessage("Uploading Lease Document...");
     
     const postDocument = async () => {
       const data = new FormData()
@@ -113,10 +120,11 @@ componentDidMount() {
     }
     postDocument().then(() => {
       //alert("Document uploaded successfully")
-      this.setState({
-        isLoad: false
-      })
+      //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
       this.props.onPresPopUpEvent()
+    }, 3000);
       window.location.reload()
       
       
@@ -147,6 +155,7 @@ componentDidMount() {
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
+    this.props.updateLoadingMessage("Generating Lease...");
     //console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
@@ -201,6 +210,22 @@ componentDidMount() {
         className={isPopUpAssign ? "modal fade show" : "modal fade"}
         role="dialog"
       >
+        <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt=" "
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -248,6 +273,17 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isPopUpAssign: mailInboxReducer.isShowAssignModal,
   isPopUpRemove: mailInboxReducer.isShowRemoveModal,
   currentStudentiD: navigationReducer.studentID,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign, onPresRooms, onPresPopUpRemove  })(PopUpAssign);
+export default connect(mapStateToProps, { 
+  onPresAddEvent, 
+  onPresPopUpEvent, 
+  onPresPopUpAssign, 
+  onPresRooms, 
+  onPresPopUpRemove,
+  updateLoadingMessage,
+  updateLoadingController,
+  })(PopUpAssign);
