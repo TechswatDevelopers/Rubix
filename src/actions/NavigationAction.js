@@ -20,6 +20,7 @@ export const UPDATE_CLIENTID = "navigationReducer/UPDATE_CLIENTID";
 export const UPDATE_STUDENTID = "navigationReducer/UPDATE_STUDENTID";
 export const UPDATE_CLIENTNAME = "navigationReducer/UPDATE_CLIENTNAME";
 export const UPDATE_CLIENTLOGO = "navigationReducer/UPDATE_CLIENTLOGO";
+export const UPDATE_CLIENTBG = "navigationReducer/UPDATE_CLIENTBG";
 
 export const ON_UPDATE_PROGRESS_BAR = "navigationReducer/ON_UPDATE_PROGRESS_BAR";
 export const ON_STUDENT_RUBIX_ID = "navigationReducer/ON_STUDENT_RUBIX_ID";
@@ -395,10 +396,16 @@ export const updateLoadingController = (val)=>(disptch) =>{
 
 //Update Client Logo
 export const updateClientLogo = (val)=>(disptch) =>{
-  //console.log("Dispatch action is called with value ", val);
-  // alert("Hello Monkey");
   disptch({
     type:UPDATE_CLIENTLOGO,
+    payload: val,
+  })
+};
+
+//Update BackGround Image
+export const updateClientBackG = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_CLIENTBG,
     payload: val,
   })
 };

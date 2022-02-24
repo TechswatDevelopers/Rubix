@@ -41,6 +41,7 @@ import {
   UPDATE_STUDENT_INDEX,
   UPDATE_LOADING_MSG,
   UPDATE_LOADING_CONTROLLER,
+  UPDATE_CLIENTBG,
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -80,6 +81,8 @@ const initialState = {
   nextOfKinProgress: '0',
 
   studentIndex: null,
+
+  backImage: "",
 
   loadingMessage: '',
   loadingController: false,
@@ -623,12 +626,22 @@ export default (state = initialState, action) => {
       }
     }
 
+    //Uppdate Client Logo
     case UPDATE_CLIENTLOGO: {
       return{
         ...state,
         clientLogo: action.payload,
       }
     }
+
+    //Uppdate Client Backgroun Image
+    case UPDATE_CLIENTBG: {
+      return{
+        ...state,
+        backImage: action.payload,
+      }
+    }
+
 //Update Student Number
     case UPDATE_STUDENTID: {
       return{

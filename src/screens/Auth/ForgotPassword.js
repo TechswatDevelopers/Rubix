@@ -3,8 +3,13 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Logo from "../../assets/images/logo-white.svg";
 import axios from "axios";
+import {Helmet} from "react-helmet";
 import { updateEmail, updatePassword,onLoggedin, updateUserID, 
-  updateClientID,onPressThemeColor,updateClientName, updateClientLogo, onPresPopUpEvent } from "../../actions";
+  updateClientID,onPressThemeColor,updateClientName, 
+  updateClientLogo, onPresPopUpEvent,
+  updateLoadingMessage,
+  updateLoadingController,
+  updateClientBackG, } from "../../actions";
   import PopUpModal from "../../components/PopUpModal"
 
 class ForgotPassword extends React.Component {
@@ -26,7 +31,7 @@ class ForgotPassword extends React.Component {
 
   componentDidMount(){
     console.log("Theme Color:", this.props.rubixThemeColor)
-
+    this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({currentLogo: localStorage.getItem('clientLogo')})
     this.setState({clientName: localStorage.getItem('clientName')})
     this.setState({loginLink: "login/" + localStorage.getItem('clientID')})
@@ -85,6 +90,10 @@ class ForgotPassword extends React.Component {
   render() {
     return (
       <div className={this.props.rubixThemeColor}>
+      <Helmet>
+              <meta charSet="utf-8" />
+              <title>Forgot Password</title>
+          </Helmet>
         <div >
         <PopUpModal 
         Title= {this.state.title}
@@ -92,12 +101,21 @@ class ForgotPassword extends React.Component {
         Function = {()=>this.state.errorTest ? this.props.history.push("/login/" + localStorage.getItem('clientID')) :null}
         />
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+                backgroundImage: "url(" + this.props.clientBG + ")",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "100% !important",
+                height: "100% !important",
+              }}
+            >
               <div className="auth-box">
                 <div className="card">
                   <div className="header">
                   <div className="top">
-                  <img src={this.state.currentLogo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+                  <img src={this.state.currentLogo} alt="" style={{  height: "40%",  width:"44%", }} />
                 </div>
                     <p className="lead">Recover my password</p>
                   </div>
@@ -141,9 +159,18 @@ const mapStateToProps = ({ navigationReducer, loginReducer, mailInboxReducer }) 
   rubixClientName: navigationReducer.clientName,
   rubixClientLogo: navigationReducer.clientLogo,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+  
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
+
+  clientBG: navigationReducer.backImage,
 });
 
 export default connect(mapStateToProps, {
   onPressThemeColor,
-  onPresPopUpEvent
+  onPresPopUpEvent,
+  updateLoadingMessage,
+  updateLoadingController,
+  updateClientBackG,
 })(ForgotPassword);

@@ -4,7 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
-import { updateEmail, updatePassword, updateUserID, updatePlatformID, updateStudentID } from "../../actions";
+import {Helmet} from "react-helmet";
+import {updateEmail, 
+  updatePassword, 
+  updateUserID, updatePlatformID,
+   updateStudentID,
+   updateLoadingMessage,
+   updateLoadingController,
+   updateClientBackG  } from "../../actions";
 
 class PersonalInformation extends React.Component {
   constructor(props) {
@@ -98,6 +105,9 @@ class PersonalInformation extends React.Component {
   //final submit check
   Submit(e) {
     e.preventDefault();
+    //Set Loading Screen ON
+ this.props.updateLoadingController(true);
+ this.props.updateLoadingMessage("Submitting Information...");
     //console.log("User email:", this.props.email)
     var idNumber = document.getElementById("IDNumber").value;
     var email = document.getElementById("email").value;
@@ -121,30 +131,31 @@ class PersonalInformation extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
             await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 this.props.updateStudentID(idNumber)
                 localStorage.setItem('studentIDNo', idNumber)
                 localStorage.setItem('studentEmail', email)
                 localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
-                this.props.history.push("/addresses")
+                //Set timer for loading screen
+                setTimeout(() => {
+                  this.props.updateLoadingController(false);
+                  this.props.history.push("/addresses")
+                }, 1000);
                 
             })
                 
         } else{
+            this.props.updateLoadingController(false)
           alert("Please ensure that you entered all required information")
         }
     }
     postData()
-    /* setTimeout(() => {
-      this.postStatus()
-    }, 5000); */
-
   }
 
   //On Page load complete
@@ -156,9 +167,13 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
 
-    console.log('platform ID', localStorage.getItem('platformID'))
+    this.props.updateClientBackG(localStorage.getItem('clientBG'))
+    //console.log('platform ID', localStorage.getItem('platformID'))
     //Fetch Data
     const fetchData = async () => {
+       //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Countries List...");
       //Fetch Countries List
       await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
       .then(response => response.json())
@@ -169,18 +184,54 @@ class PersonalInformation extends React.Component {
           //setCountryList(data.data)
         });
     }
-    fetchData()
+    fetchData().then(()=>{
+      //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
+    })
   }
+  
   render() {
     return (
       <div className="theme-green">
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>Personal Information</title>
+            </Helmet>
+        <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt=" "
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+
         <div >
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+                backgroundImage: "url(" + this.props.clientBG + ")",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "100% !important",
+                height: "100% !important",
+              }}
+            >
               <div className="auth-box">
                 <div className="card">
                   <div className="top">
-                    <img src={localStorage.getItem('clientLogo')} alt="user profile picture" style={{ 
+                    <img src={localStorage.getItem('clientLogo')} alt="" style={{ 
                       height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
@@ -337,7 +388,12 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   rubixUserID: navigationReducer.userID,
   rubixPlatformID: navigationReducer.rubixPlatformID,
   email: loginReducer.email,
-  password: loginReducer.password
+  password: loginReducer.password,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
+
+  clientBG: navigationReducer.backImage,
 });
 
 export default connect(mapStateToProps, {
@@ -346,4 +402,7 @@ export default connect(mapStateToProps, {
   updatePlatformID,
   updatePassword,
   updateEmail,
+  updateLoadingMessage,
+  updateLoadingController,
+  updateClientBackG,
 })(PersonalInformation);

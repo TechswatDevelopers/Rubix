@@ -2,10 +2,14 @@ import React, { useContext } from "react";
 import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
+import {Helmet} from "react-helmet";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import {onPresPopUpEvent} from "../../actions";
+import {onPresPopUpEvent,
+  updateClientBackG,
+  updateLoadingMessage,
+  updateLoadingController} from "../../actions";
 import PopUpModal from "../../components/PopUpModal"
 
 class NextOfKin extends React.Component {
@@ -347,6 +351,7 @@ postData()
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
     const userID = localStorage.getItem('userID');
+    this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
     this.getUserWitnessData()
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
@@ -374,6 +379,10 @@ postData()
     //const user = useContext(MyProvider);
     return (
       <div className="theme-purple">
+      <Helmet>
+            <meta charSet="utf-8" />
+            <title>Next of Kin Details</title>
+        </Helmet>
         
         <PopUpModal 
         Title= "Registration Complete!"
@@ -388,11 +397,20 @@ postData()
         </div>
         <div >
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+                backgroundImage: "url(" + this.props.clientBG + ")",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "100% !important",
+                height: "100% !important",
+              }}
+            >
               <div className="auth-box">
                 <div className="card">
                 <div className="top">
-                  <img src={localStorage.getItem('clientLogo')} alt="Lucid" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                  <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
                     <p className="lead">Next of Kin Details</p>
@@ -459,25 +477,31 @@ postData()
                         <label className="control-label sr-only" >
                           Home Address
                             </label>
-                            <input
-                          className="form-control"
-                          name= "RubixUserNextOfKinAddress"
-                          id= "streetAddress"
-                          placeholder="Enter your Physical Address"
-                          type="text"
-                        />
-                         <button className="btn btn-primary btn-sm" onClick={(e)=>this.showSearch(e)}><i className="icon-magnifier"/> Search</button>
-                            {
+                            
+                         {
                               !this.state.showSearch
-                              ? null
+                              ? <input
+                              className="form-control"
+                              name= "RubixUserNextOfKinAddress"
+                              id= "streetAddress"
+                              placeholder="Enter Address"
+                              type="text"
+                            />
                               :<GooglePlacesAutocomplete
 apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange = {(e)=>this.setState({location: e.target.value})}
 selectProps={{
 location: this.state.location,
 onChange: (e)=>this.setState({location: e}),
-placeholder: "Enter next of kin address"
+placeholder: "Search Address"
 }}
 />}
+<button className="btn btn-primary btn-sm m-2" onClick={(e)=>this.showSearch(e)}><i className={this.state.showSearch ?"icon-note pr-2" :"icon-magnifier pr-2"}/>
+{
+                      this.state.showSearch 
+                      ?'Type Address'
+                      
+                    : 'Search Address'}</button>
+                            
 <br/>
 <div className="form-group">
                         <label className="control-label sr-only" >
@@ -531,8 +555,16 @@ const mapStateToProps = ({ navigationReducer,  loginReducer, mailInboxReducer })
   email: loginReducer.email,
   password: loginReducer.password,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+    
+  clientBG: navigationReducer.backImage,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
 export default connect(mapStateToProps, {
   onPresPopUpEvent,
+  updateClientBackG,
+  updateLoadingMessage,
+  updateLoadingController
 })(NextOfKin);

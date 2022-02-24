@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-phone-number-input/style.css';
 import axios from "axios";
+import {Helmet} from "react-helmet";
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import {updateClientBackG,
+  updateLoadingController,
+  updateLoadingMessage,} from "../../actions";
 
 class Addresses extends React.Component {
   constructor(props) {
@@ -24,6 +28,9 @@ class Addresses extends React.Component {
   //final submit check
   AddressSubmit(e) {
     e.preventDefault();
+    //Set Loading Screen ON
+ this.props.updateLoadingController(true);
+ this.props.updateLoadingMessage("Submitting Information...");
     const form = document.getElementById('addresses');
     if (this.state.location != null ) {
       const locations = document.getElementById('location');
@@ -51,11 +58,19 @@ class Addresses extends React.Component {
         if (this.state.location != null && this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
-              console.log(response)
+              //console.log(response)
+              //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
               this.props.history.push("/varsityDetails")
             })
 
         } else {
+          //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
           alert("Please ensure that you entered all required information")
           console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
@@ -86,26 +101,41 @@ class Addresses extends React.Component {
         if ( this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
-              console.log(response)
+              //console.log(response)
+              //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
               this.props.history.push("/varsityDetails")
             })
 
         } else {
+          //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
           alert("Please ensure that you entered all required information")
-          console.log("checkValidity ", document.getElementById('addresses').checkValidity())
+          //console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
       }
       postData()
     }
     
     else {
-      alert("Please a valid home address")
+      //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
+      alert("Please enter a valid home address")
     }
 
   }
 
   //Posting Update status
   postStatus() {
+    //Set Loading Screen ON
+ this.props.updateLoadingController(true);
+ this.props.updateLoadingMessage("Adding Status...");
     const data = {
       'Status': 'Email Verify',
       'RubixRegisterUserID': this.state.myUserID,
@@ -120,7 +150,13 @@ class Addresses extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
-          console.log("Verify email status", response)
+          if(response != null || response != undefined){
+      //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
+          }
+          //console.log("Verify email status", response)
           //this.props.history.push("/" )
         })
     }
@@ -135,6 +171,7 @@ class Addresses extends React.Component {
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
     const userID = localStorage.getItem('userID');
+    this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({ myUserID: userID });
 
     const fetchData = async () => {
@@ -172,13 +209,25 @@ class Addresses extends React.Component {
   render() {
     return (
       <div className="theme-green">
+        <Helmet>
+              <meta charSet="utf-8" />
+              <title>Residential Information</title>
+          </Helmet>
         <div >
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+              backgroundImage: "url(" + this.props.clientBG + ")",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              width: "100% !important",
+              height: "100% !important",
+            }}>
               <div className="auth-box">
                 <div className="card">
                   <div className="top">
-                    <img src={localStorage.getItem('clientLogo')} alt="Logo" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                    <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%", display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
                     <p className="lead">Student Address Details</p>
@@ -190,25 +239,30 @@ class Addresses extends React.Component {
                         <label className="control-label sr-only" >
                           Home Address
                         </label>
-                        <input
-                          className="form-control"
-                          name= "RegisterUserStreetNameAndNumer"
-                          id="streetAddress"
-                          placeholder="Enter your Physical Address"
-                          type="text"
-                        />
-                        <button className="btn btn-primary btn-sm" onClick={(e)=>this.showSearch(e)}><i className="icon-magnifier"/> Search</button>
                         { this.state.showSearch
                         ?  <GooglePlacesAutocomplete
                           apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange={(e) => this.setState({ location: e.target.value })}
                           selectProps={{
                             location: this.state.location,
                             onChange: (e) => this.setState({ location: e }),
-                            placeholder: "Enter your home Address"
+                            placeholder: "Search Address"
                           }}
                         />
-                      : null
+                      : <input
+                      className="form-control"
+                      name= "RegisterUserStreetNameAndNumer"
+                      id="streetAddress"
+                      placeholder="Enetr your Physical Address"
+                      type="text"
+                    />
                       }
+                      <button className="btn btn-primary btn-sm mt-1" onClick={(e)=>this.showSearch(e)}><i className={this.state.showSearch ?"icon-note pr-2" :"icon-magnifier pr-2"}/>
+                      {
+                      this.state.showSearch 
+                      ?'Type Address'
+                      
+                    : 'Search Address'}</button>
+                      
                       </div>
 
                       <div className="form-group">
@@ -300,7 +354,14 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   email: loginReducer.email,
   password: loginReducer.password,
   rubixUserID: navigationReducer.userID,
+  clientBG: navigationReducer.backImage,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
 export default connect(mapStateToProps, {
+  updateClientBackG,
+  updateLoadingController,
+  updateLoadingMessage,
 })(Addresses);

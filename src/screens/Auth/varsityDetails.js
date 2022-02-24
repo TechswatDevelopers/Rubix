@@ -5,7 +5,11 @@ import Logo from "../../assets/images/logo-white.svg";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
+import {Helmet} from "react-helmet";
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { updateClientBackG,
+  updateLoadingController,
+  updateLoadingMessage,} from "../../actions";
 
 class VarsityDetails extends React.Component {
     constructor(props) {
@@ -37,6 +41,9 @@ class VarsityDetails extends React.Component {
      //final submit check
      Submit(e){
         e.preventDefault();
+        //Set Loading Screen ON
+     this.props.updateLoadingController(true);
+     this.props.updateLoadingMessage("Submitting Information...");
         const form = document.getElementById('uniDetails');
         console.log('Uni ID: ', this.state.uni)
         const data = {
@@ -65,11 +72,19 @@ class VarsityDetails extends React.Component {
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    console.log(response)
+                    //console.log(response)
+                    //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
                     this.props.history.push("/nextofkin")
                 })
                     
             } else{
+              //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+    }, 1000);
               alert("Please ensure that you entered all required information")
                 console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
@@ -86,6 +101,7 @@ async componentDidMount(){
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
     const userID = localStorage.getItem('userID');
+    this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
 
     const fetchData = async() =>{
@@ -157,12 +173,6 @@ async componentDidMount(){
     if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
       body = 
       null
-      {/* <>
-      <div style={{margin: 'auto', width: '25%'}}>
-        <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e)=>{this.changeHandler(e)}} />
-        <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={()=>this.handleUpdate()}>Upload Proof of Funding</button>
-        </div>
-      </> */}
     } else if(this.state.payment == 'Self Funded'){
       body = <>
       <div className="form-group">
@@ -242,13 +252,26 @@ async componentDidMount(){
     }
     return (
       <div className="theme-green">
+        <Helmet>
+              <meta charSet="utf-8" />
+              <title>University Details</title>
+          </Helmet>
         <div >
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+                backgroundImage: "url(" + this.props.clientBG + ")",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "100% !important",
+                height: "100% !important",
+              }}
+            >
               <div className="auth-box">
                 <div className="card">
                 <div className="top">
-                  <img src={localStorage.getItem('clientLogo')} alt="Logo" style={{  height: "40%",  width:"44%",  display: "block", display: "block", margin: "auto" }} />
+                  <img src={localStorage.getItem('clientLogo')} alt="" style={{  height: "40%",  width:"44%",  display: "block", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
                     <p className="lead">Student University Details</p>
@@ -370,6 +393,14 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   email: loginReducer.email,
   password: loginReducer.password,
   rubixUserID: navigationReducer.userID,
+  
+  clientBG: navigationReducer.backImage,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
-export default connect(mapStateToProps, {})(VarsityDetails);
+export default connect(mapStateToProps, {
+  updateClientBackG,
+  updateLoadingMessage,
+  updateLoadingController,})(VarsityDetails);

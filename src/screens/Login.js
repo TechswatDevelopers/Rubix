@@ -14,6 +14,7 @@ import {
   updateClientLogo,
   updateLoadingMessage,
   updateLoadingController,
+  updateClientBackG,
 } from "../actions";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -34,7 +35,7 @@ class Login extends React.Component {
       errorMessage: "",
       isAdmin: false,
       backImage: "cj_bg.png",
-      pageTitle: "Rubix System",
+      pageTitle: "Login",
     };
   }
 
@@ -308,6 +309,7 @@ class Login extends React.Component {
           this.props.updateClientLogo("CJ-Logo4.png");
           this.props.updateClientName("CJ Students");
           this.props.onPressThemeColor("orange");
+          this.props.updateClientBackG("https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png")
           this.setState({
             backImage:
               "https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png",
@@ -317,12 +319,15 @@ class Login extends React.Component {
           localStorage.setItem("clientLogo", "CJ-Logo4.png");
           localStorage.setItem("clientName", "CJ Students");
           localStorage.setItem("clientTheme", "orange");
+          localStorage.setItem("clientBG", "https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png");
+      
         }
         break;
       case "2": {
         this.props.onPressThemeColor("purple");
         this.props.updateClientLogo("opal.png");
         this.props.updateClientName("Opal Students");
+        this.props.updateClientBackG("https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg")
         this.setState({
           backImage:
             "https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg",
@@ -332,10 +337,11 @@ class Login extends React.Component {
         localStorage.setItem("clientLogo", "opal.png");
         localStorage.setItem("clientName", "Opal Students");
         localStorage.setItem("clientTheme", "purple");
+        localStorage.setItem("clientBG", "https://github.com/TechSwat/ResidencesImages/raw/main/Outside%20Building%201-min.jpg");
       }
     }
 
-    console.log("client:", this.state.backImage);
+    //console.log("client:", this.props.clientBG);
   }
 
   //Admin Toggle
@@ -391,7 +397,7 @@ class Login extends React.Component {
                     <div className="top">
                       <img
                         src={this.props.rubixClientLogo}
-                        alt="Lucid"
+                        alt=""
                         style={{
                           height: "10%",
                           width: "55%",
@@ -403,7 +409,7 @@ class Login extends React.Component {
                     <div className="header">
                       <p className="lead">
                         Login to your {this.props.rubixClientName}{" "}
-                        {this.state.isAdmin ? "Admin" : ""} account
+                        {this.state.isAdmin ? "Admin" : ""} account 
                       </p>
                     </div>
                     <div className="body">
@@ -618,6 +624,8 @@ const mapStateToProps = ({
 
   MyloadingController: navigationReducer.loadingController,
   loadingMessage: navigationReducer.loadingMessage,
+  
+  clientBG: navigationReducer.backImage,
 });
 
 export default connect(mapStateToProps, {
@@ -629,4 +637,5 @@ export default connect(mapStateToProps, {
   updateClientName,
   updateLoadingMessage,
   updateLoadingController,
+  updateClientBackG,
 })(Login);

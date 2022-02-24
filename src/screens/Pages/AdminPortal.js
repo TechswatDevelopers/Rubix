@@ -28,6 +28,7 @@ import {
   dataManagetOption,
   sparkleCardData,
 } from "../../Data/DashbordData";
+import {Helmet} from "react-helmet";
 
 class AdminDashboard extends React.Component {
   componentDidMount() {
@@ -1307,6 +1308,10 @@ class AdminDashboard extends React.Component {
   render() {
     return (
         <div className="container-fluid">
+        <Helmet>
+              <meta charSet="utf-8" />
+              <title>Admin Stats</title>
+          </Helmet>
           <div >
             <PageHeader
               HeaderText="Admin Stats"

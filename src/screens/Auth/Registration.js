@@ -7,11 +7,13 @@ import FacebookLogin from 'react-facebook-login';
 import InstagramLogin from "react-instagram-login";
 import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 import axios from "axios";
+import {Helmet} from "react-helmet";
 import {Grid, Row, Col, Button} from "react-bootstrap";
 import MContext from "../../App";
 import MyProvider from "../../App";
 import navigationReducer from "../../reducers/navigationReducer";
-import {updateEmail, updatePassword, updateUserID, updatePlatformID, updateClientID, onPresPopUpEvent } from "../../actions";
+import {updateEmail, updatePassword, updateUserID,
+  updateClientBackG, updatePlatformID, updateClientID, onPresPopUpEvent } from "../../actions";
 import PopUpModal from "../../components/PopUpModal"
 
 class Registration extends React.Component {
@@ -23,6 +25,7 @@ class Registration extends React.Component {
       myFunction: null,
     }
   }
+
     //Google response for testing
  responseGoogle = (response) => {
   localStorage.setItem('platformID', "2")
@@ -51,11 +54,13 @@ class Registration extends React.Component {
 }
   //Submit Email
       Submit(e){
-        console.log("Submit function is called")
         e.preventDefault();
+        //Set Loading Screen ON
+     this.props.updateLoadingController(true);
+     this.props.updateLoadingMessage("Submitting Information...");
         const email = document.getElementById('email').value;
         localStorage.setItem('studentEmail', email)
-        console.log(email)
+        //console.log(email)
 
         // PingRequest data
         const pingData = {
@@ -80,7 +85,7 @@ class Registration extends React.Component {
         //Send email to DB
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                console.log(response.data)
+                //console.log(response.data)
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
                 2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
@@ -90,12 +95,20 @@ class Registration extends React.Component {
                   postData()
                  } else if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID != null){
                   localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
+                    //Set timer for loading screen
+                  setTimeout(() => {
+                    this.props.updateLoadingController(false);
+                  }, 1000);
                   this.props.history.push("/logInformation")
                  } else {
                   this.setState({
                     title: "Error",
                     popMessage: 'User Already Exists',
                   })
+                  //Set timer for loading screen
+                setTimeout(() => {
+                  this.props.updateLoadingController(false);
+                }, 1000);
                   this.props.onPresPopUpEvent()
                  }
             })
@@ -111,12 +124,20 @@ class Registration extends React.Component {
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
                   localStorage.setItem('platformID', "1")
+                  //Set timer for loading screen
+                setTimeout(() => {
+                  this.props.updateLoadingController(false);
+                }, 1000);
                  this.props.history.push("/logInformation")
                  } else{
                   this.setState({
                     title: "Email validation failed",
                     popMessage: 'Invalid email, please enter a valid email address',
                   })
+                  //Set timer for loading screen
+                setTimeout(() => {
+                  this.props.updateLoadingController(false);
+                }, 1000);
                   this.props.onPresPopUpEvent()
                  }
             })
@@ -130,11 +151,18 @@ class Registration extends React.Component {
     document.body.classList.remove("theme-green");
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
+
+    this.props.updateClientBackG(localStorage.getItem('clientBG'))
+    //console.log("client logo", this.props.clientBG)
   }
   render() {
     //const user = useContext(MyProvider);
     return (
       <div className={this.props.rubixThemeColor}>
+      <Helmet>
+              <meta charSet="utf-8" />
+              <title>Register Email</title>
+          </Helmet>
         <div >
         <PopUpModal 
         Title= {this.state.title}
@@ -142,12 +170,21 @@ class Registration extends React.Component {
         Function = {()=>this.state.myFunction}
         />
           <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
+            <div className="vertical-align-middle auth-main"
+            style={{
+                backgroundImage: "url(" + this.props.clientBG + ")",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "100% !important",
+                height: "100% !important",
+              }}
+            >
               <div className="auth-box">
                 
                 <div className="card">
                 <div className="top">
-                  <img src={localStorage.getItem('clientLogo')} alt="Lucid" style={{ height: "50px", margin: "10px", display: "block", margin: "auto" }} />
+                  <img src={localStorage.getItem('clientLogo')} alt="" style={{height: "40%",  width:"44%", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
                     <p className="lead">Registration</p>
@@ -241,6 +278,8 @@ const mapStateToProps = ({ navigationReducer, loginReducer, mailInboxReducer }) 
   rubixClientID: navigationReducer.clientID,
   rubixThemeColor: navigationReducer.themeColor,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+
+  clientBG: navigationReducer.backImage,
 });
 
 export default connect(mapStateToProps, {
@@ -248,5 +287,6 @@ export default connect(mapStateToProps, {
   updatePlatformID,
   updatePassword,
   updateEmail,
-  onPresPopUpEvent
+  onPresPopUpEvent,
+  updateClientBackG,
 })(Registration);
