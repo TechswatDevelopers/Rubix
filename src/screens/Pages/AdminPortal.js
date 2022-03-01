@@ -13,21 +13,7 @@ import { format } from 'date-fns';
 import {updateResidenceID,
   updateLoadingMessage,
   updateLoadingController,
-} from "../../actions"
-import {
-  topProductOption,
-  topRevenueOption,
-  topRevenueMonthlyOption,
-  studentIDGaugeOption,
-  totalStudents,
-  regGaugeOption,
-  ResGaugeOption,
-  nokGaugeOption,
-  leaseGaugeOption,
-  paymentGaugeOption,
-  dataManagetOption,
-  sparkleCardData,
-} from "../../Data/DashbordData";
+} from "../../actions";
 import {Helmet} from "react-helmet";
 
 class AdminDashboard extends React.Component {
@@ -242,9 +228,6 @@ class AdminDashboard extends React.Component {
         seriesData.push(IdDataSetsChartData)
         documentsLegend.push('Student ID Documents')
 
-
-
-       
         leaseDataSetChartData = {
           name: "Lease Documents",
           type: "line",

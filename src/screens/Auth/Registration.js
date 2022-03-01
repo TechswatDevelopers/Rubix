@@ -13,7 +13,7 @@ import MContext from "../../App";
 import MyProvider from "../../App";
 import navigationReducer from "../../reducers/navigationReducer";
 import {updateEmail, updatePassword, updateUserID,
-  updateClientBackG, updatePlatformID, updateClientID, onPresPopUpEvent } from "../../actions";
+  updateClientBackG, updatePlatformID, updateClientID, onPresPopUpEvent, updateLoadingController, updateLoadingMessage } from "../../actions";
 import PopUpModal from "../../components/PopUpModal"
 
 class Registration extends React.Component {
@@ -289,4 +289,6 @@ export default connect(mapStateToProps, {
   updateEmail,
   onPresPopUpEvent,
   updateClientBackG,
+  updateLoadingController,
+  updateLoadingMessage,
 })(Registration);
