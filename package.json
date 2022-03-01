@@ -12,7 +12,6 @@
     "@fullcalendar/list": "^4.3.0",
     "@fullcalendar/react": "^4.3.0",
     "@fullcalendar/timegrid": "^4.3.0",
-    "@mui/material": "^5.4.3",
     "@react-navigation/core": "^3.5.1",
     "@react-navigation/web": "^1.0.0-alpha.9",
     "@testing-library/jest-dom": "^4.2.4",
