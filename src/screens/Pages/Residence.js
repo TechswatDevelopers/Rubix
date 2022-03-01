@@ -21,6 +21,7 @@ import {
   updateLoadingMessage,
   updateLoadingController,} from '../../actions';
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import useMediaQuery from '@mui/material/useMediaQuery';
 const images = [
   {
     original: require("../../assets/images/stock.png"),
@@ -96,6 +97,12 @@ class Residence extends React.Component {
     }, 2000);
     //console.log('amenities', this.state.amenities)
   }
+
+ useIsMobile() {
+    const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
+    return isMobile
+ }
+
 
   //Fetch Res Gallery Images
   fetchImages(resID) {
@@ -229,7 +236,6 @@ class Residence extends React.Component {
                         }}>
                         {this.state.resDetails.ResidenceLocation}
                       </span>
-
                     </div>
 
                     <div className="login-info shadow-sm p-3 mb-4 bg-white rounded">

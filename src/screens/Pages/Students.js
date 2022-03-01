@@ -147,6 +147,11 @@ class Students extends React.Component {
     this.getStudents(document.getElementById('search').value, this.state.res)
   }
 
+  //Lease regenerate
+  getStudentsWithRooms(){
+
+  }
+
 
   render() {
     return (
@@ -272,7 +277,7 @@ class Students extends React.Component {
 : null}
 {
   this.props.showRooms
-  ? <RoomAllocation />
+  ? <RoomAllocation Students={this.state.students}/>
 :null
 }
 

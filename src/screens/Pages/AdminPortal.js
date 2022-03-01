@@ -59,11 +59,7 @@ class AdminDashboard extends React.Component {
           this.setState({resList: data.data})
           });
       } 
-      fetchData();
-    //Load First Donut
-    //Load Second Donut
-    //this.chartPaymentDonut();
-    
+      fetchData()
   }
 
   //Initial State
@@ -82,6 +78,8 @@ class AdminDashboard extends React.Component {
       legend: [],
       studentDocSeriess: [],
       resList: [],
+      resInfoList: [],
+      resIndex: 0,
       isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
       colors: ['#1ebbd7', '#212121', '#ffa500', '#5743bb', '#0000ff', '#e69138', '#f603a3'],
     }
@@ -211,7 +209,6 @@ class AdminDashboard extends React.Component {
 
       
         //Populate Registration Graph Info
-
         registrationChartData = {
           name: "Students Registered",
           type: "line",
@@ -229,7 +226,6 @@ class AdminDashboard extends React.Component {
         documentsLegend.push('Students Registered')
         
         //Add Documents to lists
-        
         IdDataSetsChartData = {
           name: "Student ID Documents",
           type: "line",
@@ -331,7 +327,6 @@ class AdminDashboard extends React.Component {
 
   //Create Line Graph
   createLineGraph(legend, series, date){
-
     const optionAreaEchart = {
       tooltip: {
         trigger: "axis",
@@ -516,6 +511,71 @@ class AdminDashboard extends React.Component {
     option && myChart.setOption(option);
   }
 
+  //Get All Reports
+  getAllReports(){
+    let newList = this.state.resList.filter(doc => doc.RubixResidenceID !== null && doc.RubixResidenceID !== 99)
+    //console.log('cliked', newList)
+    if (this.state.resIndex <= newList.length - 1){
+        this.getResInfo(
+          newList[this.state.resIndex].RubixResidenceID, 
+          newList[this.state.resIndex].ResidenceName
+          )
+      
+
+    } else {
+    this.props.updateLoadingController(false);
+    }
+  }
+  
+  getResInfo(resID, resName) {
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Data, Please wait...");
+    const data = {
+      'UserCode': localStorage.getItem('userCode'),
+      'RubixClientID': localStorage.getItem('clientID'),
+      'RubixResidenceID': resID,
+    }
+
+    const requestOptions = {
+      title: 'Fetch Reports Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+console.log('Posted Data: ', data)
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
+      .then(response => {
+        console.log('current response: ', response)
+        if(response != null && response != undefined){
+        let totalCapList = response.data.PostRubixUserData.filter(doc => doc.TotalCapacityPerRes !== undefined)
+        let bedsTakenList = response.data.PostRubixUserData.filter(doc => doc.TotalbedsTaken !== undefined)
+        let signedLease = response.data.PostRubixUserData.filter(doc => doc.lease_agreement_Count !== undefined)
+        this.state.resInfoList.push(
+          {
+            'name': resName,
+            'total': totalCapList[0].TotalCapacityPerRes,
+            'beds': bedsTakenList[0].TotalbedsTaken,
+            'leases': signedLease != null && signedLease!= undefined && signedLease.length !=0 ?signedLease[0].lease_agreement_Count : 0
+          }
+        )
+        }
+      })
+    }
+    postData().then(()=>{
+      
+    this.setState({
+      resIndex: this.state.resIndex + 1
+    });
+      setTimeout(() => {
+        
+      this.getAllReports()
+      }, 2000);
+    })
+    console.log("Final List: ", this.state.resInfoList)
+  }
+
   //Get Admin Report
   getReport(resID) {
     //Set Loading Screen ON
@@ -534,81 +594,33 @@ class AdminDashboard extends React.Component {
       body: data
     };
 
-    console.log("Posted:", data)
+    //console.log("Posted:", data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
           console.log("DB response: ", response)
 
-          //Load Lists
-          localStorage.setItem('resTotal', response.data.PostRubixUserData[0].TotalRegistrationsPerYear)
-          localStorage.setItem('resIdDocs', response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage)
-          localStorage.setItem('resProofOfResDocs', response.data.PostRubixUserData[0].ProofOfResCountPerRESPercentage)
-          localStorage.setItem('resProofOfRegDocs', response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage)
-          localStorage.setItem('resNOKDocs', response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage)
-          localStorage.setItem('resLeaseDocs', response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage)
+          if(response != null || response != undefined){
 
-          let totalCapList = response.data.PostRubixUserData.filter(doc => doc.TotalCapacityPerRes !== undefined)
-          let bedsTakenList = response.data.PostRubixUserData.filter(doc => doc.TotalbedsTaken !== undefined)
-          let signedLease = response.data.PostRubixUserData.filter(doc => doc.lease_agreement_Count !== undefined)
+            //Load Lists
+            localStorage.setItem('resTotal', response.data.PostRubixUserData[0].TotalRegistrationsPerYear)
+            localStorage.setItem('resIdDocs', response.data.PostRubixUserData[0].IDDocumentCountPerRESPercentage)
+            localStorage.setItem('resProofOfResDocs', response.data.PostRubixUserData[0].ProofOfResCountPerRESPercentage)
+            localStorage.setItem('resProofOfRegDocs', response.data.PostRubixUserData[0].ProofOfRegCountPerRESPercentage)
+            localStorage.setItem('resNOKDocs', response.data.PostRubixUserData[0].NextOfKinCountPerRESPercentage)
+            localStorage.setItem('resLeaseDocs', response.data.PostRubixUserData[0].LeaseAgreementCountPerRESPercentage)
+  
+            let totalCapList = response.data.PostRubixUserData.filter(doc => doc.TotalCapacityPerRes !== undefined)
+            let bedsTakenList = response.data.PostRubixUserData.filter(doc => doc.TotalbedsTaken !== undefined)
+            let signedLease = response.data.PostRubixUserData.filter(doc => doc.lease_agreement_Count !== undefined)
 
-          if(totalCapList != null && totalCapList.length != 0){
-            //Create Total Capacity Pie Chart
-            let tempStatsLegendList = []
-          const tempData = [
-            {
-              value: totalCapList[0].TotalCapacityPerRes,
-              name: 'Total Residence Capacity',
-              itemStyle: {
-                color: "rgba(255, 255, 255)",
-                emphasis: {
-                  color: "rgba(255, 255, 255)",
-                },
-              },
-            },
-           
-          ]
-         var totalCapSeries = 
+            if(totalCapList != null && totalCapList.length != 0){
+              //Create Total Capacity Pie Chart
+              let tempStatsLegendList = []
+            const tempData = [
               {
-                type: "pie",
-                startAngle: 270,
-                clockWise: 1,
-                radius: [0, 30],
-                itemStyle: {
-                  normal: {
-                    label: { show: false },
-                    labelLine: { show: false },
-                  },
-                },
-                data: tempData,
-                emphasis: {
-                  itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: "rgba(0, 0, 0, 0.2)",
-                  },
-                },
-              }
-            this.setState({
-              resCapacity: totalCapList[0].TotalCapacityPerRes,
-            })
-
-          } else {
-
-            this.setState({
-              resCapacity: 0,
-            })
-          }
-          this.createStatsSeriesGraph(this.state.resCapacity, totalCapSeries, 'totalCap', ['Total Capacity'])
-
-
-
-          if(bedsTakenList != null && bedsTakenList.length != 0){
-            //Create Beds Allocated Pie Chart
-            const bedsAllocStats = [
-              {
-                value: bedsTakenList[0].TotalbedsTaken,
-                name: 'Total Beds Allocated',
+                value: totalCapList[0].TotalCapacityPerRes,
+                name: 'Total Residence Capacity',
                 itemStyle: {
                   color: "rgba(255, 255, 255)",
                   emphasis: {
@@ -618,7 +630,7 @@ class AdminDashboard extends React.Component {
               },
              
             ]
-           var bedsAllocSeries = 
+           var totalCapSeries = 
                 {
                   type: "pie",
                   startAngle: 270,
@@ -630,7 +642,7 @@ class AdminDashboard extends React.Component {
                       labelLine: { show: false },
                     },
                   },
-                  data: bedsAllocStats,
+                  data: tempData,
                   emphasis: {
                     itemStyle: {
                       shadowBlur: 10,
@@ -639,66 +651,110 @@ class AdminDashboard extends React.Component {
                     },
                   },
                 }
-            this.setState({
-              resBedsAllocated: bedsTakenList[0].TotalbedsTaken,
-            })
-          } else {
-            this.setState({
-              resBedsAllocated: 0,
-            })
-          }
-          this.createStatsSeriesGraph(this.state.resBedsAllocated, bedsAllocSeries, 'bedsAlloc', ['Beds Allocated'])
+              this.setState({
+                resCapacity: totalCapList[0].TotalCapacityPerRes,
+              })
+  
+            } else {
+  
+              this.setState({
+                resCapacity: 0,
+              })
+            }
+            this.createStatsSeriesGraph(this.state.resCapacity, totalCapSeries, 'totalCap', ['Total Capacity'])
 
-
-          if (signedLease != null && signedLease.length != 0){
-            //Create leases Signed Pie Chart
-            const LeaseSignedStats = [
-              {
-                value: signedLease[0].lease_agreement_Count,
-                name: 'Total Signed Leases',
-                itemStyle: {
-                  color: "rgba(255, 255, 255)",
-                  emphasis: {
+            if(bedsTakenList != null && bedsTakenList.length != 0){
+              //Create Beds Allocated Pie Chart
+              const bedsAllocStats = [
+                {
+                  value: bedsTakenList[0].TotalbedsTaken,
+                  name: 'Total Beds Allocated',
+                  itemStyle: {
                     color: "rgba(255, 255, 255)",
+                    emphasis: {
+                      color: "rgba(255, 255, 255)",
+                    },
                   },
                 },
-              },
-             
-            ]
-           var leaseSeries =
-                {
-                  type: "pie",
-                  startAngle: 270,
-                  clockWise: 1,
-                  radius: [0, 30],
-                  itemStyle: {
-                    normal: {
-                      label: { show: false },
-                      labelLine: { show: false },
-                    },
-                  },
-                  data: LeaseSignedStats,
-                  emphasis: {
+               
+              ]
+             var bedsAllocSeries = 
+                  {
+                    type: "pie",
+                    startAngle: 270,
+                    clockWise: 1,
+                    radius: [0, 30],
                     itemStyle: {
-                      shadowBlur: 10,
-                      shadowOffsetX: 0,
-                      shadowColor: "rgba(0, 0, 0, 0.2)",
+                      normal: {
+                        label: { show: false },
+                        labelLine: { show: false },
+                      },
+                    },
+                    data: bedsAllocStats,
+                    emphasis: {
+                      itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: "rgba(0, 0, 0, 0.2)",
+                      },
+                    },
+                  }
+              this.setState({
+                resBedsAllocated: bedsTakenList[0].TotalbedsTaken,
+              })
+            } else {
+              this.setState({
+                resBedsAllocated: 0,
+              })
+            }
+            this.createStatsSeriesGraph(this.state.resBedsAllocated, bedsAllocSeries, 'bedsAlloc', ['Beds Allocated'])
+
+
+            if (signedLease != null && signedLease.length != 0){
+              //Create leases Signed Pie Chart
+              const LeaseSignedStats = [
+                {
+                  value: signedLease[0].lease_agreement_Count,
+                  name: 'Total Signed Leases',
+                  itemStyle: {
+                    color: "rgba(255, 255, 255)",
+                    emphasis: {
+                      color: "rgba(255, 255, 255)",
                     },
                   },
-                }
-            this.setState({
-              signedLease: signedLease[0].lease_agreement_Count,
-            })
-          } else {
-            this.setState({
-              signedLease: 0,
-            })
-          }
-          this.createStatsSeriesGraph(this.state.signedLease, leaseSeries, 'signedLease', ['Signed Lease'])
-
-          //Create Student Documents Series Chart
-          //Add Total Students
-
+                },
+               
+              ]
+             var leaseSeries =
+                  {
+                    type: "pie",
+                    startAngle: 270,
+                    clockWise: 1,
+                    radius: [0, 30],
+                    itemStyle: {
+                      normal: {
+                        label: { show: false },
+                        labelLine: { show: false },
+                      },
+                    },
+                    data: LeaseSignedStats,
+                    emphasis: {
+                      itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: "rgba(0, 0, 0, 0.2)",
+                      },
+                    },
+                  }
+              this.setState({
+                signedLease: signedLease[0].lease_agreement_Count,
+              })
+            } else {
+              this.setState({
+                signedLease: 0,
+              })
+            }
+            this.createStatsSeriesGraph(this.state.signedLease, leaseSeries, 'signedLease', ['Signed Lease'])
 
           //Create Documents Data Donuts
           //Create Student Data Donuts
@@ -716,67 +772,20 @@ class AdminDashboard extends React.Component {
             },
            
           ]
-          this.state.studentDocSeriess.push(
-              {
-                type: "pie",
-                startAngle: 270,
-                clockWise: 1,
-                radius: [0, 30],
-                itemStyle: {
-                  normal: {
-                    label: { show: false },
-                    labelLine: { show: false },
-                  },
-                },
-                data: tempData,
-                emphasis: {
-                  itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: "rgba(0, 0, 0, 0.5)",
-                  },
-                },
-              }
-          )
-
-          //Add StudentID Info
-          const tempStudentIDLegend = ['Student ID Document', 'No Student ID Document']
-          const tempStudentID = [
-            {
-              value: response.data.PostRubixUserData[0].IDDocumentCountPerRES,
-              name: 'Student ID Document',
-              itemStyle: {
-                color: "#FFCC00",
-                emphasis: {
-                  color: "#FFCC00",
-                },
-              },
-            },
-            {
-              value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].IDDocumentCountPerRES,
-              name: 'No Student ID Document',
-              itemStyle: {
-                color: "#EEEEEE",
-                emphasis: {
-                  color: "#EEEEEE",
-                },
-              },
-            }
-           
-          ]
+          
           this.state.studentDocSeriess.push(
             {
               type: "pie",
               startAngle: 270,
               clockWise: 1,
-              radius: [40, 60],
+              radius: [0, 30],
               itemStyle: {
                 normal: {
                   label: { show: false },
                   labelLine: { show: false },
                 },
               },
-              data: tempStudentID,
+              data: tempData,
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
@@ -786,7 +795,60 @@ class AdminDashboard extends React.Component {
               },
             }
         )
-        tempDocLegendList.push(tempStudentIDLegend)
+        //Add StudentID Info
+        const tempStudentIDLegend = ['Student ID Document', 'No Student ID Document']
+
+
+        const tempStudentID = [
+          {
+            value: response.data.PostRubixUserData[0].IDDocumentCountPerRES,
+            name: 'Student ID Document',
+            itemStyle: {
+              color: "#FFCC00",
+              emphasis: {
+                color: "#FFCC00",
+              },
+            },
+          },
+          {
+            value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].IDDocumentCountPerRES,
+            name: 'No Student ID Document',
+            itemStyle: {
+              color: "#EEEEEE",
+              emphasis: {
+                color: "#EEEEEE",
+              },
+            },
+          }
+         
+        ]
+
+
+        this.state.studentDocSeriess.push(
+          {
+            type: "pie",
+            startAngle: 270,
+            clockWise: 1,
+            radius: [40, 60],
+            itemStyle: {
+              normal: {
+                label: { show: false },
+                labelLine: { show: false },
+              },
+            },
+            data: tempStudentID,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          }
+      )
+      tempDocLegendList.push(tempStudentIDLegend)
+
+
 
         //Student Proof of Residence
         const tempStudentPORes = [
@@ -813,7 +875,7 @@ class AdminDashboard extends React.Component {
           }
          
         ]
-        
+
         this.state.studentDocSeriess.push(
           {
             type: "pie",
@@ -837,6 +899,7 @@ class AdminDashboard extends React.Component {
           }
       )
 
+      
       //Student Proof of Registration
       const tempStudentPOReg = [
         {
@@ -885,131 +948,136 @@ class AdminDashboard extends React.Component {
           },
         }
     )
+
+    
 //Student Lease
-          const tempStudentLease = [
-            {
-              value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
-              name: 'Lease Agreement',
-              itemStyle: {
-                color: "#660099",
-                emphasis: {
-                  color: "#660099",
-                },
-              },
-            },
-            {
-              value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
-              name: 'No Lease Agreement',
-              itemStyle: {
-                color: "#EEEEEE",
-                emphasis: {
-                  color: "#EEEEEE",
-                },
-              },
-            }
-           
-          ]
+const tempStudentLease = [
+  {
+    value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
+    name: 'Lease Agreement',
+    itemStyle: {
+      color: "#660099",
+      emphasis: {
+        color: "#660099",
+      },
+    },
+  },
+  {
+    value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
+    name: 'No Lease Agreement',
+    itemStyle: {
+      color: "#EEEEEE",
+      emphasis: {
+        color: "#EEEEEE",
+      },
+    },
+  }
+ 
+]
+this.state.studentDocSeriess.push(
+  {
+    type: "pie",
+    startAngle: 270,
+    clockWise: 1,
+    radius: [160, 180],
+    itemStyle: {
+      normal: {
+        label: { show: false },
+        labelLine: { show: false },
+      },
+    },
+    data: tempStudentLease,
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      },
+    },
+  }
+)
 
-          this.state.studentDocSeriess.push(
-            {
-              type: "pie",
-              startAngle: 270,
-              clockWise: 1,
-              radius: [160, 180],
-              itemStyle: {
-                normal: {
-                  label: { show: false },
-                  labelLine: { show: false },
-                },
-              },
-              data: tempStudentLease,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
-                },
-              },
-            }
-        )
 //Student Next of Kin ID
-          const tempStudentNOKID = [
-            {
-              value: response.data.PostRubixUserData[0].NextOfKinCountPerRES,
-              name: 'Next of Kin ID',
-              itemStyle: {
-                color: "#FF3333",
-                emphasis: {
-                  color: "#FF3333",
-                },
-              },
-            },
-            {
-              value:  response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].NextOfKinCountPerRES,
-              name: 'No Next of Kin ID',
-              itemStyle: {
-                color: "#EEEEEE",
-                emphasis: {
-                  color: "#EEEEEE",
-                },
-              },
-            }
-           
-          ]
+const tempStudentNOKID = [
+  {
+    value: response.data.PostRubixUserData[0].NextOfKinCountPerRES,
+    name: 'Next of Kin ID',
+    itemStyle: {
+      color: "#FF3333",
+      emphasis: {
+        color: "#FF3333",
+      },
+    },
+  },
+  {
+    value:  response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].NextOfKinCountPerRES,
+    name: 'No Next of Kin ID',
+    itemStyle: {
+      color: "#EEEEEE",
+      emphasis: {
+        color: "#EEEEEE",
+      },
+    },
+  }
+ 
+]
 
-          this.state.studentDocSeriess.push(
-            {
-              type: "pie",
-              startAngle: 270,
-              clockWise: 1,
-              radius: [130, 150],
-              itemStyle: {
-                normal: {
-                  label: { show: false },
-                  labelLine: { show: false },
-                },
-              },
-              data: tempStudentNOKID,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
-                },
-              },
-            }
-        )
+this.state.studentDocSeriess.push(
+  {
+    type: "pie",
+    startAngle: 270,
+    clockWise: 1,
+    radius: [130, 150],
+    itemStyle: {
+      normal: {
+        label: { show: false },
+        labelLine: { show: false },
+      },
+    },
+    data: tempStudentNOKID,
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      },
+    },
+  }
+)
 
-          this.createSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, this.state.studentDocSeriess, 'NewDocDonut', tempDocLegendList)
+this.createSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, this.state.studentDocSeriess, 'NewDocDonut', tempDocLegendList)
 
-          //Res Information Chart
-          let tempSeriesList = []
-          let tempColorsList = []
-          let tempLegendList = []
+//Res Information Chart
+let tempSeriesList = []
+let tempColorsList = []
+let tempLegendList = []
+
 
           //Total Student
           tempSeriesList.push(
-              {
-                type: "pie",
-                startAngle: 270,
-                clockWise: 1,
-                radius: [0, 30],
+            {
+              type: "pie",
+              startAngle: 270,
+              clockWise: 1,
+              radius: [0, 30],
+              itemStyle: {
+                normal: {
+                  label: { show: false },
+                  labelLine: { show: false },
+                },
+              },
+              data: tempData,
+              emphasis: {
                 itemStyle: {
-                  normal: {
-                    label: { show: false },
-                    labelLine: { show: false },
-                  },
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
                 },
-                data: tempData,
-                emphasis: {
-                  itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: "rgba(0, 0, 0, 0.5)",
-                  },
-                },
-              }
-          )
+              },
+            }
+        )
+
+
 
           //Payment Method Chart
           let tempPayment = response.data.PostRubixUserData.filter(doc => doc.PaymentMethod !== undefined)
@@ -1017,6 +1085,7 @@ class AdminDashboard extends React.Component {
           let tempPaymentLegendData = []
           const PaymentPallete = 
           ["#99FF66", "#66CC66", "#00FF33", "#00CC66", "#009900", "#33EE33"]
+
           tempPayment.forEach((payment, index) =>{
             //Add to Legend
             tempPaymentLegendData.push(
@@ -1040,6 +1109,7 @@ class AdminDashboard extends React.Component {
           })
           tempColorsList.push({PaymentPallete})
           
+
           //Total Student
           tempSeriesList.push(
             {
@@ -1064,228 +1134,238 @@ class AdminDashboard extends React.Component {
             }
         )
 
-        //Provinces
-        let tempProvince = response.data.PostRubixUserData.filter(doc => doc.RegisterUserProvince !== undefined)
-          let tempProvinceChartData = []
-          let tempProvinceLegendData = []
-          const ProvincePallete = 
-          ["#66FFFF","#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
+//Provinces
+let tempProvince = response.data.PostRubixUserData.filter(doc => doc.RegisterUserProvince !== undefined)
+let tempProvinceChartData = []
+let tempProvinceLegendData = []
+const ProvincePallete = 
+["#66FFFF","#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
 
-          tempProvince.forEach((province, index) =>{
-            //Add to Legend
-            tempProvinceLegendData.push(
-              province.RegisterUserProvince
-            )
-           // tempLegendList.push({tempProvinceLegendData})
-            tempProvinceChartData.push(
-              {
-                value: province.ProvinceCountPerRes,
-                name: province.RegisterUserProvince,
-                itemStyle: {
-                  color: ProvincePallete[index],
-                  emphasis: {
-                    color: ProvincePallete[index],
-                  },
-                },
-              },)
-          })
-          tempColorsList.push({ProvincePallete})
-          tempSeriesList.push(
-            {
-              type: "pie",
-              startAngle: 270,
-              clockWise: 1,
-              radius: [70, 90],
-              itemStyle: {
-                normal: {
-                  label: { show: false },
-                  labelLine: { show: false },
-                },
-              },
-              data: tempProvinceChartData,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
-                },
-              },
-            }
-        )
+tempProvince.forEach((province, index) =>{
+  //Add to Legend
+  tempProvinceLegendData.push(
+    province.RegisterUserProvince
+  )
+ // tempLegendList.push({tempProvinceLegendData})
+  tempProvinceChartData.push(
+    {
+      value: province.ProvinceCountPerRes,
+      name: province.RegisterUserProvince,
+      itemStyle: {
+        color: ProvincePallete[index],
+        emphasis: {
+          color: ProvincePallete[index],
+        },
+      },
+    },)
+})
+
+        
+tempColorsList.push({ProvincePallete})
+tempSeriesList.push(
+  {
+    type: "pie",
+    startAngle: 270,
+    clockWise: 1,
+    radius: [70, 90],
+    itemStyle: {
+      normal: {
+        label: { show: false },
+        labelLine: { show: false },
+      },
+    },
+    data: tempProvinceChartData,
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      },
+    },
+  }
+)
+
 
         //Year of Study
-          let tempYearofStudy = response.data.PostRubixUserData.filter(doc => doc.YearofStudy !== undefined)
-          let tempYOSChartData = []
-          let tempYOSLegend = []
-          const YOSColorPallete = ["#FFCC00", "#FF9933", "#FF6633", "#CC6600", "#CC6633"]
+        let tempYearofStudy = response.data.PostRubixUserData.filter(doc => doc.YearofStudy !== undefined)
+        let tempYOSChartData = []
+        let tempYOSLegend = []
+        const YOSColorPallete = ["#FFCC00", "#FF9933", "#FF6633", "#CC6600", "#CC6633"]
 
-          tempYearofStudy.forEach((year, index) =>{
-            //Add to Legend
-            tempYOSLegend.push(
-              year.YearofStudy
-            )
-            tempYOSChartData.push(
-              {
-                value: year.YearofStudyCountPerRes,
-                name: year.YearofStudy,
-                itemStyle: {
+        tempYearofStudy.forEach((year, index) =>{
+          //Add to Legend
+          tempYOSLegend.push(
+            year.YearofStudy
+          )
+          tempYOSChartData.push(
+            {
+              value: year.YearofStudyCountPerRes,
+              name: year.YearofStudy,
+              itemStyle: {
+                color: YOSColorPallete[index],
+                emphasis: {
                   color: YOSColorPallete[index],
-                  emphasis: {
-                    color: YOSColorPallete[index],
-                  },
                 },
-              },)
-          })
-          tempColorsList.push({YOSColorPallete})
+              },
+            },)
+        })
+        tempColorsList.push({YOSColorPallete})
 
-          tempSeriesList.push(
-            {
-              type: "pie",
-              startAngle: 270,
-              clockWise: 1,
-              radius: [100, 120],
+
+        tempSeriesList.push(
+          {
+            type: "pie",
+            startAngle: 270,
+            clockWise: 1,
+            radius: [100, 120],
+            itemStyle: {
+              normal: {
+                label: { show: false },
+                labelLine: { show: false },
+              },
+            },
+            data: tempYOSChartData,
+            emphasis: {
               itemStyle: {
-                normal: {
-                  label: { show: false },
-                  labelLine: { show: false },
-                },
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
               },
-              data: tempYOSChartData,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
-                },
-              },
-            }
-        )
-
-
-        //Universities
-        let tempUniversity = response.data.PostRubixUserData.filter(doc => doc.UniversityName !== undefined)
-          let universiyChart = []
-          let universiyLegend = []
-          const UniPallete = ["#FFCCFF", "#FF66FF", "#FF00FF", "#FF3399", "#FF00CC", "#9933CC", "#990099", "#9966CC", "#9933FF", "#663399"]
-
-          tempUniversity.forEach((university, index) =>{
-            //Add to Legend
-            universiyLegend.push(
-              university.UniversityName
-            )
-            universiyChart.push(
-              {
-                value: university.UniCountPerRes,
-                name: university.UniversityName,
-                itemStyle: {
-                  color: UniPallete[index],
-                  emphasis: {
-                    color: UniPallete[index],
-                  },
-                },
-              },)
-          })
-          tempColorsList.push({UniPallete})
-
-          tempSeriesList.push(
-            {
-              type: "pie",
-              startAngle: 270,
-              clockWise: 1,
-              radius: [130, 150],
-              itemStyle: {
-                normal: {
-                  label: { show: false },
-                  labelLine: { show: false },
-                },
-              },
-              data: universiyChart,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
-                },
-              },
-            }
-        )
-
-        //Gender Chart
-        let tempGender = response.data.PostRubixUserData.filter(doc => doc.Gender !== undefined)
-          let genderChart = []
-          let genderLegend = []
-          const genderPallete = ["#FF3333", "#CC0033", "#990033"]
-          tempGender.forEach((gender, index) =>{
-            //Add to Legend
-            genderLegend.push(
-              gender.Gender 
-            )
-            genderChart.push(
-              {
-                value: gender.GenderCountPerRes,
-                name: gender.Gender,
-                itemStyle: {
-                  color: genderPallete[index],
-                  emphasis: {
-                    color: genderPallete[index],
-                  },
-                },
-              },)
-          })
-          tempColorsList.push({genderPallete})
-
-          tempSeriesList.push(
-            {
-              type: "pie",
-              startAngle: 270,
-              clockWise: 1,
-              radius: [160, 180],
-              itemStyle: {
-                normal: {
-                  label: { show: false },
-                  labelLine: { show: false },
-                },
-              },
-              data: genderChart,
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: "rgba(0, 0, 0, 0.5)",
-                },
-              },
-            }
-        )
-
-          this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, 
-            tempSeriesList, 'TestDocDonut',
-             tempLegendList, 
-             tempColorsList)
-
-
-          if (tempPayment.length != 0) {
-            this.setState({
-              paymentStats: tempPayment,
-              provinceStats: tempProvince,
-              yearOfStudyStats: tempYearofStudy,
-            })
-          } else if (tempProvince.length != 0) {
-            this.setState({
-              provinceStats: tempProvince,
-            })
-          } else if (tempYearofStudy.length != 0) {
-            this.setState({
-              yearOfStudyStats: tempYearofStudy,
-            })
+            },
           }
+      )
 
-          for (let i = 0; i <= response.data.PostRubixUserData.length - 1; i++) {
-            let item = response.data.PostRubixUserData[i]
-            if (i == 0 || i == 1) {
-              this.state.resStats.push(item[i])
-            }
+//Universities
+let tempUniversity = response.data.PostRubixUserData.filter(doc => doc.UniversityName !== undefined)
+let universiyChart = []
+let universiyLegend = []
+const UniPallete = ["#FFCCFF", "#FF66FF", "#FF00FF", "#FF3399", "#FF00CC", "#9933CC", "#990099", "#9966CC", "#9933FF", "#663399"]
+
+
+        
+tempUniversity.forEach((university, index) =>{
+  //Add to Legend
+  universiyLegend.push(
+    university.UniversityName
+  )
+  universiyChart.push(
+    {
+      value: university.UniCountPerRes,
+      name: university.UniversityName,
+      itemStyle: {
+        color: UniPallete[index],
+        emphasis: {
+          color: UniPallete[index],
+        },
+      },
+    },)
+})
+tempColorsList.push({UniPallete})
+
+
+tempSeriesList.push(
+  {
+    type: "pie",
+    startAngle: 270,
+    clockWise: 1,
+    radius: [130, 150],
+    itemStyle: {
+      normal: {
+        label: { show: false },
+        labelLine: { show: false },
+      },
+    },
+    data: universiyChart,
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      },
+    },
+  }
+)
+
+
+//Gender Chart
+let tempGender = response.data.PostRubixUserData.filter(doc => doc.Gender !== undefined)
+let genderChart = []
+let genderLegend = []
+const genderPallete = ["#FF3333", "#CC0033", "#990033"]
+
+tempGender.forEach((gender, index) =>{
+  //Add to Legend
+  genderLegend.push(
+    gender.Gender 
+  )
+  genderChart.push(
+    {
+      value: gender.GenderCountPerRes,
+      name: gender.Gender,
+      itemStyle: {
+        color: genderPallete[index],
+        emphasis: {
+          color: genderPallete[index],
+        },
+      },
+    },)
+})
+tempColorsList.push({genderPallete})
+
+tempSeriesList.push(
+  {
+    type: "pie",
+    startAngle: 270,
+    clockWise: 1,
+    radius: [160, 180],
+    itemStyle: {
+      normal: {
+        label: { show: false },
+        labelLine: { show: false },
+      },
+    },
+    data: genderChart,
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      },
+    },
+  }
+)
+
+
+this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, 
+  tempSeriesList, 'TestDocDonut',
+   tempLegendList, 
+   tempColorsList)
+
+
+   if (tempPayment.length != 0) {
+    this.setState({
+      paymentStats: tempPayment,
+      provinceStats: tempProvince,
+      yearOfStudyStats: tempYearofStudy,
+    })
+  } else if (tempProvince.length != 0) {
+    this.setState({
+      provinceStats: tempProvince,
+    })
+  } else if (tempYearofStudy.length != 0) {
+    this.setState({
+      yearOfStudyStats: tempYearofStudy,
+    })
+  }
+
+  for (let i = 0; i <= response.data.PostRubixUserData.length - 1; i++) {
+    let item = response.data.PostRubixUserData[i]
+    if (i == 0 || i == 1) {
+      this.state.resStats.push(item[i])
+    }
+  }
+
           }
-
         })
     }
     if (resID == 0 || resID == 'Please Select Residence'){
@@ -1359,6 +1439,37 @@ class AdminDashboard extends React.Component {
         ))   
         }
     </select> }
+
+    <button className="btn btn-outline-primary mt-2" onClick={(e) => {this.getAllReports()}}>View All Residence Stats</button>
+    {
+      this.state.resInfoList.map((res, index) => (
+        <>
+        <h2 className="mt-4">{res.name} Stats</h2>
+        <div className="row">
+                    <div className="card m-1  col-lg-2 col-md-2" style={{ height: 80, width: "100%", position: "relative" }}>
+                      <strong >Total Capacity:</strong>
+                      <div id="" style={{ width: "100%", position: "absolute", fontSize: '35px'}}>{res.total}</div>
+                     {/*  <p style={{fontSize: "60px"}}>{this.state.resCapacity}</p> */}
+                    </div>
+                    <div className="card m-1 col-lg-2 col-md-2" style={{ height: 80, width: "100%", position: "relative" }}>
+                      <strong>Beds Allocated:</strong>
+                      <div className="" id="" style={{ width: "100%", position: "absolute", fontSize: '35px'}}>{res.beds}</div>
+                     {/*  <p style={{fontSize: "60px"}}>{this.state.resBedsAllocated}</p> */}
+                    </div>
+                    <div className="card m-1  col-lg-2 col-md-2" style={{ height: 80, width: "100%", position: "relative" }}>
+                      <strong>Signed Leases:</strong>
+                      <div id="" style={{width: "100%", position: "absolute", fontSize: '35px' }}>{res.leases}</div>
+                     {/*  <p style={{fontSize: "60px"}}>{this.state.signedLease}</p> */}
+                    </div>
+                    {/* <hr style={{
+                        border: '1px dotted grey',
+                        width: '100%'
+                      }} /> */}
+                  </div>
+        </>
+        
+      ))
+    }
                 </>
                 : null
                 }

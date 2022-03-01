@@ -24,6 +24,13 @@ class RoomAllocation extends React.Component {
 
       roomNumberList: [],
       roomNumber: '',
+
+      
+    roomedstudents: [],
+
+    index: 0,
+    
+    dateAndTime: ''
     }
   }
 
@@ -33,6 +40,12 @@ class RoomAllocation extends React.Component {
     this.getStudentRoomDetails(this.props.currentStudentiD)
     const scrollToElement = () => this.testRef.current.scrollIntoView();
     scrollToElement()
+
+    
+  const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+  const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+  const myTime = new Date().toLocaleTimeString('en-ZA')
+  this.setState({ dateAndTime: myDate + myTime })
   }
 
   //Fetch User Res Data
@@ -196,8 +209,181 @@ class RoomAllocation extends React.Component {
       }
       postData()
   }
+
+  //Regenerate Leases
+  regenerate(e){
+    //e.preventDefault()
+   
+    let roomed = [this.props.Students[0], this.props.Students[1], this.props.Students[2]]
+   
+    if(this.state.index < this.props.Students.length){
+      this.getStudentRoom(this.props.Students[this.state.index].RubixRegisterUserID)
+      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.Students[this.state.index].RubixRegisterUserID, 0)
+
+    }
+  
+  }
+
+  
+  //Fetch User Res Data
+  getStudentRoom(studentID) {
+    let inRoom = false
+    const pingData = {
+        'UserCode': localStorage.getItem('userCode'),
+        'RubixClientID': localStorage.getItem('clientID'),
+        'ResidenceName': "",
+        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
+        ? this.props.currentRES
+        : localStorage.getItem('resID'),
+        'BuildingNumber': "",
+        'FloorNumber': "",
+        'RoomNumber': "",
+        'RubixRegisterUserID': studentID
+
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Get Students Room Allocation Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+      console.log('Posted:', pingData)
+      const postData = async () => {
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
+        .then(response => {
+          console.log("Students Rooms List:", response)
+          if (response.data.PostRubixUserData){
+            inRoom =  true;
+            this.state.roomedstudents.push(response.data.PostRubixUserData)
+            
+
+          } else {
+            inRoom =  false;
+          }
+        })
+      }
+      postData()
+  }
+
+
+  ///Tobe deleted
+    //Post File Using Mongo
+    onPressUpload(image, filetype, currentActiveKey) {
+      //this.props.updateLoadingMessage("Uploading Lease Document...");
+      
+      const postDocument = async () => {
+        const data = new FormData()
+        data.append('image', image)
+        data.append('FileType', filetype)
+        data.append('RubixRegisterUserID', this.props.Students[this.state.index].RubixRegisterUserID)
+        const requestOptions = {
+          title: 'Student Document Upload',
+          method: 'POST',
+          headers: { 'Content-Type': 'multipart/form-data', },
+          body: data
+        };
+        for (var pair of data.entries()) {
+          console.log(pair[0], ', ', pair[1]);
+        }
+        await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+          .then(response => {
+            console.log("Upload details:", response)
+            this.setState({ mongoID: response.data.post._id })
+          })
+      }
+      postDocument().then(() => {
+        this.setState({
+          index: this.state.index + 1
+        })
+        setTimeout(() => {
+          
+          this.regenerate()
+        }, 4000); 
+        //alert("Document uploaded successfully")
+        //Set timer for loading screen
+      
+        //window.location.reload()
+        
+        
+        /* setTimeout(() => {
+          
+          this.props.history.push("/login/" + localStorage.getItem('clientID'))
+        }, 5000); */
+        
+        //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
+      })
+    }
+  
+   //Converts base64 to file
+   dataURLtoFile(dataurl, filename) {
+  
+    var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+  
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+  
+    return new File([u8arr], filename, { type: mime });
+  }
+  
+    //Function to post signature to API
+    postSignature(signature, userid, tryval) {
+     // this.props.updateLoadingMessage("Generating Lease...");
+      //console.log("I am called incorrectly")
+      const postDocument = async () => {
+        const data = {
+          'RubixRegisterUserID': userid,
+          'ClientIdFronEnd': localStorage.getItem('clientID'),
+          'IP_Address': '',
+          'Time_and_Date': this.state.dateAndTime,
+          'image': signature
+        }
+        const requestOptions = {
+          title: 'Student Signature Upload',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: data
+        };
+        console.log("Posted Data:", data)
+        await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
+          .then(response => {
+            console.log("Signature upload details:", response)
+            this.setState({ docUrl: response.data.Base })
+            if (tryval === 1) {
+              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+              //console.log("temp file:", temp)
+              this.onPressUpload(temp, 'lease-agreement', 'signing')
+            } else if (tryval === 0) {
+              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
+              //console.log("temp file:", temp)
+              this.onPressUpload(temp, 'unsigned-agreement', 'signing')
+            }
+          })
+      }
+      postDocument()
+    }
+      //Coleect User Signing Info
+      getUserWitnessData() {
+        //Fetch IP Address
+        const getData = async () => {
+          const res = await axios.get('https://geolocation-db.com/json/')
+          //console.log("my IP", res.data);
+          this.setState({userIPAddress: res.data.IPv4 })
+        }
+        getData()
+      }
+    
+  
+
   render() {
-    const { Student } = this.props;
+    const { Student, Students } = this.props;
     return (
       <div ref={this.testRef}
         style={{ flex: 1 }}
@@ -232,6 +418,8 @@ class RoomAllocation extends React.Component {
               <div className="col-lg-12 col-md-12">
                 <div className="card planned_task">
                   <div className="body">
+                    {/* <p>{this.props.Students[this.state.index].RubixRegisterUserID}</p>
+                    <button onClick={(e)=>{this.regenerate(e)}}>Regenerate Leases</button> */}
                     <RoomsTable
               RoomList= {this.state.availableRooms}
               Body = {
