@@ -417,6 +417,29 @@ class ProfileV1Page extends React.Component {
     return message
   }
 
+  setLeaseMessage(percent, result) {
+    let message
+   if(result == 'correct'){
+     message = 'Approved'
+   } else if (percent == 0 || percent == '0') {
+    message = 'No document uploaded'
+   } else if(percent == 50 || percent == '50' && result == null){
+    message = 'Pending validation'
+   }
+    return message
+  }
+  setLeaseProg(percent, result) {
+    let progress
+   if(result == 'correct'){
+    progress = 100
+   } else if (percent == 0 || percent == '0') {
+    progress = 0
+   } else if(percent == 50 || percent == '50' && result != 'correct'){
+    progress = 50
+   }
+    return progress
+  }
+
   resetProgressBars(){
     this.props.onUpdateIDProgress(0)
     this.props.onUpdateRESProgress(0)
@@ -489,8 +512,8 @@ class ProfileV1Page extends React.Component {
                 break;
               case "lease-agreement": {
                 //console.log('its a lease')
-                this.props.onUpdateLeaseProgress(temp[i].Percentage)
-                this.props.onUpdateLeaseMessage(this.setMessage(temp[i].Percentage))
+                this.props.onUpdateLeaseProgress(this.setLeaseProg(temp[i].Percentage, temp[i].RubixVettedResult))
+                this.props.onUpdateLeaseMessage(this.setLeaseMessage(temp[i].Percentage, temp[i].RubixVettedResult))
               }
               
             }

@@ -91,6 +91,44 @@ componentDidMount() {
 
   return new File([u8arr], filename, { type: mime });
 }
+  //Function to post signature to API
+  postSignature(signature, userid, tryval) {
+    this.props.updateLoadingMessage("Generating Lease...");
+    //console.log("I am called incorrectly")
+    const postDocument = async () => {
+      const data = {
+        'RubixRegisterUserID': userid,
+        'ClientIdFronEnd': localStorage.getItem('clientID'),
+        'IP_Address': this.state.userIPAddress,
+        'Time_and_Date': this.state.dateAndTime,
+        'image': signature
+      }
+      const requestOptions = {
+        title: 'Student Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      //console.log("Posted Data:", data)
+      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
+        .then(response => {
+          //console.log("Signature upload details:", response)
+          this.setState({ docUrl: response.data.Base })
+          if (tryval === 1) {
+            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+            //console.log("temp file:", temp)
+            this.onPressUpload(temp, 'lease-agreement', 'signing')
+          } else if (tryval === 0) {
+            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
+            //console.log("temp file:", temp)
+            this.onPressUpload(temp, 'unsigned-agreement', 'signing')
+          }
+        })
+    }
+    postDocument()
+  }
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
@@ -264,7 +302,8 @@ getUserWitnessData() {
                   if(FileType == 'lease-agreement'){
                     //Set timer for loading screen
                     setTimeout(() => {
-                      this.sendFinalLease(Filename)
+                      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
+                      //this.resetLease(Filename)
                     }, 3000);
                   }
                   this.props.onPresPopUpConfirm();

@@ -105,7 +105,6 @@ async componentDidMount(){
     this.setState({myUserID: userID});
 
     const fetchData = async() =>{
-
         //Populate university list
         await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities/' + localStorage.getItem('clientID'))
         .then(response => response.json())
