@@ -10,6 +10,7 @@ export const ON_PRESS_SHOW_LEASE = "mailInboxReducer/ON_PRESS_SHOW_LEASE";
 
 export const ON_PRESS_POP_UP_CONFIRMATION = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION";
 export const ON_PRESS_POP_UP_ASSIGN_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_ASSIGN_ROOM";
+export const UPDATE_VARSITY_INFO = "mailInboxReducer/UPDATE_VARSITY_INFO";
 export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REMOVE_ROOM";
 
 export const ON_PRESS_POP_UP_NOTICE = "mailInboxReducer/ON_PRESS_POP_UP_NOTICE";
@@ -66,6 +67,12 @@ export const onPresPopUpConfirm = () => (dispatch) => {
 export const onPresPopUpAssign = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_POP_UP_ASSIGN_ROOM,
+  });
+};
+//Toggle Pop Up Assign Room
+export const onUpdateVarsity = () => (dispatch) => {
+  dispatch({
+    type: UPDATE_VARSITY_INFO,
   });
 };
 

@@ -28,6 +28,11 @@ const images = [
     thumbnail: require("../../assets/images/stock.png"),
   },
 ];
+function useIsMobile() {
+  const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
+  console.log("Is Mobile: ", isMobile)
+  return isMobile
+}
 class Residence extends React.Component {
   constructor(props) {
     super(props)
@@ -47,6 +52,7 @@ class Residence extends React.Component {
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Residence Information...");
+
 
     //Set timer for loading screen
     setTimeout(() => {
@@ -98,10 +104,7 @@ class Residence extends React.Component {
     //console.log('amenities', this.state.amenities)
   }
 
- useIsMobile() {
-    const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
-    return isMobile
- }
+
 
 
   //Fetch Res Gallery Images
@@ -248,6 +251,7 @@ class Residence extends React.Component {
                           alignContent: 'center'
                         }}
                       >About Us</h3>
+                      {/* <button onClick={()=>{}}>Check Mobile</button> */}
                       <p>{this.state.resDetails.ResidenceDescription}</p>
                     </div>
                   </div>

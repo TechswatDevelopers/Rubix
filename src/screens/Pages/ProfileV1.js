@@ -23,9 +23,11 @@ import {onPresPopUpEvent, onPresPopUpConfirm,
   updateLoadingMessage,
   onUpdateLeaseProgress,
   onUpdateLeaseMessage,
-  updateLoadingController,} from '../../actions';
+  updateLoadingController,
+  onUpdateVarsity,} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
+import PopUpVarsity from '../../components/PopUpEditVarsity';
 //import tempfile from 'tempfile';
 //import DocViewer from "react-doc-viewer";
 
@@ -836,6 +838,9 @@ class ProfileV1Page extends React.Component {
           </div>
         </div>
 
+        <PopUpVarsity
+        StudentID = {this.state.myUserID}
+        />
         <PopUpModal 
         Title= "Upload Complete!"
         Body = "Your document has been uploaded successfully."
@@ -1135,6 +1140,7 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   isSecuritySystem: ioTReducer.isSecuritySystem,
   studentProgress: navigationReducer.progressBar,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+  isUpdateVarsityModal: mailInboxReducer.isShowVarsityPopUp,
 
   currentStudentiD: navigationReducer.studentID,
   currentStudentIDNo: navigationReducer.studentIDNo,
@@ -1185,4 +1191,5 @@ export default connect(mapStateToProps, {
   updateLoadingController,
   onUpdateLeaseProgress,
   onUpdateLeaseMessage,
+  onUpdateVarsity,
 })(ProfileV1Page);

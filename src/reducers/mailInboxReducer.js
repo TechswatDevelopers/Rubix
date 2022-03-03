@@ -11,6 +11,7 @@ import {
   ON_PRESS_SHOW_ROOMS,
   ON_PRESS_SHOW_LEASE,
   ON_PRESS_POP_UP_ASSIGN_ROOM,
+  UPDATE_VARSITY_INFO,
   ON_PRESS_POP_UP_REMOVE_ROOM,
   ON_CHANGE_LOADER,
 } from "../actions/MailInboxAction";
@@ -26,6 +27,7 @@ const initialState = {
   isProfileShowing: false,
   isRoomshowing: false,
   isShowAssignModal: false,
+  isShowVarsityPopUp: false,
   isShowRemoveModal: false,
   isPopUpNewNotice: false,
   isShowLease: false,
@@ -137,6 +139,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isShowAssignModal: !state.isShowAssignModal,
+      };
+    }
+//Toggle Edit Vasrity Information
+    case UPDATE_VARSITY_INFO: {
+      return {
+        ...state,
+        isShowVarsityPopUp: !state.isShowVarsityPopUp,
       };
     }
 

@@ -16,8 +16,10 @@ import {onUpdateProgressBar,
   updateStudentYear,
   } from '../../actions/NavigationAction';
   import {
-    onPresLease} from '../../actions/MailInboxAction';
+    onPresLease, 
+    onUpdateVarsity,} from '../../actions';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import PopUpVarsity from '../../components/PopUpConfirm';
 
 class ProfileV1Setting extends React.Component {
   constructor(props) {
@@ -781,6 +783,9 @@ this.props.updateStudentName(
 
     return (
       <div>
+        {/* <PopUpVarsity
+        StudentID = {StudentID}
+        /> */}
         <div className="body">
           <h6>Profile Photo</h6>
           <div className="media">
@@ -1005,16 +1010,7 @@ this.props.updateStudentName(
                       }
                   
                 </div>
-                {/* <div className="form-group">
-                  
-                  <input
-                    className="form-control"
-                    placeholder="Street Address"
-                    name="RegisterUserStreetNameAndNumer"
-                    defaultValue={this.state.myProfile.RegisterUserStreetNameAndNumer}
-                    type="text"
-                  />
-                </div> */}
+                
                 <div className="form-group">
                   <label>
                     Unit Number:
@@ -1160,11 +1156,18 @@ this.props.updateStudentName(
               </div> */}
             </div>
           </div>
-          {/* <button className="btn btn-primary" type="submit" onClick={(e) => this.updateVarsityDetails(e)}>
+          {localStorage.getItem('role') == 'admin'
+          ?<><button className="btn btn-primary" type="submit" onClick={(e) => 
+          {
+            e.preventDefault()
+            console.log("Clicked", this.props.isPopUpModal)
+            this.props.onUpdateVarsity()
+            }}>
             Update
           </button>{" "}
           &nbsp;&nbsp;
-          <button className="btn btn-default">Cancel</button> */}
+          <button className="btn btn-default">Cancel</button></>
+          : null}
           </form>
         </div>
 
@@ -1289,6 +1292,9 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   currentStudentiD: navigationReducer.studentID,
 
   
+  isPopUpModal: mailInboxReducer.isShowVarsityPopUp,
+
+  
   currentStudentIDNo: navigationReducer.studentIDNo,
   currentStudentname: navigationReducer.studentName,
 
@@ -1314,5 +1320,7 @@ export default connect(mapStateToProps, {
   updateStudentAddress,
   updateStudentStudentNo,
   updateStudentYear,
-  onPresLease
+  onPresLease,
+  
+  onUpdateVarsity,
 })(ProfileV1Setting);
