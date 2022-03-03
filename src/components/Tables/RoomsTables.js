@@ -25,7 +25,38 @@ class RoomsTable extends React.Component {
   const myTime = new Date().toLocaleTimeString('en-ZA')
   this.setState({ dateAndTime: myDate + myTime })
   }
-  
+   //Send Auditted status
+   sendAuttingStatus(studentID){
+   
+    const data = {
+      'UserCode':  localStorage.getItem('userCode'),
+      'RubixRegisterUserID': studentID,
+      'RubixDocumentID': '',
+      'RubixDocumentType': 'unsigned-agreement',
+      'RubixDocumentVettedResult': 0,
+      'RubixRoomAllocationResult': '',
+      'RubixRoomID': '',
+      'RubixDocumentVettedResultComment': 'Lease regenerated'
+    }
+    
+    const requestOptions = {
+      title: 'Sending Auditted Status Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+
+    console.log("Posted Vetting Data: ", data)
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
+      .then(response=>{
+        console.log("DB response: ", response)
+      })
+    }
+    postData().then(()=>{
+      window.location.reload()
+    })
+  }
 
   ///Tobe deleted
     //Post File Using Mongo
@@ -52,7 +83,9 @@ class RoomsTable extends React.Component {
             this.setState({ mongoID: response.data.post._id })
           })
       }
-      postDocument()
+      postDocument().then(()=>{
+        this.sendAuttingStatus(studentiD)
+      })
     }
   
    //Converts base64 to file
