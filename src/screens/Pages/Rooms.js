@@ -300,18 +300,6 @@ class RoomAllocation extends React.Component {
           
           this.regenerate()
         }, 4000); 
-        //alert("Document uploaded successfully")
-        //Set timer for loading screen
-      
-        //window.location.reload()
-        
-        
-        /* setTimeout(() => {
-          
-          this.props.history.push("/login/" + localStorage.getItem('clientID'))
-        }, 5000); */
-        
-        //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
       })
     }
   
@@ -421,6 +409,7 @@ class RoomAllocation extends React.Component {
                     {/* <p>{this.props.Students[this.state.index].RubixRegisterUserID}</p>
                     <button onClick={(e)=>{this.regenerate(e)}}>Regenerate Leases</button> */}
                     <RoomsTable
+                    Student = {this.props.currentStudentiD}
               RoomList= {this.state.availableRooms}
               Body = {
                 this.state.availableRooms.length === 1
