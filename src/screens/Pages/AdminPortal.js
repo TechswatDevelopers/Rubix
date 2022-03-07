@@ -1222,7 +1222,7 @@ tempSeriesList.push(
 let tempUniversity = response.data.PostRubixUserData.filter(doc => doc.UniversityName !== undefined)
 let universiyChart = []
 let universiyLegend = []
-const UniPallete = ["#FFCCFF", "#FF66FF", "#FF00FF", "#FF3399", "#FF00CC", "#9933CC", "#990099", "#9966CC", "#9933FF", "#663399"]
+const UniPallete = ["#FFCCFF", "#FF66FF", "#FF00FF", "#FF3399", "#FF00CC", "#9933CC", "#990099", "#9966CC", "#9933FF", "#663399", "#4d2e69"]
 
 
         

@@ -309,13 +309,13 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+    console.log("my Data: ", data)
     const postData = async () => {
       if (this.Validate) {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            //console.log(response)
-            alert(response.data.PostRubixUserData[0].ResponceMessage)
+            console.log(response)
+            //alert(response.data.PostRubixUserData[0].ResponceMessage)
           })
       } else {
         alert("ID Number Invalid")
@@ -577,7 +577,7 @@ this.props.updateStudentName(
 
   componentDidMount() {
     const userID = localStorage.getItem('userID');
-    this.setState({ myUserID: userID });
+    this.setState({ myUserID: this.props.currentStudentiD });
     console.log('My role is: ', localStorage.getItem('role'))
 
 
@@ -605,10 +605,7 @@ this.props.updateStudentName(
     } else if (localStorage.getItem('role') == 'admin') {
       this.getStudentData(this.props.currentStudentiD)
     } 
-    
-
-    //Get Year of study list
-    this.fetchYearOfStudyData()
+  
 
 
   }
@@ -617,7 +614,7 @@ this.props.updateStudentName(
   fetchUserData = async () => {
     //console.log("user id:", localStorage.getItem('userID'))
     //Get Rubix User Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/' + localStorage.getItem('userID'))
+    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/' + this.props.currentStudentiD)
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -864,7 +861,6 @@ this.props.updateStudentName(
                   <input
                     className="form-control"
                     id='IDNumber'
-                    placeholder="ID Number"
                     name="IDNumber"
                     required=''
                     maxLength='13'

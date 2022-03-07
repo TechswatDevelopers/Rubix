@@ -15,6 +15,7 @@ import {
   updateLoadingMessage,
   updateLoadingController,
   updateClientBackG,
+  updateStudentName,
 } from "../actions";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -121,6 +122,8 @@ class Login extends React.Component {
                 "resID",
                 response.data.PostRubixUserData["0"]["RubixResidenceID"]
               );
+              this.props.updateStudentName(response.data.PostRubixUserData["0"]["Name"] + " " + response.data.PostRubixUserData["0"]["Surname"])
+              localStorage.setItem("studentName", response.data.PostRubixUserData["0"]["Name"] + " " + response.data.PostRubixUserData["0"]["Surname"])
               //Set timer for loading screen
               setTimeout(() => {
                 this.props.updateLoadingController(false);
@@ -638,4 +641,5 @@ export default connect(mapStateToProps, {
   updateLoadingMessage,
   updateLoadingController,
   updateClientBackG,
+  updateStudentName,
 })(Login);

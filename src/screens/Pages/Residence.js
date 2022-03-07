@@ -49,6 +49,7 @@ class Residence extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
+
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Residence Information...");
@@ -58,7 +59,6 @@ class Residence extends React.Component {
     setTimeout(() => {
       this.props.updateLoadingController(false);
     }, 3000);
-
 
     const pingData = {
       'RubixRegisterUserID': localStorage.getItem('userID'),
@@ -98,13 +98,10 @@ class Residence extends React.Component {
         })
     }
     setTimeout(() => {
-      
     postData()
     }, 2000);
     //console.log('amenities', this.state.amenities)
   }
-
-
 
 
   //Fetch Res Gallery Images
@@ -163,6 +160,8 @@ class Residence extends React.Component {
         }
     }
   }
+
+  
   render() {
     return (
       <div

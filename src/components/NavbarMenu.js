@@ -16,7 +16,8 @@ import {
   onPressMenuProfileDropdown,
   onPressSideMenuTab,
   tostMessageLoad,
-  updateResidenceID
+  updateResidenceID,
+  updateStudentName,
 } from "../actions";
 import Avatar4 from "../assets/images/xs/avatar4.jpg";
 import Avatar5 from "../assets/images/xs/avatar5.jpg";
@@ -31,7 +32,7 @@ class NavbarMenu extends React.Component {
     imageUrl: 'user.png',
     myClientogo: localStorage.getItem('clientLogo'),
     clientID: localStorage.getItem('clientID'),
-    userFullName: '',
+    userFullName: localStorage.getItem('studentName'),
   };
 
 
@@ -44,6 +45,10 @@ class NavbarMenu extends React.Component {
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
+
+    this.setState({
+      userFullName: this.props.studentName
+      })
     this.activeMenutabwhenNavigate("/" + activeKey);
  //Get User Profile Picture
  const fetchData = async () => {
@@ -874,7 +879,7 @@ class NavbarMenu extends React.Component {
                   </li>
                   <li
                     data-theme="cyan"
-                    className="active"
+                    //className="active"
                     className={themeColor === "theme-cyan" ? "active" : ""}
                   >
                     <div
@@ -1146,6 +1151,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     isToastMessage,
     userID,
     clientLogo,
+    studentName
   } = navigationReducer;
   return {
     addClassactive,
@@ -1169,7 +1175,8 @@ const mapStateToProps = ({ navigationReducer }) => {
     menuProfileDropdown,
     sideMenuTab,
     isToastMessage,
-    clientLogo
+    clientLogo,
+    studentName
   };
 };
 
@@ -1184,5 +1191,7 @@ export default connect(mapStateToProps, {
   onPressMenuProfileDropdown,
   onPressSideMenuTab,
   tostMessageLoad,
-  updateResidenceID
+  updateResidenceID,
+  
+  updateStudentName,
 })(NavbarMenu);
