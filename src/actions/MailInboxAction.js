@@ -15,6 +15,7 @@ export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REM
 
 export const ON_PRESS_POP_UP_NOTICE = "mailInboxReducer/ON_PRESS_POP_UP_NOTICE";
 export const ON_CHANGE_LOADER = "mailInboxReducer/ON_CHANGE_LOADER";
+export const SHOW_LEASE = "mailInboxReducer/SHOW_LEASE";
 
 export const onPressTagDropdown = () => (dispatch) => {
   dispatch({
@@ -111,6 +112,13 @@ export const onPresLease = () => (dispatch) => {
 export const onChangeLoader = () => (dispatch) => {
   dispatch({
     type: ON_CHANGE_LOADER,
+  });
+};
+
+//Toggle Show Lease Ammend
+export const onToggleLeaseAmmend = () => (dispatch) => {
+  dispatch({
+    type: SHOW_LEASE,
   });
 };
 

@@ -10,6 +10,7 @@ import {
   ON_PRESS_POP_UP_CONFIRMATION,
   ON_PRESS_SHOW_ROOMS,
   ON_PRESS_SHOW_LEASE,
+  SHOW_LEASE,
   ON_PRESS_POP_UP_ASSIGN_ROOM,
   UPDATE_VARSITY_INFO,
   ON_PRESS_POP_UP_REMOVE_ROOM,
@@ -28,6 +29,7 @@ const initialState = {
   isRoomshowing: false,
   isShowAssignModal: false,
   isShowVarsityPopUp: false,
+  isAmmendLease: false,
   isShowRemoveModal: false,
   isPopUpNewNotice: false,
   isShowLease: false,
@@ -146,6 +148,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isShowVarsityPopUp: !state.isShowVarsityPopUp,
+      };
+    }
+
+//Toggle Show Pop Up
+    case SHOW_LEASE: {
+      return {
+        ...state,
+        isAmmendLease: !state.isAmmendLease,
       };
     }
 

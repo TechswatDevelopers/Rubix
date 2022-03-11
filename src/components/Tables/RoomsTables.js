@@ -1,9 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
-import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, onPresPopUpAssign, onPresPopUpRemove} from "../../actions";
+import {updateStudentID,
+  onUpdateStudentRubixID,
+  onPresShowProfile,
+  onPresRooms,
+  onPresPopUpAssign,
+  onPresPopUpRemove,
+  onToggleLeaseAmmend} from "../../actions";
 import PopUpAssign from "../../components/PopUpAssignRoom"
 import PopUpRemove from "../../components/PopUpRemoveFromRoom"
+import AmmendLease from "../../components/AmmendLease"
 import axios from "axios";
 
 class RoomsTable extends React.Component {
@@ -171,6 +178,9 @@ class RoomsTable extends React.Component {
         Title= "Confirm Room Removal"
         Body = {"You are about to remove " + this.props.currentStudentname + " from a room: " /* + this.state.currentRoom.RoomNumber */}
         />
+        <AmmendLease 
+        StudentID= {Student}
+        />
           <div className="header">
             <h2>
               Available Room{" "}
@@ -222,7 +232,7 @@ class RoomsTable extends React.Component {
                       
                       }}>
                       <span>
-                        <i className=" icon-reload"></i> 
+                        <i className=" icon-logout"></i> 
                            Remove from Room
                         </span>
                       </button>
@@ -234,8 +244,20 @@ class RoomsTable extends React.Component {
                       
                       }}>
                       <span>
-                        <i className=" icon-ban"></i> 
+                        <i className=" icon-refresh"></i> 
                            Regenerate Lease
+                        </span>
+                      </button>
+                    <button className="btn btn-sm btn-outline-success ml-2" 
+                    onClick={(e)=>{
+                      e.preventDefault()
+                      //this.props.onPresRooms(e)
+                      this.props.onToggleLeaseAmmend()
+                      
+                      }}>
+                      <span>
+                        <i className=" icon-pencil"></i> 
+                           Ammend Lease
                         </span>
                       </button>
                       </>
@@ -287,5 +309,6 @@ export default connect(mapStateToProps, {
   onPresShowProfile,
   onPresRooms,
   onPresPopUpAssign,
-  onPresPopUpRemove
+  onPresPopUpRemove,
+  onToggleLeaseAmmend
 })(RoomsTable);
