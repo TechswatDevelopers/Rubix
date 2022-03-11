@@ -295,7 +295,7 @@ class ProfileV1Setting extends React.Component {
     const form = document.getElementById('personalInfo');
     const data = {
       'RubixRegisterUserID': this.state.myUserID, //Buffer.from(this.state.selectedFile.value).toString('base64')
-      'UserProfileImage': this.state.imgUpload,
+      'UserProfileImage': this.state.imgUpload !== null || this.state.imgUpload !== undefined ? ' ' : this.state.imgUpload,
       'ClientID': 1
     };
     for (let i = 0; i < form.elements.length; i++) {

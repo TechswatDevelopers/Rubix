@@ -1,14 +1,27 @@
 import React from "react";
+import { connect } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Dropdown, Nav, Toast } from "react-bootstrap";
 import { Component } from "@fullcalendar/core";
 import {Helmet} from "react-helmet";
+import axios from "axios";
+import {updateResidenceID,
+    updateLoadingMessage,
+    updateLoadingController,
+  } from "../../actions";
+
+  
+import PageHeader from "../../components/PageHeader";
 
 class LeaseInformation extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-          
+          leaseStart: '',
+          leaseEnd: '',
+          students: '',
+          index: 0,
+          payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
         }
       }
       componentDidMount() {
@@ -16,16 +29,14 @@ class LeaseInformation extends React.Component {
       }
 
       //Update Lease Information
-      postLeaseData() {
-        //Set Loading Screen ON
-        //this.props.updateLoadingController(true);
-        //this.props.updateLoadingMessage("Loading Residence Events...");
-        //Post Request Data
+      postLeaseData(e) {
+          console.log("I am called")
+          e.preventDefault()
         const data = {
-          'PDFDocumentUrl': '',
-          "LeaseStartDate" : "",
-          "LeaseEndDate" : "",
-          "LeaseAmount" : ""
+          "PDFDocumentUrl" : "https://rubiximages.cjstudents.co.za:449/37a1fcad-a06d-4dfb-9632-3348dbaf0f19.pdf",
+          "LeaseStartDate" : this.state.leaseStart,
+          "LeaseEndDate" : this.state.leaseEnd,
+          "LeaseAmount" : document.getElementById('amount').value
 
         }
         const requestOptions = {
@@ -39,11 +50,11 @@ class LeaseInformation extends React.Component {
         const postData = async () => {
           await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
           .then(response => {
-    
+            console.log("Post Response: ", response)
             if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
     
             } else {
-              //console.log("Res Events: ", response.data.PostRubixUserData)
+             
               //Popolate Events List
               this.populateEvents(response.data.PostRubixUserData)
               this.setState({
@@ -55,20 +66,229 @@ class LeaseInformation extends React.Component {
     
             
         this.props.updateLoadingController(false);
-        //Get Student Events
-        this.getStudentEvents()
             
           })
         }
         postData()
       }
+
+
+      //On Date Select
+  handleChange(e, timeVar){
+    const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+    const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
+    const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
+    //console.log('Date', myTime)
+    if (timeVar == 'start'){
+        this.setState({
+            leaseStart: myDate + ' ' + myTime
+        })
+    } else if (timeVar == 'end'){
+        this.setState({
+            leaseEnd: myDate + ' ' + myTime
+        })
+    }
+    return myDate + ' ' + myTime
+  }
+
+
+  //Function for lease regenration
+  //Fetch all students Data
+  getStudents(e){
+    if(e !== null && e !== undefined){
+      e.preventDefault()
+    }
+    const pingData = {
+        'UserCode': localStorage.getItem('userCode'),
+        'RubixClientID':  localStorage.getItem('clientID'),
+        'RubixResidenceID': 5,
+        'Search': 'Blue'
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Get All Students Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+      console.log('Posted data: ', pingData)
+      const postData = async () => {
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
+        .then(response => {
+          console.log("Students Data List:", response)
+          if(!response.data.PostRubixUserData){
+            this.setState({
+              students: []
+            })
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
+          } else {
+            this.setState({
+              students: response.data.PostRubixUserData
+            })
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
+          }
+        })
+      }
+      postData().then(()=>{
+        this.loadDocuments(this.state.students[this.state.index].RubixRegisterUserID)
+      })
+  }
+
+  //Load Documents
+  loadDocuments(userID) {
+    var tempList
+    const fetchData = async () => {
+      //Get documents from DB
+      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
+        .then(response => response.json())
+        .then(data => {
+          console.log("documents data:", data)
+          //Get Lease Documented stdents
+           tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
+
+           if(tempList.length != 0){
+             this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename)
+           } else {
+             this.setState({
+               index: this.state.index + 1
+             })
+             this.getStudents()
+           }
+        });
+
+    };
+    fetchData().then(()=> {
+    })
+    
+  }
+
+    //Update Lease Information
+    postLeaseData1(link) {
+      console.log("I am called")
+    const data = {
+      "PDFDocumentUrl" :link,
+      "LeaseStartDate" : ' ',
+      "LeaseEndDate" : ' ',
+      "LeaseAmount" : ' '
+
+    }
+    const requestOptions = {
+      title: 'Update Lease Information',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    }
+
+    //Http Post Request
+    const postData = async () => {
+      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
+      .then(response => {
+        console.log("Post Response: ", response)
+        if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
+
+        } else {
+         
+          
+        }
+
+        
+      })
+    }
+    postData().then(()=>{
+      this.setState({
+        index: this.state.index + 1
+      })
+      this.getStudents()
+    })
+  }
+
+
+
     render() {
         return(
             <div>
-                <Helmet>
+            <Helmet>
                 <meta charSet="utf-8" />
                 <title>Lease Information</title>
             </Helmet>
+
+            <PageHeader
+                HeaderText="Lease Information"
+                Breadcrumb={[ { name: "Lease Information" }]}
+                key="1"
+              />
+
+            <div className="card m-3 p-2">
+                <h3>Lease Information</h3>
+
+                <form>
+                <div className="form-group">
+                <div className="form-line">
+                  <label>Lease Start Date</label>
+                  <input
+                    required
+                    id="start"
+                    type="datetime-local"
+                    className="form-control"
+                    //name= "ResidenceEventStartDate"
+                    onChange={(e) => this.handleChange(e, 'start')}
+                  />
+                </div>
+              </div>
+                <div className="form-group">
+                <div className="form-line">
+                  <label>Lease End Date</label>
+                  <input
+                    required
+                    id="end"
+                    type="datetime-local"
+                    className="form-control"
+                    placeholder="Lease Date"
+                    //name= "ResidenceEventStartDate"
+                    onChange={(e) => this.handleChange(e, 'end')}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                        <label className="" >
+                        Payment Method: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({payment: e.target.value})} value={this.state.payment}>
+        {
+            
+            this.state.payMethods.map((payment, index)=> (
+            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+
+                <div className="form-group">
+                <div className="form-line">
+                  <label>Amount</label>
+                  <input
+                    required
+                    id="amount"
+                    type="number"
+                    className="form-control"
+                    placeholder="Monthly Amount"
+                  />
+                </div>
+              </div>
+
+              <button onClick={(e)=>{ this.postLeaseData(e)}} className="btn btn-primary">Update</button>
+             {/*  <button onClick={(e)=>{ this.getStudents(e)}} className="btn btn-primary">Edit Leases</button> */}
+                </form>
+                </div>
+
             </div>
         )
     }
@@ -84,8 +304,6 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   });
   
   export default connect(mapStateToProps, { 
-    onPresAddEvent, 
-    onPresPopUpEvent,
     updateLoadingMessage,
     updateLoadingController,
    })(LeaseInformation);

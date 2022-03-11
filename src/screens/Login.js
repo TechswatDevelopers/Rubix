@@ -143,7 +143,7 @@ class Login extends React.Component {
       } else {
         console.log(
           "checkValidity ",
-          document.getElementById("nof").checkValidity()
+          document.getElementById("login").checkValidity()
         );
       }
     };
@@ -217,7 +217,7 @@ class Login extends React.Component {
       } else {
         console.log(
           "checkValidity ",
-          document.getElementById("nof").checkValidity()
+          document.getElementById("login").checkValidity()
         );
       }
     };

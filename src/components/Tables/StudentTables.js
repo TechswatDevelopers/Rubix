@@ -48,9 +48,15 @@ class SudentsTable extends React.Component {
 
   //Split String into list
   splitString(given) {
-    var string = given.split(',').map(function (element, index) {
+    var string
+    if (given !== null || given != undefined){
+      string = given.split(',').map(function (element, index) {
         return <p key={index}>{ element }</p>; 
     });
+    } else {
+      string = ''
+    }
+     
     return string
   }
 

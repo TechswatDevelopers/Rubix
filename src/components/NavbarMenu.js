@@ -46,9 +46,12 @@ class NavbarMenu extends React.Component {
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
 
-    this.setState({
-      userFullName: this.props.studentName
-      })
+    if(this.props.studentName){
+      this.setState({
+        userFullName: this.props.studentName
+        })
+    }
+    
     this.activeMenutabwhenNavigate("/" + activeKey);
  //Get User Profile Picture
  const fetchData = async () => {
@@ -90,9 +93,6 @@ class NavbarMenu extends React.Component {
         fetchUserData();
         fetchData()
       }
-
-      
-   
   }
 
     //Fetch Res Gallery Images

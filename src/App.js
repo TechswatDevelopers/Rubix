@@ -50,6 +50,7 @@ import profilev2page from "./screens/Pages/ProfileV2";
 import imagegalleryprofile from "./screens/Pages/ImageGallery";
 import timeline from "./screens/Pages/TimeLine";
 import AdminDashboard from "./screens/Pages/AdminPortal";
+import LeaseInformation from "./screens/Pages/Lease-Information";
 import Students from "./screens/Pages/Students";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
@@ -524,6 +525,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/communication`}
                 component={Communication}
+              />
+                  <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/lease`}
+                component={LeaseInformation}
               />
                 </Switch>
               </div>
