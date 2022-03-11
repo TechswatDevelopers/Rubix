@@ -17,16 +17,73 @@ constructor(props) {
     payment: '',
     leaseStart: '',
     leaseEnd: '',
+    userIPAddress: '',
+    dateAndTime: null,
     payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
   }
 }
 
 componentDidMount() {
   window.scrollTo(0, 0);
-  //console.log('userCode', localStorage.getItem('userCode'))
+  this.getUserWitnessData()
 }
 
-postLeaseData1(link) {
+
+  //Post File Using Mongo
+  onPressUpload(image, filetype, currentActiveKey, userID) {
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', image)
+      data.append('FileType', filetype)
+      data.append('RubixRegisterUserID', userID)
+      const requestOptions = {
+        title: 'Student Document Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          console.log("Upload details:", response)
+          this.setState({ mongoID: response.data.post._id })
+        })
+    }
+    postDocument().then(() => {
+      
+    })
+  }
+
+ //Converts base64 to file
+ dataURLtoFile(dataurl, filename) {
+
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}
+
+    //Coleect User Signing Info
+    getUserWitnessData() {
+      //Fetch IP Address
+      const getData = async () => {
+        const res = await axios.get('https://geolocation-db.com/json/')
+        console.log("my IP", res.data);
+        this.setState({userIPAddress: res.data.IPv4 })
+      }
+      getData()
+    }
+
+postLeaseData1(link, userID) {
   
   const form = document.getElementById('ammend');
 const data = {
@@ -54,8 +111,11 @@ const postData = async () => {
   await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
   .then(response => {
     console.log("Post Response: ", response)
-    if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
-
+    if(response.data != null && response.data != undefined){
+      const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+      const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+      //console.log("temp file:", temp)
+      this.onPressUpload(temp, 'lease-agreement', 'signing',userID)
     } else {
      
       
@@ -69,60 +129,6 @@ postData().then(()=>{
   //window.location.reload()
 })
 }
-
-
-  //Post Event to DB:
-  postStudentEvent(e) {
-    e.preventDefault()
-
-    //Convert Date Information
-    const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
-    const startDate = document.getElementById('start').value
-    //const endDate = document.getElementById('end').value.toLocaleDateString('en-ZA', DATE_OPTIONS)
-
-    console.log('Start Date', startDate)
-
-    //Populate form data
-    const form = document.getElementById('add-event');
-  
-    //Populate Posting Data
-    const data = {
-      'RubixRegisterUserID': localStorage.getItem('userID'),
-      'StudentEventStartDate': this.state.startDate,
-      'StudentEventEndDate': this.state.endDate,
-      'StudentEventName': document.getElementById('title').value,
-      'StudentEventDescription': document.getElementById('desc').value,
-      'StudentEventTypeID': this.state.eventType
-    }
-
-    //Post Parameters
-    const requestOptions = {
-      title: 'Add Student Event Request',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: data
-    }
-    console.log("Post info", data)
-
-    //Make Post
-    const postData = async()=>{
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentEventsAddData', data, requestOptions)
-      .then(response => {
-        console.log("Add Student Event Response: ", response)
-      })
-    }
-    if(this.state.eventType == null || this.state.startDate == null || this.state.startDate == '' || this.state.endDate == '' || this.state.endDate == null  || document.getElementById('title').value == '' || document.getElementById('title').value == null  || document.getElementById('desc').value == '' ||document.getElementById('desc').value == null){
-      alert("Please Fill Out All the information")
-    } else {
-      postData()
-      .then(()=>{
-        this.props.onPresAddEvent()
-        window.location.reload()
-      })
-    }
-    
-
-  }
 
   //Load Documents
   loadDocuments(e, userID) {
@@ -138,13 +144,8 @@ postData().then(()=>{
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 
            if(tempList.length != 0){
-             this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename)
-           } else {
-             this.setState({
-               index: this.state.index + 1
-             })
-             this.getStudents()
-           }
+             this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename, userID)
+           } 
         });
 
     };
