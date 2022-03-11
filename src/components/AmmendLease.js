@@ -15,6 +15,8 @@ constructor(props) {
     eventTypes: [],
     eventType: null,
     payment: '',
+    leaseStart: '',
+    leaseEnd: '',
     payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
   }
 }
@@ -29,9 +31,9 @@ postLeaseData1(link) {
   const form = document.getElementById('ammend');
 const data = {
   "PDFDocumentUrl" :link,
-  "LeaseStartDate" : ' ',
-  "LeaseEndDate" : ' ',
-  "LeaseAmount" : ' ',
+  "LeaseStartDate" : this.state.leaseStart,
+  "LeaseEndDate" : this.state.leaseEnd,
+  "LeaseAmount" : document.getElementById('amount').value,
   'PaymentMethod ': this.state.payment
 
 }
@@ -45,6 +47,7 @@ const requestOptions = {
   headers: { 'Content-Type': 'application/json' },
   body: data
 }
+console.log("Data: ", data)
 
 //Http Post Request
 const postData = async () => {
@@ -61,7 +64,10 @@ const postData = async () => {
     
   })
 }
-postData()
+postData().then(()=>{
+  this.props.onToggleLeaseAmmend()
+  //window.location.reload()
+})
 }
 
 
@@ -146,7 +152,23 @@ postData()
     })
     
   }
-
+     //On Date Select
+     handleChange(e, timeVar){
+      const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+      const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
+      const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
+      //console.log('Date', myTime)
+      if (timeVar == 'start'){
+          this.setState({
+              leaseStart: myDate + ' ' + myTime
+          })
+      } else if (timeVar == 'end'){
+          this.setState({
+              leaseEnd: myDate + ' ' + myTime
+          })
+      }
+      return myDate + ' ' + myTime
+    }
 
   render() {
     const { isEventModal, StudentID } = this.props;
