@@ -78,7 +78,6 @@ class Login extends React.Component {
   //final submit check
   Submit(e) {
     e.preventDefault();
-
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Logging In...");
