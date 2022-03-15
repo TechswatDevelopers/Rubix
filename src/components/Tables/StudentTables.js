@@ -16,7 +16,7 @@ class SudentsTable extends React.Component {
   }
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.getColors()
+    //this.getColors()
   }
 
 

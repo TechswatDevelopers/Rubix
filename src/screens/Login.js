@@ -550,7 +550,7 @@ class Login extends React.Component {
                         >
                           For Student Login Click{" "}
                           <a
-                            href={"login/" + this.props.match.params.clientID}
+                            href={"login/" + localStorage.getItem('clientID')}
                             onClick={(e) => {
                               this.setState({
                                 isAdmin: false,

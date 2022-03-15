@@ -577,7 +577,7 @@ this.props.updateStudentName(
 
   componentDidMount() {
     const userID = localStorage.getItem('userID');
-    this.setState({ myUserID: this.props.currentStudentiD });
+    this.setState({ myUserID: userID });
     console.log('My role is: ', localStorage.getItem('role'))
     //Get User Profile Picture
     const fetchData = async () => {

@@ -110,18 +110,18 @@ class Students extends React.Component {
             this.setState({
               students: response.data.PostRubixUserData
             })
-            //Set timer for loading screen
-          setTimeout(() => {
-            this.props.updateLoadingController(false);
-            this.exportToCSV(resID)
-          }, 2000);
+          
           }
           
 
         })
       }
       postData().then(() =>{
-        this.getColors()
+        
+        setTimeout(() => {
+          this.props.updateLoadingController(false);
+          this.exportToCSV(resID)
+        }, 2000);
       })
   }
   exportToCSV(resID){
@@ -170,7 +170,11 @@ class Students extends React.Component {
 
         })
       }
-      postData()
+      postData().then(()=>{
+        setTimeout(() => {
+          this.getColors()
+        }, 4000);
+      })
   }
   //Get rubix color codes
   getColors(){
@@ -331,7 +335,6 @@ class Students extends React.Component {
                 </button>
               </form>
               <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('', this.state.res)}>Clear Search</button>
-              
         <button className="btn btn-outline-primary ml-5" onClick={()=>{
           console.log("data: ", data)
           var temp = data[0]
