@@ -21,18 +21,17 @@ import {
   updateLoadingMessage,
   updateLoadingController,} from '../../actions';
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
-import useMediaQuery from '@mui/material/useMediaQuery';
 const images = [
   {
     original: require("../../assets/images/stock.png"),
     thumbnail: require("../../assets/images/stock.png"),
   },
 ];
-function useIsMobile() {
+/* function useIsMobile() {
   const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
   console.log("Is Mobile: ", isMobile)
   return isMobile
-}
+} */
 class Residence extends React.Component {
   constructor(props) {
     super(props)

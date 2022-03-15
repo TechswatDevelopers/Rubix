@@ -136,7 +136,11 @@ class LeaseInformation extends React.Component {
         })
       }
       postData().then(()=>{
-        this.loadDocuments(this.state.students[this.state.index].RubixRegisterUserID)
+        //Set timer for loading screen
+    setTimeout(() => {
+      this.loadDocuments(this.state.students[this.state.index].RubixRegisterUserID);
+    }, 3000);
+        
       })
   }
 
@@ -153,7 +157,7 @@ class LeaseInformation extends React.Component {
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 
            if(tempList.length != 0){
-             this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename)
+             this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename, userID)
            } else {
              this.setState({
                index: this.state.index + 1
@@ -169,7 +173,7 @@ class LeaseInformation extends React.Component {
   }
 
     //Update Lease Information
-    postLeaseData1(link) {
+    postLeaseData1(link, userID) {
       console.log("I am called")
     const data = {
       "PDFDocumentUrl" :link,
@@ -190,23 +194,67 @@ class LeaseInformation extends React.Component {
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
       .then(response => {
         console.log("Post Response: ", response)
-        if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
+        if(response.data == null || response.data == undefined){
 
         } else {
-         
+          const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+      const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+      console.log("temp file:", temp)
+      this.onPressUpload(temp, 'lease-agreement', 'signing',userID)
           
         }
 
         
       })
     }
-    postData().then(()=>{
-      this.setState({
-        index: this.state.index + 1
-      })
-      this.getStudents()
-    })
+    postData()
   }
+    //Post File Using Mongo
+    onPressUpload(image, filetype, currentActiveKey, userID) {
+      const postDocument = async () => {
+        const data = new FormData()
+        data.append('image', image)
+        data.append('FileType', filetype)
+        data.append('RubixRegisterUserID', userID)
+        const requestOptions = {
+          title: 'Student Document Upload',
+          method: 'POST',
+          headers: { 'Content-Type': 'multipart/form-data', },
+          body: data
+        };
+        for (var pair of data.entries()) {
+          console.log(pair[0], ', ', pair[1]);
+        }
+        await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+          .then(response => {
+            console.log("Upload details:", response)
+            this.setState({ mongoID: response.data.post._id })
+          })
+      }
+      postDocument().then(()=>{
+        this.setState({
+          index: this.state.index + 1
+        })
+        this.getStudents()
+      })
+    }
+  
+   //Converts base64 to file
+   dataURLtoFile(dataurl, filename) {
+  
+    var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+  
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+  
+    return new File([u8arr], filename, { type: mime });
+  }
+  
 
 
 
@@ -285,7 +333,7 @@ class LeaseInformation extends React.Component {
               </div>
 
               <button onClick={(e)=>{ this.postLeaseData(e)}} className="btn btn-primary">Update</button>
-             {/*  <button onClick={(e)=>{ this.getStudents(e)}} className="btn btn-primary">Edit Leases</button> */}
+              <button onClick={(e)=>{ this.getStudents(e)}} className="btn btn-primary">Edit Leases</button>
                 </form>
                 </div>
 

@@ -294,7 +294,7 @@ class ProfileV1Setting extends React.Component {
     console.log(this.state.selectedFile)
     const form = document.getElementById('personalInfo');
     const data = {
-      'RubixRegisterUserID': this.state.myUserID, //Buffer.from(this.state.selectedFile.value).toString('base64')
+      'RubixRegisterUserID': this.state.myUserID,
       'UserProfileImage': this.state.imgUpload !== null || this.state.imgUpload !== undefined ? ' ' : this.state.imgUpload,
       'ClientID': 1
     };
@@ -579,8 +579,6 @@ this.props.updateStudentName(
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: this.props.currentStudentiD });
     console.log('My role is: ', localStorage.getItem('role'))
-
-
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB

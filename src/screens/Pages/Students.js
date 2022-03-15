@@ -15,6 +15,10 @@ import PopUpAssign from '../../components/PopUpAssignRoom';
 
 import {Grid, Row, Col, Button} from "react-bootstrap";
 import {Helmet} from "react-helmet";
+import {
+  JsonToCsv,
+  useJsonToCsv
+} from 'react-json-csv';
 
 class Students extends React.Component {
     constructor(props) {
@@ -27,6 +31,7 @@ class Students extends React.Component {
           isEmpty: false,
           pageTitle: 'Students',
           resList: [],
+          newList: [],
           res: '',
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
         }
@@ -108,6 +113,7 @@ class Students extends React.Component {
             //Set timer for loading screen
           setTimeout(() => {
             this.props.updateLoadingController(false);
+            this.exportToCSV(resID)
           }, 2000);
           }
           
@@ -117,6 +123,54 @@ class Students extends React.Component {
       postData().then(() =>{
         this.getColors()
       })
+  }
+  exportToCSV(resID){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Converting, Please wait...");
+  
+    const { saveAsCsv } = useJsonToCsv();
+    const pingData = {
+        'UserCode': localStorage.getItem('userCode'),
+        'RubixClientID':  localStorage.getItem('clientID'),
+        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' ? resID : localStorage.getItem('resID'),
+        
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Export To CSV',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+      console.log('Posted data: ', pingData)
+      const postData = async () => {
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReportExport', pingData, requestOptions)
+        .then(response => {
+          console.log("Students Data List:", response)
+          const temp = response.data.PostRubixUserData
+          const fields = {}
+          const filename = 'StudentsList'
+          if(!response.data.PostRubixUserData){
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
+          } else {
+            console.log("Data to be converted:", temp)
+            this.setState({
+              newList: temp
+            })
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
+          }
+          
+
+        })
+      }
+      postData()
   }
   //Get rubix color codes
   getColors(){
@@ -154,6 +208,17 @@ class Students extends React.Component {
 
 
   render() {
+    const { saveAsCsv } = useJsonToCsv();
+    var data = this.state.newList
+    var fields = {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
+    'IDNumber': 'IDNumber',
+    'Surname': 'Surname', 'StudentNumber': 'StudentNumber', 'StudentNumber': 'StudentNumber',
+    'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
+     'FloorNumber': 'FloorNumber', 
+    'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
+     'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
+      'lease-agreement_Link': 'lease-agreement_Link'}
+    var filename = 'students'
     return (
       <div
         style={{ flex: 1 }}
@@ -266,6 +331,13 @@ class Students extends React.Component {
                 </button>
               </form>
               <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('', this.state.res)}>Clear Search</button>
+              
+        <button className="btn btn-outline-primary ml-5" onClick={()=>{
+          console.log("data: ", data)
+          var temp = data[0]
+          saveAsCsv({ data, fields, filename })}}>
+  Download Report
+</button>
               </>
               }
               />
