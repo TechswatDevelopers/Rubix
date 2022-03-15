@@ -85,6 +85,7 @@ class Login extends React.Component {
 
     const form = document.getElementById("login");
     const data = {
+      RubixUserPlatformID: '1',
       RubixClientID: localStorage.getItem("clientID"),
     };
     for (let i = 0; i < form.elements.length; i++) {
