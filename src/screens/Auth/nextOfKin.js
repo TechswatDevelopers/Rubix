@@ -110,6 +110,8 @@ class NextOfKin extends React.Component {
     isLoad: true
   })
   e.preventDefault();
+
+  
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
   var nextofKinEmail = document.getElementById("NextOfKinEmail").value;
@@ -145,6 +147,9 @@ class NextOfKin extends React.Component {
               setTimeout(() => {
                 this.postStatus()
               }, 2000);
+              this.setState({
+                isLoad: false
+              })
           })
               
       } else{
@@ -179,7 +184,7 @@ const postData = async() => {
   if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          //console.log(response)
+          console.log(response)
           setTimeout(() => {
             this.postStatus()
           }, 2000);
@@ -208,32 +213,41 @@ else{
 }
 }
 
-//Posting Update status
-postStatus(){
-  const data = {
-    'RegisterStatus': 'Email Verify',
-    'RubixRegisterUserID': this.state.myUserID,
-};
-const requestOptions = {
-  title: 'Verify Status Form',
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: data
-};
-const postData = async() => {
-  await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
-          .then(response => {
-              //console.log(response)
-              
-          })
-}
-postData().then(()=>{
-  this.setState({
-    isLoad: false
-  })
-  this.props.history.push("/login/" + localStorage.getItem('clientID'))
-})
-}
+
+
+  //Posting Update status
+  postStatus() {
+    //Set Loading Screen ON
+ this.props.updateLoadingController(true);
+ this.props.updateLoadingMessage("Adding Status...");
+    const data = {
+      'Status': 'Email Verify',
+      'RubixRegisterUserID': this.state.myUserID,
+    };
+    const requestOptions = {
+      title: 'Verify Status Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+    console.log('User data:', data)
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
+        .then(response => {
+          if(response != null || response != undefined){
+      //Set timer for loading screen
+    setTimeout(() => {
+      this.setState({
+        isLoad: false
+      });
+    }, 1000);
+          }
+          //console.log("Verify email status", response)
+          //this.props.history.push("/" )
+        })
+    }
+    postData()
+  }
 
 
   componentDidMount(){
@@ -246,7 +260,6 @@ postData().then(()=>{
     const userID = localStorage.getItem('userID');
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
-    this.getUserWitnessData()
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
