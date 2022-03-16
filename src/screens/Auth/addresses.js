@@ -131,37 +131,7 @@ class Addresses extends React.Component {
 
   }
 
-  //Posting Update status
-  postStatus() {
-    //Set Loading Screen ON
- this.props.updateLoadingController(true);
- this.props.updateLoadingMessage("Adding Status...");
-    const data = {
-      'Status': 'Email Verify',
-      'RubixRegisterUserID': this.state.myUserID,
-    };
-    const requestOptions = {
-      title: 'Verify Status Form',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: data
-    };
-    console.log('User data:', data)
-    const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
-        .then(response => {
-          if(response != null || response != undefined){
-      //Set timer for loading screen
-    setTimeout(() => {
-      this.props.updateLoadingController(false);
-    }, 1000);
-          }
-          //console.log("Verify email status", response)
-          //this.props.history.push("/" )
-        })
-    }
-    postData()
-  }
+
 
   async componentDidMount() {
     document.body.classList.remove("theme-cyan");
@@ -195,7 +165,7 @@ class Addresses extends React.Component {
 
     }
     fetchData().then(() => {
-      this.postStatus()
+      //this.postStatus()
     });
 
   }

@@ -141,11 +141,10 @@ class NextOfKin extends React.Component {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              console.log(response)
-              //alert("Registration complete")
-              //this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
-              
-              
+              //console.log(response)
+              setTimeout(() => {
+                this.postStatus()
+              }, 2000);
           })
               
       } else{
@@ -156,9 +155,7 @@ class NextOfKin extends React.Component {
       }
   }
   postData().then(() => {
-    this.setState({
-      isLoad: false
-    })
+
     this.props.onPresPopUpEvent()
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
@@ -182,11 +179,10 @@ const postData = async() => {
   if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          console.log(response)
-          //alert("Registration complete")
-          //this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.state.myUserID, 0)
-          
-          
+          //console.log(response)
+          setTimeout(() => {
+            this.postStatus()
+          }, 2000);
       })
           
   } else{
@@ -197,9 +193,8 @@ const postData = async() => {
   }
 }
 postData().then(() => {
-this.setState({
-  isLoad: false
-})
+
+ 
 this.props.onPresPopUpEvent()
 //this.props.history.push("/login/" + localStorage.getItem('clientID'))
 })
@@ -212,113 +207,6 @@ else{
   })
 }
 }
-
-  //Post File Using Mongo
-  onPressUpload(image, filetype, currentActiveKey) {
-    
-    const postDocument = async () => {
-      const data = new FormData()
-      data.append('image', image)
-      data.append('FileType', filetype)
-      data.append('RubixRegisterUserID', this.state.myUserID)
-      const requestOptions = {
-        title: 'Student Document Upload',
-        method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data', },
-        body: data
-      };
-      for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
-      }
-      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
-        .then(response => {
-          console.log("Upload details:", response)
-          this.setState({ mongoID: response.data.post._id })
-        })
-    }
-    postDocument().then(() => {
-      //alert("Document uploaded successfully")
-      this.setState({
-        isLoad: false
-      })
-      this.props.onPresPopUpEvent()
-      
-      
-      
-      /* setTimeout(() => {
-        
-        this.props.history.push("/login/" + localStorage.getItem('clientID'))
-      }, 5000); */
-      
-      //window.location.reload()
-      //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
-    })
-  }
-
- //Converts base64 to file
- dataURLtoFile(dataurl, filename) {
-
-  var arr = dataurl.split(','),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], filename, { type: mime });
-}
-
-  //Function to post signature to API
-  postSignature(signature, userid, tryval) {
-    console.log("I am called incorrectly")
-    const postDocument = async () => {
-      const data = {
-        'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
-        'Time_and_Date': this.state.dateAndTime,
-        'image': signature
-      }
-      const requestOptions = {
-        title: 'Student Signature Upload',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: data
-      };
-      console.log("Posted Data:", data)
-      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
-        .then(response => {
-          console.log("Signature upload details:", response)
-          this.setState({ docUrl: response.data.Base })
-          if (tryval === 1) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
-            const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'lease-agreement', 'signing')
-          } else if (tryval === 0) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
-            const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'unsigned-agreement', 'signing')
-          }
-        })
-    }
-    postDocument()
-  }
-    //Coleect User Signing Info
-    getUserWitnessData() {
-      //Fetch IP Address
-      const getData = async () => {
-        const res = await axios.get('https://geolocation-db.com/json/')
-        console.log("my IP", res.data);
-        this.setState({userIPAddress: res.data.IPv4 })
-      }
-      getData()
-    }
-  
 
 //Posting Update status
 postStatus(){
@@ -335,11 +223,16 @@ const requestOptions = {
 const postData = async() => {
   await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              console.log(response)
-              this.props.history.push("/" )
+              //console.log(response)
+              
           })
 }
-postData()
+postData().then(()=>{
+  this.setState({
+    isLoad: false
+  })
+  this.props.history.push("/login/" + localStorage.getItem('clientID'))
+})
 }
 
 
