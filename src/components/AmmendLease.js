@@ -19,6 +19,7 @@ constructor(props) {
     leaseEnd: '',
     userIPAddress: '',
     dateAndTime: null,
+    isLoad: false,
     payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
   }
 }
@@ -84,6 +85,9 @@ componentDidMount() {
     }
 
 postLeaseData1(link, userID) {
+  this.setState({
+    isLoad: true
+  })
   
   const form = document.getElementById('ammend');
 const data = {
@@ -151,6 +155,9 @@ postData().then(()=>{
 
     };
     fetchData().then(()=> {
+      this.setState({
+        isLoad: false
+      })
     })
     
   }
@@ -179,6 +186,22 @@ postData().then(()=>{
         className={isEventModal ? "modal fade show" : "modal fade"}
         role="dialog"
       >
+        <div
+          className="page-loader-wrapper"
+          style={{ display: this.state.isLoad ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt=" "
+              />
+            </div>
+            <p>Ammending Lease, please wait...</p>
+          </div>
+        </div>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
