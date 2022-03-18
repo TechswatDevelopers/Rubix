@@ -78,7 +78,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     date: myDate,
     time: myTime
   }
-  console.log("date", date)
+  //console.log("date", date)
   return newdate
 }
 

@@ -198,6 +198,10 @@ class Login extends React.Component {
                 "resID",
                 response.data.PostRubixUserData["0"]["RubixResidenceID"]
               );
+              localStorage.setItem(
+                "adminID",
+                response.data.PostRubixUserData["0"]["RubixAdminUserID"]
+              );
               //Set timer for loading screen
               setTimeout(() => {
                 this.props.updateLoadingController(false);

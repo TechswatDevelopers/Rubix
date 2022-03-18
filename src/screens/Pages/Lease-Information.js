@@ -179,7 +179,8 @@ class LeaseInformation extends React.Component {
       "PDFDocumentUrl" :link,
       "LeaseStartDate" : ' ',
       "LeaseEndDate" : ' ',
-      "LeaseAmount" : ' '
+      "LeaseAmount" : ' ',
+      "AdminUserID": localStorage.getItem('adminID')
 
     }
     const requestOptions = {

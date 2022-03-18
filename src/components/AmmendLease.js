@@ -91,7 +91,8 @@ const data = {
   "LeaseStartDate" : this.state.leaseStart,
   "LeaseEndDate" : this.state.leaseEnd,
   "LeaseAmount" : document.getElementById('amount').value,
-  'PaymentMethod ': this.state.payment
+  'PaymentMethod ': this.state.payment,
+  "AdminUserID": localStorage.getItem('adminID')
 
 }
 for (let i = 0; i < form.elements.length; i++) {
