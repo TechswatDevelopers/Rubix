@@ -171,7 +171,7 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      console.log(" mY Posted Data:", data)
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)

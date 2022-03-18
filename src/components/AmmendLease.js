@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent , onPresPopUpEvent, onToggleLeaseAmmend} from "../actions";
+import { onPresAddEvent , onPresPopUpEvent, onToggleLeaseAmmend, 
+  updateLoadingMessage,
+  updateLoadingController,} from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -53,6 +55,11 @@ componentDidMount() {
         })
     }
     postDocument().then(() => {
+       //Set timer for loading screen
+    setTimeout(() => {
+      this.props.updateLoadingController(false);
+      window.location.reload()
+    }, 2000);
       
     })
   }
@@ -85,9 +92,10 @@ componentDidMount() {
     }
 
 postLeaseData1(link, userID) {
-  this.setState({
-    isLoad: true
-  })
+
+  //Set Loading Screen ON
+  this.props.updateLoadingController(true);
+  this.props.updateLoadingMessage("Ammending Lease Information...");
   
   const form = document.getElementById('ammend');
 const data = {
@@ -188,7 +196,7 @@ postData().then(()=>{
       >
         <div
           className="page-loader-wrapper"
-          style={{ display: this.state.isLoad ? "block" : "none" }}
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
         >
           <div className="loader">
             <div className="m-t-30">
@@ -199,9 +207,10 @@ postData().then(()=>{
                 alt=" "
               />
             </div>
-            <p>Ammending Lease, please wait...</p>
+            <p>{this.props.loadingMessage}</p>
           </div>
         </div>
+
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -287,8 +296,13 @@ postData().then(()=>{
   }
 }
 
-const mapStateToProps = ({ mailInboxReducer }) => ({
+const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isAmmendLease,
+
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onToggleLeaseAmmend })(AmmendLease);
+export default connect(mapStateToProps, { onPresAddEvent, onToggleLeaseAmmend,
+  updateLoadingMessage,
+  updateLoadingController, })(AmmendLease);
