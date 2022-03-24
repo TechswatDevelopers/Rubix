@@ -58,7 +58,7 @@ componentDidMount() {
        //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
-      window.location.reload()
+      //window.location.reload()
     }, 2000);
       
     })
