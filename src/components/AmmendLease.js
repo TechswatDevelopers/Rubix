@@ -104,7 +104,8 @@ const data = {
   "LeaseEndDate" : this.state.leaseEnd,
   "LeaseAmount" : document.getElementById('amount').value,
   'PaymentMethod ': this.state.payment,
-  "AdminUserID": localStorage.getItem('adminID')
+  "AdminUserID": localStorage.getItem('adminID'),
+  'RubixClientID': localStorage.getItem('clientID')
 
 }
 for (let i = 0; i < form.elements.length; i++) {
