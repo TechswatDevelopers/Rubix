@@ -58,7 +58,7 @@ componentDidMount() {
        //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
-      //window.location.reload()
+      window.location.reload()
     }, 2000);
       
     })
@@ -147,6 +147,9 @@ postData().then(()=>{
   //Load Documents
   loadDocuments(e, userID) {
     e.preventDefault()
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Ammending Lease Information...");
     var tempList
     const fetchData = async () => {
       //Get documents from DB
@@ -159,7 +162,11 @@ postData().then(()=>{
 
            if(tempList.length != 0){
              this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename, userID)
-           } 
+           } else {
+             
+      this.props.updateLoadingController(false);
+      alert("No Lease Available")
+           }
         });
 
     };
