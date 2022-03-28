@@ -35,13 +35,15 @@ class AdminDashboard extends React.Component {
       }, 2000);
     }
 
+    //this.getAllResInfo()
+
 
     const fetchData = async() =>{
       //Populate Residence list
       await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
       .then(response => response.json())
       .then(data => {
-          console.log("data is ", data)
+          //console.log("data is ", data)
           this.setState({resList: data.data})
           });
       } 
@@ -86,13 +88,13 @@ class AdminDashboard extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    console.log("Posted Data: ", data)
+    //console.log("Posted Data: ", data)
 
     
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
-        console.log("Response: ", response)
+        //console.log("Response: ", response)
 
         //Load data
         let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
@@ -119,7 +121,7 @@ class AdminDashboard extends React.Component {
         var tempdate = [];
 
         var diff =Math.ceil(Math.abs( new Date() - base2)/oneDay)
-        console.log('Difference: ', diff)
+        //console.log('Difference: ', diff)
         
 
         for (var i = 1; i <= diff; i++) {
@@ -509,6 +511,49 @@ class AdminDashboard extends React.Component {
     this.props.updateLoadingController(false);
     }
   }
+
+  getAllResInfo(){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Data, Please wait...");
+    const data = {
+      'UserCode': localStorage.getItem('userCode'),
+    }
+
+    const requestOptions = {
+      title: 'Fetch All Res Reports Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+
+    //Post Data
+    
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReportAll', data, requestOptions)
+      .then( response =>{
+        //console.log('Stats Data: ', response.data.PostRubixUserData)
+        var list = response.data.PostRubixUserData
+
+        list.forEach(res =>{
+          //console.log('Current res: ', res)
+          this.state.resInfoList.push(
+            {
+              'name': res.ResidenceName,
+              'total': res.TotalCapacityPerRes,
+              'beds': res.TotalbedsTaken,
+              'leases': res.lease_agreement_Count != null && res.lease_agreement_Count!= undefined ? res.lease_agreement_Count : 0
+            }
+          )
+        })
+      })
+    }
+    postData().then(()=>{
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+        }, 2000);
+    })
+  }
   
   getResInfo(resID, resName) {
     //Set Loading Screen ON
@@ -526,7 +571,7 @@ class AdminDashboard extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-console.log('Posted Data: ', data)
+//console.log('Posted Data: ', data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
       .then(response => {
@@ -556,7 +601,7 @@ console.log('Posted Data: ', data)
       this.getAllReports()
       }, 2000);
     })
-    console.log("Final List: ", this.state.resInfoList)
+    //console.log("Final List: ", this.state.resInfoList)
   }
 
   //Get Admin Report
@@ -581,7 +626,7 @@ console.log('Posted Data: ', data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
-          console.log("DB response: ", response)
+          //console.log("DB response: ", response)
 
           if(response != null || response != undefined){
 
@@ -1413,7 +1458,7 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
           
         this.getReport(e.target.value)
           this.props.updateResidenceID(e.target.value)
-          console.log('ResID1: ', e.target.value)
+         // console.log('ResID1: ', e.target.value)
           }} value={this.state.res}>
         {
             
@@ -1423,7 +1468,7 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
         }
     </select> }
 
-    <button className="btn btn-outline-primary mt-2" onClick={(e) => {this.getAllReports()}}>View All Residence Stats</button>
+    <button className="btn btn-outline-primary mt-2" onClick={(e) => {this.getAllResInfo()}}>View All Residence Stats</button>
     {
       this.state.resInfoList.map((res, index) => (
         <>
