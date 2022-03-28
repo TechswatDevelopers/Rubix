@@ -221,7 +221,8 @@ class Students extends React.Component {
      'FloorNumber': 'FloorNumber', 
     'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
      'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
-      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart'}
+      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
+    'PaymentMethod': 'PaymentMethod'}
     var filename = 'students'
     return (
       <div
