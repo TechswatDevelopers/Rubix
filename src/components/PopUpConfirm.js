@@ -182,6 +182,7 @@ getUserWitnessData() {
 
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
+    this.props.updateLoadingController(true);
     let vettedStatus
     if(vet == 'correct') {
       vettedStatus = 1
