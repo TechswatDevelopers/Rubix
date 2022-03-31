@@ -190,6 +190,10 @@ class Login extends React.Component {
                 response.data.PostRubixUserData["0"]["UserCode"]
               );
               localStorage.setItem(
+                "adminName",
+                response.data.PostRubixUserData["0"]["NameSurname"]
+              );
+              localStorage.setItem(
                 "adminLevel",
                 response.data.PostRubixUserData["0"]["AdminUserLevel"]
               );

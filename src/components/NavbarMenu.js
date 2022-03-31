@@ -86,7 +86,11 @@ class NavbarMenu extends React.Component {
       if (localStorage.getItem('role') == 'admin'){
          //Set timer for loading screen
   setTimeout(() => {
-    this.getAdmin()
+    this.setState({
+      //profile: response.data.PostRubixUserData[0],
+      userFullName: localStorage.getItem('adminName')
+    })
+    //this.getAdmin()
   }, 4000);
         
       } else {

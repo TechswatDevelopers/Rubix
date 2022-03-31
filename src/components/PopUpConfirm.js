@@ -211,10 +211,13 @@ getUserWitnessData() {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminVettings', data, requestOptions)
       .then(response=>{
         console.log("DB response: ", response)
+        setTimeout(() => {
+          this.sendAuttingStatus(filetype, docID, vet)
+        }, 2000);
       })
     }
     postData().then(()=>{
-      this.sendAuttingStatus(filetype, docID, vet)
+      
       //window.location.reload()
     })
   }
@@ -254,7 +257,7 @@ getUserWitnessData() {
       })
     }
     postData().then(()=>{
-      //window.location.reload()
+      window.location.reload()
     })
   }
 

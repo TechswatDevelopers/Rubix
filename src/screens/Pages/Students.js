@@ -34,6 +34,15 @@ class Students extends React.Component {
           newList: [],
           res: '',
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
+          fields: {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
+    'IDNumber': 'IDNumber',
+    'Surname': 'Surname', 'StudentNumber': 'StudentNumber', 'StudentNumber': 'StudentNumber',
+    'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
+     'FloorNumber': 'FloorNumber', 
+    'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
+     'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
+      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
+    'PaymentMethod': 'PaymentMethod'}
         }
       }
 
@@ -120,8 +129,9 @@ class Students extends React.Component {
         
         setTimeout(() => {
           this.props.updateLoadingController(false);
-          this.exportToCSV(resID)
-        }, 2000);
+          this.getColors()
+          //this.exportToCSV(resID)
+        }, 4000);
       })
   }
   exportToCSV(resID){
@@ -129,6 +139,7 @@ class Students extends React.Component {
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Converting, Please wait...");
   
+    
     const { saveAsCsv } = useJsonToCsv();
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
@@ -149,31 +160,42 @@ class Students extends React.Component {
         .then(response => {
           console.log("Students Data List:", response)
           const temp = response.data.PostRubixUserData
-          const fields = {}
-          const filename = 'StudentsList'
           if(!response.data.PostRubixUserData){
             //Set timer for loading screen
           setTimeout(() => {
             this.props.updateLoadingController(false);
-          }, 2000);
+          }, 4000);
           } else {
             console.log("Data to be converted:", temp)
             this.setState({
               newList: temp
             })
+            
+         
+
             //Set timer for loading screen
           setTimeout(() => {
             this.props.updateLoadingController(false);
-          }, 2000);
+          }, 4000);
           }
           
 
         })
       }
       postData().then(()=>{
-        setTimeout(() => {
-          this.getColors()
-        }, 4000);
+        var fields = {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
+    'IDNumber': 'IDNumber',
+    'Surname': 'Surname', 'StudentNumber': 'StudentNumber', 'StudentNumber': 'StudentNumber',
+    'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
+     'FloorNumber': 'FloorNumber', 
+    'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
+     'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
+      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
+    'PaymentMethod': 'PaymentMethod'}
+        const data = this.state.newList
+        const filenames = 'students'
+        console.log("data: ", filenames)
+        saveAsCsv({data, fields, filenames})
       })
   }
   //Get rubix color codes
@@ -223,7 +245,7 @@ class Students extends React.Component {
      'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
       'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
     'PaymentMethod': 'PaymentMethod'}
-    var filename = 'students'
+    
     return (
       <div
         style={{ flex: 1 }}
@@ -273,6 +295,7 @@ class Students extends React.Component {
           this.getStudents('', e.target.value)
           this.props.updateResidenceID(e.target.value)
           console.log('ResID1: ', e.target.value)
+          localStorage.setItem('resID', e.target.value)
           }} value={this.state.res}>
         {
             
@@ -337,9 +360,8 @@ class Students extends React.Component {
               </form>
               <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('', this.state.res)}>Clear Search</button>
         <button className="btn btn-outline-primary ml-5" onClick={()=>{
-          console.log("data: ", data)
-          var temp = data[0]
-          saveAsCsv({ data, fields, filename })}}>
+          console.log("data: ", localStorage.getItem('resID'))
+          this.exportToCSV(localStorage.getItem('resID'))}}>
   Download Report
 </button>
               </>

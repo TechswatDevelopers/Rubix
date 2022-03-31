@@ -296,7 +296,7 @@ class ProfileV1Setting extends React.Component {
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
       'UserProfileImage': this.state.imgUpload !== null || this.state.imgUpload !== undefined ? ' ' : this.state.imgUpload,
-      'ClientID': 1
+      'ClientID': localStorage.getItem('clientID')
     };
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
