@@ -33,6 +33,7 @@ class Students extends React.Component {
           resList: [],
           newList: [],
           res: '',
+          resName: '',
           dateAndTime: '',
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
           fields: {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
@@ -54,7 +55,7 @@ class Students extends React.Component {
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
-    this.setState({ dateAndTime: myDate + myTime })
+    this.setState({ dateAndTime: myDate })
 
 
     if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
