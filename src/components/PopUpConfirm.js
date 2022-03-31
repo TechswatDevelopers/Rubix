@@ -218,7 +218,6 @@ getUserWitnessData() {
     }
     postData().then(()=>{
       
-      //window.location.reload()
     })
   }
 

@@ -33,6 +33,7 @@ class Students extends React.Component {
           resList: [],
           newList: [],
           res: '',
+          dateAndTime: '',
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
           fields: {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
     'IDNumber': 'IDNumber',
@@ -48,6 +49,13 @@ class Students extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
+
+
+    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({ dateAndTime: myDate + myTime })
+
 
     if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
 
@@ -193,9 +201,10 @@ class Students extends React.Component {
       'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
     'PaymentMethod': 'PaymentMethod'}
         const data = this.state.newList
-        const filenames = 'students'
-        console.log("data: ", filenames)
-        saveAsCsv({data, fields, filenames})
+        const filename = 'Rubix Extract - ' + this.state.dateAndTime
+        const separator =','
+        console.log("data: ", filename)
+        saveAsCsv({data, fields, filename, separator})
       })
   }
   //Get rubix color codes
