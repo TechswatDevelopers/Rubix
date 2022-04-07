@@ -200,7 +200,7 @@ class Students extends React.Component {
     'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
      'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
       'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
-    'PaymentMethod': 'PaymentMethod',  'RubixVetted': 'RubixVetted'}
+    'PaymentMethod': 'PaymentMethod',  'RubixVetted': 'RubixVetted', 'RubixCourseID': 'RubixCourseID', 'UniversityName': 'UniversityName'}
         const data = this.state.newList
         const filename = 'Rubix Extract - ' + this.state.dateAndTime
         const separator =','
