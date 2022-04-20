@@ -36,15 +36,8 @@ class Students extends React.Component {
           resName: '',
           dateAndTime: '',
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
-          fields: {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
-    'IDNumber': 'IDNumber',
-    'Surname': 'Surname', 'StudentNumber': 'StudentNumber', 'StudentNumber': 'StudentNumber',
-    'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
-     'FloorNumber': 'FloorNumber', 
-    'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
-     'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
-      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
-    'PaymentMethod': 'PaymentMethod', 'RubixVetted': 'RubixVetted'}
+          studentLeaseAmmend: [],
+          listIndex: 0
         }
       }
 
@@ -82,6 +75,199 @@ class Students extends React.Component {
         });
     } 
     fetchData();
+  }
+
+  //Amend Lease From List
+  bulkLease(e){
+    e.preventDefault()
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Details, Please wait...");
+    const pingData = {
+      'UserCode': localStorage.getItem('userCode'),
+    };
+    const requestOptions = {
+      title: 'Get Students Data List from CSV',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: pingData
+    };
+    const postData = async () => {
+      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminLeaseBulkUpdate', pingData, requestOptions)
+      .then(response => {
+        console.log("The response = ", response)
+        const data = response.data.PostRubixUserData
+        if(data != null && data.length != 0){
+          this.setState({
+            studentLeaseAmmend: data
+          })
+          this.ammendLeases()
+        }
+      })
+    }
+    postData().then(()=>{
+      this.props.updateLoadingController(false);
+    })
+  }
+
+  //Ammend Leases
+  ammendLeases() {
+    const leases = this.state.studentLeaseAmmend
+    if ( this.state.listIndex <= leases.length - 1){
+      console.log("Current Student: ",leases[this.state.listIndex])
+      //Call Lease Ammend API
+      const student = leases[this.state.listIndex]
+//console.log("the current student is: ", this.state.studentLeaseAmmend)
+  //Set Loading Screen ON
+  this.props.updateLoadingController(true);
+  this.props.updateLoadingMessage("Ammending Lease Information...");
+   
+  const leaseStart = student.RubixRentalPeriodLeaseStartDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
+  const leaseEnd = student.RubixRentalPeriodLeaseEndDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
+
+  const data = {
+    "PDFDocumentUrl" :"https://rubiximages.cjstudents.co.za:449/" + student.FileName,
+    "LeaseStartDate" : leaseStart,
+    "LeaseEndDate" : leaseEnd,
+    "LeaseAmount" : student.RubixMontlyRentalAmount,
+    'PaymentMethod ': student.RubixPaymentMethod,
+    "AdminUserID": localStorage.getItem('adminID'),
+    'RubixClientID': localStorage.getItem('clientID')
+  }
+  
+  const requestOptions = {
+    title: 'Update Lease Information',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: data
+  }
+
+  const postData = async () => {
+    console.log("I am posting")
+    await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
+    .then(response => {
+      console.log("Post Response: ", response)
+      if(response.data != null && response.data != undefined){
+        const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+        const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+        //console.log("temp file:", temp)
+        this.onPressUpload(temp, 'lease-agreement', 'signing',student.RubixRegisterUserID)
+      } else {
+       
+        
+      }
+  
+      
+    })
+  }
+  
+  postData()
+     
+    } else {
+      this.props.updateLoadingController(false);
+
+    }
+  }
+
+  dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+  
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+  
+    return new File([u8arr], filename, { type: mime });
+  }
+postLeaseData1(i) {
+  const student = this.state.studentLeaseAmmend[i]
+console.log("the current student is: ", this.state.studentLeaseAmmend)
+  //Set Loading Screen ON
+  this.props.updateLoadingController(true);
+  this.props.updateLoadingMessage("Ammending Lease Information...");
+   
+  const leaseStart = student.RubixRentalPeriodLeaseStartDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
+  const leaseEnd = student.RubixRentalPeriodLeaseEndDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
+const data = {
+  "PDFDocumentUrl" :"https://rubiximages.cjstudents.co.za:449/" + student.FileName,
+  "LeaseStartDate" : leaseStart,
+  "LeaseEndDate" : leaseEnd,
+  "LeaseAmount" : student.RubixMontlyRentalAmount,
+  'PaymentMethod ': student.RubixPaymentMethod,
+  "AdminUserID": localStorage.getItem('adminID'),
+  'RubixClientID': localStorage.getItem('clientID')
+}
+
+const requestOptions = {
+  title: 'Update Lease Information',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: data
+}
+console.log("Data: ", data)
+
+//Http Post Request
+const postData = async () => {
+  await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
+  .then(response => {
+    console.log("Post Response: ", response)
+    if(response.data != null && response.data != undefined){
+      const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+      const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+      //console.log("temp file:", temp)
+      this.onPressUpload(temp, 'lease-agreement', 'signing',student.RubixRegisterUserID)
+    } else {
+     
+      
+    }
+
+    
+  })
+}
+postData().then(()=>{
+  //this.props.onToggleLeaseAmmend()
+  //window.location.reload()
+})
+}
+
+  //Post File Using Mongo
+  onPressUpload(image, filetype, currentActiveKey, userID) {
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', image)
+      data.append('FileType', filetype)
+      data.append('RubixRegisterUserID', userID)
+      const requestOptions = {
+        title: 'Student Document Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          console.log("Upload details:", response)
+          this.setState({ mongoID: response.data.post._id })
+        })
+    }
+    postDocument().then(() => {
+       //Set timer for loading screen
+    setTimeout(() => {
+      this.setState({
+        listIndex: this.state.listIndex + 1
+      })
+      
+      this.ammendLeases()
+      this.props.updateLoadingController(false);
+      //window.location.reload()
+    }, 2000);
+      
+    })
   }
 
   //Fetch all students Data
@@ -244,17 +430,6 @@ class Students extends React.Component {
 
 
   render() {
-    const { saveAsCsv } = useJsonToCsv();
-    var data = this.state.newList
-    var fields = {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
-    'IDNumber': 'IDNumber',
-    'Surname': 'Surname', 'StudentNumber': 'StudentNumber', 'StudentNumber': 'StudentNumber',
-    'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
-     'FloorNumber': 'FloorNumber', 
-    'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
-     'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
-      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
-    'PaymentMethod': 'PaymentMethod'}
     
     return (
       <div
@@ -293,6 +468,7 @@ class Students extends React.Component {
                 { name: "Students Details Page", navigate: "" },
               ]}
             />
+            {/* <button className="btn btn-primary" onClick={(e)=>this.bulkLease(e)}>Lease Reneg</button> */}
 
             { localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
             ? <>

@@ -149,7 +149,7 @@ postData().then(()=>{
     e.preventDefault()
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
-    this.props.updateLoadingMessage("Ammending Lease Information...");
+    this.props.updateLoadingMessage("Loading Documents...");
     var tempList
     const fetchData = async () => {
       //Get documents from DB
