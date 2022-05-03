@@ -20,7 +20,8 @@ import {Grid, Row, Col, Button} from "react-bootstrap";
 import PopUpAddNewNotice from "../../components/PopUpAddNewEvent"
 import {onPresPopNewNotice, 
   updateLoadingMessage,
-  updateLoadingController,} from "../../actions"
+  updateLoadingController,
+  onPressThemeColor} from "../../actions"
 import {Helmet} from "react-helmet";
 import {
   topProductOption,
@@ -63,6 +64,8 @@ class Dashbord extends React.Component {
     this.setState({
       cardData: [...sparkleCardData],
     });
+    this.props.onPressThemeColor("marigold");
+    localStorage.setItem("clientTheme", "marigold");
 
     this.getNoticies()
   }
@@ -441,4 +444,5 @@ export default connect(mapStateToProps, {
   onPresPopNewNotice,
   updateLoadingMessage,
   updateLoadingController,
+  onPressThemeColor
 })(Dashbord);

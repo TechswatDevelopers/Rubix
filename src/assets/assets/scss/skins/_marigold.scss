@@ -1,53 +1,53 @@
 ﻿$white: #ffffff;
 $blue-grey-400: #78909c !default;
-$grey-900: #212121 !default;
-$purple-400: #EF421A !default;
-$purple-500: #EF421A !default;
-$purple-600: #EF421A !default;
+$marigold-900: #212121 !default;
+$marigold-400: #F09F12 !default;
+$marigold-500: #F09F12 !default;
+$marigold-600: #F09F12 !default;
 
 
-.theme-purple{
+.theme-marigold{
 
     ::selection {
         color: $white;
-        background: $purple-500;
+        background: $marigold-500;
     }
 
     .page-loader-wrapper{
-        background: $purple-500;
+        background: $marigold-500;
     }
 
     #left-sidebar .nav-tabs .nav-link.active{
-        color: $purple-500;
+        color: $marigold-500;
     }
 
     &:before,
     &:after{
-        background: $purple-500;
+        background: $marigold-500;
     }
 
     #wrapper{
         &:before,
         &:after{
-            background: $purple-500;
+            background: $marigold-500;
         }
     }
 
     .sidebar-nav .metismenu>li.active>a{
-        border-left-color: $purple-500;
+        border-left-color: $marigold-500;
     }
 
 
     .navbar-nav ul.menu-icon{
-        background: $purple-500;
+        background: $marigold-500;
     }
 
     .fancy-checkbox {
         input[type="checkbox"] {
 
             &:checked + span:before {
-                background: $purple-500;
-                border-color: $purple-500;
+                background: $marigold-500;
+                border-color: $marigold-500;
             }
         }
     }
@@ -57,11 +57,11 @@ $purple-600: #EF421A !default;
             &.right {
 
                 .chat-info {
-                    background: $purple-500;
+                    background: $marigold-500;
                     color: $white;
 
                     &:before{
-                        border-left: 10px solid $purple-500;
+                        border-left: 10px solid $marigold-500;
                     }
                 }
             }
@@ -69,31 +69,31 @@ $purple-600: #EF421A !default;
     }
 
     .fc .fc-view-container .fc-view.fc-basic-view>table>thead tr th.fc-widget-header , .fc-view.fc-dayGrid-view>table>thead tr th.fc-widget-header{
-        background: $purple-500;
-        border-color: $purple-500;
+        background: $marigold-500;
+        border-color: $marigold-500;
         color:$white;
         border: 1px solid #eee;
         padding: 10px;
     }
 
     .blog-page .single_post .footer .stats li a:hover{
-        color: $purple-500;
+        color: $marigold-500;
     }
 
     .auth-main{
         .btn-primary{
-            background: $purple-500;
-            border-color: $purple-500;
+            background: $marigold-500;
+            border-color: $marigold-500;
         }
     }
 
     .sidebar-nav .metismenu>li i{
-        color: $purple-500;
+        color: $marigold-500;
     }
 
     .right_chat li a:hover{
         .media-object {
-            border-color: $purple-500;
+            border-color: $marigold-500;
         }
     }
 

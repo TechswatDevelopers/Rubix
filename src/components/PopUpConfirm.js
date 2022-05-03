@@ -62,7 +62,7 @@ componentDidMount() {
       })
       //Set Loading Screen OFF
       this.props.updateLoadingController(false);
-      this.props.onPresPopUpEvent()
+      //this.props.onPresPopUpEvent()
       
       
       
