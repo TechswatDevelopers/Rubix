@@ -37,6 +37,7 @@ class SudentsTable extends React.Component {
   //Select Specific Student
   selectStudent(e){
     this.props.onUpdateStudentRubixID(e.RubixRegisterUserID)
+    localStorage.setItem('userID', e.RubixRegisterUserID)
     //console.log('student details: ', e)
     this.props.updateStudentName(
       e.Name 
