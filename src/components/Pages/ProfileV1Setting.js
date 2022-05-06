@@ -309,12 +309,12 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log("my Data: ", data)
+    console.log("my Posted Data: ", data)
     const postData = async () => {
       if (this.Validate) {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            console.log(response)
+            console.log("My DB Response",response)
             //alert(response.data.PostRubixUserData[0].ResponceMessage)
           })
       } else {
