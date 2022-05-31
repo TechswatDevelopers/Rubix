@@ -99,7 +99,7 @@ componentDidMount() {
       const data = {
         'RubixRegisterUserID': userid,
         'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'IP_Address': '102.65.77.244' /* this.state.userIPAddress */ ,
         'Time_and_Date': this.state.dateAndTime,
         'image': signature
       }
@@ -151,7 +151,7 @@ getUserWitnessData() {
    "PDFDocumentUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
    "ClientId" : localStorage.getItem('clientID'),
-   "IP_Address" : this.state.userIPAddress,
+   "IP_Address" :'102.65.77.244' /* this.state.userIPAddress */,
    "Time_and_Date" : this.state.dateAndTime,
    "Browser" : ""
     }

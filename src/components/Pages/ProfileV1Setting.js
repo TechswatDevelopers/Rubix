@@ -298,6 +298,7 @@ class ProfileV1Setting extends React.Component {
       'UserProfileImage': this.state.imgUpload !== null || this.state.imgUpload !== undefined ? ' ' : this.state.imgUpload,
       'ClientID': localStorage.getItem('clientID')
     };
+    
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
       data[elem.name] = elem.value
