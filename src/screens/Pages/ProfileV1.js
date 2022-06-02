@@ -60,6 +60,7 @@ class ProfileV1Page extends React.Component {
       tempDoc: {},
       isSelected: false,
       base64Pdf: null,
+      base64Image: null,
       docUrl: '',
       showPad: false,
       trimmedDataURL: null,
@@ -91,6 +92,7 @@ class ProfileV1Page extends React.Component {
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
     console.log("Student Progress: ", this.props.studentProgress)
+    
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
@@ -324,6 +326,22 @@ class ProfileV1Page extends React.Component {
         }
     }
   }
+
+  getBase642(e) {
+    var file = e.target.files[0]
+    //console.log('My document before base64', e.target.files[0])
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      this.setState({
+        base64Image: reader.result
+      })
+      //console.log("This is the img:", this.state.imgUpload)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    }
+}
 
   //convert to base64
   getBase64(e) {
@@ -616,6 +634,15 @@ class ProfileV1Page extends React.Component {
     }
     
   }
+
+
+   //Handle File Selection input
+   changeHandler33333(event) {
+    //this.setState({ selectedFile: event.target.files[0] })
+    console.log("selcted file", event.target.files[0].type)
+    this.getBase642(event)
+    
+  }
   handleUpdate(e) {
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
@@ -628,6 +655,8 @@ class ProfileV1Page extends React.Component {
   clear = () => {
     this.sigPad.clear()
   }
+
+  //Convert to base 64
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
     this.setLoadingPage(3000)
@@ -893,156 +922,7 @@ class ProfileV1Page extends React.Component {
                       <Tab eventKey="settings" title="Personal Information">
                         <ProfileV1Setting  />
                       </Tab>
-                      {/* <Tab eventKey="Billing" title="Billing">
-                        <div className="tab-pane active show" id="billings">
-                          <div className="body">
-                            <h6>Payment Method</h6>
-                            <div className="payment-info">
-                              <h3 className="payment-name">
-                                <i className="fa fa-paypal"></i> PayPal ****2222
-                              </h3>
-                              <span>Next billing charged $29</span>
-                              <br />
-                              <em className="text-muted">
-                                Autopay on May 12, 2018
-                              </em>
-                              <a className="edit-payment-info">
-                                Edit Payment Info
-                              </a>
-                            </div>
-                            <p className="margin-top-30">
-                              <a>
-                                <i className="fa fa-plus-circle"></i> Add
-                                Payment Info
-                              </a>
-                            </p>
-                          </div>
 
-                          <div className="body">
-                            <h6>Billing History</h6>
-                            <table className="table billing-history">
-                              <thead className="sr-only">
-                                <tr>
-                                  <th>Plan</th>
-                                  <th>Amount</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>
-                                    <h3 className="billing-title">
-                                      Basic Plan{" "}
-                                      <span className="invoice-number">
-                                        #LA35628
-                                      </span>
-                                    </h3>
-                                    <span className="text-muted">
-                                      Charged at April 17, 2018
-                                    </span>
-                                  </td>
-                                  <td className="amount">$29</td>
-                                  <td className="action">
-                                    <a>View</a>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <h3 className="billing-title">
-                                      Pro Plan{" "}
-                                      <span className="invoice-number">
-                                        #LA3599
-                                      </span>
-                                    </h3>
-                                    <span className="text-muted">
-                                      Charged at March 18, 2018
-                                    </span>
-                                  </td>
-                                  <td className="amount">$59</td>
-                                  <td className="action">
-                                    <a>View</a>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <h3 className="billing-title">
-                                      Platinum Plan{" "}
-                                      <span className="invoice-number">
-                                        #LA1245
-                                      </span>
-                                    </h3>
-                                    <span className="text-muted">
-                                      Charged at Feb 02, 2018
-                                    </span>
-                                  </td>
-                                  <td className="amount">$89</td>
-                                  <td className="action">
-                                    <a>View</a>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <button type="button" className="btn btn-primary">
-                              Update
-                            </button>
-                            <button type="button" className="btn btn-default">
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      </Tab> */}
-
-                      
-                      {/* <Tab eventKey="Preferences" title="Residence Information">
-                        <div className="row clearfix">
-                          <div className="w-100 p-3">
-                            <div className="body">
-                              <h6 style={{textAlign:'center'}}>My Residence Information</h6>
-                              <ul className="list-unstyled list-login-session w-80 p-3">
-                                <li>
-                                <h3 className="login-title">
-                                {localStorage.getItem('resName')}
-                                      </h3>
-                                      <li>
-                                      <h3 className="login-title">
-                                      {localStorage.getItem('resUni')}
-                                      </h3>
-                                      </li>
-                                </li>
-                                
-                                <li>
-                                    <div className="login-info">
-                                      <span className="login-detail">
-                                        {localStorage.getItem('resAddress')}
-                                      </span>
-                                    </div>
-                                </li>
-                                <img
-                                  alt="cannot display"
-                                  accept='.jpg, .png, .jpeg'
-                                  className="user-photo media-object"
-                                  src={localStorage.getItem('resPhoto')} />
-                               
-                                  <li>
-                                    <p>{localStorage.getItem('resDescription')}</p>
-                                  </li>
-                                <li>
-                                  <div className="login-session">
-                                    <div className="login-info">
-                                      <h3 className="login-title">
-                                        Residence Amenitis
-                                      </h3>
-                                      <p>{localStorage.getItem('resAmenities')}</p>
-                                    </div>
-
-                                  </div>
-                                </li>
-                                
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </Tab> */}
                       <Tab  eventKey="documents" title="Documents">
                         <div
                           style={{ flex: 1 }}
@@ -1054,6 +934,8 @@ class ProfileV1Page extends React.Component {
                             <div className="container-fluid">
                               <div className="row clearfix">
                                 <div className="col-lg-3 col-md-5 col-sm-12">
+                                <input style={{ display: 'none'  }} id='upload-button' type="file" onChange={(e) => this.changeHandler33333(e)} />
+                          
                                   {/* <FileStorageCard TotalSize="Storage Used" UsedSize={90} /> */}
                                   {fileStorageStatusCardData.map((data, index) => {
                                     
@@ -1077,37 +959,12 @@ class ProfileV1Page extends React.Component {
                                       </div>
                                     );
                                   })}
-                                 {/*  {this.state.docs.map((data, index) => {
-                                    return (
-                                      <div 
-                                      key={index + "sidjpidj"} 
-                                      onClick={() => this.changeDocument(data.FileType)}
-                                      onAnimationEnd={() => this.setState({ fade: false })}
-                                      >
-                                        {
-                                          data.FileType != 'profile-pic'
-                                          ? <FileStorageStatusCard
-                                          key={index + "sidjpidj"}
-                                          TotalSize=''
-                                          UsedSize={data.FileType}
-                                          Type={data.status}
-                                          UsedPer={data.UsedPer}
-                                          ProgressBarClass={`${data.ProgressBarClass}`}
-                                        />
-                                        : null
-                                        }
-                                        
-                                      </div>
-                                    );
-                                  })} */}
+                                 
                                   <div>
                                   </div>
                                 </div>
                                 <div className="col-lg-9 col-md-7 col-sm-12">
-                                  {/* <LineChartCard
-                  HeaderText="View File"
-                  ChartOption={areaChartFileReport}
-                /> */}
+                                 
                                   <div style={{ height: '100%' }} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
                                     
