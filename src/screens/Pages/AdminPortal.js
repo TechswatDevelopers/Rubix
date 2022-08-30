@@ -306,7 +306,6 @@ class AdminDashboard extends React.Component {
       
     } else {
       postData()
-
     }
   }
 

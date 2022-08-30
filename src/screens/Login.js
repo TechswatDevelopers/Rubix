@@ -5,8 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Logo from "../assets/images/logo-white.svg";
 import {
   updateEmail,
-  updatePassword,
-  onLoggedin,
   updateUserID,
   updateClientID,
   onPressThemeColor,

@@ -649,6 +649,20 @@ class NavbarMenu extends React.Component {
                         <i className="icon-pin"></i> <span>Announcements</span>
                       </a>
                     </li>
+                    
+                  <li className="" id={localStorage.getItem('role') == 'admin' ? "students" : "myProfile"}>
+                    <a
+                        href= {localStorage.getItem('role') == 'admin' ? "students" :"profilev1page"}
+                        className=""
+                        onClick={(e)=>{
+                          //e.preventDefault()
+                          localStorage.setItem('tab', 'settings')
+                        }}
+                      
+                      >
+                        <i className="icon-user"></i> <span>{localStorage.getItem('role') == 'admin' ? "Students" : "My Profile"}</span>
+                      </a>
+                    </li>
                     { localStorage.getItem('role') == 'admin'
                     ?
                     <li className="" id="adminDash">
@@ -664,19 +678,6 @@ class NavbarMenu extends React.Component {
                         </a>
                       </li>
                       : null}
-                  <li className="" id={localStorage.getItem('role') == 'admin' ? "students" : "myProfile"}>
-                    <a
-                        href= {localStorage.getItem('role') == 'admin' ? "students" :"profilev1page"}
-                        className=""
-                        onClick={(e)=>{
-                          //e.preventDefault()
-                          localStorage.setItem('tab', 'settings')
-                        }}
-                      
-                      >
-                        <i className="icon-user"></i> <span>{localStorage.getItem('role') == 'admin' ? "Students" : "My Profile"}</span>
-                      </a>
-                    </li>
 
 
                   <li className="" id={localStorage.getItem('role') == 'admin' ? 'communication' :"Residence"}>

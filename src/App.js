@@ -42,6 +42,7 @@ import page403 from "./screens/Auth/Page403";
 import page500 from "./screens/Auth/Page500";
 import page503 from "./screens/Auth/Page503";
 import blankpage from "./screens/Pages/BlankPage";
+import Test from "./screens/Pages/test";
 import Communication from "./screens/Pages/Communication";
 import verifyemail from "./screens/Pages/VerifyEmail";
 import residence from "./screens/Pages/Residence";
@@ -51,6 +52,7 @@ import imagegalleryprofile from "./screens/Pages/ImageGallery";
 import timeline from "./screens/Pages/TimeLine";
 import AdminDashboard from "./screens/Pages/AdminPortal";
 import LeaseInformation from "./screens/Pages/Lease-Information";
+import AdminAmmendPage from "./screens/Pages/AdminAmmendPage";
 import Students from "./screens/Pages/Students";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
@@ -118,7 +120,6 @@ class App extends React.Component {
     document.body.appendChild(script);
 }
   render() {
-
     var res = window.location.pathname;
     var baseUrl = process.env.PUBLIC_URL;
     baseUrl = baseUrl.split("/");
@@ -131,8 +132,6 @@ class App extends React.Component {
       <div>
         
         <div>
-        {/* <ScriptTag isHydrating={true} type="text/javascript" 
-      src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"/> */}
         <script id="rocketbots__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=db751da9c4eb65bd56bc79161f05b8de22b93f6a0ca58253434e4b8684f0aa51"></script>
  
                </div>
@@ -144,6 +143,7 @@ class App extends React.Component {
         activeKey1 === "registration" ||
         activeKey1 === "lockscreen" ||
         activeKey1 === "logInformation" ||
+        activeKey1 === "tester" ||
         activeKey1 === "forgotpassword" ||
         activeKey1 === "forgotpass" ||
         activeKey1 === "varsityDetails" ||
@@ -211,8 +211,8 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path={`${process.env.PUBLIC_URL}/logInformation`}
-                component={PersonalInformation}
+                path={`${process.env.PUBLIC_URL}/tester`}
+                component={Test}
               />
               <Route
                 exact
@@ -530,6 +530,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/lease`}
                 component={LeaseInformation}
+              />
+                  <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/AdminAmmend`}
+                component={AdminAmmendPage}
               />
                 </Switch>
               </div>

@@ -2,20 +2,19 @@ import React from "react";
 import { connect } from "react-redux";
 import { onPresAddEvent, 
   onPresPopUpEvent, 
-  onPresPopUpConfirm,
+  onPresPopUpConfirmLeaseUpdate,
   updateLoadingMessage,
   updateLoadingController,
 } from "../actions";
-import { Form } from 'react-bootstrap';
 import axios from "axios";
 
-class PopUpConfirm extends React.Component {
-    //Initial State
-constructor(props) {
-  super(props)
-  this.state = {
-    dateAndTime: '',
-    userIPAddress: '',
+class PopUpConfirmLeaseUpdate extends React.Component {
+//Initial State
+  constructor(props) {
+    super(props)
+      this.state = {
+        dateAndTime: '',
+        userIPAddress: '',
     
   }
 }
@@ -56,15 +55,18 @@ componentDidMount() {
         })
     }
     postDocument().then(() => {
+      //alert("Document uploaded successfully")
       this.setState({
         isLoad: false
       })
+      //Set Loading Screen OFF
       this.props.updateLoadingController(false);
     })
   }
 
    //Converts base64 to file
  dataURLtoFile(dataurl, filename) {
+
   var arr = dataurl.split(','),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
@@ -85,9 +87,9 @@ componentDidMount() {
       const data = {
         'RubixRegisterUserID': userid,
         'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'IP_Address': '102.65.77.244' /* this.state.userIPAddress */ ,
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature,
+        'image': signature
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -115,6 +117,8 @@ componentDidMount() {
     }
     postDocument()
   }
+
+
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
@@ -125,6 +129,8 @@ getUserWitnessData() {
   }
   getData()
 }
+
+
   //Send Lease for Signing
   sendFinalLease(filename){
     //Set Loading Screen ON
@@ -135,7 +141,7 @@ getUserWitnessData() {
    "PDFDocumentUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
    "ClientId" : localStorage.getItem('clientID'),
-   "IP_Address" :'102.65.77.244' /* this.state.userIPAddress */,
+   "IP_Address" :this.state.userIPAddress,
    "Time_and_Date" : this.state.dateAndTime,
    "Browser" : ""
     }
@@ -150,7 +156,7 @@ getUserWitnessData() {
     const postData = async () => {
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFFinalSignature', data, requestOptions)
       .then(response=>{
-        //console.log("Final Lease Response: ", response)
+        console.log("Final Lease Response: ", response)
         
         //Send documents API
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -161,8 +167,8 @@ getUserWitnessData() {
       })
     }
     postData()
-  }
 
+  }
 
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
@@ -255,56 +261,25 @@ getUserWitnessData() {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="title" id="defaultModalLabel">
-               {Title}
+              Comfirm Lease Prices Updates
               </h4>
             </div>
             <div className="modal-body">
-              {Body}
-              <label className="control-label sr-only" >
-                          Vet Comment
-                            </label>
-                        <input
-                          className="form-control"
-                          id="comment"
-                          placeholder="Vetting comment..."
-                          type="email"
-                        />
+              <p>Please confirm that you are changing the prices for all leases created from today onwards.</p>
+              
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
                   this.sendVettingStatus(FileType, DocID, 'correct')
-                  if(FileType == 'lease-agreement'){
-                    setTimeout(() => {
-                      this.sendFinalLease(Filename)
-                    }, 3000);
-                  }
-                  this.props.onPresPopUpConfirm();
+                  this.props.onPresPopUpConfirmLeaseUpdate();
                 }}>
-                Vet as Correct
+                Confirm
               </button>
               <button
                 type="button"
                 onClick={(e) => {
-                  this.sendVettingStatus(FileType, DocID, 'incorrect')
-                  if(FileType == 'lease-agreement'){
-                    //Set timer for loading screen
-                    setTimeout(() => {
-                      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
-                      //this.resetLease(Filename)
-                    }, 3000);
-                  }
-                  this.props.onPresPopUpConfirm();
-                }}
-                className="btn btn-simple"
-                data-dismiss="modal"
-              >
-                Vet as Incorrect
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  console.log('pressed')
-                  this.props.onPresPopUpConfirm();
+                  //console.log('pressed')
+                  this.props.onPresPopUpConfirmLeaseUpdate();
                 }}
                 className="btn btn-danger"
                 data-dismiss="modal"
@@ -321,7 +296,7 @@ getUserWitnessData() {
 
 const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
-  isPopUpConfirm: mailInboxReducer.isPopUpConfirm,
+  isPopUpConfirm: mailInboxReducer.isPopUpConfirmLeaseUpdate,
   currentStudentiD: navigationReducer.studentID,
 
   MyloadingController: navigationReducer.loadingController,
@@ -331,7 +306,7 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
 export default connect(mapStateToProps, {
    onPresAddEvent, 
    onPresPopUpEvent, 
-   onPresPopUpConfirm,
+   onPresPopUpConfirmLeaseUpdate,
    updateLoadingMessage,
    updateLoadingController,
-  })(PopUpConfirm);
+  })(PopUpConfirmLeaseUpdate);

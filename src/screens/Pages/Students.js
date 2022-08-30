@@ -1,24 +1,18 @@
-import React from "react";
-import { Dropdown } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
 import SudentsTable from "../../components/Tables/StudentTables";
 import axios from "axios";
-import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
-import {updateStudentID, onPresShowProfile, onPresRooms, 
-  onPresPopUpAssign, updateResidenceID,
-  updateLoadingMessage,
+import {
+  updateStudentID, onPresShowProfile,
+  onPresRooms, onPresPopUpAssign, 
+  updateResidenceID, updateLoadingMessage,
   updateLoadingController,} from "../../actions"
 import ProfileV1Page from '../../screens/Pages/ProfileV1';
 import RoomAllocation from '../../screens/Pages/Rooms';
-import PopUpAssign from '../../components/PopUpAssignRoom';
-
-import {Grid, Row, Col, Button} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import {Helmet} from "react-helmet";
-import {
-  JsonToCsv,
-  useJsonToCsv
-} from 'react-json-csv';
+import {useJsonToCsv} from 'react-json-csv';
 
 class Students extends React.Component {
     constructor(props) {
@@ -43,16 +37,12 @@ class Students extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-
-
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate })
 
-
     if(localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'){
-
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Details, Please wait...");
@@ -143,7 +133,7 @@ class Students extends React.Component {
   }
 
   const postData = async () => {
-    console.log("I am posting")
+    //console.log("I am posting")
     await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
     .then(response => {
       console.log("Post Response: ", response)
@@ -156,8 +146,6 @@ class Students extends React.Component {
        
         
       }
-  
-      
     })
   }
   
@@ -182,6 +170,7 @@ class Students extends React.Component {
   
     return new File([u8arr], filename, { type: mime });
   }
+
 postLeaseData1(i) {
   const student = this.state.studentLeaseAmmend[i]
 console.log("the current student is: ", this.state.studentLeaseAmmend)
@@ -213,7 +202,7 @@ console.log("Data: ", data)
 const postData = async () => {
   await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
   .then(response => {
-    console.log("Post Response: ", response)
+    //console.log("Post Response: ", response)
     if(response.data != null && response.data != undefined){
       const dataUrl = 'data:application/pdf;base64,' + response.data.Base
       const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
@@ -233,6 +222,7 @@ postData().then(()=>{
 })
 }
 
+
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey, userID) {
     const postDocument = async () => {
@@ -247,7 +237,7 @@ postData().then(()=>{
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
@@ -269,6 +259,7 @@ postData().then(()=>{
       
     })
   }
+
 
   //Fetch all students Data
   getStudents(search, resID){
@@ -296,11 +287,10 @@ postData().then(()=>{
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted data: ', pingData)
+      //console.log('Posted data: ', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
-          console.log("Students Data List:", response)
           if(!response.data.PostRubixUserData){
             this.setState({
               isEmpty: true,
@@ -329,18 +319,17 @@ postData().then(()=>{
         }, 4000);
       })
   }
+
+
   exportToCSV(resID){
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Converting, Please wait...");
-  
-    
     const { saveAsCsv } = useJsonToCsv();
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID':  localStorage.getItem('clientID'),
         'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' ? resID : localStorage.getItem('resID'),
-        
       };
       //Ping Request Headers
       const requestOptions = {
@@ -349,11 +338,11 @@ postData().then(()=>{
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted data: ', pingData)
+      //console.log('Posted data: ', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReportExport', pingData, requestOptions)
         .then(response => {
-          console.log("Students Data List:", response)
+          //console.log("Students Data List:", response)
           const temp = response.data.PostRubixUserData
           if(!response.data.PostRubixUserData){
             //Set timer for loading screen
@@ -361,13 +350,10 @@ postData().then(()=>{
             this.props.updateLoadingController(false);
           }, 4000);
           } else {
-            console.log("Data to be converted:", temp)
+            //console.log("Data to be converted:", temp)
             this.setState({
               newList: temp
             })
-            
-         
-
             //Set timer for loading screen
           setTimeout(() => {
             this.props.updateLoadingController(false);
@@ -386,14 +372,18 @@ postData().then(()=>{
     'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
      'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
       'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
-    'PaymentMethod': 'PaymentMethod',  'RubixVetted': 'RubixVetted', 'RubixCourseID': 'RubixCourseID', 'UniversityName': 'UniversityName'}
+    'PaymentMethod': 'PaymentMethod',  'RubixVetted': 'RubixVetted', 'RubixCourseID': 'RubixCourseID', 'UniversityName': 'UniversityName', 'RegisterStatus': 'RegisterStatus',
+  'IsEmailVerified': 'IsEmailVerified'
+  }
         const data = this.state.newList
         const filename = 'Rubix Extract - ' + this.state.dateAndTime
         const separator =','
-        console.log("data: ", filename)
+        //console.log("data: ", filename)
         saveAsCsv({data, fields, filename, separator})
       })
   }
+
+  
   //Get rubix color codes
   getColors(){
     const fetchData = async () => {

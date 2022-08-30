@@ -57,7 +57,7 @@ class RoomsTable extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
@@ -82,11 +82,11 @@ class RoomsTable extends React.Component {
           body: data
         };
         for (var pair of data.entries()) {
-          console.log(pair[0], ', ', pair[1]);
+          //console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
           .then(response => {
-            console.log("Upload details:", response)
+            //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -129,10 +129,10 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted Data:", data)
+        //console.log("Posted Data:", data)
         await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -159,7 +159,34 @@ class RoomsTable extends React.Component {
         }
         getData()
       }
-    
+    ///Change room
+    changeRoom(document, roomCode, roomNumber, userid){
+      const data = {
+        'PDFDocumentUrl': document,
+        'RoomCode': roomCode,
+        'RoomNumber': roomNumber,
+      }
+
+      const requestOptions = {
+        title: 'Student Lease Room Update',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      }
+
+      const postDocument = async () => {
+
+      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFRoomAmend', data, requestOptions)
+      .then(response => {
+        console.log('Response: ', response)
+        const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+              //console.log("temp file:", temp)
+              this.onPressUpload(temp, 'lease-agreement', userid)
+      })
+    }
+    postDocument()
+  }
   
 
   
@@ -224,6 +251,7 @@ class RoomsTable extends React.Component {
                   
                   { RoomList.length == 1
                     ? <>
+                    
                     <button className="btn btn-sm btn-outline-danger" 
                     onClick={(e)=>{
                       e.preventDefault()

@@ -8,6 +8,8 @@ import {
   ON_PRESS_POP_UP_EVENT,
   ON_PRESS_SHOW_PROFILE,
   ON_PRESS_POP_UP_CONFIRMATION,
+  ON_PRESS_POP_UP_CONFIRMATION_LEASE_UPDATE,
+  ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE,
   ON_PRESS_SHOW_ROOMS,
   ON_PRESS_SHOW_LEASE,
   SHOW_LEASE,
@@ -24,6 +26,8 @@ const initialState = {
   isEventModal: false,
   isPopUpModal: false,
   isPopUpConfirm: false,
+  isPopUpConfirmLeaseUpdate: false,
+  isPopUpConfirmMassLeaseUpdate: false,
   isContactModal: false,
   isProfileShowing: false,
   isRoomshowing: false,
@@ -86,6 +90,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isPopUpConfirm: !state.isPopUpConfirm,
+      };
+    }
+
+    case ON_PRESS_POP_UP_CONFIRMATION_LEASE_UPDATE: {
+      return {
+        ...state,
+        isPopUpConfirmLeaseUpdate: !state.isPopUpConfirmLeaseUpdate,
+      };
+    }
+
+    case ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE: {
+      return {
+        ...state,
+        isPopUpConfirmMassLeaseUpdate: !state.isPopUpConfirmMassLeaseUpdate,
       };
     }
 

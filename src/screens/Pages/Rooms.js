@@ -70,34 +70,26 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted:', pingData)
+      //console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms List:", response)
+          //console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
               availableRooms: response.data.PostRubixUserData
             })
-
-            //Populate Lists
-            //this.populate('BuildingNumber', response.data.PostRubixUserData, this.state.buildingNumberList)
             this.setState({
               buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
               floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
               roomNumberList: this.populate('RoomNumber', response.data.PostRubixUserData)
 
             })
-            //this.populate('FloorNumber', response.data.PostRubixUserData, this.state.floorNumberList)
-            //this.populate('RoomNumber', response.data.PostRubixUserData, this.state.roomNumberList)
 
           } else {
             //Show Room Details
             this.getStudentRoomDetails(' ')
-            /* this.setState({
-              studentRoomDetails: response.data.PostRubixUserData
-            }) */
           }
           
 
@@ -149,11 +141,6 @@ class RoomAllocation extends React.Component {
           }
         }
     }
-
-    //console.log('New List: ', newList)
-    /* this.setState({
-      destination: newList
-    }) */
     return newList
   }
 
@@ -179,11 +166,11 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted:', pingData)
+      //console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms Dropdown:", response)
+          //console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -248,11 +235,11 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted:', pingData)
+      //console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms List:", response)
+          //console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             inRoom =  true;
             this.state.roomedstudents.push(response.data.PostRubixUserData)
@@ -284,11 +271,11 @@ class RoomAllocation extends React.Component {
           body: data
         };
         for (var pair of data.entries()) {
-          console.log(pair[0], ', ', pair[1]);
+          //console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
           .then(response => {
-            console.log("Upload details:", response)
+            //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -337,10 +324,10 @@ class RoomAllocation extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted Data:", data)
+        //console.log("Posted Data:", data)
         await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -368,6 +355,7 @@ class RoomAllocation extends React.Component {
         getData()
       }
     
+      
   
 
   render() {

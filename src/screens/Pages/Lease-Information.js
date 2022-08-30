@@ -30,14 +30,13 @@ class LeaseInformation extends React.Component {
 
       //Update Lease Information
       postLeaseData(e) {
-          console.log("I am called")
+          //console.log("I am called")
           e.preventDefault()
         const data = {
           "PDFDocumentUrl" : "https://rubiximages.cjstudents.co.za:449/37a1fcad-a06d-4dfb-9632-3348dbaf0f19.pdf",
           "LeaseStartDate" : this.state.leaseStart,
           "LeaseEndDate" : this.state.leaseEnd,
-          "LeaseAmount" : document.getElementById('amount').value
-
+          "LeaseAmount" : document.getElementById('amount').value,
         }
         const requestOptions = {
           title: 'Update Lease Information',
@@ -174,7 +173,7 @@ class LeaseInformation extends React.Component {
 
     //Update Lease Information
     postLeaseData1(link, userID) {
-      console.log("I am called")
+      //console.log("I am called")
     const data = {
       "PDFDocumentUrl" :link,
       "LeaseStartDate" : ' ',

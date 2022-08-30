@@ -1,37 +1,42 @@
 import React from "react";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import {Helmet} from "react-helmet";
-import {updateEmail, 
+import {
+  updateEmail, 
   updatePassword, 
   updateUserID, updatePlatformID,
-   updateStudentID,
-   updateLoadingMessage,
-   updateLoadingController,
-   updateClientBackG  } from "../../actions";
+  updateStudentID,
+  updateLoadingMessage,
+  updateLoadingController,
+  updateClientBackG
+  } from "../../actions";
 
 class PersonalInformation extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       userGender: 'Male',
       medicalConditions: 'None',
+      yearOfRes: '',
       errorMessage: '',
       countryList: [],
       value: 0
 
     };
   }
+
+  ///Validate ID numbers
   Validate() {
-
     var idNumber = document.getElementById("IDNumber").value;
-
     // store the error div, to save typing
     var error = document.getElementById('error');
-    //console.log("ID number is ",idNumber);
 
     // assume everything is correct and if it later turns out not to be, just set this to false
     var correct = true;
@@ -39,7 +44,6 @@ class PersonalInformation extends React.Component {
     //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
     // SA ID Number have to be 13 digits, so check the length
     if (idNumber.length != 13) {
-      //error.append('ID number does not appear to be authentic - input not a valid number.');
       correct = false;
     }
 
@@ -47,7 +51,6 @@ class PersonalInformation extends React.Component {
     var year = idNumber.substring(0, 2);
     var month = idNumber.substring(2, 4);
     var day = idNumber.substring(4, 6);
-    //console.log(year, month, day)
 
     // get first 6 digits as a valid date
     var tempDate = new Date(year, month - 1, day);
@@ -101,16 +104,16 @@ class PersonalInformation extends React.Component {
     return correct
   }
 
-  
   //final submit check
   Submit(e) {
     e.preventDefault();
     //Set Loading Screen ON
  this.props.updateLoadingController(true);
- this.props.updateLoadingMessage("Submitting Information...");
+ this.props.updateLoadingMessage("Submitting Information..."); 
     //console.log("User email:", this.props.email)
     var idNumber = document.getElementById("IDNumber").value;
     var email = document.getElementById("email").value;
+    //var year = document.getElementById("email").value;
     const form = document.getElementById('register');
     const data = {
         'ClientID': localStorage.getItem('clientID'),
@@ -119,7 +122,8 @@ class PersonalInformation extends React.Component {
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
-        'Nationality': this.state.country
+        'Nationality': this.state.country,
+        'RegistrationYear': this.state.yearOfRes
     };
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -131,7 +135,7 @@ class PersonalInformation extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log(data)
+    console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
             await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
@@ -191,6 +195,13 @@ class PersonalInformation extends React.Component {
     }, 1000);
     })
   }
+
+  onValueChange(e){
+
+    this.setState({
+      yearOfRes: e.target.value
+    })
+  }
   
   render() {
     return (
@@ -216,7 +227,7 @@ class PersonalInformation extends React.Component {
           </div>
         </div>
 
-        <div >
+        <div>
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main"
             style={{
@@ -237,9 +248,27 @@ class PersonalInformation extends React.Component {
                   <div className="header">
                     <p className="lead">Student User Details</p>
                   </div>
-
+                  
                   <div className="body">
                     <form id='register' onSubmit={(e) => this.Submit(e)}>
+                      <label>Which year are you applying for?</label>
+                    <Row>
+                    <Col >
+                        <input 
+                        onChange={(e) => {this.onValueChange(e)}}
+                        //checked={this.state.yearOfRes === "2022"}
+                        type="radio"  value='2022'/>
+                         2022
+                      </Col>
+                      <Col>
+                      <input 
+                      onChange={(e) => {this.onValueChange(e)}}
+                      //checked={this.state.yearOfRes === "2023"}
+                      type="radio"  value='2023'/>
+                         2023
+                      </Col>
+                    </Row>
+                      
                       <div className="form-group">
                         <label className="control-label sr-only" >
                           First Name

@@ -46,7 +46,7 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
@@ -81,7 +81,7 @@ componentDidMount() {
 }
 
     //Coleect User Signing Info
-    getUserWitnessData() {
+getUserWitnessData() {
       //Fetch IP Address
       const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
@@ -92,7 +92,6 @@ componentDidMount() {
     }
 
 postLeaseData1(link, userID) {
-
   //Set Loading Screen ON
   this.props.updateLoadingController(true);
   this.props.updateLoadingMessage("Ammending Lease Information...");
@@ -118,7 +117,7 @@ const requestOptions = {
   headers: { 'Content-Type': 'application/json' },
   body: data
 }
-console.log("Data: ", data)
+//console.log("Data: ", data)
 
 //Http Post Request
 const postData = async () => {

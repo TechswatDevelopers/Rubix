@@ -9,6 +9,8 @@ export const ON_PRESS_SHOW_ROOMS = "mailInboxReducer/ON_PRESS_SHOW_ROOMS";
 export const ON_PRESS_SHOW_LEASE = "mailInboxReducer/ON_PRESS_SHOW_LEASE";
 
 export const ON_PRESS_POP_UP_CONFIRMATION = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION";
+export const ON_PRESS_POP_UP_CONFIRMATION_LEASE_UPDATE = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION_LEASE_UPDATE";
+export const ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE = "mailInboxReducer/ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE";
 export const ON_PRESS_POP_UP_ASSIGN_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_ASSIGN_ROOM";
 export const UPDATE_VARSITY_INFO = "mailInboxReducer/UPDATE_VARSITY_INFO";
 export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REMOVE_ROOM";
@@ -60,6 +62,20 @@ export const onPresPopUpEvent = () => (dispatch) => {
 export const onPresPopUpConfirm = () => (dispatch) => {
   dispatch({
     type: ON_PRESS_POP_UP_CONFIRMATION,
+  });
+};
+
+//Toggle Pop Up Confirm Modal
+export const onPresPopUpConfirmLeaseUpdate = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_POP_UP_CONFIRMATION_LEASE_UPDATE,
+  });
+};
+
+//Toggle Pop Up Confirm Modal
+export const onPresPopUpConfirmMassLeaseUpdate = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE,
   });
 };
 

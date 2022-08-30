@@ -2,15 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import { onPresAddEvent, 
   onPresPopUpEvent, 
-  onPresPopUpConfirm,
+  onPresPopUpConfirmMassLeaseUpdate,
   updateLoadingMessage,
   updateLoadingController,
 } from "../actions";
-import { Form } from 'react-bootstrap';
 import axios from "axios";
 
-class PopUpConfirm extends React.Component {
-    //Initial State
+class PopUpConfrimUpdateAndRegen extends React.Component {
+//Initial State
 constructor(props) {
   super(props)
   this.state = {
@@ -19,9 +18,10 @@ constructor(props) {
     
   }
 }
+
+//On Page Load Complete
 componentDidMount() {
   window.scrollTo(0, 0);
- 
   this.getUserWitnessData()
   const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
@@ -47,24 +47,27 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+         // console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
     postDocument().then(() => {
+      //alert("Document uploaded successfully")
       this.setState({
         isLoad: false
       })
+      //Set Loading Screen OFF
       this.props.updateLoadingController(false);
     })
   }
 
    //Converts base64 to file
  dataURLtoFile(dataurl, filename) {
+
   var arr = dataurl.split(','),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
@@ -77,17 +80,18 @@ componentDidMount() {
 
   return new File([u8arr], filename, { type: mime });
 }
-  //Function to post signature to API
+
+
+//Function to post signature to API
   postSignature(signature, userid, tryval) {
     this.props.updateLoadingMessage("Generating Lease...");
-    //console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
         'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'IP_Address': /* '102.65.77.244'*/  this.state.userIPAddress  ,
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature,
+        'image': signature
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -115,6 +119,8 @@ componentDidMount() {
     }
     postDocument()
   }
+
+
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
@@ -125,6 +131,8 @@ getUserWitnessData() {
   }
   getData()
 }
+
+
   //Send Lease for Signing
   sendFinalLease(filename){
     //Set Loading Screen ON
@@ -135,7 +143,7 @@ getUserWitnessData() {
    "PDFDocumentUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
    "ClientId" : localStorage.getItem('clientID'),
-   "IP_Address" :'102.65.77.244' /* this.state.userIPAddress */,
+   "IP_Address" :this.state.userIPAddress,
    "Time_and_Date" : this.state.dateAndTime,
    "Browser" : ""
     }
@@ -161,8 +169,8 @@ getUserWitnessData() {
       })
     }
     postData()
-  }
 
+  }
 
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
@@ -173,6 +181,7 @@ getUserWitnessData() {
     } else {
       vettedStatus = 0
     }
+
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
@@ -194,7 +203,7 @@ getUserWitnessData() {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminVettings', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
         setTimeout(() => {
           this.sendAuttingStatus(filetype, docID, vet)
         }, 2000);
@@ -236,16 +245,16 @@ getUserWitnessData() {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
-      //window.location.reload()
+      
     })
   }
 
   render() {
-    const { isPopUpConfirm, Title, Body, FileType, DocID, Filename} = this.props;
+    const { isPopUpConfirm} = this.props;
     return (
       <div
         className={isPopUpConfirm ? "modal fade show" : "modal fade"}
@@ -255,56 +264,23 @@ getUserWitnessData() {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="title" id="defaultModalLabel">
-               {Title}
+               Confirm Lease Regeneration
               </h4>
             </div>
             <div className="modal-body">
-              {Body}
-              <label className="control-label sr-only" >
-                          Vet Comment
-                            </label>
-                        <input
-                          className="form-control"
-                          id="comment"
-                          placeholder="Vetting comment..."
-                          type="email"
-                        />
+              <p>Please confirm that you are changing the prices and <strong>UPDATING ALL LEASES</strong> with new prices.</p>
+              
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
-                  this.sendVettingStatus(FileType, DocID, 'correct')
-                  if(FileType == 'lease-agreement'){
-                    setTimeout(() => {
-                      this.sendFinalLease(Filename)
-                    }, 3000);
-                  }
-                  this.props.onPresPopUpConfirm();
+                  this.props.onPresPopUpConfirmMassLeaseUpdate();
                 }}>
-                Vet as Correct
+                Confirm
               </button>
               <button
                 type="button"
                 onClick={(e) => {
-                  this.sendVettingStatus(FileType, DocID, 'incorrect')
-                  if(FileType == 'lease-agreement'){
-                    //Set timer for loading screen
-                    setTimeout(() => {
-                      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
-                      //this.resetLease(Filename)
-                    }, 3000);
-                  }
-                  this.props.onPresPopUpConfirm();
-                }}
-                className="btn btn-simple"
-                data-dismiss="modal"
-              >
-                Vet as Incorrect
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  console.log('pressed')
-                  this.props.onPresPopUpConfirm();
+                  this.props.onPresPopUpConfirmMassLeaseUpdate();
                 }}
                 className="btn btn-danger"
                 data-dismiss="modal"
@@ -321,7 +297,7 @@ getUserWitnessData() {
 
 const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
-  isPopUpConfirm: mailInboxReducer.isPopUpConfirm,
+  isPopUpConfirm: mailInboxReducer.isPopUpConfirmMassLeaseUpdate,
   currentStudentiD: navigationReducer.studentID,
 
   MyloadingController: navigationReducer.loadingController,
@@ -329,9 +305,9 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
 });
 
 export default connect(mapStateToProps, {
-   onPresAddEvent, 
-   onPresPopUpEvent, 
-   onPresPopUpConfirm,
+   onPresAddEvent,
+   onPresPopUpEvent,
+   onPresPopUpConfirmMassLeaseUpdate,
    updateLoadingMessage,
    updateLoadingController,
-  })(PopUpConfirm);
+  })(PopUpConfrimUpdateAndRegen);
