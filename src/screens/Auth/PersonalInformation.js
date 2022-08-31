@@ -159,7 +159,7 @@ class PersonalInformation extends React.Component {
           alert("Please ensure that you entered all required information")
         }
     }
-    postData()
+    //postData()
   }
 
   //On Page load complete
@@ -249,25 +249,25 @@ class PersonalInformation extends React.Component {
                     <p className="lead">Student User Details</p>
                   </div>
                   
-                  <div className="body">
-                    <form id='register' onSubmit={(e) => this.Submit(e)}>
-                      <label>Which year are you applying for?</label>
+                  <div className="body"><label>Which year are you applying for?</label>
                     <Row>
                     <Col >
                         <input 
                         onChange={(e) => {this.onValueChange(e)}}
                         //checked={this.state.yearOfRes === "2022"}
-                        type="radio"  value='2022'/>
+                        type="radio" name="regyear" value='2022'/>
                          2022
                       </Col>
                       <Col>
                       <input 
                       onChange={(e) => {this.onValueChange(e)}}
                       //checked={this.state.yearOfRes === "2023"}
-                      type="radio"  value='2023'/>
+                      type="radio" name="regyear" value='2023'/>
                          2023
                       </Col>
                     </Row>
+                    <form id='register' onSubmit={(e) => this.Submit(e)}>
+                      
                       
                       <div className="form-group">
                         <label className="control-label sr-only" >

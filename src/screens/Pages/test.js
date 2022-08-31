@@ -12,7 +12,6 @@ class Test extends React.Component {
       }
     merge() {
         const merger = new PDFMerger();
-        var test = 'public/test.pdf'
         const load = async () => {
             await merger.add('https://rubiximages.cjstudents.co.za:449/37a1fcad-a06d-4dfb-9632-3348dbaf0f19.pdf')
             await merger.add(`https://rubiximages.cjstudents.co.za:449/37a1fcad-a06d-4dfb-9632-3348dbaf0f19.pdf`)
