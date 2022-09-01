@@ -364,9 +364,18 @@ postData().then(()=>{
         })
       }
       postData().then(()=>{
-        var fields = {'RubixRegisterUserID': 'RubixRegisterUserID', 'Color': 'Color', 'Name': 'Name', 'MiddleName': 'MiddleName', 
+        var fields = {
+    'RubixRegisterUserID': 'RubixRegisterUserID', 
+    'Color': 'Color', 
+    'Name': 'Name', 
+    'MiddleName': 'MiddleName', 
     'IDNumber': 'IDNumber',
-    'Surname': 'Surname', 'UserEmail': 'UserEmail', 'StudentNumber': 'StudentNumber', 'StudentNumber': 'StudentNumber',
+    'Surname': 'Surname', 
+    'UserEmail': 'UserEmail', 
+    'StudentNumber': 'StudentNumber', 
+    'RegisterUserDateAdded': 'RegisterUserDateAdded',
+    'RegistrationYear': 'RegistrationYear',
+    'RegistrationYearDateAdded': 'RegistrationYearDateAdded',
     'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
      'FloorNumber': 'FloorNumber', 
     'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
