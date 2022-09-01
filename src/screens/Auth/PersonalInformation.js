@@ -24,7 +24,7 @@ class PersonalInformation extends React.Component {
     this.state = {
       userGender: 'Male',
       medicalConditions: 'None',
-      yearOfRes: '',
+      yearOfRes: '2022',
       errorMessage: '',
       countryList: [],
       value: 0
