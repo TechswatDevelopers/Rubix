@@ -800,7 +800,6 @@ this.props.updateStudentName(
                 className="user-photo media-object"
                 width="150px"
                 src={this.state.imageUrl} />
-                {myButton}
               {localStorage.getItem('role') == 'admin' ?null : myButton}
             </div>
             <div className="media-body">
