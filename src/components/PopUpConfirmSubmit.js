@@ -45,7 +45,9 @@ componentDidMount() {
                 type="button"
                 onClick={(e) => {
                   console.log('pressed')
+                  this.props.updateLoadingController(false);
                   this.props.onPresPopUpConfirmSupport();
+                  window.location.reload()
                 }}
                 className="btn btn-danger"
                 data-dismiss="modal"

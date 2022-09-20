@@ -165,17 +165,18 @@ class RubixSurport extends React.Component {
     .then(response => {
       //console.log('done', response)
       if(response.data.PostRubixUserData[0].Response == 1){
-        this.props.onPresPopUpConfirmSupport()
+        
       }
     })
   }
   setTimeout(() => {
     this.props.updateLoadingController(false);
-  }, 3000);
-  postData()
+  }, 4000);
+  postData().then(() => {
+    this.props.onPresPopUpConfirmSupport()
+    //window.location.reload()
+  })
   }
-
-
   ///Initial state (On Page Load)
   componentDidMount() {
     window.scrollTo(0, 0);
