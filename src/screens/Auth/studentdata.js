@@ -112,7 +112,7 @@ class StudentInformation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
             await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
@@ -122,8 +122,8 @@ class StudentInformation extends React.Component {
             })
                 
         } else{
-            console.log("Validate results are ", this.Validate())
-            console.log("checkValidity ", document.getElementById('register').checkValidity())
+            //console.log("Validate results are ", this.Validate())
+            //console.log("checkValidity ", document.getElementById('register').checkValidity())
         }
     }
     postData()

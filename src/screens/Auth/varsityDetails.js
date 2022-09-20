@@ -143,7 +143,7 @@ async componentDidMount(){
         await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities/' + localStorage.getItem('clientID'))
         .then(response => response.json())
         .then(data => {
-            console.log("data is ", data.data)
+            //console.log("data is ", data.data)
             this.setState({uniList: data.data})
             });
 
@@ -151,7 +151,7 @@ async componentDidMount(){
             await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
         .then(response => response.json())
         .then(data => {
-            console.log("data is ", data)
+            //console.log("data is ", data)
             this.setState({resList: data.data})
             });
 

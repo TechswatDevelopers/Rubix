@@ -26,7 +26,7 @@ class SudentsTable extends React.Component {
       await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixGetColor')
       .then(response => response.json())
       .then(data => {
-        console.log("colors data: ", data.data)
+        //console.log("colors data: ", data.data)
         this.setState({
           colors: data.data
         })

@@ -119,7 +119,7 @@ class Registration extends React.Component {
         //Ping email address
         await axios.post(' https://rubixpdf.cjstudents.co.za:94/validEmailCheck', pingData, requestOptions)
             .then(response => {
-                console.log(response.data.EmailResult )
+                //console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");

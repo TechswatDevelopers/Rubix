@@ -106,7 +106,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            console.log(response);
+            //console.log(response);
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -252,8 +252,8 @@ class Login extends React.Component {
           requestOptions
         )
         .then((response) => {
-          console.log(response);
-          console.log("checking data", response.data);
+          //console.log(response);
+          //console.log("checking data", response.data);
           if (response.data.PostRubixUserData["0"]["Response"] == 1) {
             this.props.updateUserID(
               response.data.PostRubixUserData["0"]["RubixRegisterUserID"]

@@ -38,7 +38,7 @@ constructor(props) {
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
       .then(response => response.json())
       .then(data => {
-        console.log("response data:", data)
+        //console.log("response data:", data)
         this.setState({userData: data.PostEmailVerification})
           alert("Account verified successfully!")
           });
@@ -78,7 +78,7 @@ constructor(props) {
       localStorage.setItem('clientTheme', 'purple')
     }
     }
-    console.log('client:', this.state.backImage)
+    //console.log('client:', this.state.backImage)
   }
   
   render() {

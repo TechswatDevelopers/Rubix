@@ -171,7 +171,7 @@ class AdminAmmendPage extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAddLeaseBulkUpdate', data, requestOptions)
         .then(response => {
-          console.log("Response for Bulk Updates: ", response)
+          //console.log("Response for Bulk Updates: ", response)
         })
     }
     postData().then(() => {

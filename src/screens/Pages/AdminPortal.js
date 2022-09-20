@@ -574,7 +574,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
       .then(response => {
-        console.log('current response: ', response)
+        //console.log('current response: ', response)
         if(response != null && response != undefined){
         let totalCapList = response.data.PostRubixUserData.filter(doc => doc.TotalCapacityPerRes !== undefined)
         let bedsTakenList = response.data.PostRubixUserData.filter(doc => doc.TotalbedsTaken !== undefined)

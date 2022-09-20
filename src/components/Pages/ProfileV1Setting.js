@@ -106,7 +106,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
-          console.log(response)
+          //console.log(response)
           alert(response.data[0].ResponceMessage)
           window.location.reload()
         })
@@ -172,7 +172,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
         .then(response => {
-          console.log("Next of Kin Post Response", response)
+          //console.log("Next of Kin Post Response", response)
           alert("Information Updated")
           
         })
@@ -206,7 +206,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
-          console.log("Update Varsity information Response: ", response)
+          //console.log("Update Varsity information Response: ", response)
           alert("Information Updated")
           window.location.reload()
         })
@@ -317,7 +317,7 @@ class ProfileV1Setting extends React.Component {
       if (this.Validate) {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            console.log("My DB Response",response)
+            //console.log("My DB Response",response)
             //alert(response.data.PostRubixUserData[0].ResponceMessage)
           })
       } else {
@@ -348,7 +348,7 @@ class ProfileV1Setting extends React.Component {
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
           window.location.reload()
         })
@@ -425,7 +425,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response.data.PostRubixUserData[0].RegistrationYear)
+          //console.log("All Student data", response.data.PostRubixUserData[0].RegistrationYear)
           this.setState({ myProfile: response.data.PostRubixUserData[0],
             yearOfRes: response.data.PostRubixUserData[0].RegistrationYear
           })
@@ -690,7 +690,7 @@ this.props.updateStudentName(
       .then(response => response.json())
       .then(data => {
         if (data.data != null || data.data != undefined) {
-          console.log('countries', data)
+          //console.log('countries', data)
           this.setState({ countryList: data.data })
         } else {
           alert("Error loading countries list: " + data.message)
@@ -747,7 +747,7 @@ this.props.updateStudentName(
         if (data === null || data === undefined) {
           alert('Error loading next of kin informaion')
         } else {
-          console.log("Next of Kin Details:", data)
+          //console.log("Next of Kin Details:", data)
           this.setState({ nextOfKin: data })
         }
 

@@ -140,7 +140,7 @@ class ProfileV1Page extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
 
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
@@ -231,7 +231,7 @@ class ProfileV1Page extends React.Component {
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({ isSelected: false })
     this.setState({ selectedFile: null })
-    console.log('Doc: ', temp)
+    //console.log('Doc: ', temp)
     if(temp != undefined && temp.length != 0){
       this.setState({
         currentDocID: temp[0].ImageID

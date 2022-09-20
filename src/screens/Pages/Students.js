@@ -60,7 +60,7 @@ class Students extends React.Component {
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
     .then(response => response.json())
     .then(data => {
-        console.log("data is ", data)
+        //console.log("data is ", data)
         this.setState({resList: data.data})
         });
     } 
@@ -104,7 +104,7 @@ class Students extends React.Component {
   ammendLeases() {
     const leases = this.state.studentLeaseAmmend
     if ( this.state.listIndex <= leases.length - 1){
-      console.log("Current Student: ",leases[this.state.listIndex])
+      //console.log("Current Student: ",leases[this.state.listIndex])
       //Call Lease Ammend API
       const student = leases[this.state.listIndex]
 //console.log("the current student is: ", this.state.studentLeaseAmmend)
@@ -136,7 +136,7 @@ class Students extends React.Component {
     //console.log("I am posting")
     await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
     .then(response => {
-      console.log("Post Response: ", response)
+      //console.log("Post Response: ", response)
       if(response.data != null && response.data != undefined){
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
         const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
@@ -241,7 +241,7 @@ postData().then(()=>{
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -399,7 +399,7 @@ postData().then(()=>{
       await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixGetColor')
       .then(response => response.json())
       .then(data => {
-        console.log("colors data: ", data.data)
+        //console.log("colors data: ", data.data)
         this.setState({
           colors: data.data
         })

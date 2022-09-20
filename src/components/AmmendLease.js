@@ -50,7 +50,7 @@ componentDidMount() {
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -85,7 +85,7 @@ getUserWitnessData() {
       //Fetch IP Address
       const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
-        console.log("my IP", res.data);
+        //console.log("my IP", res.data);
         this.setState({userIPAddress: res.data.IPv4 })
       }
       getData()
@@ -155,7 +155,7 @@ postData().then(()=>{
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
           //Get Lease Documented stdents
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 

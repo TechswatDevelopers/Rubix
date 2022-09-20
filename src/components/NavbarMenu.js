@@ -61,7 +61,7 @@ class NavbarMenu extends React.Component {
     .then(data => {
       //console.log("Profile data:", data)
       const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-      console.log("Profile Picture data:", profilePic)
+      //console.log("Profile Picture data:", profilePic)
       //If Profile Picture Exists...
       if(profilePic != null && profilePic != undefined){
         this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})

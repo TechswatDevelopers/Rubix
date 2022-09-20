@@ -151,7 +151,7 @@ class LeaseInformation extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
           //Get Lease Documented stdents
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 
@@ -223,11 +223,11 @@ class LeaseInformation extends React.Component {
           body: data
         };
         for (var pair of data.entries()) {
-          console.log(pair[0], ', ', pair[1]);
+          //console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
           .then(response => {
-            console.log("Upload details:", response)
+            //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
