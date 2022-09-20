@@ -3,6 +3,12 @@ import { Dropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import axios from "axios";
 import PageHeader from "../../components/PageHeader";
+import PopUpConfirmSubmit from "../../components/PopUpConfirmSubmit"
+import {
+  onPresPopUpConfirmSupport,
+   updateLoadingController,
+   updateLoadingMessage
+  }from "../../actions"
 
 class RubixSurport extends React.Component {
     //Initial State
@@ -136,6 +142,8 @@ class RubixSurport extends React.Component {
   ///Submit Function
   Submit(e){
     e.preventDefault();
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Submitting Request...");
     const data = {
       'RubixClientID': localStorage.getItem('clientID'),
       'RubixResidenceID': localStorage.getItem('resID'),
@@ -155,9 +163,15 @@ class RubixSurport extends React.Component {
   const postData = async()=>{
     await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixSupportAdd', data, requestOptions)
     .then(response => {
-      console.log('done', response)
+      //console.log('done', response)
+      if(response.data.PostRubixUserData[0].Response == 1){
+        this.props.onPresPopUpConfirmSupport()
+      }
     })
   }
+  setTimeout(() => {
+    this.props.updateLoadingController(false);
+  }, 3000);
   postData()
   }
 
@@ -165,7 +179,6 @@ class RubixSurport extends React.Component {
   ///Initial state (On Page Load)
   componentDidMount() {
     window.scrollTo(0, 0);
-
     //Load Data
     this.getStudents('', '99')
   }
@@ -179,6 +192,23 @@ class RubixSurport extends React.Component {
         }}
       >
         <div>
+        <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={this.props.rubixClientLogo}
+                width="20%"
+                height="20%"
+                alt=" "
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
+          <PopUpConfirmSubmit />
           <div className="container-fluid">
             <PageHeader
               HeaderText="Rubix Support"
@@ -274,8 +304,18 @@ class RubixSurport extends React.Component {
   }
 }
 
-const mapStateToProps = ({ ioTReducer }) => ({
+const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
+  rubixClientLogo: navigationReducer.clientLogo,
+  rubixThemeColor: navigationReducer.themeColor,
+  rubixClientName: navigationReducer.clientName,
 });
 
-export default connect(mapStateToProps, {})(RubixSurport);
+export default connect(
+  mapStateToProps, {
+    onPresPopUpConfirmSupport,
+    updateLoadingController,
+    updateLoadingMessage,
+  })(RubixSurport);

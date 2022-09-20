@@ -9,6 +9,7 @@ import {
   ON_PRESS_SHOW_PROFILE,
   ON_PRESS_POP_UP_CONFIRMATION,
   ON_PRESS_POP_UP_CONFIRMATION_LEASE_UPDATE,
+  ON_PRESS_POP_UP_CONFIRMATION_SUPPORT,
   ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE,
   ON_PRESS_SHOW_ROOMS,
   ON_PRESS_SHOW_LEASE,
@@ -26,6 +27,7 @@ const initialState = {
   isEventModal: false,
   isPopUpModal: false,
   isPopUpConfirm: false,
+  isPopUpConfirmSupport: false,
   isPopUpConfirmLeaseUpdate: false,
   isPopUpConfirmMassLeaseUpdate: false,
   isContactModal: false,
@@ -104,6 +106,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isPopUpConfirmMassLeaseUpdate: !state.isPopUpConfirmMassLeaseUpdate,
+      };
+    }
+
+    case ON_PRESS_POP_UP_CONFIRMATION_SUPPORT: {
+      return {
+        ...state,
+        isPopUpConfirmSupport: !state.isPopUpConfirmSupport,
       };
     }
 
