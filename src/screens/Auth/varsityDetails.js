@@ -67,7 +67,7 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        console.log(data)
+        //console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
@@ -87,7 +87,7 @@ class VarsityDetails extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
               alert("Please ensure that you entered all required information")
-                console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
+                //console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
         postData()
@@ -107,7 +107,7 @@ class VarsityDetails extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('User data:', data)
+    //console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {

@@ -20,6 +20,7 @@ import {onUpdateProgressBar,
     onUpdateVarsity,} from '../../actions';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import PopUpVarsity from '../../components/PopUpConfirm';
+import { Tabs, Tab, Row, Col } from "react-bootstrap";
 
 class ProfileV1Setting extends React.Component {
   constructor(props) {
@@ -65,6 +66,7 @@ class ProfileV1Setting extends React.Component {
       nextOfKinProgress: '',
       proofOfResProgress: '',
       proofOfRegProgress: '',
+      yearOfRes: '',
     };
   }
 
@@ -322,7 +324,7 @@ class ProfileV1Setting extends React.Component {
         alert("ID Number Invalid")
       }
     }
-    postData()
+    //postData()
 
   }
 
@@ -423,8 +425,10 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response)
-          this.setState({ myProfile: response.data.PostRubixUserData[0] })
+          console.log("All Student data", response.data.PostRubixUserData[0].RegistrationYear)
+          this.setState({ myProfile: response.data.PostRubixUserData[0],
+            yearOfRes: response.data.PostRubixUserData[0].RegistrationYear
+          })
           //Load Vetting information to Redux Store
 this.props.updateStudentID(response.data.PostRubixUserData[0].IDNumber)
 this.props.updateStudentName(
@@ -464,7 +468,7 @@ this.props.updateStudentName(
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          console.log("All profile data", response.data.PostRubixUserData)
+          //console.log("All profile data", response.data.PostRubixUserData)
           this.setState({ myProfile: response.data.PostRubixUserData[0] })
 
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
@@ -586,9 +590,9 @@ this.props.updateStudentName(
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("Profile data:", data)
+          //console.log("Profile data:", data)
           const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-          console.log("Profile Picture data:", profilePic)
+          //console.log("Profile Picture data:", profilePic)
           //If Profile Picture Exists...
           if (profilePic != null && profilePic != undefined) {
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
@@ -750,6 +754,12 @@ this.props.updateStudentName(
       });
 
   }
+  onValueChange(e){
+
+    this.setState({
+      yearOfRes: e.target.value
+    })
+  }
 
   render() {
     const { StudentID } = this.props;
@@ -809,9 +819,34 @@ this.props.updateStudentName(
         </div>
 
 
-        <div className="body">
+        <div className="body"> <h6>Personal Information</h6>
+            {
+              localStorage.getItem('role') == 'admin'
+             ?
+              <Row>
+                    <Col >
+                        <input 
+                        //checked={ this.state.myProfile.RegistrationYear =='2022'  ?  'yes' : 'no'}
+                        onChange={(e) => {this.onValueChange(e)}}
+                        checked={this.state.yearOfRes === "2022"}
+                        type="radio" name="RegistrationYear" value='2022'/>
+                         2022
+                      </Col>
+                      <Col>
+                      <input 
+                      //checked={ this.state.myProfile.RegistrationYear =='2023'  ?  'yes' :'no'}
+                      onChange={(e) => {this.onValueChange(e)}}
+                      checked={this.state.yearOfRes === "2023"}
+                      type="radio" name="RegistrationYear" value='2023'/>
+                         2023
+                      </Col>
+                    </Row>
+                    
+                  :null
+                  
+                  }
           <form id="personalInfo">
-            <h6>Personal Information</h6>
+           
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
                 <div className="form-group">

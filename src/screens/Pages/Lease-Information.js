@@ -49,7 +49,7 @@ class LeaseInformation extends React.Component {
         const postData = async () => {
           await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
           .then(response => {
-            console.log("Post Response: ", response)
+            //console.log("Post Response: ", response)
             if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
     
             } else {
@@ -110,11 +110,11 @@ class LeaseInformation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted data: ', pingData)
+      //console.log('Posted data: ', pingData)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
-          console.log("Students Data List:", response)
+          //console.log("Students Data List:", response)
           if(!response.data.PostRubixUserData){
             this.setState({
               students: []
@@ -193,13 +193,13 @@ class LeaseInformation extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
       .then(response => {
-        console.log("Post Response: ", response)
+        //console.log("Post Response: ", response)
         if(response.data == null || response.data == undefined){
 
         } else {
           const dataUrl = 'data:application/pdf;base64,' + response.data.Base
       const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-      console.log("temp file:", temp)
+      //console.log("temp file:", temp)
       this.onPressUpload(temp, 'lease-agreement', 'signing',userID)
           
         }

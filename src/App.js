@@ -53,6 +53,7 @@ import timeline from "./screens/Pages/TimeLine";
 import AdminDashboard from "./screens/Pages/AdminPortal";
 import LeaseInformation from "./screens/Pages/Lease-Information";
 import AdminAmmendPage from "./screens/Pages/AdminAmmendPage";
+import RubixSurport from "./screens/Pages/Rubix Support";
 import Students from "./screens/Pages/Students";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
@@ -144,6 +145,7 @@ class App extends React.Component {
         activeKey1 === "lockscreen" ||
         activeKey1 === "logInformation" ||
         activeKey1 === "tester" ||
+        //activeKey1 === "support" ||
         activeKey1 === "forgotpassword" ||
         activeKey1 === "forgotpass" ||
         activeKey1 === "varsityDetails" ||
@@ -239,6 +241,7 @@ class App extends React.Component {
                 path={`${process.env.PUBLIC_URL}/studentData`}
                 component={StudentInformation}
               />
+              
               <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/registration`}
@@ -535,6 +538,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/AdminAmmend`}
                 component={AdminAmmendPage}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/support`}
+                component={RubixSurport}
               />
                 </Switch>
               </div>

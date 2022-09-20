@@ -11,7 +11,9 @@ import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
 import {Helmet} from "react-helmet";
-import {onPresPopUpEvent, onPresPopUpConfirm, 
+import {
+  onPresPopUpEvent, 
+  onPresPopUpConfirm, 
   onUpdateNOKProgress,
   onUpdateIDProgress,
   onUpdateRESProgress,
@@ -254,7 +256,6 @@ class ProfileV1Page extends React.Component {
     } else {
       this.setState({ doc: null })
     }
-    //this.setState(state => ({ document: {file: file}}));
   }
 
   //Change heading
@@ -342,10 +343,8 @@ class ProfileV1Page extends React.Component {
     }
   }
 
-
   //Converts base64 to file
   dataURLtoFile(dataurl, filename) {
-
     var arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
@@ -355,7 +354,6 @@ class ProfileV1Page extends React.Component {
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
-
     return new File([u8arr], filename, { type: mime });
   }
 
@@ -380,11 +378,11 @@ class ProfileV1Page extends React.Component {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -482,7 +480,7 @@ class ProfileV1Page extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
-          console.log("document progress", response)
+          //console.log("document progress", response)
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
          
@@ -606,7 +604,7 @@ class ProfileV1Page extends React.Component {
   //Handle File Selection input
   changeHandler(event) {
     this.setState({ selectedFile: event.target.files[0] })
-    console.log("selcted file1", event.target.files[0].type)
+    //console.log("selcted file1", event.target.files[0].type)
     if(event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg' || event.target.files[0].type == 'application/pdf'){
       this.onPressUpload(event.target.files[0], this.state.keyString, 'documents')
       this.setState({ isSelected: true })
@@ -645,7 +643,7 @@ class ProfileV1Page extends React.Component {
     //Fetch IP Address
     const getData = async () => {
       const res = await axios.get('https://geolocation-db.com/json/')
-      console.log("my IP", res.data);
+      //console.log("my IP", res.data);
       this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
@@ -668,10 +666,10 @@ class ProfileV1Page extends React.Component {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      //console.log("Posted Data:", data)
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
         .then(response => {
-          console.log("Signature upload details:", response)
+          //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -819,8 +817,6 @@ class ProfileV1Page extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
-
-            
             <div
           className="page-loader-wrapper"
           style={{ display: this.props.MyloadingController ? "block" : "none" }}
@@ -893,156 +889,7 @@ class ProfileV1Page extends React.Component {
                       <Tab eventKey="settings" title="Personal Information">
                         <ProfileV1Setting  />
                       </Tab>
-                      {/* <Tab eventKey="Billing" title="Billing">
-                        <div className="tab-pane active show" id="billings">
-                          <div className="body">
-                            <h6>Payment Method</h6>
-                            <div className="payment-info">
-                              <h3 className="payment-name">
-                                <i className="fa fa-paypal"></i> PayPal ****2222
-                              </h3>
-                              <span>Next billing charged $29</span>
-                              <br />
-                              <em className="text-muted">
-                                Autopay on May 12, 2018
-                              </em>
-                              <a className="edit-payment-info">
-                                Edit Payment Info
-                              </a>
-                            </div>
-                            <p className="margin-top-30">
-                              <a>
-                                <i className="fa fa-plus-circle"></i> Add
-                                Payment Info
-                              </a>
-                            </p>
-                          </div>
-
-                          <div className="body">
-                            <h6>Billing History</h6>
-                            <table className="table billing-history">
-                              <thead className="sr-only">
-                                <tr>
-                                  <th>Plan</th>
-                                  <th>Amount</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>
-                                    <h3 className="billing-title">
-                                      Basic Plan{" "}
-                                      <span className="invoice-number">
-                                        #LA35628
-                                      </span>
-                                    </h3>
-                                    <span className="text-muted">
-                                      Charged at April 17, 2018
-                                    </span>
-                                  </td>
-                                  <td className="amount">$29</td>
-                                  <td className="action">
-                                    <a>View</a>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <h3 className="billing-title">
-                                      Pro Plan{" "}
-                                      <span className="invoice-number">
-                                        #LA3599
-                                      </span>
-                                    </h3>
-                                    <span className="text-muted">
-                                      Charged at March 18, 2018
-                                    </span>
-                                  </td>
-                                  <td className="amount">$59</td>
-                                  <td className="action">
-                                    <a>View</a>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <h3 className="billing-title">
-                                      Platinum Plan{" "}
-                                      <span className="invoice-number">
-                                        #LA1245
-                                      </span>
-                                    </h3>
-                                    <span className="text-muted">
-                                      Charged at Feb 02, 2018
-                                    </span>
-                                  </td>
-                                  <td className="amount">$89</td>
-                                  <td className="action">
-                                    <a>View</a>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <button type="button" className="btn btn-primary">
-                              Update
-                            </button>
-                            <button type="button" className="btn btn-default">
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      </Tab> */}
-
-                      
-                      {/* <Tab eventKey="Preferences" title="Residence Information">
-                        <div className="row clearfix">
-                          <div className="w-100 p-3">
-                            <div className="body">
-                              <h6 style={{textAlign:'center'}}>My Residence Information</h6>
-                              <ul className="list-unstyled list-login-session w-80 p-3">
-                                <li>
-                                <h3 className="login-title">
-                                {localStorage.getItem('resName')}
-                                      </h3>
-                                      <li>
-                                      <h3 className="login-title">
-                                      {localStorage.getItem('resUni')}
-                                      </h3>
-                                      </li>
-                                </li>
-                                
-                                <li>
-                                    <div className="login-info">
-                                      <span className="login-detail">
-                                        {localStorage.getItem('resAddress')}
-                                      </span>
-                                    </div>
-                                </li>
-                                <img
-                                  alt="cannot display"
-                                  accept='.jpg, .png, .jpeg'
-                                  className="user-photo media-object"
-                                  src={localStorage.getItem('resPhoto')} />
-                               
-                                  <li>
-                                    <p>{localStorage.getItem('resDescription')}</p>
-                                  </li>
-                                <li>
-                                  <div className="login-session">
-                                    <div className="login-info">
-                                      <h3 className="login-title">
-                                        Residence Amenitis
-                                      </h3>
-                                      <p>{localStorage.getItem('resAmenities')}</p>
-                                    </div>
-
-                                  </div>
-                                </li>
-                                
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </Tab> */}
+          
                       <Tab  eventKey="documents" title="Documents">
                         <div
                           style={{ flex: 1 }}
@@ -1077,41 +924,12 @@ class ProfileV1Page extends React.Component {
                                       </div>
                                     );
                                   })}
-                                 {/*  {this.state.docs.map((data, index) => {
-                                    return (
-                                      <div 
-                                      key={index + "sidjpidj"} 
-                                      onClick={() => this.changeDocument(data.FileType)}
-                                      onAnimationEnd={() => this.setState({ fade: false })}
-                                      >
-                                        {
-                                          data.FileType != 'profile-pic'
-                                          ? <FileStorageStatusCard
-                                          key={index + "sidjpidj"}
-                                          TotalSize=''
-                                          UsedSize={data.FileType}
-                                          Type={data.status}
-                                          UsedPer={data.UsedPer}
-                                          ProgressBarClass={`${data.ProgressBarClass}`}
-                                        />
-                                        : null
-                                        }
-                                        
-                                      </div>
-                                    );
-                                  })} */}
                                   <div>
                                   </div>
                                 </div>
                                 <div className="col-lg-9 col-md-7 col-sm-12">
-                                  {/* <LineChartCard
-                  HeaderText="View File"
-                  ChartOption={areaChartFileReport}
-                /> */}
                                   <div style={{ height: '100%' }} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
-                                    
-
                                     {myBody}
                                   </div>
                                 </div>
@@ -1120,8 +938,6 @@ class ProfileV1Page extends React.Component {
                           </div>
                         </div>
                       </Tab>
-
-
 {myLease}
                     </Tabs>
                   </div>

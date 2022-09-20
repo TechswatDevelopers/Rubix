@@ -13,7 +13,7 @@ class FileStorageStatusCard extends React.Component {
           <p className="mb-0">
             {Type}{" "}
             &nbsp;&nbsp;
-             
+            
           {
             localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 
             

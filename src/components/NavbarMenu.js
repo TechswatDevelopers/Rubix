@@ -449,17 +449,7 @@ class NavbarMenu extends React.Component {
                   <li
                     className={toggleEqualizer ? "show dropdown" : "dropdown"}
                   >
-                    {/* <a
-                      href="#!"
-                      className="dropdown-toggle icon-menu"
-                      data-toggle="dropdown"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.props.onPressEqualizer();
-                      }}
-                    >
-                      <i className="icon-equalizer"></i>
-                    </a> */}
+                    
                     <ul
                       className={
                         toggleEqualizer
@@ -552,14 +542,7 @@ class NavbarMenu extends React.Component {
                   </Dropdown.Item>
                   <li className="divider"></li>
                   </>}
-                  {/* <Dropdown.Item href="appinbox">
-                    {" "}
-                    <i className="icon-envelope-open"></i>Messages
-                  </Dropdown.Item> */}
-                  {/* <Dropdown.Item>
-                    {" "}
-                    <i className="icon-settings"></i>Settings
-                  </Dropdown.Item> */}
+                  
                   <Dropdown.Item href={"login/" + this.state.clientID}>
                     {" "}
                     <i className="icon-power"></i>Logout
@@ -567,20 +550,7 @@ class NavbarMenu extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
               <hr />
-               {/* <ul className="row list-unstyled">
-                <li className="col-4">
-                  <small>Sales</small>
-                  <h6>456</h6>
-                </li>
-                <li className="col-4">
-                  <small>Order</small>
-                  <h6>1350</h6>
-                </li>
-                <li className="col-4">
-                  <small>Revenue</small>
-                  <h6>$2.13B</h6>
-                </li>
-              </ul> */} 
+              
             </div>
             <ul className="nav nav-tabs">
               <li className="nav-item">
@@ -717,6 +687,19 @@ class NavbarMenu extends React.Component {
                     </li>
                     : null
                   }
+
+{ localStorage.getItem('role') == 'admin'
+                    ?
+                    <li className="" id="support">
+                      <a
+                          href="support"
+                          className=""
+                        
+                        >
+                          <i className="icon-earphones-alt"></i> <span>Rubix Support</span>
+                        </a>
+                      </li>
+                      : null}
 
                   </ul>
                 </Nav>

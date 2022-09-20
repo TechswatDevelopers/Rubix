@@ -298,7 +298,7 @@ class Login extends React.Component {
   };
   //Facebook response for testing
   responseFacebook = (response) => {
-    this.props.updatePlatformID("3");
+    //this.props.updatePlatformID("3");
     localStorage.setItem("platformID", "3");
     localStorage.setItem("userplatformID", response["id"]);
     this.SocialMediaLogin(response["id"]);
@@ -329,7 +329,7 @@ class Login extends React.Component {
           localStorage.setItem("clientName", "CJ Students");
           localStorage.setItem("clientTheme", "orange");
           localStorage.setItem("clientBG", "https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png");
-      
+    
         }
         break;
       case "2": {
