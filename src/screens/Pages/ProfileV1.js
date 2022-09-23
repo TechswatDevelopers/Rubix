@@ -141,7 +141,6 @@ class ProfileV1Page extends React.Component {
         .then(response => response.json())
         .then(data => {
           //console.log("documents data:", data)
-
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -216,9 +215,7 @@ class ProfileV1Page extends React.Component {
       setTimeout(() => {
         this.props.updateLoadingController(false);
       }, 2000);
-    }
-    
-    
+    }  
   }
 
 
@@ -428,6 +425,7 @@ class ProfileV1Page extends React.Component {
    }
     return message
   }
+
   setLeaseProg(percent, result) {
     let progress
    if(result == 'correct'){
@@ -612,13 +610,12 @@ class ProfileV1Page extends React.Component {
     } else {
       alert("Please select proper file")
     }
-    
   }
+
   handleUpdate(e) {
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
   }
-
 
   //Signature Pad array of lines
   sigPad = {}
@@ -717,8 +714,6 @@ class ProfileV1Page extends React.Component {
       tabKey: e
     })
   }
-
-
 
    //Set Message according to percentage
    setMessage(percent) {

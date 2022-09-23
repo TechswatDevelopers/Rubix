@@ -489,8 +489,6 @@ this.props.updateStudentName(
           localStorage.setItem('resUni', this.state.myProfile.ResidenceUniversity)
           localStorage.setItem('resDescription', this.state.myProfile.ResidenceDescription)
           localStorage.setItem('resAmenities', this.state.myProfile.ResidenceAmenities)
-
-         
         })
     }
     postData()
@@ -789,9 +787,6 @@ this.props.updateStudentName(
 
     return (
       <div>
-        {/* <PopUpVarsity
-        StudentID = {StudentID}
-        /> */}
         <div className="body">
           <h6>Profile Photo</h6>
           <div className="media">
@@ -846,7 +841,6 @@ this.props.updateStudentName(
                   
                   }
           <form id="personalInfo">
-           
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
                 <div className="form-group">
@@ -887,7 +881,6 @@ this.props.updateStudentName(
                 </div>
                 <div className="form-group">
                 </div>
-
                 <div className="form-group">
                   <label>
                     ID Number:
@@ -1065,57 +1058,7 @@ this.props.updateStudentName(
                     type="text"
                   />
                 </div>
-                {/* <div className="form-group">
-                  <label>
-                    Postal Code:
-                  </label>
-                  <input
-                    className="form-control"
-                    placeholder="Complex/Appartment Number"
-                    defaultValue={this.state.myProfile.PostCode}
-                    type="email"
-                    onChange={() => { }}
-                  />
-                </div> */}
-                {/* <div className="form-group">
-                  <input
-                    className="form-control"
-                    placeholder="Complex/Appartment Name"
-                    defaultValue={this.state.myProfile.RegisterUserComplexorBuildingName}
-                    type="text"
-                    onChange={() => { }}
-                  />
-                </div> */}
               </div>
-              {/* <div className="col-lg-6 col-md-12">
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    placeholder="Postal Code"
-                    defaultValue={this.state.myProfile.PostCode}
-                    type="text"
-                  />
-                </div> 
-                <div className="form-group">
-                  {
-                    <select className="form-control" onChange={(e) => this.setState({addressProv: e.target.value })} value={this.state.myProfile.Province}>
-                      {
-                        this.state.provList.map((province, index) => (
-                          <option key={index} name='RegisterUserProvince' value={province.Province}>{province.Province}</option>
-                        ))
-                      }
-                    </select>}
-                </div>
-                <div className="form-group">
-                  <select className="form-control" onChange={(e) => this.setState({country: e.target.value })} value={this.state.myProfile.Country}>
-                    {
-                      this.state.countryList.map((country, index) => (
-                        <option key={index} name='RegisterUserCountry' value={country.Country_Name}>{country.Country_Name}</option>
-                      ))
-                    }
-                  </select>
-                </div>
-              </div> */}
             </div>
             <button className="btn btn-primary" type="button" onClick={(e) => { this.updateAddressInformation(e) }}>
               Update
@@ -1170,20 +1113,7 @@ this.props.updateStudentName(
                   type="text"
                 />
               </div>
-              {/* <div className="form-group">
-                <label>
-                  Payment Method: {this.state.myProfile.PaymentMethod}
-                </label>
-                {
-                  <select className="form-control" onChange={(e) => this.setState({ payment: e.target.value })} value={this.state.payment}>
-                    {
-
-                      this.state.payMethods.map((payment, index) => (
-                        <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
-                      ))
-                    }
-                  </select>}
-              </div> */}
+              
             </div>
           </div>
           {localStorage.getItem('role') == 'admin'

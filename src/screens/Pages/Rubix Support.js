@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 import axios from "axios";
 import PageHeader from "../../components/PageHeader";
 import PopUpConfirmSubmit from "../../components/PopUpConfirmSubmit"
+import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import {
   onPresPopUpConfirmSupport,
    updateLoadingController,
-   updateLoadingMessage
+   updateLoadingMessage,
+   updateResidenceID
   }from "../../actions"
 
 class RubixSurport extends React.Component {
@@ -19,10 +21,13 @@ class RubixSurport extends React.Component {
         isLoad: true,
         isShow: false,
         isShowing: false,
+        isShowInfo: false,
         topic: '',
         students: [],
         studentList: [],
         querries: ['Add to residence', 'Remove from Rubix', 'Cannot log in', 'Lease Issue', 'Other'],
+        resList: [],
+        tickets: []
       };
     }
 
@@ -34,6 +39,36 @@ class RubixSurport extends React.Component {
       }
       return isChecked
     }
+
+    //Fetch all tickets
+    getTockets(){
+      const data = {
+        'RubixClientID': 1,
+        'RubixResidenceID': 1,
+        'UserCode': localStorage.getItem('userCode')
+      }
+
+      const requestOptions = {
+        title: 'Get All Student Tickets',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: data
+      }
+
+      console.log("Posted Data: ", data)
+      const postData = async () => {
+        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixGetSupportData', data, requestOptions)
+        .then(response => {
+          console.log("Response Data:", response)
+          this.setState({
+            tickets: response.data.PostRubixUserData
+          })
+        })
+
+      }
+      postData()
+      
+    }
   
     //Fetch all students Data
     getStudents(search, resID){
@@ -43,7 +78,10 @@ class RubixSurport extends React.Component {
         studentList: [],
       
       })
-      document.getElementById('Comments').value = ''
+       if(this.state.isShowInfo){
+        document.getElementById('Comments').value = ''
+       }
+       
       if(localStorage.getItem('role') == 'admin'){
   
       } else {
@@ -91,12 +129,14 @@ class RubixSurport extends React.Component {
         })
     }
 
+
     //Handle Issue Topic
     handleIssue(e){
       this.setState({
         topic: e.target.value
       })
     }
+
 
     //Toggle Classified
     handleClass(e){
@@ -139,6 +179,7 @@ class RubixSurport extends React.Component {
 
       })
     }
+
 
   ///Submit Function
   Submit(e){
@@ -183,6 +224,21 @@ class RubixSurport extends React.Component {
     window.scrollTo(0, 0);
     //Load Data
     this.getStudents('', '99')
+
+    //Fetch Ticket List
+    this.getTockets()
+
+    //Fetch Residences
+    const fetchData = async() =>{
+      //Populate Residence list
+      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      .then(response => response.json())
+      .then(data => {
+          //console.log("data is ", data)
+          this.setState({resList: data.data})
+          });
+      } 
+      fetchData();
   }
 
   render() {
@@ -211,7 +267,7 @@ class RubixSurport extends React.Component {
           </div>
         </div>
           <PopUpConfirmSubmit />
-          <div className="container-fluid">
+           <div className="container-fluid">
             <PageHeader
               HeaderText="Rubix Support"
               Breadcrumb={[
@@ -219,11 +275,66 @@ class RubixSurport extends React.Component {
                 { name: "Rubix Support", navigate: "" },
               ]}
             />
-            <div className="row clearfix">
+            
+            {
+            localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
+            ? <>
+            <p> <strong>Please Select a Residence to view: </strong></p>
+            {  
+        <select className="form-control" onChange={(e)=>{
+          this.setState({res: e.target.value,
+          isShowInfo: true
+          })
+          this.getStudents('', e.target.value)
+          this.props.updateResidenceID(e.target.value)
+          //console.log('ResID1: ', e.target.value)
+          localStorage.setItem('resID', e.target.value)
+          }} value={this.state.res}>
+        {
+            
+            this.state.resList.map((res, index)=> (
+            <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
+        ))   
+        }
+    </select> }
+            </>
+          :null}
+
+            {/* Top Bar Ticket Lists */}
+            {
+              this.state.isShowInfo
+              ? <div className="row clearfix m-2">
+              <div className="col-lg-12 col-md-12">
+              <div className="card planned_task">
+              <div className="header">
+                    <h4>Ticket List</h4>
+                  </div>
+                  <ScrollMenu>
+                    {
+                      this.state.tickets.map((ticket, index) => (
+                        <div className="card p-2">
+                          <div className="m-2">
+                          <p className="m-2"><strong>{ticket.Topic}</strong></p>
+                          <p><strong>Issue: </strong>{ticket.Comments}</p>
+                          <p><strong>Status: </strong>{ticket.Status}</p>
+                          </div>
+                        </div>
+                      ))
+                    }
+                  </ScrollMenu>
+
+                </div>
+              </div>
+            </div>
+            : null}
+
+             {/* Add new ticket */}
+             { this.state.isShowInfo
+             ?<div className="row clearfix">
               <div className="col-lg-12 col-md-12">
                 <div className="card planned_task">
                   <div className="header">
-                    <h4>Rubix Support</h4>
+                    <h4>New Rubix Support Ticket</h4>
                   </div>
                   <div className="body">
                     <p>Please fill in the form below and we will get back to you at our earliest convinience.</p>
@@ -234,10 +345,8 @@ class RubixSurport extends React.Component {
                       <input className="m-2" type="radio" name="class" value ='not-in-res' onChange={(e) => {this.handleClass(e)}}/>
                        <span>No</span>
                     </div>
-
                     {
-                             this.state.isShowing
-
+                    this.state.isShowing
                       ? <button className="btn btn-primary btn-sm btn-block mt-3 mb-3"  
                     onClick={(e) => {
                       e.preventDefault()
@@ -245,7 +354,7 @@ class RubixSurport extends React.Component {
                       isShow: !this.state.isShow})} }>
                         {this.state.isShow ? "Hide List" : "Select Students"}
                         </button>
-                        : <div></div>
+                        : <div> </div>
                         }
                     {
                       this.state.isShow
@@ -294,12 +403,16 @@ class RubixSurport extends React.Component {
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         Submit
                         </button>
-
                   </div>
+
                 </div>
               </div>
             </div>
+             : null}
           </div>
+          
+
+
         </div>
       </div>
     );
@@ -320,4 +433,5 @@ export default connect(
     onPresPopUpConfirmSupport,
     updateLoadingController,
     updateLoadingMessage,
+    updateResidenceID,
   })(RubixSurport);

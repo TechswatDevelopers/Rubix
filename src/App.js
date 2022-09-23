@@ -54,6 +54,7 @@ import AdminDashboard from "./screens/Pages/AdminPortal";
 import LeaseInformation from "./screens/Pages/Lease-Information";
 import AdminAmmendPage from "./screens/Pages/AdminAmmendPage";
 import RubixSurport from "./screens/Pages/Rubix Support";
+import RubixTickets from "./screens/Pages/RubixTickets";
 import Students from "./screens/Pages/Students";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
@@ -543,6 +544,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/support`}
                 component={RubixSurport}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/wolf`}
+                component={RubixTickets}
               />
                 </Switch>
               </div>
