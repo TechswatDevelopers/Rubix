@@ -124,7 +124,8 @@ class RubixSurport extends React.Component {
         }
         postData().then(() =>{
           setTimeout(() => {
-            
+            //Fetch Ticket List
+            this.getTockets()  
           }, 4000);
         })
     }
@@ -282,8 +283,9 @@ class RubixSurport extends React.Component {
             <p> <strong>Please Select a Residence to view: </strong></p>
             {  
         <select className="form-control" onChange={(e)=>{
-          this.setState({res: e.target.value,
-          isShowInfo: true
+          this.setState({
+            res: e.target.value,
+            isShowInfo: true
           })
           this.getStudents('', e.target.value)
           this.props.updateResidenceID(e.target.value)
@@ -298,7 +300,114 @@ class RubixSurport extends React.Component {
         }
     </select> }
             </>
-          :null}
+          : <div>
+            <div className="row clearfix m-2">
+              <div className="col-lg-12 col-md-12">
+              <div className="card planned_task">
+              <div className="header">
+                    <h4>Ticket List</h4>
+                  </div>
+                  <ScrollMenu>
+                    {
+                      this.state.tickets.map((ticket, index) => (
+                        <div className="card p-2">
+                          <div className="m-2">
+                          <p className="m-2"><strong>{ticket.Topic}</strong></p>
+                          <p><strong>Issue: </strong>{ticket.Comments}</p>
+                          <p><strong>Status: </strong>{ticket.Status}</p>
+                          </div>
+                        </div>
+                      ))
+                    }
+                  </ScrollMenu>
+
+                </div>
+              </div>
+            </div>
+
+            <div className="row clearfix">
+              <div className="col-lg-12 col-md-12">
+                <div className="card planned_task">
+                  <div className="header">
+                    <h4>New Rubix Support Ticket</h4>
+                  </div>
+                  <div className="body">
+                    <p>Please fill in the form below and we will get back to you at our earliest convinience.</p>
+                    <div>
+                      <p>Is the student <strong>ACTIVE</strong> in your residence?</p>
+                      <input className="m-2" type="radio" name="class" value ='in-res' onChange={(e) => {this.handleClass(e)}}/>
+                        <span>Yes</span>
+                      <input className="m-2" type="radio" name="class" value ='not-in-res' onChange={(e) => {this.handleClass(e)}}/>
+                       <span>No</span>
+                    </div>
+                    {
+                    this.state.isShowing
+                      ? <button className="btn btn-primary btn-sm btn-block mt-3 mb-3"  
+                    onClick={(e) => {
+                      e.preventDefault()
+                      this.setState({
+                      isShow: !this.state.isShow})} }>
+                        {this.state.isShow ? "Hide List" : "Select Students"}
+                        </button>
+                        : <div> </div>
+                        }
+                    {
+                      this.state.isShow
+                      ? <div>
+                      {
+                        this.state.students.map((student, index) => (
+                          <div>
+                            <input value={student.Name + '' + student.Surname} 
+                            checked = {
+                              this.checkBoxChecked(student.Name + student.Surname)
+                              } type="checkbox" onChange={(e) =>{this.handleCheck(e)}}/>
+                            <span> {student.Name + ' ' + student.Surname}</span>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  : <div> </div>  
+                  }
+
+                  <h5>Please assist with: </h5>
+                    <div>
+                      {
+                        this.state.querries.map((querry, index) => (
+                          <div>
+                            <input name="topic" value={querry} 
+                             type="radio" onChange={(e) =>{this.handleIssue(e)}}/>
+                            <span> {querry}</span>
+                          </div>
+                        ))
+                      }
+                    </div>
+                    <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Comment:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="Comments"
+                          name='Comments'
+                          placeholder="Enter your comment or question"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
+                        Submit
+                        </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+          
+          }
 
             {/* Top Bar Ticket Lists */}
             {

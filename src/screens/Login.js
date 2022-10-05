@@ -96,7 +96,7 @@ class Login extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: data,
     };
-    console.log(data);
+    //console.log(data);
     const postData = async () => {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
@@ -106,7 +106,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            //console.log(response);
+            console.log(response);
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]

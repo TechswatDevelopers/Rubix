@@ -324,7 +324,7 @@ class ProfileV1Setting extends React.Component {
         alert("ID Number Invalid")
       }
     }
-    //postData()
+    postData()
 
   }
 

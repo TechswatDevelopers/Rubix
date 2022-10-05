@@ -30,6 +30,7 @@ import {
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
 import PopUpVarsity from '../../components/PopUpEditVarsity';
+import PDFMerger from 'pdf-merger-js/browser';
 //import tempfile from 'tempfile';
 //import DocViewer from "react-doc-viewer";
 
@@ -84,6 +85,7 @@ class ProfileV1Page extends React.Component {
       currentProgress: '',
       filename: '',
       pageTitle: 'User Profile',
+      mergedFile: '',
     }
   }
 
@@ -129,6 +131,36 @@ class ProfileV1Page extends React.Component {
     scrollToElement()
   }
 
+  //Merge Documents
+  mergeFiles(){
+    const merger = new PDFMerger();
+
+    //console.log('these are the documents: ', this.state.docs)
+    const mergeTime = async () =>{
+        //Run through docs list
+    this.state.docs.forEach((doc) =>{
+      if(doc.FileType != "signature" && doc.Filetype != "profile-pic"){
+        const dataUrl = 'data:application/pdf;base64,' + doc.image
+        const temp = this.dataURLtoFile(dataUrl, 'Merged Document' + doc.FileType)
+        const temp2 = 'https://rubiximages.cjstudents.co.za:449/'+ doc.filename
+        merger.add(temp)
+        console.log("This is this document: ", merger)
+      }
+      
+    })
+    const mergedPdf = await merger.saveAsBlob();
+    const url = URL.createObjectURL(mergedPdf);
+
+    this.setState(
+      {
+        mergedFile: url
+      }
+    )
+    }
+    mergeTime()
+
+  }
+
   //Fetch All documents from DB
   loadDocuments(userID) {
     //Set Loading Screen ON
@@ -140,7 +172,7 @@ class ProfileV1Page extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+          console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -381,6 +413,7 @@ class ProfileV1Page extends React.Component {
         .then(response => {
           //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
+          this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
     }
     postDocument().then(() => {
@@ -523,6 +556,7 @@ class ProfileV1Page extends React.Component {
       //Set timer for loading screen
       setTimeout(() => {
         this.props.updateLoadingController(false);
+        //this.mergeFiles()
       }, 3000);
     })
   }
@@ -623,16 +657,52 @@ class ProfileV1Page extends React.Component {
   clear = () => {
     this.sigPad.clear()
   }
+
+  
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
+    //var myBlob = this.sigPad.getTrimmedCanvas().toBlob
+    //var myFile = new File([myBlob], 'mySignature', { type: "image/png", })
+    var my2ndFile = this.dataURLtoFile(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'Student signature')
+    //console.log('The file: ', my2ndFile)
+    this.onPressSignatureUpload(my2ndFile)
     this.setLoadingPage(3000)
-    if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
+     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
     } else {
       alert("Please provide a signature")
+    } 
+  }
+
+  
+  //Update Profile Picture
+  onPressSignatureUpload(file) {
+    //e.preventDefault();
+    //var file = this.state.selectedFile
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', file)
+      data.append('FileType', 'signature')
+      data.append('RubixRegisterUserID', this.state.myUserID)
+      const requestOptions = {
+        title: 'Save Student Signature',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        //console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          //console.log("Upload details:", response)
+          //this.setState({ mongoID: response.data.post._id })
+          //window.location.reload()
+        })
     }
+    postDocument()
   }
 
   //Coleect User Signing Info
@@ -801,6 +871,7 @@ class ProfileV1Page extends React.Component {
         } else {
           myLease = null
         }
+
     return (
       <div ref={this.testRef}
         style={{ flex: 1 }}
@@ -828,7 +899,6 @@ class ProfileV1Page extends React.Component {
             <p>{this.props.loadingMessage}</p>
           </div>
         </div>
-
         <PopUpVarsity
         StudentID = {this.state.myUserID}
         />
@@ -934,6 +1004,14 @@ class ProfileV1Page extends React.Component {
                         </div>
                       </Tab>
 {myLease}
+
+                    {/* <Tab  eventKey="Test" title="Test">
+                    <>
+                    <p>This is the merged doc: {this.state.mergedFile}</p>
+                    <iframe src={this.state.mergedFile} width="100%" height="500px">
+           </iframe>
+                </>
+                    </Tab> */}
                     </Tabs>
                   </div>
                 </div>
