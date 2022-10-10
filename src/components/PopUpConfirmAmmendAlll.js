@@ -154,7 +154,7 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('My data: ', data)
+    //console.log('My data: ', data)
     const postData = async () => {
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFFinalSignature', data, requestOptions)
       .then(response=>{
@@ -241,7 +241,7 @@ getUserWitnessData() {
       body: data
     };
 
-    console.log("Posted Vetting Data: ", data)
+    //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{

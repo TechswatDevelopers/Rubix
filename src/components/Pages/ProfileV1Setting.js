@@ -75,7 +75,7 @@ class ProfileV1Setting extends React.Component {
   updateAddressInformation(e) {
     const locations = document.getElementById('location');
     let id;
-    console.log("location:", this.state.location)
+    //console.log("location:", this.state.location)
     let street_address
     if (Object.keys(this.state.location).length != 0) {
       street_address = this.state.location['value']['structured_formatting']['main_text']
@@ -237,7 +237,7 @@ class ProfileV1Setting extends React.Component {
     var year = idNumber.substring(0, 2);
     var month = idNumber.substring(2, 4);
     var day = idNumber.substring(4, 6);
-    console.log(year, month, day)
+    //console.log(year, month, day)
 
     // get first 6 digits as a valid date
     var tempDate = new Date(year, month - 1, day);
@@ -246,7 +246,7 @@ class ProfileV1Setting extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    console.log(id_date, id_month, id_year)
+    //console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -293,7 +293,7 @@ class ProfileV1Setting extends React.Component {
   //Update personal information
   updateUserInformation(e) {
     e.preventDefault();
-    console.log(this.state.selectedFile)
+    //console.log(this.state.selectedFile)
     const form = document.getElementById('personalInfo');
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
@@ -344,7 +344,7 @@ class ProfileV1Setting extends React.Component {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
@@ -421,7 +421,7 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('Posted student data:', data)
+    //console.log('Posted student data:', data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
@@ -527,7 +527,7 @@ this.props.updateStudentName(
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
-          console.log("document progress", response.data.PostRubixUserData)
+          //console.log("document progress", response.data.PostRubixUserData)
           const temp = response.data.PostRubixUserData
           //Set local storage to default values
           localStorage.setItem('idProgress', 0)
@@ -634,7 +634,7 @@ this.props.updateStudentName(
         if (data === null || data === undefined) {
           alert('Error loading university data: ' + data.message)
         } else {
-          console.log("University detail:", data)
+          //console.log("University detail:", data)
           this.setState({ universityID: data.RubixUniversityID })
           this.setState({ courseID: data.RubixCourseID })
           this.setState({ myresID: data.RubixRegisterUserUniversityDetailsID })
@@ -706,7 +706,6 @@ this.props.updateStudentName(
           //console.log("University data:", data)
           this.setState({ uniList: data.data })
         }
-
       });
   }
 

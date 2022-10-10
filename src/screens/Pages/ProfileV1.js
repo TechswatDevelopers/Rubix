@@ -94,7 +94,7 @@ class ProfileV1Page extends React.Component {
     const userID = localStorage.getItem('userID');
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
-    console.log("Student Progress: ", this.props.studentProgress)
+    //console.log("Student Progress: ", this.props.studentProgress)
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
@@ -147,7 +147,7 @@ class ProfileV1Page extends React.Component {
         let out = new Uint8Array(length);
 
         merger.add(temp)
-        console.log("This is this document: ", temp)
+        //console.log("This is this document: ", temp)
       }
       
     })
@@ -169,13 +169,13 @@ class ProfileV1Page extends React.Component {
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
-    console.log("Loading Student Documents...");
+    //console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 

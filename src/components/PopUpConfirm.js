@@ -46,12 +46,12 @@ componentDidMount() {
         headers: { 'Content-Type': 'multipart/form-data', },
         body: data
       };
-      for (var pair of data.entries()) {
+    /*   for (var pair of data.entries()) {
         console.log(pair[0], ', ', pair[1]);
-      }
+      } */
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -146,7 +146,7 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('My data: ', data)
+    //console.log('My data: ', data)
     const postData = async () => {
       await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFFinalSignature', data, requestOptions)
       .then(response=>{
@@ -194,7 +194,7 @@ getUserWitnessData() {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminVettings', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
         setTimeout(() => {
           this.sendAuttingStatus(filetype, docID, vet)
         }, 2000);
@@ -232,11 +232,11 @@ getUserWitnessData() {
       body: data
     };
 
-    console.log("Posted Vetting Data: ", data)
+    //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
       })
     }
     postData().then(()=>{

@@ -85,7 +85,7 @@ class Students extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminLeaseBulkUpdate', pingData, requestOptions)
       .then(response => {
-        console.log("The response = ", response)
+        //console.log("The response = ", response)
         const data = response.data.PostRubixUserData
         if(data != null && data.length != 0){
           this.setState({
@@ -196,7 +196,7 @@ const requestOptions = {
   headers: { 'Content-Type': 'application/json' },
   body: data
 }
-console.log("Data: ", data)
+//console.log("Data: ", data)
 
 //Http Post Request
 const postData = async () => {
