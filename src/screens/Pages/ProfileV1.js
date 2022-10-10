@@ -85,7 +85,7 @@ class ProfileV1Page extends React.Component {
       currentProgress: '',
       filename: '',
       pageTitle: 'User Profile',
-      mergedFile: '',
+      mergedFile: null,
     }
   }
 
@@ -134,17 +134,20 @@ class ProfileV1Page extends React.Component {
   //Merge Documents
   mergeFiles(){
     const merger = new PDFMerger();
-
     //console.log('these are the documents: ', this.state.docs)
     const mergeTime = async () =>{
         //Run through docs list
     this.state.docs.forEach((doc) =>{
-      if(doc.FileType != "signature" && doc.Filetype != "profile-pic"){
-        const dataUrl = 'data:application/pdf;base64,' + doc.image
-        const temp = this.dataURLtoFile(dataUrl, 'Merged Document' + doc.FileType)
-        const temp2 = 'https://rubiximages.cjstudents.co.za:449/'+ doc.filename
+      if(doc.FileType != "signature" && doc.FileType != "profile-pic"){
+        const dataUrl = 'data:' + doc.fileextension + ';base64,' + doc.image
+        const temp = this.dataURLtoFile(dataUrl, 'Merged Document-' + doc.FileType)
+
+        const bytes = atob(doc.image);
+        let length = bytes.length;
+        let out = new Uint8Array(length);
+
         merger.add(temp)
-        console.log("This is this document: ", merger)
+        console.log("This is this document: ", temp)
       }
       
     })
@@ -1005,13 +1008,13 @@ class ProfileV1Page extends React.Component {
                       </Tab>
 {myLease}
 
-                    {/* <Tab  eventKey="Test" title="Test">
+                    <Tab  eventKey="Test" title="Test">
                     <>
                     <p>This is the merged doc: {this.state.mergedFile}</p>
                     <iframe src={this.state.mergedFile} width="100%" height="500px">
            </iframe>
                 </>
-                    </Tab> */}
+                    </Tab>
                     </Tabs>
                   </div>
                 </div>
