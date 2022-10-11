@@ -44,6 +44,66 @@ import { set } from "echarts-gl";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
+var Base64Binary = {
+	_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+	
+	/* will return a  Uint8Array type */
+	decodeArrayBuffer: function(input) {
+		var bytes = (input.length/4) * 3;
+		var ab = new ArrayBuffer(bytes);
+		this.decode(input, ab);
+		
+		return ab;
+	},
+
+	removePaddingChars: function(input){
+		var lkey = this._keyStr.indexOf(input.charAt(input.length - 1));
+		if(lkey == 64){
+			return input.substring(0,input.length - 1);
+		}
+		return input;
+	},
+
+	decode: function (input, arrayBuffer) {
+		//get last chars to see if are valid
+		input = this.removePaddingChars(input);
+		input = this.removePaddingChars(input);
+
+		var bytes = parseInt((input.length / 4) * 3, 10);
+		
+		var uarray;
+		var chr1, chr2, chr3;
+		var enc1, enc2, enc3, enc4;
+		var i = 0;
+		var j = 0;
+		
+		if (arrayBuffer)
+			uarray = new Uint8Array(arrayBuffer);
+		else
+			uarray = new Uint8Array(bytes);
+		
+		input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+		
+		for (i=0; i<bytes; i+=3) {	
+			//get the 3 octects in 4 ascii chars
+			enc1 = this._keyStr.indexOf(input.charAt(j++));
+			enc2 = this._keyStr.indexOf(input.charAt(j++));
+			enc3 = this._keyStr.indexOf(input.charAt(j++));
+			enc4 = this._keyStr.indexOf(input.charAt(j++));
+	
+			chr1 = (enc1 << 2) | (enc2 >> 4);
+			chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+			chr3 = ((enc3 & 3) << 6) | enc4;
+	
+			uarray[i] = chr1;			
+			if (enc3 != 64) uarray[i+1] = chr2;
+			if (enc4 != 64) uarray[i+2] = chr3;
+		}
+	
+		return uarray;	
+	}
+}
+
 class ProfileV1Page extends React.Component {
 
   constructor(props) {
@@ -138,16 +198,27 @@ class ProfileV1Page extends React.Component {
     const mergeTime = async () =>{
         //Run through docs list
     this.state.docs.forEach((doc) =>{
-      if(doc.FileType != "signature" && doc.FileType != "profile-pic"){
+      if(doc.FileType != "signature" && doc.FileType != "profile-pic" /* && doc.FileType  == "id-document" */){
         const dataUrl = 'data:' + doc.fileextension + ';base64,' + doc.image
         const temp = this.dataURLtoFile(dataUrl, 'Merged Document-' + doc.FileType)
 
-        const bytes = atob(doc.image);
+        const myUrl = 'https://rubiximages.cjstudents.co.za:449/' + doc.filename
+        
+        const bytes = window.atob(doc.image);
         let length = bytes.length;
         let out = new Uint8Array(length);
 
-        merger.add(temp)
-        //console.log("This is this document: ", temp)
+        for(let i = 0; i< length; i++){
+          out[i] = bytes.charCodeAt(i);
+        }
+
+        const blob = new Blob([out], {type: doc.fileextension});
+        var uintArray = Base64Binary.decode(dataUrl);  
+        var byteArray = Base64Binary.decodeArrayBuffer(dataUrl); 
+
+        merger.add(out)
+        console.log("This is this document: ", merger)
+
       }
       
     })
@@ -175,7 +246,7 @@ class ProfileV1Page extends React.Component {
       await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+         // console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -1008,13 +1079,12 @@ class ProfileV1Page extends React.Component {
                       </Tab>
 {myLease}
 
-                    <Tab  eventKey="Test" title="Test">
+                    {/* <Tab  eventKey="Test" title="Test">
                     <>
-                    <p>This is the merged doc: {this.state.mergedFile}</p>
                     <iframe src={this.state.mergedFile} width="100%" height="500px">
            </iframe>
                 </>
-                    </Tab>
+                    </Tab> */}
                     </Tabs>
                   </div>
                 </div>

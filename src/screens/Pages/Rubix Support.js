@@ -55,11 +55,11 @@ class RubixSurport extends React.Component {
         body: data
       }
 
-      console.log("Posted Data: ", data)
+      //console.log("Posted Data: ", data)
       const postData = async () => {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixGetSupportData', data, requestOptions)
         .then(response => {
-          console.log("Response Data:", response)
+          //console.log("Response Data:", response)
           this.setState({
             tickets: response.data.PostRubixUserData
           })
@@ -201,7 +201,7 @@ class RubixSurport extends React.Component {
       body: data
   };
 
-  console.log("Posted Data:", data)
+  //console.log("Posted Data:", data)
 
   const postData = async()=>{
     await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixSupportAdd', data, requestOptions)

@@ -50,7 +50,7 @@ class StudentInformation extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    console.log(id_date, id_month, id_year)
+    //console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -117,7 +117,7 @@ class StudentInformation extends React.Component {
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
             await axios.post('http://197.242.69.18:3300/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 this.props.history.push("/addresses")
             })
                 

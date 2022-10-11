@@ -409,7 +409,7 @@ class ProfileV1Setting extends React.Component {
 
   //Get Specific User Data
   getStudentData(userID){
-    console.log('Current Student Rubix ID: ', userID)
+    //console.log('Current Student Rubix ID: ', userID)
     const data = {
       'RubixRegisterUserID': userID,
       "RubixClientID" : localStorage.getItem('clientID'),
