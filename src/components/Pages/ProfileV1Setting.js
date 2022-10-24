@@ -17,9 +17,11 @@ import {onUpdateProgressBar,
   } from '../../actions/NavigationAction';
   import {
     onPresLease, 
-    onUpdateVarsity,} from '../../actions';
+    onUpdateVarsity,
+    onPresPopConfirmInfo,} from '../../actions';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import PopUpVarsity from '../../components/PopUpConfirm';
+import PopUpConfirmInfo from '../../components/PopUpConfirmInfo';
 import { Tabs, Tab, Row, Col } from "react-bootstrap";
 
 class ProfileV1Setting extends React.Component {
@@ -106,9 +108,12 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
+          if(response.data[0].ResponceMessage == 'Successfully Updted Record'){
+            this.props.onPresPopConfirmInfo()
+          }
           //console.log(response)
-          alert(response.data[0].ResponceMessage)
-          window.location.reload()
+          //alert(response.data[0].ResponceMessage)
+          //window.location.reload()
         })
     }
     postData()
@@ -140,8 +145,11 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
+          if(response.data[0].ResponceMessage == 'PasswordUpdated'){
+            this.props.onPresPopConfirmInfo()
+          }
           //console.log(response)
-          alert(response.data.PostRubixUserData[0].Response)
+          //alert(response.data.PostRubixUserData[0].Response)
           window.location.reload()
         })
     }
@@ -169,16 +177,20 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
+
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
         .then(response => {
+          if(response.data[0].ResponceMessage == 'Successfully Update Record'){
+            this.props.onPresPopConfirmInfo()
+          }
           //console.log("Next of Kin Post Response", response)
-          alert("Information Updated")
+          //alert("Information Updated")
           
         })
     }
     postData().then(()=>{
-      window.location.reload()
+      //window.location.reload()
     })
    // 
   }
@@ -206,8 +218,11 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
+          /* if(response.data[0].ResponceMessage == 'Successfully Update Record'){
+            this.props.onPresPopConfirmInfo()
+          } */
           //console.log("Update Varsity information Response: ", response)
-          alert("Information Updated")
+          //alert("Information Updated")
           window.location.reload()
         })
     }
@@ -318,6 +333,10 @@ class ProfileV1Setting extends React.Component {
         await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
             //console.log("My DB Response",response)
+
+            if(response.data.PostRubixUserData[0].ResponceMessage == "Record successfully Updated"){
+              this.props.onPresPopConfirmInfo()
+            }
             //alert(response.data.PostRubixUserData[0].ResponceMessage)
           })
       } else {
@@ -611,7 +630,7 @@ this.props.updateStudentName(
 
   }
 
-  //Populate data from DB
+/*   //Populate data from DB
   fetchUserData = async () => {
     //console.log("user id:", localStorage.getItem('userID'))
     //Get Rubix User Details
@@ -624,7 +643,7 @@ this.props.updateStudentName(
           this.setState({ profile: data })
         }
       });
-  }
+  } */
 
   fetchUserUniversityData = async () => {
     //Get Rubix User University Details
@@ -736,6 +755,7 @@ this.props.updateStudentName(
 
       });
   }
+
   fetchUserNextofKinData = async () => {
     //Populate Next of Kin
     await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
@@ -751,6 +771,7 @@ this.props.updateStudentName(
       });
 
   }
+  
   onValueChange(e){
 
     this.setState({
@@ -766,7 +787,6 @@ this.props.updateStudentName(
       //this.setState({imageUrl:this.state.myProfile.UserProfileImage})
       myButton = <>
         <div>
-          {/*  <input type="file" onChange={(e)=>{this.getBase64(e)}} /> */}
           <input style={{ display: 'none' }} id='upload-image-button' type="file" onChange={(e) => { this.changeImageHandler(e) }} />
           <button className="btn btn-primary rounded-0" variant="contained" color="primary" component="span" onClick={() => this.handleImageUpdate()}>Change Profile Image</button>
         </div>
@@ -787,6 +807,7 @@ this.props.updateStudentName(
     return (
       <div>
         <div className="body">
+        <PopUpConfirmInfo></PopUpConfirmInfo>
           <h6>Profile Photo</h6>
           <div className="media">
             <div className="media-left m-r-15 border border-primary border-2"
@@ -812,7 +833,6 @@ this.props.updateStudentName(
           </div>
         </div>
 
-
         <div className="body"> <h6>Personal Information</h6>
             {
               localStorage.getItem('role') == 'admin'
@@ -820,7 +840,6 @@ this.props.updateStudentName(
               <Row>
                     <Col >
                         <input 
-                        //checked={ this.state.myProfile.RegistrationYear =='2022'  ?  'yes' : 'no'}
                         onChange={(e) => {this.onValueChange(e)}}
                         checked={this.state.yearOfRes === "2022"}
                         type="radio" name="RegistrationYear" value='2022'/>
@@ -828,7 +847,6 @@ this.props.updateStudentName(
                       </Col>
                       <Col>
                       <input 
-                      //checked={ this.state.myProfile.RegistrationYear =='2023'  ?  'yes' :'no'}
                       onChange={(e) => {this.onValueChange(e)}}
                       checked={this.state.yearOfRes === "2023"}
                       type="radio" name="RegistrationYear" value='2023'/>
@@ -837,8 +855,8 @@ this.props.updateStudentName(
                     </Row>
                     
                   :null
-                  
                   }
+
           <form id="personalInfo">
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
@@ -957,9 +975,12 @@ this.props.updateStudentName(
           </form>
         </div>
 
-        {//Change Password Section
+        {
+        //Change Password Section
         }
-        { localStorage.getItem('role') == 'admin'
+
+        { 
+        localStorage.getItem('role') == 'admin'
         ? null
           : <div className="body">
           <div className="row clearfix">
@@ -1000,7 +1021,10 @@ this.props.updateStudentName(
           <button className="btn btn-default">Cancel</button>
         </div>
 }
-        {//Residential Address Section
+
+
+        {
+        //Residential Address Section
         }
         <div className="body">
           <form id="addresses" onSubmit={(e) => this.updateAddressInformation(e)}>
@@ -1119,7 +1143,7 @@ this.props.updateStudentName(
           ?<><button className="btn btn-primary" type="submit" onClick={(e) => 
           {
             e.preventDefault()
-            console.log("Clicked", this.props.isPopUpModal)
+            //console.log("Clicked", this.props.isPopUpModal)
             this.props.onUpdateVarsity()
             }}>
             Update
@@ -1259,7 +1283,6 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
 
   nextOfKinName: navigationReducer.nextofKinName,
   nextOfKinId: navigationReducer.nextofKinID,
-
 });
 
 export default connect(mapStateToProps, {
@@ -1282,4 +1305,7 @@ export default connect(mapStateToProps, {
   onPresLease,
   
   onUpdateVarsity,
+
+  
+  onPresPopConfirmInfo,
 })(ProfileV1Setting);

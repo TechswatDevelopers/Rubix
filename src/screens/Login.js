@@ -106,7 +106,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            console.log(response);
+            //console.log(response);
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -122,11 +122,21 @@ class Login extends React.Component {
               );
               this.props.updateStudentName(response.data.PostRubixUserData["0"]["Name"] + " " + response.data.PostRubixUserData["0"]["Surname"])
               localStorage.setItem("studentName", response.data.PostRubixUserData["0"]["Name"] + " " + response.data.PostRubixUserData["0"]["Surname"])
-              //Set timer for loading screen
-              setTimeout(() => {
-                this.props.updateLoadingController(false);
-                this.props.history.push("/dashboard");
-              }, 2000);
+              
+              ///Check if student is in a residence
+              if( response.data.PostRubixUserData["0"]["RubixResidenceID"]  == 99) {
+                //Navigate to request page
+                setTimeout(() => {
+                  this.props.updateLoadingController(false);
+                  this.props.history.push("/dashboard");
+                }, 2000);
+              } else {
+                setTimeout(() => {
+                  this.props.updateLoadingController(false);
+                  this.props.history.push("/dashboard");
+                }, 2000);
+              }
+              
             } else {
               //Set timer for loading screen
               setTimeout(() => {
@@ -147,6 +157,8 @@ class Login extends React.Component {
     };
     postData();
   }
+
+
   //final submit check
   LoginToAdmin(e) {
     e.preventDefault();
@@ -230,6 +242,7 @@ class Login extends React.Component {
     postData();
   }
 
+
   //Login Using Social Media
   SocialMediaLogin(userId) {
     //Set Loading Screen ON
@@ -254,7 +267,7 @@ class Login extends React.Component {
         .then((response) => {
           //console.log(response);
           //console.log("checking data", response.data);
-          if (response.data.PostRubixUserData["0"]["Response"] == 1) {
+          if (response.data.PostRubixUserData["0"]["Response"] === 1) {
             this.props.updateUserID(
               response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
             );

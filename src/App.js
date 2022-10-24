@@ -56,6 +56,7 @@ import AdminAmmendPage from "./screens/Pages/AdminAmmendPage";
 import RubixSurport from "./screens/Pages/Rubix Support";
 import RubixTickets from "./screens/Pages/RubixTickets";
 import Students from "./screens/Pages/Students";
+import RequestReReg from "./screens/Pages/RequestReReg";
 import pricing from "./screens/Pages/Pricing";
 import invoices from "./screens/Pages/Invoices";
 import invoicesv2 from "./screens/Pages/InvoicesV2";
@@ -78,9 +79,9 @@ import VarsityDetails from "./screens/Auth/varsityDetails";
 import NextOfKin from "./screens/Auth/nextOfKin";
 import forgotPass from "./screens/Auth/ForgotPasswordPage";
 import StudentInformation from "./screens/Auth/studentdata";
-//import ScriptTag from 'react-script-tag';
 
 export const MContext = React.createContext();  //exporting context object
+
 class MyProvider extends Component {
 state = {email: ""}
 render() {
@@ -145,8 +146,7 @@ class App extends React.Component {
         activeKey1 === "registration" ||
         activeKey1 === "lockscreen" ||
         activeKey1 === "logInformation" ||
-        activeKey1 === "tester" ||
-        //activeKey1 === "support" ||
+        activeKey1 === "request" ||
         activeKey1 === "forgotpassword" ||
         activeKey1 === "forgotpass" ||
         activeKey1 === "varsityDetails" ||
@@ -197,21 +197,21 @@ class App extends React.Component {
                 path={`${process.env.PUBLIC_URL}/page404`}
                 component={page404}
               />
-              <Route
+              {/* <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/page403`}
                 component={page403}
-              />
-              <Route
+              /> */}
+              {/* <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/page500`}
                 component={page500}
-              />
-              <Route
+              /> */}
+              {/* <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/page503`}
                 component={page503}
-              />
+              /> */}
               <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/tester`}
@@ -259,6 +259,11 @@ class App extends React.Component {
                 path={`${process.env.PUBLIC_URL}/maintanance`}
                 component={maintanance}
               />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/request`}
+                component={RequestReReg}
+              />
             </Switch>
         ) : (
           <>
@@ -275,36 +280,36 @@ class App extends React.Component {
                     path={`${process.env.PUBLIC_URL}/demographic`}
                     component={demographic}
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/ioT`}
                     component={ioT}
-                  />
-                  <Route
+                  /> */}
+                 {/*  <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/appinbox`}
                     component={appInbox}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/appchat`}
                     component={appChat}
-                  />
+                  /> */}
                   <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/appcalendar`}
                     component={appCalendar}
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/appcontact`}
                     component={appContact}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/apptaskbar`}
                     component={appTaskbar}
-                  />
+                  /> */}
                   <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/filemanagerdashboard`}
@@ -315,41 +320,41 @@ class App extends React.Component {
                     path={`${process.env.PUBLIC_URL}/filedocuments`}
                     component={filedocuments}
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/filemedia`}
                     component={filemedia}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/fileimages`}
                     component={fileimages}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/blognewpost`}
                     component={blognewPost}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/blogdetails`}
                     component={blogdetails}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/bloglist`}
                     component={bloglist}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uitypography`}
                     component={uitypography}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uitabs`}
                     component={uitabs}
-                  />
+                  /> */}
                   <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/bootstrapui`}
@@ -360,61 +365,61 @@ class App extends React.Component {
                     path={`${process.env.PUBLIC_URL}/uiicons`}
                     component={uiicons}
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uinotifications`}
                     component={uinotifications}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uicolors`}
                     component={uicolors}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uilistgroup`}
                     component={uilistgroup}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uimediaobject`}
                     component={uimediaobject}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uimodal`}
                     component={uimodal}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uibuttons`}
                     component={uibuttons}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/uiprogressbar`}
                     component={uiprogressbar}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/widgetsdata`}
                     component={widgetsdata}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/widgetsweather`}
                     component={widgetsweather}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/widgetsblog`}
                     component={widgetsblog}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/widgetsecommers`}
                     component={widgetsecommers}
-                  />
+                  /> */}
                   <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/blankpage`}
@@ -430,22 +435,22 @@ class App extends React.Component {
                     path={`${process.env.PUBLIC_URL}/profilev2page`}
                     component={profilev2page}
                   />
-                  <Route
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/imagegalleryprofile`}
                     component={imagegalleryprofile}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/timeline`}
                     component={timeline}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/pricing`}
                     component={pricing}
-                  />
-                  <Route
+                  /> */}
+                 {/*  <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/invoices`}
                     component={invoices}
@@ -454,62 +459,62 @@ class App extends React.Component {
                     exact
                     path={`${process.env.PUBLIC_URL}/invoicesv2`}
                     component={invoicesv2}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/searchresult`}
                     component={searchresult}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/helperclass`}
                     component={helperclass}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/teamsboard`}
                     component={teamsboard}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/projectslist`}
                     component={projectslist}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/testimonials`}
                     component={testimonials}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/faqs`}
                     component={faqs}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/formvalidation`}
                     component={formvalidation}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/basicelements`}
                     component={basicelements}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/tablenormal`}
                     component={tablenormal}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/echart`}
                     component={echart}
-                  />
-                  <Route
+                  /> */}
+                  {/* <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/leafletmap`}
                     component={leafletmap}
-                  />
+                  /> */}
                   <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/residence`}

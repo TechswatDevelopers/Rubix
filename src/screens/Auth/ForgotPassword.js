@@ -57,11 +57,11 @@ class ForgotPassword extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async() => {
               await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixForgetPasswordEmail', data, requestOptions)
             .then(response => {
-                console.log(response.data.PostRubixUserData[0].Response)
+                //console.log(response.data.PostRubixUserData[0].Response)
                 if(response.data.PostRubixUserData[0].Response === "Redirected"){
                   this.setState({
                     title: "Request Received",
@@ -126,7 +126,7 @@ class ForgotPassword extends React.Component {
                         <input className="form-control" placeholder="Your Email" type="email" name='UserEmail' required='' />
                       </div>
                       <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => { this.resetPassword(e) }}>
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => {this.resetPassword(e)}}>
                         RESET PASSWORD
                         </button>
                         <div className="bottom">

@@ -53,6 +53,8 @@ class NavbarMenu extends React.Component {
     }
     
     this.activeMenutabwhenNavigate("/" + activeKey);
+
+
  //Get User Profile Picture
  const fetchData = async () => {
   //Get documents from DB
@@ -99,6 +101,7 @@ class NavbarMenu extends React.Component {
       }
   }
 
+  
     //Fetch Res Gallery Images
     fetchImages() {
       const fetchData = async () => {
@@ -125,6 +128,7 @@ class NavbarMenu extends React.Component {
     }
     }
 
+    
   //Get Admin User Data
   getAdmin(){
     const pingData = {

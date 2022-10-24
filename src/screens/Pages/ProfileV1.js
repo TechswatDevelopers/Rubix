@@ -3,11 +3,7 @@ import { connect } from "react-redux";
 import PageHeader from "../../components/PageHeader";
 import { Tabs, Tab, Row, Col } from "react-bootstrap";
 import ProfileV1Setting from "../../components/Pages/ProfileV1Setting";
-import ResidenceInformation from "../../components/Pages/ResInformation";
-import DocumentManager from "../../components/Pages/documentsSetting";
 import axios from "axios";
-import FileFolderCard from "../../components/FileManager/FileFolderCard";
-import FileStorageCard from "../../components/FileManager/FileStorageCard";
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard";
 import SignatureCanvas from 'react-signature-canvas';
 import {Helmet} from "react-helmet";
@@ -26,14 +22,15 @@ import {
   onUpdateLeaseProgress,
   onUpdateLeaseMessage,
   updateLoadingController,
-  onUpdateVarsity,} from '../../actions';
+  onPresPopConfirmInfo,
+  onUpdateVarsity,
+} from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
 import PopUpVarsity from '../../components/PopUpEditVarsity';
+import PopUpConfirmInfo from '../../components/PopUpConfirmInfo';
 import PDFMerger from 'pdf-merger-js/browser';
-//import tempfile from 'tempfile';
-//import DocViewer from "react-doc-viewer";
-
+import { createPDF,pdfArrayToBlob, mergePDF } from "pdf-actions";
 import {
   fileFolderCardData,
   fileStorageStatusCardData,
@@ -146,6 +143,7 @@ class ProfileV1Page extends React.Component {
       filename: '',
       pageTitle: 'User Profile',
       mergedFile: null,
+      myDocs: [],
     }
   }
 
@@ -192,8 +190,48 @@ class ProfileV1Page extends React.Component {
   }
 
   //Merge Documents
+mergePDF(){
+
+  // Async Function To Merge PDF Files Uploaded Using The Input Tag in HTML
+const mergePDFHandler = async () => {
+  
+    this.state.docs.forEach((doc) =>{
+    if(doc.FileType != "signature" && doc.FileType != "profile-pic" /* && doc.FileType  == "id-document" */){
+      const dataUrl = 'data:' + doc.fileextension + ';base64,' + doc.image
+      const temp = this.dataURLtoFile(dataUrl, doc.FileType)
+
+      this.state.myDocs.push(temp)
+      
+    }
+  })
+  
+  this.state.myDocs.forEach((file) =>{
+    
+    const test = async () => {
+      await createPDF.PDFDocumentFromFile(file)
+    }
+    test()
+    //console.log("New File: ", file)
+    
+  
+  })
+  
+  console.log("MergedPDF: ", this.state.myDocs)
+  // Merging The PDF Files to A PDFDocument
+  const mergedPDFDocument = await mergePDF(this.state.myDocs)
+  console.log("MergedPDF: ", mergedPDFDocument)
+  this.getBase64(mergedPDFDocument)
+  
+  //const blob = new Blob([mergedPDFDocument], {type: 'application/pdf'});
+ 
+}
+mergePDFHandler()
+}
+
+  
   mergeFiles(){
     const merger = new PDFMerger();
+    let myBlob;
     //console.log('these are the documents: ', this.state.docs)
     const mergeTime = async () =>{
         //Run through docs list
@@ -213,17 +251,18 @@ class ProfileV1Page extends React.Component {
         }
 
         const blob = new Blob([out], {type: doc.fileextension});
+        myBlob = blob
         var uintArray = Base64Binary.decode(dataUrl);  
         var byteArray = Base64Binary.decodeArrayBuffer(dataUrl); 
 
-        merger.add(out)
+        merger.add(blob)
         console.log("This is this document: ", merger)
 
       }
       
     })
     const mergedPdf = await merger.saveAsBlob();
-    const url = URL.createObjectURL(mergedPdf);
+    const url = URL.createObjectURL(myBlob);
 
     this.setState(
       {
@@ -267,15 +306,10 @@ class ProfileV1Page extends React.Component {
           this.setState({ doc: data.post.filter(doc => doc.FileType == currentDoc)[0],
             currentDocID: data.post.filter(doc => doc.FileType == currentDoc)[0].ImageID
           })
-
-          //Convert base64 to file
-          //const image = this.dataURLtoFile(string, "document.pdf")
-          //this.setState({ testDoc: image })
           }
           else {
             this.setState({doc: null})
           }
-          //console.log("Documents: ", data.post)
 
           //Check the lease
           const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
@@ -290,9 +324,7 @@ class ProfileV1Page extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000)
       this.checkLease(userID)
-      this.setDocumentProgress()
-      //Set timer for loading screen
-  ;
+      this.setDocumentProgress();
       
     })
     
@@ -305,7 +337,6 @@ class ProfileV1Page extends React.Component {
     this.props.updateLoadingMessage("Checking Lease...");
     const temp = this.state.docs.filter(doc => doc.FileType == 'lease-agreement')
     const temp2 = this.state.docs.filter(doc => doc.FileType == 'unsigned-agreement')
-    //console.log(temp[0].image)
     if (temp.length != 0) {
       this.setState({ docUrl: temp[0].image, myLease: temp[0].filename })
       this.setState({ showPad: false })
@@ -334,7 +365,6 @@ class ProfileV1Page extends React.Component {
     const temp = this.state.docs.filter(doc => doc.FileType == file)
     this.setState({ isSelected: false })
     this.setState({ selectedFile: null })
-    //console.log('Doc: ', temp)
     if(temp != undefined && temp.length != 0){
       this.setState({
         currentDocID: temp[0].ImageID
@@ -432,7 +462,6 @@ class ProfileV1Page extends React.Component {
   //convert to base64
   getBase64(e) {
     var file = e.target.files[0]
-    //console.log('My document before base64', e.target.files[0])
     let reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
@@ -440,6 +469,19 @@ class ProfileV1Page extends React.Component {
         base64Pdf: reader.result
       })
       //console.log("This is the img:", this.state.imgUpload)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    }
+  }
+  //From File
+  getBase64(file) {
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      this.setState({
+        mergedFile: reader.result
+      })
     };
     reader.onerror = function (error) {
       console.log('Error: ', error);
@@ -480,23 +522,18 @@ class ProfileV1Page extends React.Component {
         headers: { 'Content-Type': 'multipart/form-data', },
         body: data
       };
-      for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
-      }
+      
       await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
           this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
     }
     postDocument().then(() => {
       localStorage.setItem('tab', currentActiveKey)
-      //alert("Document uploaded successfully")
       this.setState({
         isLoad: false
       })
-
       //Populate Pop Up Event
       this.props.onPresPopUpEvent()
       
@@ -585,38 +622,32 @@ class ProfileV1Page extends React.Component {
     const postData = async () => {
       await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
-          //console.log("document progress", response)
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
               case 'id-document': {
-                //console.log('its an ID')
                 this.props.onUpdateIDProgress(temp[i].Percentage)
                 this.props.onUpdateIDMessage(this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-res": {
-                //console.log('its a Proof of res')
                 this.props.onUpdateRESProgress(temp[i].Percentage)
                 this.props.onUpdateRESMessage(this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-reg": {
-                //console.log('its a proof of res')
                 this.props.onUpdateREGProgress(temp[i].Percentage)
                 this.props.onUpdateREGMessage(this.setMessage(temp[i].Percentage))
               }
                 break;
               case "next-of-kin": {
-                //console.log('its a next of kin')
                 this.props.onUpdateNOKProgress(temp[i].Percentage)
                 this.props.onUpdateNOKMessage(this.setMessage(temp[i].Percentage))
               }
                 break;
               case "lease-agreement": {
-                //console.log('its a lease')
                 this.props.onUpdateLeaseProgress(this.setLeaseProg(temp[i].Percentage, temp[i].RubixVettedResult))
                 this.props.onUpdateLeaseMessage(this.setLeaseMessage(temp[i].Percentage, temp[i].RubixVettedResult))
               }
@@ -630,7 +661,7 @@ class ProfileV1Page extends React.Component {
       //Set timer for loading screen
       setTimeout(() => {
         this.props.updateLoadingController(false);
-        //this.mergeFiles()
+        //this.mergePDF()
       }, 3000);
     })
   }
@@ -973,6 +1004,8 @@ class ProfileV1Page extends React.Component {
             <p>{this.props.loadingMessage}</p>
           </div>
         </div>
+
+
         <PopUpVarsity
         StudentID = {this.state.myUserID}
         />
@@ -1134,8 +1167,12 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   
   showLease: mailInboxReducer.isShowLease,
 
+  showConfrimInfo: mailInboxReducer.isShowConfirmInfo,
+
   MyloadingController: navigationReducer.loadingController,
   loadingMessage: navigationReducer.loadingMessage,
+
+
 });
 
 export default connect(mapStateToProps, {
@@ -1154,4 +1191,5 @@ export default connect(mapStateToProps, {
   onUpdateLeaseProgress,
   onUpdateLeaseMessage,
   onUpdateVarsity,
+  onPresPopConfirmInfo,
 })(ProfileV1Page);

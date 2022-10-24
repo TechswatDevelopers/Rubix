@@ -202,17 +202,7 @@ class Registration extends React.Component {
                           type="email"
                         />
                       </div>
-                      {/* <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Password
-                            </label>
-                        <input
-                          className="form-control"
-                          id="password"
-                          placeholder="Password"
-                          type="password"
-                        />
-                      </div> */}
+                      
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue
                         </button>
@@ -220,7 +210,7 @@ class Registration extends React.Component {
                       <div className="bottom">
                         <span className="helper-text">
                           Already have an account?{" "}
-                          <a href="/">Login</a>
+                          <a href={"/login/"+ localStorage.getItem('clientID')}>Login</a>
                         </span>
                       </div>
                     </form>

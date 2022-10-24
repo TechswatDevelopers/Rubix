@@ -15,6 +15,8 @@ import {
   ON_PRESS_SHOW_LEASE,
   SHOW_LEASE,
   ON_PRESS_POP_UP_ASSIGN_ROOM,
+  ON_PRESS_POP_CONFIRM_INFO,
+  ON_PRESS_POP_REQUEST,
   UPDATE_VARSITY_INFO,
   ON_PRESS_POP_UP_REMOVE_ROOM,
   ON_CHANGE_LOADER,
@@ -34,6 +36,8 @@ const initialState = {
   isProfileShowing: false,
   isRoomshowing: false,
   isShowAssignModal: false,
+  isShowConfirmInfo: false,
+  isShowConfirmReq: false,
   isShowVarsityPopUp: false,
   isAmmendLease: false,
   isShowRemoveModal: false,
@@ -170,6 +174,24 @@ export default (state = initialState, action) => {
         isShowAssignModal: !state.isShowAssignModal,
       };
     }
+
+//Toggle Info Submit
+    case ON_PRESS_POP_CONFIRM_INFO: {
+      return {
+        ...state,
+        isShowConfirmInfo: !state.isShowConfirmInfo,
+      };
+    }
+
+    
+//Toggle 
+case ON_PRESS_POP_REQUEST: {
+  return {
+    ...state,
+    isShowConfirmReq: !state.isShowConfirmReq,
+  };
+}
+
 //Toggle Edit Vasrity Information
     case UPDATE_VARSITY_INFO: {
       return {

@@ -127,9 +127,7 @@ class Residence extends React.Component {
           localStorage.setItem('reManagerPic', 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename)
         }
       }
-      /* this.setState({
-        gallery: data.post
-      }) */
+     
       console.log('In the gallery: ', this.state.gallery)
     })
   }
@@ -169,7 +167,7 @@ class Residence extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
-        <Helmet>
+            <Helmet>
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
