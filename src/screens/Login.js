@@ -158,7 +158,6 @@ class Login extends React.Component {
     postData();
   }
 
-
   //final submit check
   LoginToAdmin(e) {
     e.preventDefault();
@@ -180,7 +179,6 @@ class Login extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: data,
     };
-    //console.log(data);
     const postData = async () => {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
@@ -190,7 +188,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            //console.log("Logging info: ", response);
+            
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -265,8 +263,6 @@ class Login extends React.Component {
           requestOptions
         )
         .then((response) => {
-          //console.log(response);
-          //console.log("checking data", response.data);
           if (response.data.PostRubixUserData["0"]["Response"] === 1) {
             this.props.updateUserID(
               response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -285,7 +281,8 @@ class Login extends React.Component {
               this.props.updateLoadingController(false);
               this.props.history.push("/dashboard");
             }, 3000);
-          } else {//Set timer for loading screen
+          } else {
+            //Set timer for loading screen
             setTimeout(() => {
               this.props.updateLoadingController(false);
               this.props.history.push("/logInformation");
@@ -311,7 +308,7 @@ class Login extends React.Component {
   };
   //Facebook response for testing
   responseFacebook = (response) => {
-    //this.props.updatePlatformID("3");
+    
     localStorage.setItem("platformID", "3");
     localStorage.setItem("userplatformID", response["id"]);
     this.SocialMediaLogin(response["id"]);

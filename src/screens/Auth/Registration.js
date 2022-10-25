@@ -83,9 +83,9 @@ class Registration extends React.Component {
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
+        await axios.post('http://129.232.144.154:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                //console.log(response.data)
+                console.log(response.data)
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
                 2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
@@ -99,7 +99,7 @@ class Registration extends React.Component {
                   setTimeout(() => {
                     this.props.updateLoadingController(false);
                   }, 1000);
-                  this.props.history.push("/logInformation")
+                  //this.props.history.push("/logInformation")
                  } else {
                   this.setState({
                     title: "Error",
@@ -117,18 +117,18 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post(' https://rubixpdf.cjstudents.co.za:94/validEmailCheck', pingData, requestOptions)
+        await axios.post('http://129.232.144.154:88/api/validEmailCheck', pingData, requestOptions)
             .then(response => {
-                //console.log(response.data.EmailResult )
+                console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
-                  this.props.updatePlatformID("1");
-                  localStorage.setItem('platformID', "1")
+                  //this.props.updatePlatformID("1");
+                  //localStorage.setItem('platformID', "1")
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
                 }, 1000);
-                 this.props.history.push("/logInformation")
+                 //this.props.history.push("/logInformation")
                  } else{
                   this.setState({
                     title: "Email validation failed",
