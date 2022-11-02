@@ -250,7 +250,8 @@ class PersonalInformation extends React.Component {
                     <p className="lead">Student User Details</p>
                   </div>
                   
-                  <div className="body"><label>Which year are you applying for?</label>
+                  <div className="body">
+                    <label>Which year are you applying for?</label>
                     <Row>
                     <Col >
                         <input 

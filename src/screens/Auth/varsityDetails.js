@@ -6,6 +6,8 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css';
 import axios from "axios";
 import {Helmet} from "react-helmet";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { updateClientBackG,
   updateLoadingController,
@@ -31,9 +33,13 @@ class VarsityDetails extends React.Component {
             selectedFile: null,
             bankType: null,
             showResInput: false,
-            payMethods: ['Please Select your Payment Method', 'NSFAS TUT', 'NSFAS UP ', 'Bursary', 'Student Loan', 'Self Funded'],
-            hearAboutUs: ['Where did you hear about us?', 'Social Media', 'Word of Mouth', 'School Campaign', 'Other'],
+            carRegistration: '',
+            duration: 0,
+            hasCar: false,
+            payMethods: ['Please Select your Payment Method', 'NSFAS TUT', 'NSFAS UP ', 'Bursary', 'Agreement with University ', 'Self Funded'],
+            hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
+            durations: [],
             value: 0
 
         };
@@ -55,6 +61,7 @@ class VarsityDetails extends React.Component {
             'ResidenceID': this.state.res,
             'StudentYearofStudyID': this.state.year,
             'PaymentMethod': this.state.payment,
+            'Duration': this.state.duration,
             'HearAbout': this.state.hearAbout
         };
         for (let i=0; i < form.elements.length; i++) {
@@ -113,20 +120,13 @@ async componentDidMount(){
         await fetch('http://129.232.144.154:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            console.log("data is ", data.data)
             this.setState({
               uniList: data.data,
               //uni: data.data[0]['RubixUniversityID']
             })
             });
 
-           /*  //Populate Residence list
-            await fetch('http://129.232.144.154:88/api/RubixResidences/' + localStorage.getItem('clientID'))
-        .then(response => response.json())
-        .then(data => {
-            //console.log("data is ", data)
-            this.setState({resList: data.data})
-            }); */
 
             //Populate Provinces list
         await fetch('http://129.232.144.154:88/api/RubixProvinces')
@@ -137,14 +137,6 @@ async componentDidMount(){
             this.setState({provList: data.data})
             //console.log("this is the provList:", this.state.provList)
             //setProvList(data.data)
-            });
-
-            //Populate Courses list
-            await fetch('http://129.232.144.154:88/api/RubixCourses')
-        .then(response => response.json())
-        .then(data => {
-            //console.log("data is ", data.data)
-            this.setState({courseList: data.data})
             });
 
             //Populate Year of Study list
@@ -194,8 +186,23 @@ async componentDidMount(){
       uni: e.target.value,
       showResInput: true,
     })
+    if(e.target.value == 1 || e.target.value == 2){
+      this.setState({
+        durations: [5,10,12]
+      })
+    } else {
+      this.setState({
+        durations: [5,10]
+      })
+    }
     this.getRes(e.target.value)
 
+  }
+  onValueChange(e){
+
+    this.setState({
+      hasCar: !this.state.hasCar
+    })
   }
 
 
@@ -341,7 +348,7 @@ async componentDidMount(){
 
                       {
                         this.state.showResInput
-                        ? <div className="form-group">
+                        ? <><div className="form-group">
                         <label className="control-label sr-only" >
                         Residence:
                             </label>
@@ -355,8 +362,61 @@ async componentDidMount(){
         }
     </select> }
                       </div>
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Duration: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({duration: e.target.value})} value={this.state.duration}>
+        {
+            
+            this.state.durations.map((duration, index)=> (
+            <option key={index} name='Duration' value={duration}>{duration} months</option>
+        ))   
+        }
+    </select> }
+                      </div>
+
+                      <label>Do you have car?</label>
+                    <Row>
+                    <Col >
+                        <input 
+                        onChange={(e) => {this.onValueChange(e)}}
+                        //checked={this.state.yearOfRes === "2022"}
+                        type="radio" name="CarReg" value='yes'/>
+                         Yes
+                      </Col>
+                      <Col>
+                      <input 
+                      onChange={(e) => {this.onValueChange(e)}}
+                      //checked={this.state.yearOfRes === "2023"}
+                      type="radio" name="CarReg" value='no'/>
+                         No
+                      </Col>
+                    </Row>
+                    {
+                      this.state.hasCar
+                      ? <div className="form-group">
+                      <label className="control-label sr-only" >
+                      Car Number Plate:
+                          </label>
+                          <input
+                        className="form-control"
+                        id="CarReg"
+                        name='CarReg'
+                        placeholder="Enter your car Registration Number"
+                        type="text"
+                        required
+                      />
+                    </div>
+                      : null
+                    }
+                      </>
+                      
                     : null  
                     }
+
+                 
                       
 
                       <div className="form-group">

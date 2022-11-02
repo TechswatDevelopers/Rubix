@@ -823,22 +823,22 @@ mergePDFHandler()
         break;
       case 'booking-doc':
         {
-          message = this.props.bookingFMessage
+          message = this.props.myBookingFMessage
         }
         break;
       case "proof-of-pay":
         {
-          message = this.props.proofOfPayMessage
+          message = this.props.myProofOfPayMessage
         }
         break;
       case "rules-doc":
         {
-          message = this.props.rulesMessage
+          message = this.props.myBookingFMessage
         }
         break;
       case "student-card":
         {
-          message = this.props.studentCMessage
+          message = this.props.myStudentCardMessage
         }
     }
     return message
@@ -1288,7 +1288,7 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   myBookingFMessage: navigationReducer.bookingFMessage,
 
   myRules: navigationReducer.rulesProgress,
-  myRulesMessage: navigationReducer.rulesMessage,
+  myBookingFMessage: navigationReducer.rulesMessage,
   
   showLease: mailInboxReducer.isShowLease,
 
