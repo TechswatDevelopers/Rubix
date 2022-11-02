@@ -671,7 +671,7 @@ mergePDFHandler()
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
-          console.log("The returned data: ", response)
+          //console.log("The returned data: ", response)
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
