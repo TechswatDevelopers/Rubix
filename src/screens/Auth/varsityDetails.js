@@ -30,7 +30,8 @@ class VarsityDetails extends React.Component {
             hearAbout: null,
             selectedFile: null,
             bankType: null,
-            payMethods: ['Please Select your Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+            showResInput: false,
+            payMethods: ['Please Select your Payment Method', 'NSFAS TUT', 'NSFAS UP ', 'Bursary', 'Student Loan', 'Self Funded'],
             hearAboutUs: ['Where did you hear about us?', 'Social Media', 'Word of Mouth', 'School Campaign', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             value: 0
@@ -70,12 +71,12 @@ class VarsityDetails extends React.Component {
         //console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+                await axios.post('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    //console.log(response)
+                    //console.log("The Response: ",response)
                     //Set timer for loading screen
+                    
     setTimeout(() => {
-      this.postStatus()
       this.props.updateLoadingController(false);
     }, 1000);
                     this.props.history.push("/nextofkin")
@@ -92,40 +93,7 @@ class VarsityDetails extends React.Component {
         }
         postData()
     }
-  //Posting Update status
-  postStatus() {
-    //Set Loading Screen ON
- this.props.updateLoadingController(true);
- this.props.updateLoadingMessage("Adding Status...");
-    const data = {
-      'Status': 'Email Verify',
-      'RubixRegisterUserID': this.state.myUserID,
-    };
-    const requestOptions = {
-      title: 'Verify Status Form',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: data
-    };
-    //console.log('User data:', data)
-    const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
-        .then(response => {
-          if(response != null || response != undefined){
-      //Set timer for loading screen
-    setTimeout(() => {
-      this.setState({
-        isLoad: false
-      });
-    }, 1000);
-          }
-          //console.log("Verify email status", response)
-          //this.props.history.push("/" )
-        })
-    }
-    postData()
-  }
-
+  
 
 async componentDidMount(){
     document.body.classList.remove("theme-cyan");
@@ -138,25 +106,30 @@ async componentDidMount(){
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
 
+    
+
     const fetchData = async() =>{
         //Populate university list
-        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities/' + localStorage.getItem('clientID'))
+        await fetch('http://129.232.144.154:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
-            this.setState({uniList: data.data})
+            this.setState({
+              uniList: data.data,
+              //uni: data.data[0]['RubixUniversityID']
+            })
             });
 
-            //Populate Residence list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+           /*  //Populate Residence list
+            await fetch('http://129.232.144.154:88/api/RubixResidences/' + localStorage.getItem('clientID'))
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data)
             this.setState({resList: data.data})
-            });
+            }); */
 
             //Populate Provinces list
-        await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
+        await fetch('http://129.232.144.154:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -167,7 +140,7 @@ async componentDidMount(){
             });
 
             //Populate Courses list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCourses')
+            await fetch('http://129.232.144.154:88/api/RubixCourses')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -175,7 +148,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixStudentYearofStudies')
+            await fetch('http://129.232.144.154:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -200,6 +173,31 @@ async componentDidMount(){
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
   }
+
+  //Fetch Residences
+  getRes(uniID){
+    console.log("Uni ID: ", uniID)
+    const fetchResses = async() => {
+      //Populate Residence list
+      await fetch('http://129.232.144.154:88/api/RubixResidences/' + uniID)
+      .then(response => response.json())
+      .then(data => {
+          //console.log("data is ", data)
+          this.setState({resList: data.data})
+          });
+    }
+    fetchResses()
+  }
+
+  onVarsitySelect(e){
+    this.setState({
+      uni: e.target.value,
+      showResInput: true,
+    })
+    this.getRes(e.target.value)
+
+  }
+
 
   render() {
     let body;
@@ -284,7 +282,7 @@ async componentDidMount(){
       body = null;
     }
     return (
-      <div className="theme-green">
+      <div className="theme-grey">
         <Helmet>
               <meta charSet="utf-8" />
               <title>University Details</title>
@@ -317,7 +315,7 @@ async componentDidMount(){
                         University:
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>this.setState({uni: e.target.value})} value={this.state.uni}>
+        <select className="form-control" onChange={(e)=>this.onVarsitySelect(e)} value={this.state.uni}>
         {
             
          this.state.uniList.map((university, index)=> (
@@ -341,7 +339,9 @@ async componentDidMount(){
                         />
                       </div>
 
-                      <div className="form-group">
+                      {
+                        this.state.showResInput
+                        ? <div className="form-group">
                         <label className="control-label sr-only" >
                         Residence:
                             </label>
@@ -355,6 +355,8 @@ async componentDidMount(){
         }
     </select> }
                       </div>
+                    : null  
+                    }
                       
 
                       <div className="form-group">

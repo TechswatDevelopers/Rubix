@@ -25,6 +25,14 @@ import {
   ON_NOK_MESSAGE,
   ON_REG_PROGRESS,
   ON_LEASE_PROGRESS,
+  ON_BOOKING_UPDATE,
+  ON_RULES_UPDATE,
+  ON_STUDENT_CARD_MESSAGE,
+  ON_PROOF_OF_PAY_MESSAGE,
+  ON_RULES_MESSAGE,
+  ON_BOOKING_MESSAGE,
+  ON_PROOF_OF_PAY_UPDATE,
+  ON_STUDENT_CARD_UPDATE,
   ON_REG_MESSAGE,
   ON_LEASE_MESSAGE,
   ON_RES_PROGRESS,
@@ -77,8 +85,20 @@ const initialState = {
   leaseProgress: '0',
   leaseMessage: '',
 
+  bookingFProgress: '0',
+  bookingFMessage: '',
+
+  studentCProgress: '0',
+  studentCMessage: '',
+
+  proofOfPayProgress: '0',
+  proofOfPayMessage: '',
+
   proofOfRegProgress: '0',
   nextOfKinProgress: '0',
+
+  rulesProgress: '0',
+  rulesMessage: '',
 
   studentIndex: null,
 
@@ -596,13 +616,70 @@ export default (state = initialState, action) => {
         leaseProgress: action.payload,
       };
     }
-    
     case ON_LEASE_MESSAGE: {
       return {
         ...state,
         leaseMessage: action.payload,
       };
     }
+    
+    //Student Card Progress and Message
+    case ON_STUDENT_CARD_UPDATE: {
+      return {
+        ...state,
+        studentCProgress: action.payload,
+      };
+    }
+    case ON_STUDENT_CARD_MESSAGE: {
+      return {
+        ...state,
+        studentCMessage: action.payload,
+      };
+    }
+    
+    //Student Proof of Payment Progress and Message
+    case ON_PROOF_OF_PAY_UPDATE: {
+      return {
+        ...state,
+        proofOfPayProgress: action.payload,
+      };
+    }
+    case ON_PROOF_OF_PAY_MESSAGE: {
+      return {
+        ...state,
+        proofOfPayMessage: action.payload,
+      };
+    }
+
+    //Rules and Regulation Progress Bar and Message
+    case ON_RULES_UPDATE: {
+      return {
+        ...state,
+        rulesProgress: action.payload,
+      };
+    }
+    case ON_RULES_MESSAGE: {
+      return {
+        ...state,
+        rulesMessage: action.payload,
+      };
+    }
+
+    //Booking Form Update and Message
+    case ON_BOOKING_UPDATE: {
+      return {
+        ...state,
+        bookingProgress: action.payload,
+      };
+    }
+    case ON_BOOKING_MESSAGE: {
+      return {
+        ...state,
+        bookingFMessage: action.payload,
+      };
+    }
+    
+
 
     //Next of Kin ID Progress and Message
     case ON_NOK_PROGRESS: {

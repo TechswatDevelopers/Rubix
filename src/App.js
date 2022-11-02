@@ -77,6 +77,7 @@ import Registration from "./screens/Auth/Registration";
 import Addresses from "./screens/Auth/addresses";
 import VarsityDetails from "./screens/Auth/varsityDetails";
 import NextOfKin from "./screens/Auth/nextOfKin";
+import Relatives from "./screens/Auth/relatives";
 import forgotPass from "./screens/Auth/ForgotPasswordPage";
 import StudentInformation from "./screens/Auth/studentdata";
 
@@ -153,6 +154,7 @@ class App extends React.Component {
         activeKey1 === "studentData" ||
         activeKey1 === "myDashboard" ||
         activeKey1 === "nextofkin" ||
+        activeKey1 === "relatives" ||
         activeKey1 === "addresses" ||
         activeKey1 === "verifyemail" ||
         activeKey1 === "page404" ||
@@ -231,6 +233,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/nextofkin`}
                 component={NextOfKin}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/relatives`}
+                component={Relatives}
               />
               <Route
                 exact

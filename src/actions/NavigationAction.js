@@ -42,6 +42,10 @@ export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
 export const ON_RES_PROGRESS = "navigationReducer/ON_RES_PROGRESS";
 export const ON_ID_PROGRESS = "navigationReducer/ON_ID_PROGRESS";
 export const ON_LEASE_PROGRESS = "navigationReducer/ON_LEASE_PROGRESS";
+export const ON_BOOKING_UPDATE = "navigationReducer/ON_BOOKING_UPDATE";
+export const ON_RULES_UPDATE = "navigationReducer/ON_RULES_UPDATE";
+export const ON_PROOF_OF_PAY_UPDATE = "navigationReducer/ON_PROOF_OF_PAY_UPDATE";
+export const ON_STUDENT_CARD_UPDATE = "navigationReducer/ON_STUDENT_CARD_UPDATE";
 
 
 export const ON_ID_MESSAGE = "navigationReducer/ON_ID_MESSAGE";
@@ -49,6 +53,10 @@ export const ON_RES_MESSAGE = "navigationReducer/ON_RES_MESSAGE";
 export const ON_REG_MESSAGE = "navigationReducer/ON_REG_MESSAGE";
 export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
 export const ON_LEASE_MESSAGE = "navigationReducer/ON_LEASE_MESSAGE";
+export const ON_BOOKING_MESSAGE = "navigationReducer/ON_BOOKING_MESSAGE";
+export const ON_PROOF_OF_PAY_MESSAGE = "navigationReducer/ON_PROOF_OF_PAY_MESSAGE";
+export const ON_STUDENT_CARD_MESSAGE = "navigationReducer/ON_STUDENT_CARD_MESSAGE";
+export const ON_RULES_MESSAGE = "navigationReducer/ON_RULES_MESSAGE";
 
 
 export const UPDATE_STUDENT_INDEX = "navigationReducer/UPDATE_STUDENT_INDEX";
@@ -203,7 +211,7 @@ export const onUpdateNOKMessage = (val) => (dispatch) => {
   });
 };
 
-//Next of Kin Progress Update and Message
+//Lease Progress Update and Message
 export const onUpdateLeaseProgress = (val) => (dispatch) => {
   dispatch({
     type: ON_LEASE_PROGRESS,
@@ -218,6 +226,62 @@ export const onUpdateLeaseMessage = (val) => (dispatch) => {
   });
 };
 
+//Booking Form Update and Message
+export const onUpdateBookingForm = (val) => (dispatch) => {
+  dispatch({
+    type: ON_BOOKING_UPDATE,
+    payload: val,
+  });
+};
+export const onUpdateBookingMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_BOOKING_MESSAGE,
+    payload: val,
+  });
+};
+
+
+//Proof of Payment Update and Message
+export const onUpdateProofOfPay = (val) => (dispatch) => {
+  dispatch({
+    type: ON_PROOF_OF_PAY_UPDATE,
+    payload: val,
+  });
+};
+export const onUpdateProofOfPayMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_PROOF_OF_PAY_MESSAGE,
+    payload: val,
+  });
+};
+
+//Rules and Regulations Update and Message
+export const onUpdateRules = (val) => (dispatch) => {
+  dispatch({
+    type: ON_RULES_UPDATE,
+    payload: val,
+  });
+};
+export const onUpdateRulesMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_RULES_MESSAGE,
+    payload: val,
+  });
+};
+
+//Student Card Update and Message
+export const onUpdateStudentCard = (val) => (dispatch) => {
+  dispatch({
+    type: ON_STUDENT_CARD_UPDATE,
+    payload: val,
+  });
+};
+export const onUpdateStudenCMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_STUDENT_CARD_MESSAGE,
+    payload: val,
+  });
+};
 
 //Proof of Registration Update and Message
 export const onUpdateREGProgress = (val) => (dispatch) => {

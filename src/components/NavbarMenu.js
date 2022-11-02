@@ -42,6 +42,7 @@ class NavbarMenu extends React.Component {
     const userID = localStorage.getItem('userID');
     const userCode = localStorage.getItem('userCode');
     this.props.onPressThemeColor(localStorage.getItem('clientTheme'))
+    console.log(userID)
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
@@ -58,23 +59,24 @@ class NavbarMenu extends React.Component {
  //Get User Profile Picture
  const fetchData = async () => {
   //Get documents from DB
-  await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
-    .then(response => response.json())
+  await fetch('http://129.232.144.154:86/feed/post/' + userID)
+    .then(response => {
+      console.log("Profile data:", response)
+      response.json()})
     .then(data => {
-      //console.log("Profile data:", data)
       const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
       //console.log("Profile Picture data:", profilePic)
       //If Profile Picture Exists...
       if(profilePic != null && profilePic != undefined){
         this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
-        this.setState({imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename})
+        this.setState({imageUrl: 'http://129.232.144.154:449/' + profilePic.filename})
       }
     });
 };
     //Fetch data from DB
     const fetchUserData = async() =>{
     //Get Rubix User Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/'+ userID)
+    await fetch('http://129.232.144.154:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
         this.setState({profile: data,
@@ -97,7 +99,7 @@ class NavbarMenu extends React.Component {
         
       } else {
         fetchUserData();
-        fetchData()
+        //fetchData()
       }
   }
 
@@ -105,7 +107,7 @@ class NavbarMenu extends React.Component {
     //Fetch Res Gallery Images
     fetchImages() {
       const fetchData = async () => {
-      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + localStorage.getItem('resID'))
+      await fetch('http://129.232.144.154:86/feed/post/' + localStorage.getItem('resID'))
       .then(response => response.json())
       .then(data => {
        /*  console.log("Res ID:", localStorage.getItem('resID'))
@@ -115,7 +117,7 @@ class NavbarMenu extends React.Component {
          if(data.post[i].FileType == "ResManager"){ 
           
           this.setState({
-            imageUrl: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
+            imageUrl: 'http://129.232.144.154:449/' +  data.post[i].filename
           })
           }
         }
@@ -142,7 +144,7 @@ class NavbarMenu extends React.Component {
         body: pingData
       };
       const postData = async () => {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminGetUser', pingData, requestOptions)
+        await axios.post('http://129.232.144.154:88/api/RubixAdminGetUser', pingData, requestOptions)
         .then(response => {
           //console.log("Admin User Details:", response)
           this.setState({

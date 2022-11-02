@@ -69,6 +69,16 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
+  {
+    UsedSize: "Student Card",
+    Type: "Documents",
+    status: localStorage.getItem('studentProgress'),
+    FileType: "student-card",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('studentProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-grey mb-0",
+  },
    {
     UsedSize: "Next of Kin ID",
     Type: "Documents",
@@ -78,6 +88,36 @@ export const fileStorageStatusCardData = [
     UsedPer: localStorage.getItem('nextOfKinProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-yellow mb-0",
+  },
+  {
+    UsedSize: "Booking Form",
+    Type: "Documents",
+    status: localStorage.getItem('bookFormProgress'),
+    FileType: "booking-doc",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('bookFormProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-blue mb-0",
+  },
+  {
+    UsedSize: "Rules and Regulations",
+    Type: "Documents",
+    status: localStorage.getItem('rulesProgress'),
+    FileType: "rules-doc",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('rulesProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-grey mb-0",
+  },
+  {
+    UsedSize: "Proof of Payment",
+    Type: "Documents",
+    status: localStorage.getItem('popProgress'),
+    FileType: "proof-of-pay",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('popProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-grey mb-0",
   },
    {
     UsedSize: "My Lease Agreement",

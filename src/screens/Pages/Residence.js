@@ -69,10 +69,10 @@ class Residence extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: pingData
     };
-
+    //console.log("The request: ", pingData)
     const postData = async () => {
       //Ping email address
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixStudentResDetails', pingData, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixStudentResDetails', pingData, requestOptions)
         .then(response => {
           //console.log("Student Res Details", response)
           const temp = response.data.PostRubixUserData;
@@ -106,7 +106,7 @@ class Residence extends React.Component {
   //Fetch Res Gallery Images
   fetchImages(resID) {
     const fetchData = async () => {
-    await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + resID)
+    await fetch('http://129.232.144.154:86/feed/post/' + resID)
     .then(response => response.json())
     .then(data => {
       //console.log("Images:", data.post)
@@ -115,16 +115,16 @@ class Residence extends React.Component {
        if(data.post[i].FileType != "ResManager"){ 
          this.state.gallery.push(
           {
-            original: 'https://rubiximages.cjstudents.co.za:449/' + data.post[i].filename,
-            thumbnail: 'https://rubiximages.cjstudents.co.za:449/' + data.post[i].filename
+            original: 'http://129.232.144.154:449/' + data.post[i].filename,
+            thumbnail: 'http://129.232.144.154:449/' + data.post[i].filename
           }
         )
         }
         else {
           this.setState({
-            resManagerPic: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
+            resManagerPic: 'http://129.232.144.154:449/' +  data.post[i].filename
           })
-          localStorage.setItem('reManagerPic', 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename)
+          localStorage.setItem('reManagerPic', 'http://129.232.144.154:449/' +  data.post[i].filename)
         }
       }
      

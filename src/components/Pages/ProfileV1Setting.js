@@ -106,7 +106,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
           if(response.data[0].ResponceMessage == 'Successfully Updted Record'){
             this.props.onPresPopConfirmInfo()
@@ -143,7 +143,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixResetPassword', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
           if(response.data[0].ResponceMessage == 'PasswordUpdated'){
             this.props.onPresPopConfirmInfo()
@@ -179,7 +179,7 @@ class ProfileV1Setting extends React.Component {
     }
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKins', data, requestOptions)
         .then(response => {
           if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
@@ -216,7 +216,7 @@ class ProfileV1Setting extends React.Component {
       body: data
     }
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
           /* if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
@@ -330,7 +330,7 @@ class ProfileV1Setting extends React.Component {
     //console.log("my Posted Data: ", data)
     const postData = async () => {
       if (this.Validate) {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
+        await axios.post('http://129.232.144.154:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
             //console.log("My DB Response",response)
 
@@ -365,7 +365,7 @@ class ProfileV1Setting extends React.Component {
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+      await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -442,7 +442,7 @@ class ProfileV1Setting extends React.Component {
     };
     //console.log('Posted student data:', data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserData', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
           //console.log("All Student data", response.data.PostRubixUserData[0].RegistrationYear)
           this.setState({ myProfile: response.data.PostRubixUserData[0],
@@ -485,9 +485,9 @@ this.props.updateStudentName(
     };
     //console.log('All student data:', data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          //console.log("All profile data", response.data.PostRubixUserData)
+          console.log("All profile data", response.data.PostRubixUserData)
           this.setState({ myProfile: response.data.PostRubixUserData[0] })
 
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
@@ -544,7 +544,7 @@ this.props.updateStudentName(
     };
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
           //console.log("document progress", response.data.PostRubixUserData)
           const temp = response.data.PostRubixUserData
@@ -600,11 +600,11 @@ this.props.updateStudentName(
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
-    console.log('My role is: ', localStorage.getItem('role'))
+    //console.log('My role is: ', localStorage.getItem('role'))
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
+      await fetch('http://129.232.144.154:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           //console.log("Profile data:", data)
@@ -613,7 +613,7 @@ this.props.updateStudentName(
           //If Profile Picture Exists...
           if (profilePic != null && profilePic != undefined) {
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
-            this.setState({ imageUrl: 'https://rubiximages.cjstudents.co.za:449/' + profilePic.filename })
+            this.setState({ imageUrl: 'http://129.232.144.154:449/' + profilePic.filename })
           }
         });
 
@@ -647,7 +647,7 @@ this.props.updateStudentName(
 
   fetchUserUniversityData = async () => {
     //Get Rubix User University Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
+    await fetch('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -668,7 +668,7 @@ this.props.updateStudentName(
   fetchUserAddressData = async () => {
     //console.log("User ID being used:", localStorage.getItem('userID'))
     //Get Rubix User Address Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
+    await fetch('http://129.232.144.154:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -690,7 +690,7 @@ this.props.updateStudentName(
 
   fetchProvinceListData = async () => {
     //Get Rubix Provices
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixProvinces')
+    await fetch('http://129.232.144.154:88/api/RubixProvinces')
       .then(response => response.json())
       .then(data => {
         if (data.data != null || data.data != undefined) {
@@ -703,7 +703,7 @@ this.props.updateStudentName(
 
   fetchCountriesData = async () => {
     //Fetch Countries List
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
+    await fetch('http://129.232.144.154:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
         if (data.data != null || data.data != undefined) {
@@ -716,7 +716,7 @@ this.props.updateStudentName(
   }
   fetchUniversitiesData = async () => {
     //Populate university list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities')
+    await fetch('http://129.232.144.154:88/api/RubixUniversities')
       .then(response => response.json())
       .then(data => {
         if (data.data === null || data.data === undefined) {
@@ -730,7 +730,7 @@ this.props.updateStudentName(
 
   fetchResidencesData = async () => {
     //Populate Residence list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences')
+    await fetch('http://129.232.144.154:88/api/RubixResidences')
       .then(response => response.json())
       .then(data => {
         if (data.data === null || data.data === undefined) {
@@ -744,7 +744,7 @@ this.props.updateStudentName(
 
   fetchYearOfStudyData = async () => {
     //Populate Year of Study list
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixStudentYearofStudies')
+    await fetch('http://129.232.144.154:88/api/RubixStudentYearofStudies')
       .then(response => response.json())
       .then(data => {
         if (data.data === null || data.data === undefined) {
@@ -758,7 +758,7 @@ this.props.updateStudentName(
 
   fetchUserNextofKinData = async () => {
     //Populate Next of Kin
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
+    await fetch('http://129.232.144.154:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -833,7 +833,7 @@ this.props.updateStudentName(
           </div>
         </div>
 
-        <div className="body"> <h6>Personal Information</h6>
+        <div className="body"> <h3>Personal Information</h3>
             {
               localStorage.getItem('role') == 'admin'
              ?
@@ -986,7 +986,7 @@ this.props.updateStudentName(
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
               <form id="password">
-                <h6>Change Password</h6>
+                <h3>Change Password</h3>
                 <div className="form-group">
                   <input
                     className="form-control"
@@ -1030,7 +1030,7 @@ this.props.updateStudentName(
           <form id="addresses" onSubmit={(e) => this.updateAddressInformation(e)}>
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
-                <h6>Address Information</h6>
+                <h3>Address Information</h3>
                 <div className="form-group">
                   <label>
                     Street Address: {this.state.myProfile.RegisterUserStreetNameAndNumer}, {this.state.myProfile.RegisterUserProvince}
@@ -1096,7 +1096,7 @@ this.props.updateStudentName(
           <form id='uniDetails' onSubmit={(e) => this.updateVarsityDetails(e)}>
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
-              <h6>University Information</h6>
+              <h3>University Information</h3>
               <div className="form-group">
                 <label>
                   University:
@@ -1159,7 +1159,7 @@ this.props.updateStudentName(
           <form id='nextOfKin' onSubmit={(e) => this.updateNextOfKin(e)}>
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
-                <h6>Next of Kin Information</h6>
+                <h3>Next of Kin Information</h3>
                 <div className="form-group">
                   <label>
                     First Name:
@@ -1264,6 +1264,148 @@ this.props.updateStudentName(
             <button className="btn btn-default">Cancel</button>
           </form>
         </div>
+
+        {///2 extra family members setion
+        }
+
+<div className="body">
+  <form id='nextOfKin1' onSubmit={(e) => this.updateNextOfKin(e)}>
+    <div className="row clearfix">
+      <div className="col-lg-6 col-md-12">
+        <h3>Family Members</h3>
+        <h6>First Member:</h6>
+        <div className="form-group">
+          <label>
+            First Name:
+          </label>
+          <input
+            className="form-control"
+            disabled=""
+            placeholder="First Name"
+            id="NextOfKinFirstName1"
+            name='NextOfKinFirstName1'
+            type="text"
+            defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName1}
+            onChange={() => { }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>
+            Last Name:
+          </label>
+          <input
+            className="form-control"
+            placeholder="Last Name"
+            id="NextOfKinLastName1"
+            name='NextOfKinLastName1'
+            type="text"
+            defaultValue={this.state.myProfile.RubixUserNextOfKinLastName1}
+            onChange={() => { }}
+          />
+        </div>
+      </div>
+      <div className="col-lg-6 col-md-12">
+        <div className="form-group">
+          <label>
+            Phone Number:
+          </label>
+          <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
+            defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber1} name="NextOfKinPhoneNumber1" required=''
+            value={this.state.myProfile.RubixUserNextOfKinPhoneNumber1}
+            onChange={() => this.setState({ value: this.state.value })} />
+        </div>
+        <div className="form-group">
+          <label>
+            Relationship:
+          </label>
+          <input
+            className="form-control"
+            placeholder="Relationship"
+            name='NextOfKiniRelationship1'
+            defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship1}
+            type="text"
+          />
+        </div>
+      </div>
+    </div>
+    <button className="btn btn-primary" type="button" onClick={(e) => this.updateNextOfKin(e)}>
+      Update
+    </button>{" "}
+    &nbsp;&nbsp;
+    <button className="btn btn-default">Cancel</button>
+  </form>
+</div>
+
+<div className="body">
+  <form id='nextOfKin2' onSubmit={(e) => this.updateNextOfKin(e)}>
+    <div className="row clearfix">
+      <div className="col-lg-6 col-md-12">
+        <h6>Second Member:</h6>
+        <div className="form-group">
+          <label>
+            First Name:
+          </label>
+          <input
+            className="form-control"
+            disabled=""
+            placeholder="First Name"
+            id="NextOfKinFirstName2"
+            name='NextOfKinFirstName2'
+            type="text"
+            defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName2}
+            onChange={() => { }}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>
+            Last Name:
+          </label>
+          <input
+            className="form-control"
+            placeholder="Last Name"
+            id="NextOfKinLastName2"
+            name='NextOfKinLastName2'
+            type="text"
+            defaultValue={this.state.myProfile.RubixUserNextOfKinLastName2}
+            onChange={() => { }}
+          />
+        </div>
+      </div>
+      <div className="col-lg-6 col-md-12">
+        <div className="form-group">
+          <label>
+            Phone Number:
+          </label>
+          <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
+            defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber2} name="NextOfKinPhoneNumber2" required=''
+            value={this.state.myProfile.RubixUserNextOfKinPhoneNumber2}
+            onChange={() => this.setState({ value: this.state.value })} />
+        </div>
+        <div className="form-group">
+          <label>
+            Relationship:
+          </label>
+          <input
+            className="form-control"
+            placeholder="Relationship"
+            name='NextOfKiniRelationship2'
+            defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship2}
+            type="text"
+          />
+        </div>
+      </div>
+    </div>
+    <button className="btn btn-primary" type="button" onClick={(e) => this.updateNextOfKin(e)}>
+      Update
+    </button>{" "}
+    &nbsp;&nbsp;
+    <button className="btn btn-default">Cancel</button>
+  </form>
+</div>
+
+
       </div>
     );
   }

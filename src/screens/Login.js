@@ -101,7 +101,7 @@ class Login extends React.Component {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
           .post(
-            "https://rubixapi.cjstudents.co.za:88/api/RubixLogin",
+            "http://129.232.144.154:88/api/RubixLogin",
             data,
             requestOptions
           )
@@ -183,7 +183,7 @@ class Login extends React.Component {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
           .post(
-            "https://rubixapi.cjstudents.co.za:88/api/RubixAdminUserLogin",
+            "http://129.232.144.154:88/api/RubixAdminUserLogin",
             data,
             requestOptions
           )
@@ -258,7 +258,7 @@ class Login extends React.Component {
     const postData = async () => {
       await axios
         .post(
-          "https://rubixapi.cjstudents.co.za:88/api/RubixLogin",
+          "http://129.232.144.154:88/api/RubixLogin",
           data,
           requestOptions
         )
@@ -325,20 +325,20 @@ class Login extends React.Component {
     switch (client) {
       case "1":
         {
-          this.props.updateClientLogo("CJ-Logo4.png");
-          this.props.updateClientName("CJ Students");
-          this.props.onPressThemeColor("orange");
-          this.props.updateClientBackG("https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png")
+          this.props.updateClientLogo("jjp-logo.png");
+          this.props.updateClientName("Varsity Lodge");
+          this.props.onPressThemeColor("blush");
+          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/8f8ea73b-809b-47d2-af1a-5be374fb153b.jpeg")
           this.setState({
             backImage:
-              "https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png",
-            pageTitle: "CJ Students",
+              "https://github.com/TechswatDevelopers/Media/raw/main/8f8ea73b-809b-47d2-af1a-5be374fb153b.jpeg",
+            pageTitle: "Varsity Lodge",
           });
 
-          localStorage.setItem("clientLogo", "CJ-Logo4.png");
-          localStorage.setItem("clientName", "CJ Students");
-          localStorage.setItem("clientTheme", "orange");
-          localStorage.setItem("clientBG", "https://github.com/TechSwat/ResidencesImages/raw/main/cj_bg.png");
+          localStorage.setItem("clientLogo", "jjp-logo.png");
+          localStorage.setItem("clientName", "Varsity Lodge");
+          localStorage.setItem("clientTheme", "blush");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/8f8ea73b-809b-47d2-af1a-5be374fb153b.jpeg");
     
         }
         break;
@@ -376,7 +376,7 @@ class Login extends React.Component {
     const { navigation } = this.props;
     const { email, password } = this.props;
     return (
-      <div className={this.props.rubixThemeColor}>
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
         <Helmet>
           <meta charSet="utf-8" />
           <title>{this.state.pageTitle}</title>

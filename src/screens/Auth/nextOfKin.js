@@ -49,7 +49,7 @@ class NextOfKin extends React.Component {
   var year = idNumber.substring(0, 2);
   var month = idNumber.substring(2, 4);
   var day = idNumber.substring(4, 6);
-  console.log(year, month, day)
+  //console.log(year, month, day)
 
   // get first 6 digits as a valid date
   var tempDate = new Date(year, month - 1, day);
@@ -58,7 +58,7 @@ class NextOfKin extends React.Component {
   var id_month = tempDate.getMonth();
   var id_year = tempDate.getFullYear();
   var right_month = id_month + 1;
-  console.log(id_date, id_month, id_year)
+  //console.log(id_date, id_month, id_year)
 
   var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -104,7 +104,6 @@ class NextOfKin extends React.Component {
 
 //final submit check
  Submit(e){
-   console.log("called")
    //Set timer for loading screen
   this.setState({
     isLoad: true
@@ -138,15 +137,19 @@ class NextOfKin extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  console.log(data)
+  //console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
+          await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              //console.log(response)
-              setTimeout(() => {
+              console.log(response)
+              if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
+                this.props.history.push("/relatives")
+              }
+          //this.props.history.push("/relatives")
+              /* setTimeout(() => {
                 this.postStatus()
-              }, 2000);
+              }, 2000); */
               this.setState({
                 isLoad: false
               })
@@ -161,10 +164,11 @@ class NextOfKin extends React.Component {
   }
   postData().then(() => {
 
-    this.props.onPresPopUpEvent()
+    //this.props.onPresPopUpEvent()
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
+  console.log("called")
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
 };
@@ -182,12 +186,17 @@ const requestOptions = {
 
 const postData = async() => {
   if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUserNextOfKins', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          console.log(response)
-          setTimeout(() => {
+          //console.log()
+            setTimeout(() => {
+              this.props.updateLoadingController(false);
+            }, 1000);
+            this.props.history.push("/relatives")
+          //this.props.history.push("/relatives")
+          /* setTimeout(() => {
             this.postStatus()
-          }, 2000);
+          }, 2000); */
       })
           
   } else{
@@ -200,7 +209,7 @@ const postData = async() => {
 postData().then(() => {
 
  
-this.props.onPresPopUpEvent()
+//this.props.onPresPopUpEvent()
 //this.props.history.push("/login/" + localStorage.getItem('clientID'))
 })
 }
@@ -232,7 +241,7 @@ else{
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateStatus', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           if(response != null || response != undefined){
       //Set timer for loading screen
@@ -243,7 +252,7 @@ else{
     }, 1000);
           }
           //console.log("Verify email status", response)
-          //this.props.history.push("/" )
+          this.props.history.push("/relatives")
         })
     }
     postData()
@@ -284,7 +293,7 @@ else{
   render() {
     //const user = useContext(MyProvider);
     return (
-      <div className="theme-purple">
+      <div className="theme-grey">
       <Helmet>
             <meta charSet="utf-8" />
             <title>Next of Kin Details</title>
@@ -374,7 +383,7 @@ else{
                         <label className="control-label sr-only" >
                         Phone Number:
                             </label>
-                            <PhoneInput placeholder="+27 123 15348" name="NextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
+                            <PhoneInput placeholder="Cell Phone Number" name="NextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
@@ -421,6 +430,14 @@ placeholder: "Search Address"
                           type="text"
                           required/>
                       </div>
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Work Number:
+                            </label>
+                            <PhoneInput placeholder="Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
+                    value={this.state.value}
+                    onChange={()=> this.setState({value: this.state.value})}/>
+                      </div>
 
                       </div>
                       <div className="form-group">
@@ -437,7 +454,7 @@ placeholder: "Search Address"
                         />
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
-                        REGISTER
+                        Next
                         </button>
                     </form>
                   </div>

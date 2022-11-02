@@ -23,6 +23,8 @@ class Registration extends React.Component {
       title: '',
       popMessage: '',
       myFunction: null,
+      errorMessage: '',
+      userGender: 'Male',
     }
   }
 
@@ -52,6 +54,80 @@ class Registration extends React.Component {
   this.props.updateUserID(response['id'])
   this.props.history.push("/logInformation")
 }
+
+
+
+  ///Validate ID numbers
+  Validate() {
+    var idNumber = document.getElementById("IDNumber").value;
+    // store the error div, to save typing
+    var error = document.getElementById('error');
+
+    // assume everything is correct and if it later turns out not to be, just set this to false
+    var correct = true;
+
+    //Ref: http://www.sadev.co.za/content/what-south-african-id-number-made
+    // SA ID Number have to be 13 digits, so check the length
+    if (idNumber.length != 13) {
+      correct = false;
+    }
+
+    //Extract first 6 digits
+    var year = idNumber.substring(0, 2);
+    var month = idNumber.substring(2, 4);
+    var day = idNumber.substring(4, 6);
+
+    // get first 6 digits as a valid date
+    var tempDate = new Date(year, month - 1, day);
+
+    var id_date = tempDate.getDate();
+    var id_month = tempDate.getMonth();
+    var id_year = tempDate.getFullYear();
+    var right_month = id_month + 1;
+    //console.log(id_date, id_month, id_year)
+
+    var fullDate = id_date + "-" + right_month + "-" + id_year;
+
+    if (!((tempDate.getYear() == idNumber.substring(0, 2)) && (id_month == idNumber.substring(2, 4) - 1) && (id_date == idNumber.substring(4, 6)))) {
+      //error.append('ID number does not appear to be authentic - date part not valid. ');
+      correct = false;
+    }
+
+    // get the gender
+    var genderCode = idNumber.substring(6, 10);
+    var gender = parseInt(genderCode) < 5000 ? "Female" : "Male";
+    this.setState({ userGender: gender })
+    //setGender(gender)
+
+    // get country ID for citzenship
+    var citzenship = parseInt(idNumber.substring(10, 11)) == 0 ? "Yes" : "No";
+
+    // apply Luhn formula for check-digits
+    var tempTotal = 0;
+    var checkSum = 0;
+    var multiplier = 1;
+    for (var i = 0; i < 13; ++i) {
+      tempTotal = parseInt(idNumber.charAt(i)) * multiplier;
+      if (tempTotal > 9) {
+        tempTotal = parseInt(tempTotal.toString().charAt(0)) + parseInt(tempTotal.toString().charAt(1));
+      }
+      checkSum = checkSum + tempTotal;
+      multiplier = (multiplier % 2 == 0) ? 1 : 2;
+    }
+    if ((checkSum % 10) != 0) {
+
+      correct = false;
+    }
+    if (correct) {
+      // and put together a result message
+      //document.getElementById('result').append('<p>South African ID Number:   ' + idNumber + '</p><p>Birth Date:   ' + fullDate + '</p><p>Gender:  ' + gender + '</p><p>SA Citizen:  ' + citzenship + '</p>');
+    } else {
+      alert("Invalid ID Number, please correct ID Number and try again")
+      //error.append("Invalid ID Number, please enter a valid ID Number")
+      this.setState({ errorMessage: "Invalid ID Number, please enter a valid ID Number" })
+    }
+    return correct
+  }
   //Submit Email
       Submit(e){
         e.preventDefault();
@@ -59,6 +135,8 @@ class Registration extends React.Component {
      this.props.updateLoadingController(true);
      this.props.updateLoadingMessage("Submitting Information...");
         const email = document.getElementById('email').value;
+        const idNumber = document.getElementById('idNumber').value;
+        localStorage.setItem('idNumber', idNumber)
         localStorage.setItem('studentEmail', email)
         //console.log(email)
 
@@ -77,15 +155,17 @@ class Registration extends React.Component {
         // User Exists Request data
         const userExistsData = {
           'UserEmail': email,
+          'IDNumber': idNumber,
           'RubixClientID': localStorage.getItem('clientID'),
       };
+      //console.log("The Call: ", userExistsData)
 
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
         await axios.post('http://129.232.144.154:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                console.log(response.data)
+                //console.log("The response: ",response.data)
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
                 2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
@@ -98,8 +178,8 @@ class Registration extends React.Component {
                     //Set timer for loading screen
                   setTimeout(() => {
                     this.props.updateLoadingController(false);
-                  }, 1000);
-                  //this.props.history.push("/logInformation")
+                  }, 3000);
+                  this.props.history.push("/logInformation")
                  } else {
                   this.setState({
                     title: "Error",
@@ -108,7 +188,7 @@ class Registration extends React.Component {
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
-                }, 1000);
+                }, 3000);
                   this.props.onPresPopUpEvent()
                  }
             })
@@ -117,9 +197,9 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post('http://129.232.144.154:88/api/validEmailCheck', pingData, requestOptions)
+        await axios.post('http://129.232.144.154:94/validEmailCheck', pingData, requestOptions)
             .then(response => {
-                console.log(response.data.EmailResult )
+                //console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   //this.props.updatePlatformID("1");
@@ -127,8 +207,8 @@ class Registration extends React.Component {
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
-                }, 1000);
-                 //this.props.history.push("/logInformation")
+                }, 3000);
+                 this.props.history.push("/logInformation")
                  } else{
                   this.setState({
                     title: "Email validation failed",
@@ -137,7 +217,7 @@ class Registration extends React.Component {
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
-                }, 1000);
+                }, 3000);
                   this.props.onPresPopUpEvent()
                  }
             })
@@ -158,11 +238,27 @@ class Registration extends React.Component {
   render() {
     //const user = useContext(MyProvider);
     return (
-      <div className={this.props.rubixThemeColor}>
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
       <Helmet>
               <meta charSet="utf-8" />
               <title>Register Email</title>
           </Helmet>
+          <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="20%"
+                height="20%"
+                alt=" "
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
         <div >
         <PopUpModal 
         Title= {this.state.title}
@@ -202,6 +298,14 @@ class Registration extends React.Component {
                           type="email"
                         />
                       </div>
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                          ID Number
+                        </label>
+                        <input type='number' name="idNumber" className="form-control" id='idNumber'
+                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' ></input>
+                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
+                      </div>
                       
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue
@@ -214,6 +318,7 @@ class Registration extends React.Component {
                         </span>
                       </div>
                     </form>
+                    {/* 
                     <div className="separator-linethrough">
                       <span>OR</span>
                     </div>
@@ -245,7 +350,7 @@ class Registration extends React.Component {
                         >
                           <FaInstagram style = {{ color: "#cd486b", fontSize: "1.5em", paddingRight: "4px"}}/> Instagram
                           </InstagramLogin>
-                    
+                     */}
                   </div>
                 </div>
 
@@ -268,6 +373,8 @@ const mapStateToProps = ({ navigationReducer, loginReducer, mailInboxReducer }) 
   rubixClientID: navigationReducer.clientID,
   rubixThemeColor: navigationReducer.themeColor,
   isPopUpModal: mailInboxReducer.isPopUpModal,
+  MyloadingController: navigationReducer.loadingController,
+  loadingMessage: navigationReducer.loadingMessage,
 
   clientBG: navigationReducer.backImage,
 });

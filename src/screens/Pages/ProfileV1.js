@@ -14,12 +14,22 @@ import {
   onUpdateIDProgress,
   onUpdateRESProgress,
   onUpdateREGProgress,
+
   onUpdateNOKMessage,
   onUpdateREGMessage,
   onUpdateRESMessage,
   onUpdateIDMessage,
   updateLoadingMessage,
+  onUpdateBookingMessage,
+  onUpdateProofOfPayMessage,
+  onUpdateRulesMessage,
+  onUpdateStudenCMessage,
+
   onUpdateLeaseProgress,
+  onUpdateBookingForm,
+  onUpdateProofOfPay,
+  onUpdateRules,
+  onUpdateStudentCard,
   onUpdateLeaseMessage,
   updateLoadingController,
   onPresPopConfirmInfo,
@@ -147,7 +157,7 @@ class ProfileV1Page extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount() { 
     window.scrollTo(0, 0);
     const userID = localStorage.getItem('userID');
     const userProgress = localStorage.getItem('progress');
@@ -240,7 +250,7 @@ mergePDFHandler()
         const dataUrl = 'data:' + doc.fileextension + ';base64,' + doc.image
         const temp = this.dataURLtoFile(dataUrl, 'Merged Document-' + doc.FileType)
 
-        const myUrl = 'https://rubiximages.cjstudents.co.za:449/' + doc.filename
+        const myUrl = 'http://129.232.144.154:449/' + doc.filename
         
         const bytes = window.atob(doc.image);
         let length = bytes.length;
@@ -282,10 +292,10 @@ mergePDFHandler()
     //console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
+      await fetch('http://129.232.144.154:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-         // console.log("documents data:", data)
+          //console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -428,6 +438,46 @@ mergePDFHandler()
            })
         }
         break
+        case 'rules-doc':
+          {
+            this.setState({ docType: "Res Rules and Regulations",
+            topBarData: <>
+            
+            <br></br>
+            </> 
+             })
+          }
+          break
+          case 'booking-doc':
+            {
+              this.setState({ docType: "My Booking Document",
+              topBarData: <>
+              
+              <br></br>
+              </> 
+               })
+            }
+            break
+            case 'student-card':
+              {
+                this.setState({ docType: "My Student Card",
+                topBarData: <>
+                
+                <br></br>
+                </> 
+                 })
+              }
+          break
+          case 'proof-of-pay':
+            {
+              this.setState({ docType: "My Proof of Payment",
+              topBarData: <>
+              
+              <br></br>
+              </> 
+               })
+            }
+            break
       case 'proof-of-reg':
         {
           this.setState({ docType: "My Proof of Registration",
@@ -474,19 +524,6 @@ mergePDFHandler()
       console.log('Error: ', error);
     }
   }
-  //From File
-  getBase64(file) {
-    let reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      this.setState({
-        mergedFile: reader.result
-      })
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    }
-  }
 
   //Converts base64 to file
   dataURLtoFile(dataurl, filename) {
@@ -522,11 +559,12 @@ mergePDFHandler()
         headers: { 'Content-Type': 'multipart/form-data', },
         body: data
       };
-      
-      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+      //console.log("Posted: ", data)
+      await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {
+          console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
-          this.onPressSignatureUpload(this.state.trimmedDataURL)
+          //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
     }
     postDocument().then(() => {
@@ -583,11 +621,16 @@ mergePDFHandler()
   }
 
   resetProgressBars(){
+    //Reset Progress Bar
     this.props.onUpdateIDProgress(0)
     this.props.onUpdateRESProgress(0)
     this.props.onUpdateREGProgress(0)
     this.props.onUpdateNOKProgress(0)
     this.props.onUpdateLeaseProgress(0)
+    this.props.onUpdateStudentCard(0)
+    this.props.onUpdateRules(0)
+    this.props.onUpdateProofOfPay(0)
+    this.props.onUpdateBookingForm(0)
 
     //Reset Messages
     this.props.onUpdateIDMessage(this.setMessage(0))
@@ -595,6 +638,10 @@ mergePDFHandler()
     this.props.onUpdateREGMessage(this.setMessage(0))
     this.props.onUpdateNOKMessage(this.setMessage(0))
     this.props.onUpdateLeaseMessage(this.setMessage(0))
+    this.props.onUpdateBookingMessage(this.setMessage(0))
+    this.props.onUpdateProofOfPayMessage(this.setMessage(0))
+    this.props.onUpdateRulesMessage(this.setMessage(0))
+    this.props.onUpdateStudenCMessage(this.setMessage(0))
   }
 
   
@@ -613,17 +660,18 @@ mergePDFHandler()
     };
 
     const requestOptions = {
-      title: 'Fetch User Profile Form',
+      title: 'Fetch User Document Progresses',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixDocumentsProgress', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
+          console.log("The returned data: ", response)
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
@@ -651,6 +699,26 @@ mergePDFHandler()
                 this.props.onUpdateLeaseProgress(this.setLeaseProg(temp[i].Percentage, temp[i].RubixVettedResult))
                 this.props.onUpdateLeaseMessage(this.setLeaseMessage(temp[i].Percentage, temp[i].RubixVettedResult))
               }
+              break;
+            case "booking-doc": {
+              this.props.onUpdateBookingForm(temp[i].Percentage)
+              this.props.onUpdateBookingMessage(this.setMessage(temp[i].Percentage))
+            }
+              break;
+            case "proof-of-pay": {
+              this.props.onUpdateProofOfPay(temp[i].Percentage)
+              this.props.onUpdateProofOfPayMessage(this.setMessage(temp[i].Percentage))
+            }
+              break;
+            case "rules-doc": {
+              this.props.onUpdateRules(temp[i].Percentage)
+              this.props.onUpdateRulesMessage(this.setMessage(temp[i].Percentage))
+            }
+              break;
+            case "student-card": {
+              this.props.onUpdateStudentCard(temp[i].Percentage)
+              this.props.onUpdateStudenCMessage(this.setMessage(temp[i].Percentage))
+            }
               
             }
           }
@@ -694,6 +762,31 @@ mergePDFHandler()
         {
           progress = this.props.myLeaseProgress
         }
+        break;
+      case "booking-doc":
+        {
+          progress = this.props.myBookingFProgress
+        }
+        break;
+      case "proof-of-pay":
+        {
+          progress = this.props.myProofOfPayProgress
+        }
+        break;
+      case "proof-of-pay":
+        {
+          progress = this.props.myProofOfPayProgress
+        }
+        break;
+      case "rules-doc":
+        {
+          progress = this.props.myRules
+        }
+        break;
+      case "student-card":
+        {
+          progress = this.props.myStudentCardProgress
+        }
     }
     return progress
   }
@@ -726,6 +819,26 @@ mergePDFHandler()
       case 'lease-agreement':
         {
           message = this.props.myLeaseMessage
+        }
+        break;
+      case 'booking-doc':
+        {
+          message = this.props.bookingFMessage
+        }
+        break;
+      case "proof-of-pay":
+        {
+          message = this.props.proofOfPayMessage
+        }
+        break;
+      case "rules-doc":
+        {
+          message = this.props.rulesMessage
+        }
+        break;
+      case "student-card":
+        {
+          message = this.props.studentCMessage
         }
     }
     return message
@@ -800,7 +913,7 @@ mergePDFHandler()
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+      await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           //this.setState({ mongoID: response.data.post._id })
@@ -839,7 +952,7 @@ mergePDFHandler()
         body: data
       };
       //console.log("Posted Data:", data)
-      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
+      await axios.post('http://129.232.144.154:94/PDFSignature', data, requestOptions)
         .then(response => {
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
@@ -920,7 +1033,7 @@ mergePDFHandler()
           : null
         }
           
-          <iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.doc.filename}width="100%" height="500px">
+          <iframe src={'http://129.232.144.154:449/' + this.state.doc.filename}width="100%" height="500px">
     </iframe>
         </>
 
@@ -947,7 +1060,7 @@ mergePDFHandler()
               ? <>
               <p>Loading document...</p>
             </>
-            :<iframe src={'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease} width="100%" height="500px">
+            :<iframe src={'http://129.232.144.154:449/' + this.state.myLease} width="100%" height="500px">
            </iframe>}
             
             {
@@ -1022,7 +1135,7 @@ mergePDFHandler()
         Body = "You are confirming that the document and information are in line."
         FileType = {this.state.keyString} 
         DocID = {this.state.currentDocID}
-        Filename = {'https://rubiximages.cjstudents.co.za:449/' + this.state.myLease}
+        Filename = {'http://129.232.144.154:449/' + this.state.myLease}
         />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
@@ -1164,6 +1277,18 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
 
   myLeaseProgress: navigationReducer.leaseProgress,
   myLeaseMessage: navigationReducer.leaseMessage,
+
+  myStudentCardProgress: navigationReducer.studentCProgress,
+  myStudentCardMessage: navigationReducer.bookingFMessage,
+
+  myProofOfPayProgress: navigationReducer.proofOfPayProgress,
+  myProofOfPayMessage: navigationReducer.proofOfPayMessage,
+
+  myBookingFProgress: navigationReducer.bookingProgress,
+  myBookingFMessage: navigationReducer.bookingFMessage,
+
+  myRules: navigationReducer.rulesProgress,
+  myRulesMessage: navigationReducer.rulesMessage,
   
   showLease: mailInboxReducer.isShowLease,
 
@@ -1178,18 +1303,33 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
 export default connect(mapStateToProps, {
   onPresPopUpEvent,
   onPresPopUpConfirm,
+
   onUpdateNOKProgress,
   onUpdateIDProgress,
   onUpdateRESProgress,
   onUpdateREGProgress,
+
   onUpdateNOKMessage,
   onUpdateREGMessage,
   onUpdateRESMessage,
   onUpdateIDMessage,
+  onUpdateBookingMessage,
+  onUpdateProofOfPayMessage,
+  onUpdateRulesMessage,
+  onUpdateStudenCMessage,
+
   updateLoadingMessage,
   updateLoadingController,
+
   onUpdateLeaseProgress,
+  onUpdateBookingForm,
+  onUpdateProofOfPay,
+  onUpdateRules,
+  onUpdateStudentCard,
+
   onUpdateLeaseMessage,
+
   onUpdateVarsity,
+
   onPresPopConfirmInfo,
 })(ProfileV1Page);

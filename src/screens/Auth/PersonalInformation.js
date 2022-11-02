@@ -138,11 +138,12 @@ class PersonalInformation extends React.Component {
     //console.log("Sent: ", data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
-            await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers', data, requestOptions)
+            await axios.post('http://129.232.144.154:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                //console.log("Response: ",response)
+                //console.log("Response: ",response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.updateStudentID(idNumber)
                 localStorage.setItem('studentIDNo', idNumber)
+                //localStorage.setItem('idNumber', " ")
                 localStorage.setItem('studentEmail', email)
                 localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
                 this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
@@ -179,7 +180,7 @@ class PersonalInformation extends React.Component {
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Countries List...");
       //Fetch Countries List
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixCountries')
+      await fetch('http://129.232.144.154:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data.data)
@@ -205,7 +206,7 @@ class PersonalInformation extends React.Component {
   
   render() {
     return (
-      <div className="theme-green">
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
         <Helmet>
                 <meta charSet="utf-8" />
                 <title>Personal Information</title>
@@ -328,7 +329,7 @@ class PersonalInformation extends React.Component {
                           ID Number
                         </label>
                         <input type='number' name="IDNumber" className="form-control" id='IDNumber'
-                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' ></input>
+                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>
                       <div className="form-group">
