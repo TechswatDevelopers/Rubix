@@ -57,7 +57,7 @@ class RubixSurport extends React.Component {
 
       //console.log("Posted Data: ", data)
       const postData = async () => {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixGetSupportData', data, requestOptions)
+        await axios.post('http://129.232.144.154:88/api/RubixGetSupportData', data, requestOptions)
         .then(response => {
           //console.log("Response Data:", response)
           this.setState({
@@ -102,7 +102,7 @@ class RubixSurport extends React.Component {
         };
         //console.log('Posted data: ', pingData)
         const postData = async () => {
-          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
+          await axios.post('http://129.232.144.154:88/api/RubixAdminStudentList', pingData, requestOptions)
           .then(response => {
             //console.log("All Students: ", response)
             if(!response.data.PostRubixUserData){
@@ -204,7 +204,7 @@ class RubixSurport extends React.Component {
   //console.log("Posted Data:", data)
 
   const postData = async()=>{
-    await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixSupportAdd', data, requestOptions)
+    await axios.post('http://129.232.144.154:88/api/RubixSupportAdd', data, requestOptions)
     .then(response => {
       //console.log('done', response)
       if(response.data.PostRubixUserData[0].Response == 1){
@@ -232,7 +232,7 @@ class RubixSurport extends React.Component {
     //Fetch Residences
     const fetchData = async() =>{
       //Populate Residence list
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      await fetch('http://129.232.144.154:88/api/RubixResidences/' + localStorage.getItem('clientID'))
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)

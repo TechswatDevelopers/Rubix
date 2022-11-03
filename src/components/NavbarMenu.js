@@ -42,7 +42,7 @@ class NavbarMenu extends React.Component {
     const userID = localStorage.getItem('userID');
     const userCode = localStorage.getItem('userCode');
     this.props.onPressThemeColor(localStorage.getItem('clientTheme'))
-    console.log(userID)
+    //console.log(userID)
     res = res.split("/");
     res = res.length > 4 ? res[4] : "/";
     const { activeKey } = this.props;
@@ -61,7 +61,7 @@ class NavbarMenu extends React.Component {
   //Get documents from DB
   await fetch('http://129.232.144.154:86/feed/post/' + userID)
     .then(response => {
-      console.log("Profile data:", response)
+      //console.log("Profile data:", response)
       response.json()})
     .then(data => {
       const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]

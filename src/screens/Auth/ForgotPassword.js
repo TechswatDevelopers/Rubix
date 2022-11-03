@@ -59,7 +59,7 @@ class ForgotPassword extends React.Component {
     };
     //console.log(data)
     const postData = async() => {
-              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixForgetPasswordEmail', data, requestOptions)
+              await axios.post('http://129.232.144.154:88/api/RubixForgetPasswordEmail', data, requestOptions)
             .then(response => {
                 //console.log(response.data.PostRubixUserData[0].Response)
                 if(response.data.PostRubixUserData[0].Response === "Redirected"){

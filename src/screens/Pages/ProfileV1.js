@@ -559,7 +559,9 @@ mergePDFHandler()
         headers: { 'Content-Type': 'multipart/form-data', },
         body: data
       };
-      //console.log("Posted: ", data)
+      for (let i = 0; i<data.length; i++){
+        console.log(data[i])
+      }
       await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {
           console.log("The reponse: ", response)

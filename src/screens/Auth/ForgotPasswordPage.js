@@ -77,7 +77,7 @@ class ForgotPasswordPage extends React.Component {
     }
     //console.log(data)
     const postData = async() => {
-              await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixUpdateForgetPassword', data, requestOptions)
+              await axios.post('http://129.232.144.154:88/api/RubixUpdateForgetPassword', data, requestOptions)
             .then(response => {
                 //console.log(response)
                 //Go to login screen

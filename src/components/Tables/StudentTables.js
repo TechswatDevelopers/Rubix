@@ -23,7 +23,7 @@ class SudentsTable extends React.Component {
   //Get rubix color codes
   getColors(){
     const fetchData = async () => {
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixGetColor')
+      await fetch('http://129.232.144.154:88/api/RubixGetColor')
       .then(response => response.json())
       .then(data => {
         //console.log("colors data: ", data.data)

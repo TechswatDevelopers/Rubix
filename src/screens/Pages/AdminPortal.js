@@ -40,7 +40,7 @@ class AdminDashboard extends React.Component {
 
     const fetchData = async() =>{
       //Populate Residence list
-      await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      await fetch('http://129.232.144.154:88/api/RubixResidences/' + localStorage.getItem('clientID'))
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)
@@ -92,9 +92,9 @@ class AdminDashboard extends React.Component {
 
     
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReport', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
-        //console.log("Response: ", response)
+        console.log("Response: ", response)
 
         //Load data
         let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
@@ -529,7 +529,7 @@ class AdminDashboard extends React.Component {
     //Post Data
     
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminReportAll', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminReportAll', data, requestOptions)
       .then( response =>{
         //console.log('Stats Data: ', response.data.PostRubixUserData)
         var list = response.data.PostRubixUserData
@@ -572,7 +572,7 @@ class AdminDashboard extends React.Component {
     };
 //console.log('Posted Data: ', data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminResidneceReports', data, requestOptions)
       .then(response => {
         //console.log('current response: ', response)
         if(response != null && response != undefined){
@@ -623,7 +623,7 @@ class AdminDashboard extends React.Component {
 
     //console.log("Posted:", data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminResidneceReports', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
           //console.log("DB response: ", response)
 
