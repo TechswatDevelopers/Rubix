@@ -333,7 +333,7 @@ class NavbarMenu extends React.Component {
                   className="img-responsive logo pl-3"
                   style={{
                     height: '50px',
-                    width: '130px'
+                    width: '80px'
                   }}
                 />
               </a>

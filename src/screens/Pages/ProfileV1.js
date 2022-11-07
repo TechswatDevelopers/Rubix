@@ -166,8 +166,10 @@ class ProfileV1Page extends React.Component {
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
+      console.log('I am called')
       this.loadDocuments(this.props.currentStudentiD)
     } else {
+      console.log('I am called here')
       this.loadDocuments(userID)
     }
     //this.setState({ progress: userProgress });
@@ -284,18 +286,18 @@ mergePDFHandler()
 
   }
 
-  //Fetch All documents from DB
+//Fetch All documents from DB
   loadDocuments(userID) {
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
-    //console.log("Loading Student Documents...");
+    console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
       await fetch('http://129.232.144.154:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+          console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -326,7 +328,6 @@ mergePDFHandler()
           const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
           
         });
-
     };
     fetchData()
     .then(()=>{
@@ -335,9 +336,7 @@ mergePDFHandler()
     }, 1000)
       this.checkLease(userID)
       this.setDocumentProgress();
-      
     })
-    
   }
 
   //Check Lease Agreement Doc
@@ -367,7 +366,7 @@ mergePDFHandler()
 
 
   //Switch to different Document type
-  changeDocument = (file) => {
+  changeDocument = (file) => {''
     this.setLoadingDocumentPage()
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
@@ -559,8 +558,8 @@ mergePDFHandler()
         headers: { 'Content-Type': 'multipart/form-data', },
         body: data
       };
-      for (let i = 0; i<data.length; i++){
-        console.log(data[i])
+      for (var pair of data.entries()) {
+        console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {
@@ -673,7 +672,7 @@ mergePDFHandler()
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
-          //console.log("The returned data: ", response)
+          console.log("The returned data: ", response)
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
@@ -1041,15 +1040,36 @@ mergePDFHandler()
 
         : <>
           {this.state.keyString != 'lease-agreement'
-          ? <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+          ? <>
+          {
+            this.state.keyString == 'booking-doc'
+            ?<>
+            <iframe src={"http://129.232.144.154:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px"></iframe>
+            </>
+            :<>
+            {
+              this.state.keyString == 'rules-doc'
+              ?<>
+              <iframe src={'http://129.232.144.154:449/General%20Rules%20and%20Regulations.pdf'}width="100%" height="500px"></iframe>
+              </>
+              :<>
+              <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
             <p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not uploaded a document yet, to enable viewer, please upload a document.</p>
             <div>
               <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => { this.changeHandler(e) }} />
               <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
             </div>
           </div>
-          :<p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not Any active lease, please make sure all documents are uploaded and you are assigned to a room.</p>
-        }
+              </>
+            }
+            </>
+          }
+          </>
+        
+          : <p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not Any active lease, please make sure all documents are uploaded and you are assigned to a room.</p>
+          
+          
+           }
         </>
       }
       </>

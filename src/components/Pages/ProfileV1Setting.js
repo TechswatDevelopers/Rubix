@@ -41,6 +41,7 @@ class ProfileV1Setting extends React.Component {
       courseList: [],
       yearList: [],
       countryList: [],
+      bankTypes: ['Please select account type', 'Savings', 'Cheque'],
       payment: '',
       address: {},
       university: {},
@@ -60,7 +61,7 @@ class ProfileV1Setting extends React.Component {
       errorMessage: null,
       myUserID: null,
       imageUrl: 'user.png',
-      payMethods: ['Change Payment Method', 'NSFAS', 'External Bursary', 'Student Loan', 'Self Funded'],
+      payMethods: ['Please Select your Payment Method', 'NSFAS TUT', 'NSFAS UP ', 'Bursary', 'Agreement with University ', 'Self Funded'],
       value: 0,
       profilePicture: {},
       progress: '',
@@ -69,7 +70,76 @@ class ProfileV1Setting extends React.Component {
       proofOfResProgress: '',
       proofOfRegProgress: '',
       yearOfRes: '',
+      uni: 0,
+      year: 0,
+      durations: [],
+      duration: 0,
     };
+  }
+  //Fetch Residences
+  getRes(uniID, key){
+    //console.log("Uni ID: ", uniID)
+    const fetchResses = async() => {
+      //Populate Residence list
+      await fetch('http://129.232.144.154:88/api/RubixResidences/' + uniID)
+      .then(response => response.json())
+      .then(data => {
+          console.log("Res list data is ", data)
+          this.setState({resList: data.data})
+
+          //If first call initialize res, else show selected
+          if(key == 0){
+            for(let i = 0; i < data.data.length; i ++){
+              //console.log("I am called: ", data.data[i].RubixResidenceID)
+              if(data.data[i].RubixResidenceID == this.state.myProfile.RubixResidenceID){
+                this.setState({
+                  res: this.state.resList[i].RubixResidenceID
+                })
+              }
+            }
+          }
+          });
+    }
+    fetchResses()
+    this.defaultDuration(uniID)
+  }
+
+  
+  //Selecting Varsity
+  onVarsitySelect(e){
+    this.setState({
+      uni: e.target.value,
+      showResInput: true,
+    })
+    if(e.target.value == 1 || e.target.value == 2){
+      this.setState({
+        durations: [5,10,12]
+      })
+    } else {
+      this.setState({
+        durations: [5,10]
+      })
+    }
+    this.getRes(e.target.value, 1)
+
+  }
+
+  ///Set Varsity durations
+  defaultDuration(uniID){
+    this.setState({
+      uni: uniID,
+      showResInput: true,
+    })
+    if(uniID == 1 || uniID == 2){
+      this.setState({
+        durations: [5,10,12]
+      })
+    } else {
+      this.setState({
+        durations: [5,10]
+      })
+    }
+
   }
 
 
@@ -444,10 +514,26 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          //console.log("All Student data", response.data.PostRubixUserData[0].RegistrationYear)
+          console.log("All Student data", response.data.PostRubixUserData[0])
           this.setState({ myProfile: response.data.PostRubixUserData[0],
+            uni: response.data.PostRubixUserData[0].RubixUniversityID,
+            year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
+            duration: response.data.PostRubixUserData[0].Duration,  
             yearOfRes: response.data.PostRubixUserData[0].RegistrationYear
           })
+           //Set Payment Method
+           for (let i = 0; i < this.state.payMethods.length; i++){
+            //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
+            if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
+              this.setState({
+                payment: i,
+              })
+            }
+          }
+
+
+          //Get Residence Name 
+          this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)
           //Load Vetting information to Redux Store
 this.props.updateStudentID(response.data.PostRubixUserData[0].IDNumber)
 this.props.updateStudentName(
@@ -487,8 +573,26 @@ this.props.updateStudentName(
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          console.log("All profile data", response.data.PostRubixUserData)
-          this.setState({ myProfile: response.data.PostRubixUserData[0] })
+          //console.log("All profile data", response.data.PostRubixUserData)
+          this.setState({ myProfile: response.data.PostRubixUserData[0],
+          uni: response.data.PostRubixUserData[0].RubixUniversityID,
+          year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
+          duration: response.data.PostRubixUserData[0].Duration
+          })
+
+          //Set Payment Method
+          for (let i = 0; i < this.state.payMethods.length; i++){
+            //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
+            if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
+              this.setState({
+                payment: i,
+              })
+            }
+          }
+          //Get Residence Name 
+          this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)
+          //console.log("Heyyyyyyyyyyyyyyyyyyyyy", this.state.resList)
+          
 
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
           this.props.onUpdateProgressBar(response.data.PostRubixUserData[1].InfoCount)
@@ -616,6 +720,59 @@ this.props.updateStudentName(
             this.setState({ imageUrl: 'http://129.232.144.154:449/' + profilePic.filename })
           }
         });
+        //Populate university list
+        await fetch('http://129.232.144.154:88/api/RubixUniversities/')
+        .then(response => response.json())
+        .then(data => {
+            console.log("data is ", data.data)
+            this.setState({
+              uniList: data.data,
+              //uni: data.data[0]['RubixUniversityID']
+            })
+            });
+            //Populate Year of Study list
+            await fetch('http://129.232.144.154:88/api/RubixStudentYearofStudies')
+        .then(response => response.json())
+        .then(data => {
+            //console.log("data is ", data.data)
+            this.setState({yearList: data.data})
+            });
+
+    };
+
+
+    //Admin side Dropdowns
+    const fetchDropDownData = async () => {
+      //Get documents from DB
+      await fetch('http://129.232.144.154:86/feed/post/' + this.props.currentStudentiD)
+        .then(response => response.json())
+        .then(data => {
+          //console.log("Profile data:", data)
+          const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
+          //console.log("Profile Picture data:", profilePic)
+          //If Profile Picture Exists...
+          if (profilePic != null && profilePic != undefined) {
+            this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
+            this.setState({ imageUrl: 'http://129.232.144.154:449/' + profilePic.filename })
+          }
+        });
+        //Populate university list
+        await fetch('http://129.232.144.154:88/api/RubixUniversities/')
+        .then(response => response.json())
+        .then(data => {
+            console.log("data is ", data.data)
+            this.setState({
+              uniList: data.data,
+              //uni: data.data[0]['RubixUniversityID']
+            })
+            });
+            //Populate Year of Study list
+            await fetch('http://129.232.144.154:88/api/RubixStudentYearofStudies')
+        .then(response => response.json())
+        .then(data => {
+            //console.log("data is ", data.data)
+            this.setState({yearList: data.data})
+            });
 
     };
     //Get All User Data
@@ -624,26 +781,12 @@ this.props.updateStudentName(
       fetchData()
     } else if (localStorage.getItem('role') == 'admin') {
       this.getStudentData(this.props.currentStudentiD)
+      fetchDropDownData()
     } 
   
 
 
   }
-
-/*   //Populate data from DB
-  fetchUserData = async () => {
-    //console.log("user id:", localStorage.getItem('userID'))
-    //Get Rubix User Details
-    await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUsers/' + this.props.currentStudentiD)
-      .then(response => response.json())
-      .then(data => {
-        if (data === null || data === undefined) {
-          alert('Error loading user data')
-        } else {
-          this.setState({ profile: data })
-        }
-      });
-  } */
 
   fetchUserUniversityData = async () => {
     //Get Rubix User University Details
@@ -716,16 +859,15 @@ this.props.updateStudentName(
   }
   fetchUniversitiesData = async () => {
     //Populate university list
-    await fetch('http://129.232.144.154:88/api/RubixUniversities')
-      .then(response => response.json())
-      .then(data => {
-        if (data.data === null || data.data === undefined) {
-          alert('Error loading Universities data' + data.message)
-        } else {
-          //console.log("University data:", data)
-          this.setState({ uniList: data.data })
-        }
-      });
+    await fetch('http://129.232.144.154:88/api/RubixUniversities/')
+    .then(response => response.json())
+    .then(data => {
+        console.log("data is ", data.data)
+        this.setState({
+          uniList: data.data,
+          //uni: data.data[0]['RubixUniversityID']
+        })
+        });
   }
 
   fetchResidencesData = async () => {
@@ -779,8 +921,139 @@ this.props.updateStudentName(
     })
   }
 
+  SubmitRelatives(e){
+    //console.log("called")
+    //Set timer for loading screen
+   this.setState({
+     isLoad: true
+   })
+   e.preventDefault();
+   const form = document.getElementById('nextOfKin1');
+   const form2 = document.getElementById('nextOfKin2');
+ 
+   const data = {
+     'RubixRegisterUserID': this.state.myUserID,
+   };
+   for (let i=0; i < form.elements.length; i++) {
+       const elem = form.elements[i];
+       data[elem.name] = elem.value
+   }
+   for (let i=0; i < form2.elements.length; i++) {
+       const elem = form2.elements[i];
+       data[elem.name] = elem.value
+   }
+ 
+   const requestOptions = {
+       title: 'Relatives Form',
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: data
+   };
+   //console.log(data)
+   const postData = async() => {
+     await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKin2s', data, requestOptions)
+     .then(response => {
+         //console.log(response)
+         setTimeout(() => {
+           this.postStatus()
+         }, 2000);
+         this.setState({
+           isLoad: false
+         })
+     })
+   }
+   postData().then(() => {
+ 
+     this.props.onPresPopUpEvent()
+     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
+   })
+ 
+ }
+
   render() {
     const { StudentID } = this.props;
+    let body;
+    if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
+      body = 
+      null
+    } else if(this.state.payment == 'Self Funded'){
+      body = <>
+      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Holder Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountHolderName"
+                          name='AccountHolderName'
+                          placeholder="Enter your bank account holder name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Bank Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BankName"
+                          name='BankName'
+                          placeholder="Enter your bank name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Branch Code:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BranchCode"
+                          name='BranchCode'
+                          placeholder="Enter your branch code"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Number:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountNumber"
+                          name='AccountNumber'
+                          placeholder="Enter your account number"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Type:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({bankType: e.target.value})} value={this.state.bankType}>
+        {
+         this.state.bankTypes.map((banktype, index)=> (
+            <option key={index} name='AccountType' value = {banktype}>{banktype}</option>
+        ))  
+        }
+        </select> }
+                      </div>
+
+      </>
+    } else {
+      body = null;
+    }
+
     let myButton;
     //Select Image Url
     if (this.state.profilePicture != null && this.state.base64Image == null) {
@@ -1092,30 +1365,34 @@ this.props.updateStudentName(
         </div>
 
 
+{
+  ///University Information
+}
         <div className="body">
           <form id='uniDetails' onSubmit={(e) => this.updateVarsityDetails(e)}>
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
               <h3>University Information</h3>
+            
               <div className="form-group">
-                <label>
-                  University:
-                </label>
-                <input
-                  className="form-control"
-                  disabled
-                  name="UniversityName"
-                  defaultValue={this.state.myProfile.UniversityName}
-                  placeholder="University Name"
-                  type="text"
-                />
-              </div>
+                        <label>
+                        University:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.onVarsitySelect(e)} value={this.state.uni}>
+        {
+            
+         this.state.uniList.map((university, index)=> (
+            <option key={index} name='UniversityID' value = {university.RubixUniversityID}>{university.UniversityName}</option>
+        ))   
+        }
+    </select> }
+                      </div>
               <div className="form-group">
                 <label>
                   Field of Study:
                 </label>
                 <input
-                disabled
                   className="form-control"
                   name="CourseID"
                   defaultValue={this.state.myProfile.RubixCourse}
@@ -1124,18 +1401,126 @@ this.props.updateStudentName(
                 />
               </div>
               <div className="form-group">
-                <label>
-                  Year of Study:
-                </label>
-                <input
-                disabled
-                  className="form-control"
-                  name="StudentYearofStudyID"
-                  defaultValue={this.state.myProfile.YearofStudy}
-                  placeholder="Year of Study"
-                  type="text"
-                />
-              </div>
+                        <label>
+                        Year of Study:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({year: e.target.value})} value={this.state.year}>
+        {
+            
+            this.state.yearList.map((year, index)=> (
+            <option key={index} name='StudentYearofStudyID' value = {year.RubixStudentYearofStudyID}>{year.YearofStudy}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+
+
+                      <><div className="form-group">
+                        <label>
+                        Residence:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({res: e.target.value})} value={this.state.res}>
+        {
+            
+            this.state.resList.map((res, index)=> (
+            <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+                      <div className="form-group">
+                        <label>
+                        Duration: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({duration: e.target.value})} value={this.state.duration}>
+        {
+            
+            this.state.durations.map((duration, index)=> (
+            <option key={index} name='Duration' value={duration}>{duration} months</option>
+        ))   
+        }
+    </select> }
+                      </div>
+
+                      {
+                        this.state.myProfile.CarReg != ""
+                        ?<>
+                        <div className="form-group">
+                      <label>
+                      Car Number Plate:
+                          </label>
+                          <input
+                        className="form-control"
+                        id="CarReg"
+                        name='CarReg'
+                        placeholder="Enter your car Registration Number"
+                        type="text"
+                        value={this.state.myProfile.CarReg}
+                        required
+                      />
+                    </div></>
+
+                        : <>
+                        <label>Do you have car?</label>
+                    <Row>
+                    <Col >
+                        <input 
+                        onChange={(e) => {this.onValueChange(e)}}
+                        //checked={this.state.yearOfRes === "2022"}
+                        type="radio" name="CarReg" value='yes'/>
+                         Yes
+                      </Col>
+                      <Col>
+                      <input 
+                      onChange={(e) => {this.onValueChange(e)}}
+                      //checked={this.state.yearOfRes === "2023"}
+                      type="radio" name="CarReg" value='no'/>
+                         No
+                      </Col>
+                    </Row>
+                    {
+                      this.state.hasCar
+                      ? <div className="form-group">
+                      <label>
+                      Car Number Plate:
+                          </label>
+                          <input
+                        className="form-control"
+                        id="CarReg"
+                        name='CarReg'
+                        placeholder="Enter your car Registration Number"
+                        type="text"
+                        required
+                      />
+                    </div>
+                      : null
+                    }</>
+                      }
+
+                      
+                      </>
+
+
+                      <div className="form-group">
+                        <label >
+                        Payment Method: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({payment: e.target.value})} value={this.state.payment}>
+        {
+            
+            this.state.payMethods.map((payment, index)=> (
+            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+                     {body}
+
+             
               
             </div>
           </div>
@@ -1150,7 +1535,17 @@ this.props.updateStudentName(
           </button>{" "}
           &nbsp;&nbsp;
           <button className="btn btn-default">Cancel</button></>
-          : null}
+          : <><button className="btn btn-primary" type="submit" onClick={(e) => 
+            {
+              e.preventDefault()
+              //console.log("Clicked", this.props.isPopUpModal)
+              this.props.onUpdateVarsity()
+              }}>
+              Update
+            </button>{" "}
+            &nbsp;&nbsp;
+            <button className="btn btn-default">Cancel</button></>
+            }
           </form>
         </div>
 
@@ -1206,6 +1601,15 @@ this.props.updateStudentName(
                   />
                 </div>
 
+                <div className="form-group">
+                <label>
+                    Work Number:
+                  </label>
+                <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinWorkNumber} name="RubixUserNextOfKinWorkNumber" required=''
+                    value={this.state.myProfile.RubixUserNextOfKinWorkNumber}
+                    onChange={() => this.setState({ value: this.state.value })} />
+                    </div>
 
               </div>
               <div className="col-lg-6 col-md-12">
@@ -1329,11 +1733,6 @@ this.props.updateStudentName(
         </div>
       </div>
     </div>
-    <button className="btn btn-primary" type="button" onClick={(e) => this.updateNextOfKin(e)}>
-      Update
-    </button>{" "}
-    &nbsp;&nbsp;
-    <button className="btn btn-default">Cancel</button>
   </form>
 </div>
 
@@ -1397,7 +1796,7 @@ this.props.updateStudentName(
         </div>
       </div>
     </div>
-    <button className="btn btn-primary" type="button" onClick={(e) => this.updateNextOfKin(e)}>
+    <button className="btn btn-primary" type="button" onClick={(e) => this.SubmitRelatives(e)}>
       Update
     </button>{" "}
     &nbsp;&nbsp;

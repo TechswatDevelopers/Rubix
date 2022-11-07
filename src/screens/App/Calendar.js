@@ -78,8 +78,8 @@ class AppCalendar extends React.Component {
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/RubixResidenceEventsGetData', data, requestOptions)
       .then(response => {
-
-        if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
+console.log("Events :", response)
+        if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0 || response.data.PostRubixUserData == false){
 
         } else {
           //console.log("Res Events: ", response.data.PostRubixUserData)
@@ -220,7 +220,7 @@ class AppCalendar extends React.Component {
        if(data.post[i].FileType == "ResManager"){ 
         
         this.setState({
-          resManagerPic: 'https://rubiximages.cjstudents.co.za:449/' +  data.post[i].filename
+          resManagerPic: 'hhttp://129.232.144.154:449/' +  data.post[i].filename
         })
         }
       }

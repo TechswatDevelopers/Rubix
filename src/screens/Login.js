@@ -328,17 +328,17 @@ class Login extends React.Component {
           this.props.updateClientLogo("jjp-logo.png");
           this.props.updateClientName("Varsity Lodge");
           this.props.onPressThemeColor("blush");
-          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/8f8ea73b-809b-47d2-af1a-5be374fb153b.jpeg")
+          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/8f8ea73b-809b-47d2-af1a-5be374fb153b.jpeg",
+              "https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg",
             pageTitle: "Varsity Lodge",
           });
 
           localStorage.setItem("clientLogo", "jjp-logo.png");
           localStorage.setItem("clientName", "Varsity Lodge");
           localStorage.setItem("clientTheme", "blush");
-          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/8f8ea73b-809b-47d2-af1a-5be374fb153b.jpeg");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg");
     
         }
         break;

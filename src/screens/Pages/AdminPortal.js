@@ -625,7 +625,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
-          //console.log("DB response: ", response)
+          console.log("look at this DB response: ", response)
 
           if(response != null || response != undefined){
 
@@ -797,9 +797,7 @@ class AdminDashboard extends React.Component {
                 },
               },
             },
-           
           ]
-          
           this.state.studentDocSeriess.push(
             {
               type: "pie",
@@ -1071,14 +1069,12 @@ this.state.studentDocSeriess.push(
     },
   }
 )
-
 this.createSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrationsPerYear, this.state.studentDocSeriess, 'NewDocDonut', tempDocLegendList)
 
 //Res Information Chart
 let tempSeriesList = []
 let tempColorsList = []
 let tempLegendList = []
-
 
           //Total Student
           tempSeriesList.push(
@@ -1165,8 +1161,7 @@ let tempLegendList = []
 let tempProvince = response.data.PostRubixUserData.filter(doc => doc.RegisterUserProvince !== undefined)
 let tempProvinceChartData = []
 let tempProvinceLegendData = []
-const ProvincePallete = 
-["#66FFFF","#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
+const ProvincePallete = ["#66FFFF","#3399FF", "#66CCFF", "#33CCFF", "#00CCCC", "#3399CC", "#0033CC", "#0066CC", "#0033FF", "#3333CC"]
 
 tempProvince.forEach((province, index) =>{
   //Add to Legend

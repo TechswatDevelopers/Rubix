@@ -52,7 +52,7 @@ class VarsityDetails extends React.Component {
      this.props.updateLoadingController(true);
      this.props.updateLoadingMessage("Submitting Information...");
         const form = document.getElementById('uniDetails');
-        console.log('Uni ID: ', this.state.uni)
+        //console.log('Uni ID: ', this.state.uni)
         const data = {
             'RubixRegisterUserID': this.state.myUserID,
             //'ProvinceID': this.state.prov,
