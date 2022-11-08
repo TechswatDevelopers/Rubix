@@ -55,7 +55,7 @@ class AdminAmmendPage extends React.Component {
         };
         //console.log('Posted request data:', data)
         const postData = async () => {
-          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminGetLeaseRefferenceList', data, requestOptions)
+          await axios.post('http://129.232.144.154:88/api/RubixAdminGetLeaseRefferenceList', data, requestOptions)
             .then(response => {
               //Sort out the data
               //console.log('Response data:', response)
@@ -102,7 +102,7 @@ class AdminAmmendPage extends React.Component {
     //console.log('Posted student data:', data)
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAddLeaseRefferance', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminAddLeaseRefferance', data, requestOptions)
         .then(response => {
         })
     }
@@ -129,7 +129,7 @@ class AdminAmmendPage extends React.Component {
     };
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminRateUpdateData', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminRateUpdateData', data, requestOptions)
         .then(response => {
           this.setState({
             studentList: response.data.PostRubixUserData
@@ -169,7 +169,7 @@ class AdminAmmendPage extends React.Component {
     };
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAddLeaseBulkUpdate', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminAddLeaseBulkUpdate', data, requestOptions)
         .then(response => {
           //console.log("Response for Bulk Updates: ", response)
         })

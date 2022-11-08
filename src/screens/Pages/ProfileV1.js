@@ -1082,9 +1082,24 @@ mergePDFHandler()
               ? <>
               <p>Loading document...</p>
             </>
-            :<iframe src={'http://129.232.144.154:449/' + this.state.myLease} width="100%" height="500px">
-           </iframe>}
-            
+            :<><iframe src={'http://129.232.144.154:449/' + this.state.myLease} width="100%" height="500px">
+           </iframe>
+           <p>If you agree to the above document, please enter your signature:</p>
+                  <div className="border border-primary border-2 p-3" style={{
+                    width: '100%'
+                    }}>
+                    <SignatureCanvas className="border border-primary border-2" penColor='black'
+                    canvasProps={{  height: '100%', width: '400px', className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
+                    </div>
+                  <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
+                    Submit Signature
+                  </button>
+                  <button className="btn btn-default" onClick={this.clear}>
+                    Clear
+                  </button>
+            </>
+           
+           }
             {
               this.state.showPad
                 ? <>

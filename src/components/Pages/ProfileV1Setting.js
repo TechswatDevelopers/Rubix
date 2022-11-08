@@ -74,6 +74,9 @@ class ProfileV1Setting extends React.Component {
       year: 0,
       durations: [],
       duration: 0,
+      hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
+      hearAbout: '',
+      course: '',
     };
   }
   //Fetch Residences
@@ -141,7 +144,6 @@ class ProfileV1Setting extends React.Component {
     }
 
   }
-
 
   //Reset password
   updateAddressInformation(e) {
@@ -268,11 +270,19 @@ class ProfileV1Setting extends React.Component {
   //Update Varsity details
   updateVarsityDetails(e) {
     e.preventDefault();
+    console.log("I am def called", this.state.course)
     const form = document.getElementById('uniDetails');
 
     //Request Data
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
+      'UniversityID': this.state.uni,
+      //'CourseID': document.getElementById('CourseID').value,
+      'ResidenceID': this.state.res,
+      'StudentYearofStudyID': this.state.year,
+      'PaymentMethod': this.state.payment,
+      'Duration': this.state.duration,
+      'HearAbout': this.state.hearAbout
     }
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -280,11 +290,12 @@ class ProfileV1Setting extends React.Component {
     }
 
     const requestOptions = {
-      title: 'Next of Kin Form',
+      title: 'Varsity Update Form',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
+    console.log("Posted: ", data)
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
@@ -293,10 +304,11 @@ class ProfileV1Setting extends React.Component {
           } */
           //console.log("Update Varsity information Response: ", response)
           //alert("Information Updated")
-          window.location.reload()
+          //window.location.reload()
+          this.props.onPresPopConfirmInfo()
         })
     }
-    postData()
+    //postData()
   }
 
   //Validate ID
@@ -711,7 +723,7 @@ this.props.updateStudentName(
       await fetch('http://129.232.144.154:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("Profile data:", data)
+          console.log("Profile data:", data)
           const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
           //console.log("Profile Picture data:", profilePic)
           //If Profile Picture Exists...
@@ -783,9 +795,6 @@ this.props.updateStudentName(
       this.getStudentData(this.props.currentStudentiD)
       fetchDropDownData()
     } 
-  
-
-
   }
 
   fetchUserUniversityData = async () => {
@@ -954,9 +963,7 @@ this.props.updateStudentName(
      await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKin2s', data, requestOptions)
      .then(response => {
          //console.log(response)
-         setTimeout(() => {
-           this.postStatus()
-         }, 2000);
+         
          this.setState({
            isLoad: false
          })
@@ -964,7 +971,7 @@ this.props.updateStudentName(
    }
    postData().then(() => {
  
-     this.props.onPresPopUpEvent()
+    this.props.onPresPopConfirmInfo()
      //this.props.history.push("/login/" + localStorage.getItem('clientID'))
    })
  
@@ -1394,10 +1401,13 @@ this.props.updateStudentName(
                 </label>
                 <input
                   className="form-control"
+                  id="CourseID"
                   name="CourseID"
                   defaultValue={this.state.myProfile.RubixCourse}
                   placeholder="Field of Study"
                   type="text"
+                 // value={this.state.myProfile.RubixCourse}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -1519,7 +1529,20 @@ this.props.updateStudentName(
     </select> }
                       </div>
                      {body}
-
+                     <div className="form-group">
+                        <label>
+                        Where Hear About Us: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({hearAbout: e.target.value})} value={this.state.hearAbout}>
+        {
+            
+            this.state.hearAboutUs.map((options, index)=> (
+            <option key={index} name='HearAbout' value={options}>{options}</option>
+        ))   
+        }
+    </select> }
+                      </div>
              
               
             </div>
@@ -1527,9 +1550,10 @@ this.props.updateStudentName(
           {localStorage.getItem('role') == 'admin'
           ?<><button className="btn btn-primary" type="submit" onClick={(e) => 
           {
-            e.preventDefault()
+            this.updateVarsityDetails(e)
+            //e.preventDefault()
             //console.log("Clicked", this.props.isPopUpModal)
-            this.props.onUpdateVarsity()
+            //this.props.onUpdateVarsity()
             }}>
             Update
           </button>{" "}
@@ -1537,9 +1561,10 @@ this.props.updateStudentName(
           <button className="btn btn-default">Cancel</button></>
           : <><button className="btn btn-primary" type="submit" onClick={(e) => 
             {
-              e.preventDefault()
+              
+              //e.preventDefault()
               //console.log("Clicked", this.props.isPopUpModal)
-              this.props.onUpdateVarsity()
+              //this.props.onUpdateVarsity()
               }}>
               Update
             </button>{" "}

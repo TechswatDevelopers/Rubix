@@ -48,7 +48,7 @@ componentDidMount() {
 
    // console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
         console.log("DB response: ", response)
       })
@@ -82,7 +82,7 @@ componentDidMount() {
   
       console.log("Posted Vetting Data: ", data)
       const postData = async () => {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
+        await axios.post('http://129.232.144.154:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
           console.log("DB response: ", response)
         })
@@ -112,7 +112,7 @@ componentDidMount() {
       for (var pair of data.entries()) {
         console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+      await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {
           console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -172,7 +172,7 @@ componentDidMount() {
         body: data
       };
       console.log(" mY Posted Data:", data)
-      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFSignature', data, requestOptions)
+      await axios.post('http://129.232.144.154:94/PDFSignature', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })

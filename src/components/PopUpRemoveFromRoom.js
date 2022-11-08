@@ -33,7 +33,7 @@ constructor(props) {
 
    // console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
         console.log("DB response: ", response)
       })
@@ -59,7 +59,7 @@ constructor(props) {
     };
 
     const postData = async () => {
-      await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminRemoveRubixUserResidencesRoom', data, requestOptions)
+      await axios.post('http://129.232.144.154:88/api/RubixAdminRemoveRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
         console.log("DB response: ", response)
       })
@@ -93,7 +93,7 @@ constructor(props) {
     
         console.log("Posted Vetting Data: ", data)
         const postData = async () => {
-          await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminAudits', data, requestOptions)
+          await axios.post('http://129.232.144.154:88/api/RubixAdminAudits', data, requestOptions)
           .then(response=>{
             console.log("DB response: ", response)
           })

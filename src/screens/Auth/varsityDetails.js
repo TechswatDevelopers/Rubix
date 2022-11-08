@@ -68,14 +68,13 @@ class VarsityDetails extends React.Component {
             const elem = form.elements[i];
             data[elem.name] = elem.value
         }
-    
         const requestOptions = {
             title: 'Student University Deytails',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        //console.log(data)
+        console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
@@ -98,7 +97,7 @@ class VarsityDetails extends React.Component {
                 //console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
-        postData()
+        //postData()
     }
   
 

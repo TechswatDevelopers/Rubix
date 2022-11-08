@@ -79,6 +79,7 @@ class NavbarMenu extends React.Component {
     await fetch('http://129.232.144.154:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
+      //console.log("Check: ", data)
         this.setState({profile: data,
         userFullName: data.Name + " " + data.Surname
         })
