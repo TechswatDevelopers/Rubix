@@ -25,6 +25,9 @@ class RoomAllocation extends React.Component {
       roomNumberList: [],
       roomNumber: '',
 
+      genderRoomList: ['Female', 'Male'],
+      roomGender: '',
+
       
     roomedstudents: [],
 
@@ -74,7 +77,7 @@ class RoomAllocation extends React.Component {
       const postData = async () => {
         await axios.post('http://129.232.144.154:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms List:", response)
+          console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -239,7 +242,7 @@ class RoomAllocation extends React.Component {
       const postData = async () => {
         await axios.post('http://129.232.144.154:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms List:", response)
+          console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             inRoom =  true;
             this.state.roomedstudents.push(response.data.PostRubixUserData)
@@ -446,6 +449,20 @@ class RoomAllocation extends React.Component {
         ))   
         }
     </select> </>}
+
+    {   <> 
+              <label>Room Gender</label>
+        <select className="form-control" onChange={(e)=>{
+          this.getRoomsFilters('', '', e.target.value, this.props.currentStudentiD)
+          this.setState({roomNumber: e.target.value})}} value={this.state.roomNumberList}>
+        {
+            
+         this.state.genderRoomList.map((gender, index)=> (
+            <option key={index} name='RoomGender' value = {gender}>{gender}</option>
+        ))   
+        }
+    </select> </>}
+    
               <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '', this.props.currentStudentiD)}>Reset</button>
               </Row>
               </>}

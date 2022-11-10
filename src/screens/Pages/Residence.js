@@ -158,7 +158,6 @@ class Residence extends React.Component {
     }
   }
 
-  
   render() {
     return (
       <div

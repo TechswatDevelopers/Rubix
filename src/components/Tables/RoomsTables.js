@@ -34,7 +34,6 @@ class RoomsTable extends React.Component {
   }
    //Send Auditted status
    sendAuttingStatus(studentID){
-   
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': studentID,
@@ -225,6 +224,7 @@ class RoomsTable extends React.Component {
                   <th>Building Number</th>
                   <th>Floor Number</th>
                   <th>Room Number</th>
+                  <th>Bed Number</th>
                   <th>QUICK ACTIONS</th>
                 </tr>
               </thead>
@@ -245,6 +245,7 @@ class RoomsTable extends React.Component {
                   <td>{room.BuildingNumber}</td>
                   <td>{room.FloorNumber}</td>
                   <td>{room.RoomNumber}</td>
+                  <td>{room.BedNumber}</td>
                   <td>
                     <>
                   

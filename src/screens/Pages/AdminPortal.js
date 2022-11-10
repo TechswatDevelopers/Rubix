@@ -114,7 +114,7 @@ class AdminDashboard extends React.Component {
        IdDataSetsChartData = [],  leaseDataSetChartData = [],  nokDataSetChartData = [],  regDataSetChartData = [],  resDataSetChartData = []
 
        let seriesData = []
-        var base =  new Date(2021, 12, 1).getTime();
+        var base =  new Date(2022, 5, 1).getTime();
         var base2 =  new Date(2021, 12, 1);
         var oneDay = 24 * 3600 * 1000;
         var date = [];
