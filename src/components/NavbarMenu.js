@@ -571,39 +571,7 @@ class NavbarMenu extends React.Component {
                   Menu
                 </a>
               </li>
-              {/* <li className="nav-item">
-                <a
-                  className={sideMenuTab[1] ? "nav-link active" : "nav-link"}
-                  data-toggle="tab"
-                  onClick={() => {
-                    this.props.onPressSideMenuTab(1);
-                  }}
-                >
-                  <i className="icon-book-open"></i>
-                </a>
-              </li> */}
-             {/*  <li className="nav-item">
-                <a
-                  className={sideMenuTab[2] ? "nav-link active" : "nav-link"}
-                  data-toggle="tab"
-                  onClick={() => {
-                    this.props.onPressSideMenuTab(2);
-                  }}
-                >
-                  <i className="icon-settings"></i>
-                </a>
-              </li> */}
-             {/*  <li className="nav-item">
-                <a
-                  className={sideMenuTab[3] ? "nav-link active" : "nav-link"}
-                  data-toggle="tab"
-                  onClick={() => {
-                    this.props.onPressSideMenuTab(3);
-                  }}
-                >
-                  <i className="icon-question"></i>
-                </a>
-              </li> */}
+             
             </ul> 
 
 

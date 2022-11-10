@@ -12,6 +12,7 @@ import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { updateClientBackG,
   updateLoadingController,
   updateLoadingMessage,} from "../../actions";
+import { duration } from "moment/moment";
 
 class VarsityDetails extends React.Component {
     constructor(props) {
@@ -45,6 +46,18 @@ class VarsityDetails extends React.Component {
         };
       }
 
+      //Change Duration According to Payment Method
+      onChangeDurationViaPayment(e){
+        if(e.target.value == 'Self Funded'){
+          this.state.durations.push(1)
+          this.setState({
+            //duration: this.state.duration.push(1)
+          })
+        } else if(this.state.durations.length == 3){
+          this.state.durations.pop(1)
+        }
+      }
+
      //final submit check
      Submit(e){
         e.preventDefault();
@@ -74,7 +87,7 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        console.log(data)
+        //console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
@@ -97,7 +110,7 @@ class VarsityDetails extends React.Component {
                 //console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
-        //postData()
+        postData()
     }
   
 
@@ -187,7 +200,7 @@ async componentDidMount(){
     })
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
-        durations: [5,10,12]
+        durations: [5, 12]
       })
     } else {
       this.setState({
@@ -361,6 +374,23 @@ async componentDidMount(){
         }
     </select> }
                       </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Payment Method: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>{
+          this.onChangeDurationViaPayment(e)
+          this.setState({payment: e.target.value})}} value={this.state.payment}>
+        {
+            this.state.payMethods.map((payment, index)=> (
+            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+
                       <div className="form-group">
                         <label className="control-label sr-only" >
                         Duration: 
@@ -370,7 +400,7 @@ async componentDidMount(){
         {
             
             this.state.durations.map((duration, index)=> (
-            <option key={index} name='Duration' value={duration}>{duration} months</option>
+            <option key={index} name='Duration' value={duration}>{duration} {duration == 1 ? "Once off Payment": "months"}</option>
         ))   
         }
     </select> }
@@ -433,20 +463,7 @@ async componentDidMount(){
     </select> }
                       </div>
 
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Payment Method: 
-                            </label>
-                            {  
-        <select className="form-control" onChange={(e)=>this.setState({payment: e.target.value})} value={this.state.payment}>
-        {
-            
-            this.state.payMethods.map((payment, index)=> (
-            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
-        ))   
-        }
-    </select> }
-                      </div>
+                      
                      {body}
 
                       <div className="form-group">

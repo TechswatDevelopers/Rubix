@@ -90,7 +90,6 @@ class AdminDashboard extends React.Component {
     }
     //console.log("Posted Data: ", data)
 
-    
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
@@ -104,6 +103,7 @@ class AdminDashboard extends React.Component {
         let registrationLegend = [], regMonth = [], registrationChartData = [], dataset = []
 
         let statsID = response.data.PostRubixUserData.filter(doc => doc.FileType === "id-document")
+        //console.log("Id stats", statsID)
         let statsLease = response.data.PostRubixUserData.filter(doc => doc.FileType === "lease-agreement")
         let statsNOK = response.data.PostRubixUserData.filter(doc => doc.FileType === "next-of-kin")
         let statsREG = response.data.PostRubixUserData.filter(doc => doc.FileType === "proof-of-reg")
@@ -246,7 +246,6 @@ class AdminDashboard extends React.Component {
         seriesData.push(leaseDataSetChartData)
         documentsLegend.push('Lease Documents')
 
-        
         nokDataSetChartData = {
           name: "Next of Kin ID",
           type: "line",

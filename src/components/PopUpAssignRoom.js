@@ -46,7 +46,7 @@ componentDidMount() {
       body: data
     };
 
-   // console.log("Posted Vetting Data: ", data)
+   console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('http://129.232.144.154:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{

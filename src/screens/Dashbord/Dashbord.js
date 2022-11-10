@@ -116,7 +116,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
   console.log('Posted data: ', data)
     const getData = async () => {
       const res = await axios.post('http://129.232.144.154:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
-      console.log("Messages data", res.data.PostRubixUserData);
+      //console.log("Messages data", res.data.PostRubixUserData);
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
     }

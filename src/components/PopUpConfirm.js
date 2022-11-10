@@ -115,6 +115,7 @@ componentDidMount() {
     }
     postDocument()
   }
+  
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
@@ -125,6 +126,7 @@ getUserWitnessData() {
   }
   getData()
 }
+
   //Send Lease for Signing
   sendFinalLease(filename){
     //Set Loading Screen ON
@@ -240,7 +242,8 @@ getUserWitnessData() {
       })
     }
     postData().then(()=>{
-      //window.location.reload()
+      this.props.updateLoadingController(false);
+      window.location.reload()
     })
   }
 

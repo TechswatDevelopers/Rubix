@@ -366,7 +366,7 @@ mergePDFHandler()
 
 
   //Switch to different Document type
-  changeDocument = (file) => {''
+  changeDocument = (file) => {
     this.setLoadingDocumentPage()
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
@@ -559,7 +559,7 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
         .then(response => {

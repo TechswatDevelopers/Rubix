@@ -45,6 +45,7 @@ import blankpage from "./screens/Pages/BlankPage";
 import Test from "./screens/Pages/test";
 import Communication from "./screens/Pages/Communication";
 import verifyemail from "./screens/Pages/VerifyEmail";
+import ParentSignature from "./screens/Pages/Parent Signature";
 import residence from "./screens/Pages/Residence";
 import profilev1page from "./screens/Pages/ProfileV1";
 import profilev2page from "./screens/Pages/ProfileV2";
@@ -157,6 +158,7 @@ class App extends React.Component {
         activeKey1 === "relatives" ||
         activeKey1 === "addresses" ||
         activeKey1 === "verifyemail" ||
+        activeKey1 === "ParentSignature" ||
         activeKey1 === "page404" ||
         activeKey1 === "page403" ||
         activeKey1 === "page500" ||
@@ -178,6 +180,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/verifyemail/:activeCode&:clientID`}
                 component={verifyemail}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/ParentSignature`}
+                component={ParentSignature}
               />
               <Route
                 exact

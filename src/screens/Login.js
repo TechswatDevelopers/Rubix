@@ -188,7 +188,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            console.log('My login respond: ', response)
+            //console.log('My login respond: ', response)
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -328,17 +328,17 @@ class Login extends React.Component {
           this.props.updateClientLogo("jjp-logo.png");
           this.props.updateClientName("Varsity Lodge");
           this.props.onPressThemeColor("blush");
-          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg")
+          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg",
+              "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg",
             pageTitle: "Varsity Lodge",
           });
 
           localStorage.setItem("clientLogo", "jjp-logo.png");
           localStorage.setItem("clientName", "Varsity Lodge");
           localStorage.setItem("clientTheme", "blush");
-          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg");
     
         }
         break;
