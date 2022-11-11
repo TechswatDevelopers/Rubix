@@ -31,7 +31,7 @@ constructor(props) {
 
     const fetchDocs = async()=> {
       //Get documents from DB
-      await fetch('http://129.232.144.154:86/feed/post/103' /* + userID */)
+      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/103' /* + userID */)
       .then(response => response.json())
       .then(data => {
         console.log("check: ", data)
@@ -58,7 +58,7 @@ constructor(props) {
   //console.log("client ID:", localStorage.getItem('clientID'))
   //Send verification
   const verify = async() => {
-    await fetch('http://129.232.144.154:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
+    await fetch('https://jjprest.rubix.mobi:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
       .then(response => response.json())
       .then(data => {
         console.log("response data:", data)

@@ -33,7 +33,7 @@ class LeaseInformation extends React.Component {
           //console.log("I am called")
           e.preventDefault()
         const data = {
-          "PDFDocumentUrl" : "https://rubiximages.cjstudents.co.za:449/37a1fcad-a06d-4dfb-9632-3348dbaf0f19.pdf",
+          "PDFDocumentUrl" : "https://jjpimages.rubix.mobi:449/37a1fcad-a06d-4dfb-9632-3348dbaf0f19.pdf",
           "LeaseStartDate" : this.state.leaseStart,
           "LeaseEndDate" : this.state.leaseEnd,
           "LeaseAmount" : document.getElementById('amount').value,
@@ -47,7 +47,7 @@ class LeaseInformation extends React.Component {
     
         //Http Post Request
         const postData = async () => {
-          await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
+          await axios.post('https://jjppdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
           .then(response => {
             //console.log("Post Response: ", response)
             if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
@@ -112,7 +112,7 @@ class LeaseInformation extends React.Component {
       };
       //console.log('Posted data: ', pingData)
       const postData = async () => {
-        await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixAdminStudentList', pingData, requestOptions)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
           //console.log("Students Data List:", response)
           if(!response.data.PostRubixUserData){
@@ -148,7 +148,7 @@ class LeaseInformation extends React.Component {
     var tempList
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://rubixdocuments.cjstudents.co.za:86/feed/post/' + userID)
+      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           //console.log("documents data:", data)
@@ -156,7 +156,7 @@ class LeaseInformation extends React.Component {
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 
            if(tempList.length != 0){
-             this.postLeaseData1("https://rubiximages.cjstudents.co.za:449/" + tempList[0].filename, userID)
+             this.postLeaseData1("https://jjpimages.rubix.mobi:449/" + tempList[0].filename, userID)
            } else {
              this.setState({
                index: this.state.index + 1
@@ -191,7 +191,7 @@ class LeaseInformation extends React.Component {
 
     //Http Post Request
     const postData = async () => {
-      await axios.post('https://rubixpdf.cjstudents.co.za:94/PDFLeaseAdd', data, requestOptions)
+      await axios.post('https://jjppdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
       .then(response => {
         //console.log("Post Response: ", response)
         if(response.data == null || response.data == undefined){
@@ -225,7 +225,7 @@ class LeaseInformation extends React.Component {
         for (var pair of data.entries()) {
           //console.log(pair[0], ', ', pair[1]);
         }
-        await axios.post('https://rubixdocuments.cjstudents.co.za:86/feed/post?image', data, requestOptions)
+        await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
             //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })

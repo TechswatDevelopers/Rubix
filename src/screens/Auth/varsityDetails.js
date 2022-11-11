@@ -37,7 +37,7 @@ class VarsityDetails extends React.Component {
             carRegistration: '',
             duration: 0,
             hasCar: false,
-            payMethods: ['Please Select your Payment Method', 'NSFAS TUT', 'NSFAS UP ', 'Bursary', 'Agreement with University ', 'Self Funded'],
+            payMethods: [],
             hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             durations: [],
@@ -90,7 +90,7 @@ class VarsityDetails extends React.Component {
         //console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('http://129.232.144.154:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+                await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     //console.log("The Response: ",response)
                     //Set timer for loading screen
@@ -129,7 +129,7 @@ async componentDidMount(){
 
     const fetchData = async() =>{
         //Populate university list
-        await fetch('http://129.232.144.154:88/api/RubixUniversities/')
+        await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
             console.log("data is ", data.data)
@@ -141,7 +141,7 @@ async componentDidMount(){
 
 
             //Populate Provinces list
-        await fetch('http://129.232.144.154:88/api/RubixProvinces')
+        await fetch('https://jjprest.rubix.mobi:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -152,7 +152,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('http://129.232.144.154:88/api/RubixStudentYearofStudies')
+            await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -169,7 +169,7 @@ async componentDidMount(){
   }
   changeHandler = (event) => {
     this.setState({selectedFile: event.target.files[0]})
-    console.log("selcted file", event.target.files[0])
+    //console.log("selcted file", event.target.files[0])
     this.setState({isSelected: true})
     this.getBase64(event)
   }
@@ -180,10 +180,10 @@ async componentDidMount(){
 
   //Fetch Residences
   getRes(uniID){
-    console.log("Uni ID: ", uniID)
+    //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
-      await fetch('http://129.232.144.154:88/api/RubixResidences/' + uniID)
+      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)
@@ -191,6 +191,35 @@ async componentDidMount(){
           });
     }
     fetchResses()
+  }
+
+  getResAndPayment(resID){
+    this.setState({
+      isLoad: true
+    })
+    const data = {
+      'RubixUniversityID': this.state.uni,
+      'RubixResidenceID': resID
+    };
+    const requestOptions = {
+      title: 'Get Payment Details Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+  };
+  console.log("My Data: ", data)
+    const getData = async() => {
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
+      .then(response => {
+        console.log("My response: ", response.data.PostRubixUserData)
+        
+        this.setState({
+          isLoad: false,
+          payMethods: response.data.PostRubixUserData
+        })
+    })
+    }
+    getData()
   }
 
   onVarsitySelect(e){
@@ -365,7 +394,9 @@ async componentDidMount(){
                         Residence:
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>this.setState({res: e.target.value})} value={this.state.res}>
+        <select className="form-control" onChange={(e)=>{
+          this.getResAndPayment(e.target.value)
+          this.setState({res: e.target.value})}} value={this.state.res}>
         {
             
             this.state.resList.map((res, index)=> (
@@ -385,7 +416,7 @@ async componentDidMount(){
           this.setState({payment: e.target.value})}} value={this.state.payment}>
         {
             this.state.payMethods.map((payment, index)=> (
-            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+            <option key={index} name='PaymentMethod' value={payment.PaymentMethod}>{payment.PaymentMethod}</option>
         ))   
         }
     </select> }

@@ -76,7 +76,7 @@ class AppCalendar extends React.Component {
 
     //Http Post Request
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixResidenceEventsGetData', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixResidenceEventsGetData', data, requestOptions)
       .then(response => {
 console.log("Events :", response)
         if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0 || response.data.PostRubixUserData == false){
@@ -121,7 +121,7 @@ console.log("Events :", response)
 
     //Http Post Request
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixStudentEventsGetData', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentEventsGetData', data, requestOptions)
       .then(response => {
 
         if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0){
@@ -161,7 +161,7 @@ console.log("Events :", response)
       body: pingData
     };
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixStudentResDetails', pingData, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentResDetails', pingData, requestOptions)
       .then(response => {
         console.log("Res Data:", response.data.PostRubixUserData[0])
         this.setState({
@@ -193,7 +193,7 @@ console.log("Events :", response)
     };
     console.log('Posted Data: ', pingData)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminResDetails', pingData, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminResDetails', pingData, requestOptions)
       .then(response => {
         console.log("Res Admin Data:", response)
         this.setState({
@@ -211,7 +211,7 @@ console.log("Events :", response)
   //Fetch Res Gallery Images
   fetchImages(resID) {
     const fetchData = async () => {
-    await fetch('http://129.232.144.154:86/feed/post/' + resID)
+    await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + resID)
     .then(response => response.json())
     .then(data => {
       console.log("Images:", data.post)

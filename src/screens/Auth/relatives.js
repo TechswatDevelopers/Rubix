@@ -54,7 +54,7 @@ class Relatives extends React.Component {
   };
   //console.log(data)
   const postData = async() => {
-    await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKin2s', data, requestOptions)
+    await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
     .then(response => {
         //console.log(response)
         setTimeout(() => {
@@ -93,7 +93,7 @@ class Relatives extends React.Component {
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixUpdateStatus', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           if(response != null || response != undefined){
       //Set timer for loading screen

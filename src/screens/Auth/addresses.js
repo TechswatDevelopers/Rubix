@@ -56,7 +56,7 @@ class Addresses extends React.Component {
       const postData = async () => {
 
         if (this.state.location != null && this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
-          await axios.post('http://129.232.144.154:88/api/RubixRegisterUserAddesss', data, requestOptions)
+          await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
               //console.log(response)
               //Set timer for loading screen
@@ -99,7 +99,7 @@ class Addresses extends React.Component {
       const postData = async () => {
 
         if ( this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
-          await axios.post('http://129.232.144.154:88/api/RubixRegisterUserAddesss', data, requestOptions)
+          await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
               //console.log("The response: ",response)
               //Set timer for loading screen
@@ -147,7 +147,7 @@ class Addresses extends React.Component {
     //console.log("This is the ID: ", localStorage.getItem('userID'))
 
     const fetchData = async () => {
-      await fetch('http://129.232.144.154:88/api/RubixProvinces')
+      await fetch('https://jjprest.rubix.mobi:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
           this.setState({ provList: data.data })
@@ -156,7 +156,7 @@ class Addresses extends React.Component {
         });
 
       //Fetch Countries List
-      await fetch('http://129.232.144.154:88/api/RubixCountries')
+      await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
         .then(response => response.json())
         .then(data => {
           //console.log("data is ", data.data)

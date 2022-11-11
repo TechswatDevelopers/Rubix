@@ -34,7 +34,7 @@ constructor(props) {
       body: data
   };
     const getData = async () => {
-      const res = await axios.post('http://129.232.144.154:88/api/RubixRegisterUserMessages', data, requestOptions)
+      const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserMessages', data, requestOptions)
       //console.log("Add notice response data", res.data.PostRubixUserData);
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)

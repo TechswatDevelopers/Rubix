@@ -140,7 +140,7 @@ class NextOfKin extends React.Component {
   //console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKins', data, requestOptions)
+          await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
@@ -186,7 +186,7 @@ const requestOptions = {
 
 const postData = async() => {
   if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-      await axios.post('http://129.232.144.154:88/api/RubixUserNextOfKins', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
           //console.log()
             setTimeout(() => {
@@ -241,7 +241,7 @@ else{
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/RubixUpdateStatus', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           if(response != null || response != undefined){
       //Set timer for loading screen

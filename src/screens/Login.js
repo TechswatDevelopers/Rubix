@@ -101,7 +101,7 @@ class Login extends React.Component {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
           .post(
-            "http://129.232.144.154:88/api/RubixLogin",
+            "https://jjprest.rubix.mobi:88/api/RubixLogin",
             data,
             requestOptions
           )
@@ -183,7 +183,7 @@ class Login extends React.Component {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
           .post(
-            "http://129.232.144.154:88/api/RubixAdminUserLogin",
+            "https://jjprest.rubix.mobi:88/api/RubixAdminUserLogin",
             data,
             requestOptions
           )
@@ -258,7 +258,7 @@ class Login extends React.Component {
     const postData = async () => {
       await axios
         .post(
-          "http://129.232.144.154:88/api/RubixLogin",
+          "https://jjprest.rubix.mobi:88/api/RubixLogin",
           data,
           requestOptions
         )

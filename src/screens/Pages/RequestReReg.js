@@ -20,7 +20,7 @@ class RequestReReg extends React.Component {
     const fetchData = async() =>{
       
             //Populate Residence list
-            await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+            await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + localStorage.getItem('clientID'))
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data)
@@ -48,7 +48,7 @@ class RequestReReg extends React.Component {
     }
 
     const postData = async () => {
-      await axios.post("https://rubixapi.cjstudents.co.za:88/api/RubixUpdateRubixResidence", data, requestOptions)
+      await axios.post("https://jjprest.rubix.mobi:88/api/RubixUpdateRubixResidence", data, requestOptions)
       .then((response) => {
         console.log("This is the response: ", response)
         if(response.data.PostRubixUserData["0"]["Responce"] == 1){

@@ -40,7 +40,7 @@ class AdminDashboard extends React.Component {
 
     const fetchData = async() =>{
       //Populate Residence list
-      await fetch('http://129.232.144.154:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + localStorage.getItem('clientID'))
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)
@@ -91,7 +91,7 @@ class AdminDashboard extends React.Component {
     //console.log("Posted Data: ", data)
 
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminReport', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
         console.log("Response: ", response)
 
@@ -528,7 +528,7 @@ class AdminDashboard extends React.Component {
     //Post Data
     
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminReportAll', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminReportAll', data, requestOptions)
       .then( response =>{
         //console.log('Stats Data: ', response.data.PostRubixUserData)
         var list = response.data.PostRubixUserData
@@ -571,7 +571,7 @@ class AdminDashboard extends React.Component {
     };
 //console.log('Posted Data: ', data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminResidneceReports', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminResidneceReports', data, requestOptions)
       .then(response => {
         //console.log('current response: ', response)
         if(response != null && response != undefined){
@@ -622,7 +622,7 @@ class AdminDashboard extends React.Component {
 
     //console.log("Posted:", data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminResidneceReports', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
           console.log("look at this DB response: ", response)
 

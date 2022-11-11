@@ -49,7 +49,7 @@ componentDidMount() {
     /*   for (var pair of data.entries()) {
         console.log(pair[0], ', ', pair[1]);
       } */
-      await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
+      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -96,7 +96,7 @@ componentDidMount() {
         body: data
       };
       //console.log("Posted Data:", data)
-      await axios.post('http://129.232.144.154:94/PDFSignature', data, requestOptions)
+      await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
         .then(response => {
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
@@ -115,7 +115,7 @@ componentDidMount() {
     }
     postDocument()
   }
-  
+
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
@@ -150,7 +150,7 @@ getUserWitnessData() {
     };
     //console.log('My data: ', data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:94/PDFFinalSignature', data, requestOptions)
+      await axios.post('https://jjppdf.rubix.mobi:94/PDFFinalSignature', data, requestOptions)
       .then(response=>{
         //console.log("Final Lease Response: ", response)
         
@@ -194,7 +194,7 @@ getUserWitnessData() {
 
     //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminVettings', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminVettings', data, requestOptions)
       .then(response=>{
         //console.log("DB response: ", response)
         setTimeout(() => {
@@ -236,7 +236,7 @@ getUserWitnessData() {
 
     //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminAudits', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
         //console.log("DB response: ", response)
       })

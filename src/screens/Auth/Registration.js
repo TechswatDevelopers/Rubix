@@ -163,7 +163,7 @@ class Registration extends React.Component {
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
-        await axios.post('http://129.232.144.154:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
                 //console.log("The response: ",response.data)
                 /*If User exists on DB:
@@ -197,7 +197,7 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post('http://129.232.144.154:94/validEmailCheck', pingData, requestOptions)
+        await axios.post('https://jjppdf.rubix.mobi:94/validEmailCheck', pingData, requestOptions)
             .then(response => {
                 //console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
@@ -318,39 +318,7 @@ class Registration extends React.Component {
                         </span>
                       </div>
                     </form>
-                    {/* 
-                    <div className="separator-linethrough">
-                      <span>OR</span>
-                    </div>
-                    <GoogleLogin as={Col}
-                        render={renderProps => (
-                          <button className="btn btn-signin-social" onClick={renderProps.onClick} disabled={renderProps.disabled}><FaGoogle style = {{ color: "#EA4335 ", fontSize: "1.5em", paddingRight: "4px"}}/>Google</button>
-                        )}
-                          clientId="256115085565-b3k2c8gsuqc40vstp06r4cu0sb7kc5qs.apps.googleusercontent.com"
-                          buttonText="Google"
-                          onSuccess={this.responseGoogle}
-                          cookiePolicy={'single_host_origin'}/>
-                          
-                    <FacebookLogin
-                        appId="552332679301004"
-                        fields="name,email,picture, first_name, about"
-                        height='10'
-                        textButton='Facebook'
-                        size= 'medium'
-                        icon = {<FaFacebook style = {{ color: "#1877f2 ", fontSize: "1.5em", paddingRight: "4px"}}/>}
-                        callback={this.responseFacebook}
-                        cssClass = "btn btn-signin-social" />
-
-                        <InstagramLogin
-                        clientId="552332679301004"
-                        buttonText="Instagram"
-                        width = '10px'
-                        onSuccess={this.responseInstagram}
-                        cssClass= "btn btn-signin-social"
-                        >
-                          <FaInstagram style = {{ color: "#cd486b", fontSize: "1.5em", paddingRight: "4px"}}/> Instagram
-                          </InstagramLogin>
-                     */}
+                 
                   </div>
                 </div>
 
