@@ -203,8 +203,8 @@ class Registration extends React.Component {
                 //console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
-                  //this.props.updatePlatformID("1");
-                  //localStorage.setItem('platformID', "1")
+                  this.props.updatePlatformID("1");
+                  localStorage.setItem('platformID', "1")
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);

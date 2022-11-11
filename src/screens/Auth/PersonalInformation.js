@@ -123,7 +123,7 @@ class PersonalInformation extends React.Component {
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
         'Nationality': this.state.country,
-        'RegistrationYear': this.state.yearOfRes
+        'RegistrationYear': "2023"
     };
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -252,7 +252,7 @@ class PersonalInformation extends React.Component {
                   
                   <div className="body">
                     <label>Which year are you applying for?</label>
-                    <Row>
+                    {/* <Row>
                     <Col >
                         <input 
                         onChange={(e) => {this.onValueChange(e)}}
@@ -267,7 +267,7 @@ class PersonalInformation extends React.Component {
                       type="radio" name="regyear" value='2023'/>
                          2023
                       </Col>
-                    </Row>
+                    </Row> */}
                     <form id='register' onSubmit={(e) => this.Submit(e)}>
                       
                       
