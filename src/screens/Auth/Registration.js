@@ -133,6 +133,7 @@ class Registration extends React.Component {
         e.preventDefault();
         //Set Loading Screen ON
      this.props.updateLoadingController(true);
+     localStorage.setItem('userplatformID', ' ')
      this.props.updateLoadingMessage("Submitting Information...");
         const email = document.getElementById('email').value;
         const idNumber = document.getElementById('idNumber').value;

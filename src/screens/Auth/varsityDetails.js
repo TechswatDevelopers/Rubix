@@ -48,7 +48,7 @@ class VarsityDetails extends React.Component {
 
       //Change Duration According to Payment Method
       onChangeDurationViaPayment(e){
-        if(e.target.value == 'Self Funded'){
+        if(e.target.value == "Private student"){
           this.state.durations.push(1)
           this.setState({
             //duration: this.state.duration.push(1)
@@ -406,7 +406,11 @@ async componentDidMount(){
     </select> }
                       </div>
 
-                      <div className="form-group">
+                      { this.state.payMethods.length == 0
+                      ?<></>
+                      :
+                        
+                        <div className="form-group">
                         <label className="control-label sr-only" >
                         Payment Method: 
                             </label>
@@ -420,7 +424,7 @@ async componentDidMount(){
         ))   
         }
     </select> }
-                      </div>
+                      </div>}
 
                       <div className="form-group">
                         <label className="control-label sr-only" >
