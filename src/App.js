@@ -183,7 +183,7 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path={`${process.env.PUBLIC_URL}/ParentSignature`}
+                path={`${process.env.PUBLIC_URL}/ParentSignature/:userID`}
                 component={ParentSignature}
               />
               <Route

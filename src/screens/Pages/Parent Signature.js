@@ -17,7 +17,7 @@ constructor(props) {
     activationCode: null,
     errorMessage: '',
     errorMessage: '',
-    rubixClientLogo: this.props.match.params.clientID,
+    //rubixClientLogo: this.props.match.params.clientID,
     bookingDoc: null,
     leasDoc: null,
     userData: {},
@@ -26,12 +26,13 @@ constructor(props) {
     fullName: '',
     trimmedDataURL: '',
     dateAndTime: '',
+    userID: this.props.match.params.userID,
   }
 }
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.setThemeColor(this.props.match.params.clientID )
-    localStorage.setItem('clientID', this.props.match.params.clientID)
+    this.setThemeColor('1')
+    //localStorage.setItem('clientID', this.props.match.params.clientID)
     const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
@@ -83,16 +84,16 @@ constructor(props) {
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
-      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 1)
     } else {
       alert("Please provide a signature")
     } 
   }
     //Function to post signature to API
-    postSignature(signature, userid, tryval) {
+    postSignature(signature, tryval) {
       const data = {
         'NameSurname': document.getElementById('NameSurname').value,
-        'ClientId': localStorage.getItem('clientID'),
+        'ClientId': this.state.userID,
         'RubixPlace': document.getElementById('RubixPlace').value,
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,
@@ -104,7 +105,7 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      //console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://jjppdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
@@ -127,7 +128,7 @@ constructor(props) {
       if( document.getElementById('RubixPlace').value =='' ||  document.getElementById('NameSurname').value == ''){
 
       } else {
-        //postDocument()
+        postDocument()
       }
     }
     
