@@ -48,7 +48,7 @@ componentDidMount() {
 
    console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
         console.log("DB response: ", response)
       })
@@ -82,18 +82,17 @@ componentDidMount() {
   
       console.log("Posted Vetting Data: ", data)
       const postData = async () => {
-        await axios.post('http://129.232.144.154:88/api/RubixAdminAudits', data, requestOptions)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
           console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
-        this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
+        this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', this.props.currentStudentiD, 0)
         //window.location.reload()
       })
     }
 
-    
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
     this.props.updateLoadingMessage("Uploading Lease Document...");

@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
-import {updateStudentID,
+import {
+  updateStudentID,
   onUpdateStudentRubixID,
   onPresShowProfile,
   onPresRooms,
@@ -54,7 +55,7 @@ class RoomsTable extends React.Component {
 
     console.log("Posted Vetting Data: ", data)
     const postData = async () => {
-      await axios.post('http://129.232.144.154:88/api/RubixAdminAudits', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
         //console.log("DB response: ", response)
       })
@@ -83,7 +84,7 @@ class RoomsTable extends React.Component {
         for (var pair of data.entries()) {
           //console.log(pair[0], ', ', pair[1]);
         }
-        await axios.post('http://129.232.144.154:86/feed/post?image', data, requestOptions)
+        await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
             //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
@@ -129,7 +130,7 @@ class RoomsTable extends React.Component {
           body: data
         };
         //console.log("Posted Data:", data)
-        await axios.post('http://129.232.144.154:94/PDFSignature', data, requestOptions)
+        await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
           .then(response => {
             //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
@@ -175,7 +176,7 @@ class RoomsTable extends React.Component {
 
       const postDocument = async () => {
 
-      await axios.post('http://129.232.144.154:94/PDFRoomAmend', data, requestOptions)
+      await axios.post('https://jjppdf.rubix.mobi:94/PDFRoomAmend', data, requestOptions)
       .then(response => {
         console.log('Response: ', response)
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -269,7 +270,7 @@ class RoomsTable extends React.Component {
                     onClick={(e)=>{
                       e.preventDefault()
                       //this.props.onPresRooms(e)
-                      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', Student, 0)
+                      this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', Student, 0)
                       
                       }}>
                       <span>

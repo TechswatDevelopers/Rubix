@@ -1,6 +1,7 @@
 import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { connect } from "react-redux";
+import axios from "axios";
 import PageHeader from "../../components/PageHeader";
 import SignatureCanvas from 'react-signature-canvas';
 import FileStorageStatusCard from "../../components/FileManager/FileStorageStatusCard"
@@ -21,13 +22,20 @@ constructor(props) {
     leasDoc: null,
     userData: {},
     currentDoc: '',
+    placeOfSign: '',
+    fullName: '',
+    trimmedDataURL: '',
+    dateAndTime: '',
   }
 }
-
   componentDidMount() {
     window.scrollTo(0, 0);
     this.setThemeColor(this.props.match.params.clientID )
     localStorage.setItem('clientID', this.props.match.params.clientID)
+    const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+    const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
+    const myTime = new Date().toLocaleTimeString('en-ZA')
+    this.setState({ dateAndTime: myDate + myTime })
 
     const fetchDocs = async()=> {
       //Get documents from DB
@@ -46,7 +54,6 @@ constructor(props) {
     }
     fetchDocs()
 
-    
      //Set timer for loading screen
   setTimeout(() => {
     this.setState({
@@ -54,20 +61,75 @@ constructor(props) {
       activationCode: this.props.match.params.activeCode
     })
   }, 2000);
+  }
 
-  //console.log("client ID:", localStorage.getItem('clientID'))
-  //Send verification
-  const verify = async() => {
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
-      .then(response => response.json())
-      .then(data => {
-        console.log("response data:", data)
-        this.setState({userData: data.PostEmailVerification})
-          //alert("Account verified successfully!")
-          });
+  //Function to clear signature and input data
+  clear = () => {
+    //Clear Inputs
+    document.getElementById('RubixPlace').value = ''
+    document.getElementById('NameSurname').value = ''
+    //Clear SIgnature
+    this.sigPad.clear()
   }
-  //verify()
+
+  //Function for triming Signature Pad array and save as one png file
+  trim = () => {
+    //var myBlob = this.sigPad.getTrimmedCanvas().toBlob
+    //var myFile = new File([myBlob], 'mySignature', { type: "image/png", })
+   // var my2ndFile = this.dataURLtoFile(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'Parent signature')
+    //console.log('The file: ', my2ndFile)
+   // this.onPressSignatureUpload(my2ndFile)
+    //this.setLoadingPage(3000)
+     if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
+      this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
+      //console.log("IP Address:", this.state.userIPAddress)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
+    } else {
+      alert("Please provide a signature")
+    } 
   }
+    //Function to post signature to API
+    postSignature(signature, userid, tryval) {
+      const data = {
+        'NameSurname': document.getElementById('NameSurname').value,
+        'ClientId': localStorage.getItem('clientID'),
+        'RubixPlace': document.getElementById('RubixPlace').value,
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature,
+        'PDFDocumentUrl': this.state.leaseDoc
+      }
+      const requestOptions = {
+        title: 'Parent Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      console.log("Posted Data:", data)
+      const postDocument = async () => {
+        
+        await axios.post('https://jjppdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
+          .then(response => {
+            //console.log("Signature upload details:", response)
+            this.setState({ docUrl: response.data.Base })
+            if (tryval === 1) {
+              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
+              //console.log("temp file:", temp)
+              this.onPressUpload(temp, 'lease-agreement', 'signing')
+            } else if (tryval === 0) {
+              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
+              //console.log("temp file:", temp)
+              this.onPressUpload(temp, 'unsigned-agreement', 'signing')
+            }
+          })
+      }
+      if( document.getElementById('RubixPlace').value =='' ||  document.getElementById('NameSurname').value == ''){
+
+      } else {
+        //postDocument()
+      }
+    }
     
   //Set Theme Color
   setThemeColor(client){
@@ -147,11 +209,11 @@ constructor(props) {
       },
     ]
     return (
-      <div className={localStorage.getItem('clientTheme')}
+      <div className={"theme-grey"/* localStorage.getItem('clientTheme') */}
       >
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="10%" height="10%" alt="" /></div>
             <p>Please wait...</p>
           </div>
         </div>
@@ -197,17 +259,33 @@ constructor(props) {
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
                                     <iframe src={'http://129.232.144.154:449/' + this.state.currentDoc} width="100%" height="500px">
            </iframe>
-           <p>If you agree to the above document, please enter your signature:</p>
+           <p>I:</p>
+           <input
+                            className="form-control"
+                            id="NameSurname"
+                            placeholder="Full Name"
+                            type="text"
+                            name= "NameSurname"
+                          />
+                          <p>Confirm that I have read, understood and agree the above agreement.</p>
                   <div className="border border-primary border-2 p-3" style={{
                     width: '100%'
                     }}>
                     <SignatureCanvas className="border border-primary border-2" penColor='black'
                     canvasProps={{  height: '100%', width: '400px', className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
                     </div>
-                  <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
+                    <p>Signed at:</p>
+           <input
+                            className="form-control"
+                            id="RubixPlace"
+                            placeholder="Location"
+                            type="text"
+                            name= "RubixPlace"
+                          />
+                  <button className="btn btn-primary rounded-0 mt-2" onClick={() => this.trim()}>
                     Submit Signature
                   </button>
-                  <button className="btn btn-default" onClick={this.clear}>
+                  <button className="btn btn-default mt-2 ml-1" onClick={this.clear}>
                     Clear
                   </button>
                                   </div>

@@ -73,7 +73,7 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      //console.log('Posted:', pingData)
+      console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {

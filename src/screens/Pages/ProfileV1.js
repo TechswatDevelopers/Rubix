@@ -563,7 +563,7 @@ mergePDFHandler()
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("The reponse: ", response)
+          //console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
           //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
@@ -720,7 +720,6 @@ mergePDFHandler()
               this.props.onUpdateStudentCard(temp[i].Percentage)
               this.props.onUpdateStudenCMessage(this.setMessage(temp[i].Percentage))
             }
-              
             }
           }
         })
@@ -1084,7 +1083,7 @@ mergePDFHandler()
             </>
             :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="500px">
            </iframe>
-           <p>If you agree to the above document, please enter your signature:</p>
+           {/* <p>If you agree to the above document, please enter your signature:</p>
                   <div className="border border-primary border-2 p-3" style={{
                     width: '100%'
                     }}>
@@ -1096,7 +1095,7 @@ mergePDFHandler()
                   </button>
                   <button className="btn btn-default" onClick={this.clear}>
                     Clear
-                  </button>
+                  </button> */}
             </>
            
            }
@@ -1146,8 +1145,8 @@ mergePDFHandler()
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt="Rubix System"
               />
             </div>
@@ -1176,7 +1175,7 @@ mergePDFHandler()
         />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt=" " /></div>
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="10%" height="10%" alt=" " /></div>
             <p>Uploading document...</p>
           </div>
         </div>

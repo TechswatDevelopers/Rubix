@@ -313,8 +313,8 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt=" "
               />
             </div>

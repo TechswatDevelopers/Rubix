@@ -108,10 +108,12 @@ console.log("Events :", response)
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Events...");
+    
     //Post Request Data
     const data = {
       'RubixRegisterUserID': localStorage.getItem('userID')
     }
+
     const requestOptions = {
       title: 'Get Student Events Details',
       method: 'POST',

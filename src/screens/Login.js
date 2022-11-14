@@ -389,8 +389,8 @@ class Login extends React.Component {
             <div className="m-t-30">
               <img
                 src={this.props.rubixClientLogo}
-                width="20%"
-                height="20%"
+                width="10%%"
+                height="10%%"
                 alt=" "
               />
             </div>
@@ -475,7 +475,7 @@ class Login extends React.Component {
                           Login Now
                         </button>
 
-                        <p
+                      {/*   <p
                           className="helper-text m-b-10 bottom"
                           style={{
                             display: this.state.isAdmin ? "none" : "block",
@@ -483,13 +483,13 @@ class Login extends React.Component {
                         >
                           Or Login Using:
                         </p>
-
+ */}
                         <div
                           style={{
                             display: this.state.isAdmin ? "none" : "block",
                           }}
                         >
-                          <GoogleLogin
+                          {/* <GoogleLogin
                             as={Col}
                             render={(renderProps) => (
                               <button
@@ -547,7 +547,7 @@ class Login extends React.Component {
                               }}
                             />{" "}
                             Instagram
-                          </InstagramLogin>
+                          </InstagramLogin> */}
                           <span className=" bottom helper-text m-b-10">
                             <i className="fa fa-lock"></i>{" "}
                             <a
