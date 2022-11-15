@@ -173,7 +173,7 @@ componentDidMount() {
       console.log(" mY Posted Data:", data)
       await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
         .then(response => {
-          console.log("Signature upload details:", response)
+          //console.log("Signature upload details:", response.data.Base)
           this.setState({ docUrl: response.data.Base })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base

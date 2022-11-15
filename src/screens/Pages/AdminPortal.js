@@ -938,7 +938,6 @@ class AdminDashboard extends React.Component {
           },
         },
         {
-          
           value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].ProofOfRegCountPerRES,
           name: 'No Proof of Registration',
           itemStyle: {
@@ -977,7 +976,7 @@ class AdminDashboard extends React.Component {
     //Student Card stats
     const tempStudentCard = [
       {
-        value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
+        value: response.data.PostRubixUserData[0].StudentCardCountPerRES,
         name: 'Student Card',
         itemStyle: {
           color: "#310B44",
@@ -987,7 +986,7 @@ class AdminDashboard extends React.Component {
         },
       },
       {
-        value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
+        value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].StudentCardCountPerRES,
         name: 'No Student Card',
         itemStyle: {
           color: "#EEEEEE",
@@ -1011,6 +1010,150 @@ class AdminDashboard extends React.Component {
           },
         },
         data: tempStudentCard,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+      }
+    )
+
+    
+    //Proof of Pay Stats
+    const tempProofOfPay = [
+      {
+        value: response.data.PostRubixUserData[0].ProofOfpaymentCountPerRES,
+        name: 'Proof of Pay',
+        itemStyle: {
+          color: "#65044A",
+          emphasis: {
+            color: "#65044A",
+          },
+        },
+      },
+      {
+        value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].ProofOfpaymentCountPerRES,
+        name: 'No Proof of Pay',
+        itemStyle: {
+          color: "#EEEEEE",
+          emphasis: {
+            color: "#EEEEEE",
+          },
+        },
+      }
+     
+    ]
+    this.state.studentDocSeriess.push(
+      {
+        type: "pie",
+        startAngle: 270,
+        clockWise: 1,
+        radius: [220, 240],
+        itemStyle: {
+          normal: {
+            label: { show: false },
+            labelLine: { show: false },
+          },
+        },
+        data: tempProofOfPay,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+      }
+    )
+
+    
+
+    //Rules and Regulations Stats
+    const tempRules = [
+      {
+        value: response.data.PostRubixUserData[0].RulesDocumentCountPerRES,
+        name: 'Rules and Regulations',
+        itemStyle: {
+          color: "#900437",
+          emphasis: {
+            color: "#900437",
+          },
+        },
+      },
+      {
+        value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].RulesDocumentCountPerRES,
+        name: 'No Rules and Regulations',
+        itemStyle: {
+          color: "#EEEEEE",
+          emphasis: {
+            color: "#EEEEEE",
+          },
+        },
+      }
+     
+    ]
+    this.state.studentDocSeriess.push(
+      {
+        type: "pie",
+        startAngle: 270,
+        clockWise: 1,
+        radius: [250, 270],
+        itemStyle: {
+          normal: {
+            label: { show: false },
+            labelLine: { show: false },
+          },
+        },
+        data: tempRules,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+      }
+    )
+
+    //Booking Doc Stats
+    const tempBookingDoc = [
+      {
+        value: response.data.PostRubixUserData[0].BookingDocumentCountPerRES,
+        name: 'Booking Form',
+        itemStyle: {
+          color: "#9E0507",
+          emphasis: {
+            color: "#9E0507",
+          },
+        },
+      },
+      {
+        value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].BookingDocumentCountPerRES,
+        name: 'No Booking Form',
+        itemStyle: {
+          color: "#EEEEEE",
+          emphasis: {
+            color: "#EEEEEE",
+          },
+        },
+      }
+     
+    ]
+    this.state.studentDocSeriess.push(
+      {
+        type: "pie",
+        startAngle: 270,
+        clockWise: 1,
+        radius: [250, 270],
+        itemStyle: {
+          normal: {
+            label: { show: false },
+            labelLine: { show: false },
+          },
+        },
+        data: tempBookingDoc,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -1585,7 +1728,7 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
                 </div>
 
                 <div className="col-lg-12 col-md-12">
-        <div className="card" style={{ height: 580, width: "100%", position: "relative" }}>
+        <div className="card" style={{ height: 780, width: "100%", position: "relative" }}>
         <div className="header">
                   <h4>Documents Data</h4>
                 </div>
@@ -1593,7 +1736,7 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
           <div
                           id="NewDocDonut"
                           className="inner"
-                          style={{ height: 485, width: "100%", position: "absolute" }}
+                          style={{ height: 585, width: "100%", position: "absolute" }}
                         ></div>
           </div>
         </div>

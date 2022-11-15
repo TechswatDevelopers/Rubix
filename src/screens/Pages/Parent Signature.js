@@ -97,7 +97,7 @@ constructor(props) {
         'RubixPlace': document.getElementById('RubixPlace').value,
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,
-        'PDFDocumentUrl': this.state.leaseDoc
+        'PDFDocumentUrl': "https://jjpimages.rubix.mobi:449/" + this.state.leaseDoc
       }
       const requestOptions = {
         title: 'Parent Signature Upload',
@@ -105,12 +105,12 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
+      console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://jjppdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
           .then(response => {
-            //console.log("Signature upload details:", response)
+            console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -132,6 +132,65 @@ constructor(props) {
       }
     }
     
+
+    //Converts base64 to file
+ dataURLtoFile(dataurl, filename) {
+
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}
+
+ //Post File Using Mongo
+ onPressUpload(image, filetype, currentActiveKey) {
+  //this.props.updateLoadingMessage("Uploading Lease Document...");
+  
+  const postDocument = async () => {
+    const data = new FormData()
+    data.append('image', image)
+    data.append('FileType', filetype)
+    data.append('RubixRegisterUserID', this.state.userID)
+    const requestOptions = {
+      title: 'Student Document Upload',
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data', },
+      body: data
+    };
+    for (var pair of data.entries()) {
+      console.log(pair[0], ', ', pair[1]);
+    }
+    await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      .then(response => {
+        console.log("Upload details:", response)
+        this.setState({ mongoID: response.data.post._id })
+      })
+  }
+  postDocument().then(() => {
+    //alert("Document uploaded successfully")
+    //Set timer for loading screen
+  setTimeout(() => {
+    this.props.updateLoadingController(false);
+    this.props.onPresPopUpEvent()
+  }, 3000);
+    window.location.reload()
+    
+    
+    /* setTimeout(() => {
+      
+      this.props.history.push("/login/" + localStorage.getItem('clientID'))
+    }, 5000); */
+    
+    //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
+  })
+}
   //Set Theme Color
   setThemeColor(client){
     switch(client){
@@ -258,7 +317,7 @@ constructor(props) {
                                 <div className="col-lg-9 col-md-7 col-sm-12">
                                   <div style={{ height: '100%' }} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
-                                    <iframe src={'http://129.232.144.154:449/' + this.state.currentDoc} width="100%" height="500px">
+                                    <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.currentDoc} width="100%" height="500px">
            </iframe>
            <p>I:</p>
            <input

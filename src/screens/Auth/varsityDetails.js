@@ -240,10 +240,19 @@ async componentDidMount(){
 
   }
   onValueChange(e){
+    //console.log(e.target.value)
 
-    this.setState({
-      hasCar: !this.state.hasCar
-    })
+    if(e.target.value == 'no'){
+      this.setState({
+        hasCar: false
+      })
+    } else if (e.target.value == 'yes'){
+      this.setState({
+        hasCar: true
+      })
+    }
+
+   
   }
 
 
