@@ -52,7 +52,7 @@ class ProfileV1Setting extends React.Component {
       myYear: '',
       myPayment: '',
       myresID: '',
-      location: {},
+      location: null,
       selectedFile: null,
       isSelected: false,
       picPresent: false,
@@ -79,7 +79,15 @@ class ProfileV1Setting extends React.Component {
       hearAbout: '',
       course: '',
       hasCar: false,
+      prov: '',
+      showSearch: false,
+      myTempAddress: '',
     };
+  }
+   //Show Search
+   showSearch(e){
+    e.preventDefault() 
+    this.setState({showSearch: !this.state.showSearch})
   }
   //Fetch Residences
   getRes(uniID, key){
@@ -152,11 +160,20 @@ class ProfileV1Setting extends React.Component {
     const locations = document.getElementById('location');
     let id;
     //console.log("location:", this.state.location)
-    let street_address
-    if (Object.keys(this.state.location).length != 0) {
+   let street_address
+    if (this.state.location != null) {
       street_address = this.state.location['value']['structured_formatting']['main_text']
+      this.setState({
+        myTempAddress: this.state.location['value']['structured_formatting']['main_text']
+      })
+      
+      console.log("I am called", street_address)
     } else {
+      console.log("I am called 222")
       street_address = this.state.myProfile.RegisterUserStreetNameAndNumer
+      this.setState({
+        myTempAddress: this.state.myProfile.RegisterUserStreetNameAndNumer
+      })
     }
 
     e.preventDefault();
@@ -164,12 +181,18 @@ class ProfileV1Setting extends React.Component {
     const data = {
       'RubixRegisterUserID': localStorage.getItem('role') == 'admin' ? this.props.currentStudentiD : localStorage.getItem('userID'),
       'RegisterUserStreetNameAndNumer': street_address,
-      'RegisterUserProvince': this.state.prov,
-      'RegisterUserCountry': this.state.country,
+      'RegisterUserProvince': ""/*  this.state.prov */,
+      'RegisterUserCountry': ""/*  this.state.country */,
     };
+    console.log("Data 1", data)
     for (let i = 0; i < form.elements.length; i++) {
-      const elem = form.elements[i];
-      data[elem.name] = elem.value
+      if(form.elements[i].name == 'RegisterUserStreetNameAndNumer'){
+console.log("down")
+      } else {
+
+        const elem = form.elements[i];
+        data[elem.name] = elem.value
+      }
     }
 
     const requestOptions = {
@@ -178,14 +201,16 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log(data)
+    console.log(data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
-          if(response.data[0].ResponceMessage == 'Successfully Updted Record'){
+          if(response.status == 200){
             this.props.onPresPopConfirmInfo()
+          } else {
+            console.log("never")
           }
-          //console.log(response)
+          console.log(response)
           //alert(response.data[0].ResponceMessage)
           //window.location.reload()
         })
