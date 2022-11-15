@@ -170,7 +170,7 @@ class ProfileV1Setting extends React.Component {
       console.log("I am called", street_address)
     } else {
       console.log("I am called 222")
-      street_address = this.state.myProfile.RegisterUserStreetNameAndNumer
+      street_address = document.getElementById('streetAddress').value
       this.setState({
         myTempAddress: this.state.myProfile.RegisterUserStreetNameAndNumer
       })
@@ -178,6 +178,7 @@ class ProfileV1Setting extends React.Component {
 
     e.preventDefault();
     const form = document.getElementById('addresses');
+    
     const data = {
       'RubixRegisterUserID': localStorage.getItem('role') == 'admin' ? this.props.currentStudentiD : localStorage.getItem('userID'),
       'RegisterUserStreetNameAndNumer': street_address,
