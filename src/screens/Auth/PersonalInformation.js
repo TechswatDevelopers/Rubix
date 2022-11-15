@@ -251,8 +251,8 @@ class PersonalInformation extends React.Component {
                   </div>
                   
                   <div className="body">
-                    <label>Which year are you applying for?</label>
-                    {/* <Row>
+                    {/*<label>Which year are you applying for?</label>
+                     <Row>
                     <Col >
                         <input 
                         onChange={(e) => {this.onValueChange(e)}}

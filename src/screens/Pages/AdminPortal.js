@@ -40,7 +40,7 @@ class AdminDashboard extends React.Component {
 
     const fetchData = async() =>{
       //Populate Residence list
-      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' /* + localStorage.getItem('clientID') */)
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)
@@ -530,7 +530,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminReportAll', data, requestOptions)
       .then( response =>{
-        //console.log('Stats Data: ', response.data.PostRubixUserData)
+        console.log('Stats Data: ', response.data.PostRubixUserData)
         var list = response.data.PostRubixUserData
 
         list.forEach(res =>{
@@ -923,6 +923,7 @@ class AdminDashboard extends React.Component {
           }
       )
 
+
       
       //Student Proof of Registration
       const tempStudentPOReg = [
@@ -947,7 +948,6 @@ class AdminDashboard extends React.Component {
             },
           },
         }
-       
       ]
 
       this.state.studentDocSeriess.push(
@@ -971,6 +971,54 @@ class AdminDashboard extends React.Component {
             },
           },
         }
+    )
+
+
+    //Student Card stats
+    const tempStudentCard = [
+      {
+        value: response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
+        name: 'Student Card',
+        itemStyle: {
+          color: "#310B44",
+          emphasis: {
+            color: "#310B44",
+          },
+        },
+      },
+      {
+        value: response.data.PostRubixUserData[0].TotalRegistrationsPerYear - response.data.PostRubixUserData[0].LeaseAgreementCountPerRES,
+        name: 'No Student Card',
+        itemStyle: {
+          color: "#EEEEEE",
+          emphasis: {
+            color: "#EEEEEE",
+          },
+        },
+      }
+     
+    ]
+    this.state.studentDocSeriess.push(
+      {
+        type: "pie",
+        startAngle: 270,
+        clockWise: 1,
+        radius: [190, 210],
+        itemStyle: {
+          normal: {
+            label: { show: false },
+            labelLine: { show: false },
+          },
+        },
+        data: tempStudentCard,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+      }
     )
 
     

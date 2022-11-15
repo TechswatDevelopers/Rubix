@@ -578,8 +578,6 @@ class Login extends React.Component {
                         </span>
 
                         <div className="bottom">
-                          
-
                           <span
                             style={{
                               display: this.state.isAdmin ? "none" : "block",
@@ -588,7 +586,6 @@ class Login extends React.Component {
                             Don't have an account?{" "}
                             <a href="registration">Register</a>
                           </span>
-
                           <span
                             style={{
                               display: this.state.isAdmin ? "none" : "block",
@@ -604,11 +601,7 @@ class Login extends React.Component {
                               here.
                             </a>
                           </span>
-
-                          {/* <button type="button" onClick={()=>{this.props.onPressThemeColor("blue"); this.props.history.push("/registration")}}>Login with C-Ges</button>
-                        <br></br>
-                  <button type="button" onClick={()=>{this.props.onPressThemeColor("orange"); this.props.history.push("/registration")}}>Login with Opal</button>
-                       */}
+                         
                         </div>
                       </div>
                     </div>

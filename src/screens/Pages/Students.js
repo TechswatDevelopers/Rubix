@@ -57,10 +57,10 @@ class Students extends React.Component {
 
     const fetchData = async() =>{
     //Populate Residence list
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+    await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/'/*  + localStorage.getItem('clientID') */)
     .then(response => response.json())
     .then(data => {
-        //console.log("data is ", data)
+        console.log("data is ", data)
         this.setState({resList: data.data})
         });
     } 
