@@ -548,7 +548,7 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log('Posted student data:', data)
+    console.log('Posted student data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
