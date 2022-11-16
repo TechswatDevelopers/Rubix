@@ -552,7 +552,7 @@ console.log("down")
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          //console.log("All Student data", response.data.PostRubixUserData[0])
+          console.log("All Student data", response.data.PostRubixUserData[0])
           this.setState({ myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
             year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
@@ -597,7 +597,7 @@ this.props.updateStudentName(
 
   //Get All User Data
   getAllUserData(userId) {
-    
+
     const data = {
       'RubixRegisterUserID': userId,
     };
