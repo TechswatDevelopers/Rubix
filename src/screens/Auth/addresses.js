@@ -143,6 +143,8 @@ class Addresses extends React.Component {
     const userID = localStorage.getItem('userID');
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({ myUserID: userID });
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Details...");
 
     //console.log("This is the ID: ", localStorage.getItem('userID'))
 
@@ -167,6 +169,9 @@ class Addresses extends React.Component {
 
     }
     fetchData().then(() => {
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 2000);
       //this.postStatus()
     });
 
@@ -185,6 +190,23 @@ class Addresses extends React.Component {
               <meta charSet="utf-8" />
               <title>Residential Information</title>
           </Helmet>
+
+          <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="10%"
+                height="10%"
+                alt=" "
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main"

@@ -380,8 +380,8 @@ class RoomAllocation extends React.Component {
             <div className="m-t-30">
               <img
                 src={this.props.rubixClientLogo}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt=" "
               />
             </div>

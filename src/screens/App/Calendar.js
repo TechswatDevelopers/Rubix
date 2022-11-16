@@ -314,11 +314,28 @@ console.log("Events :", response)
         <div style={{ opacity: isEventModal ? 0.3 : 1 }}>
           <div className="ng-star-inserted">
             <div className="container-fluid">
+              
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{this.state.pageTitle}</title>
             </Helmet>
 
+            <div
+          className="page-loader-wrapper"
+          style={{ display: this.props.MyloadingController ? "block" : "none" }}
+        >
+          <div className="loader">
+            <div className="m-t-30">
+              <img
+                src={localStorage.getItem('clientLogo')}
+                width="10%"
+                height="10%"
+                alt=" "
+              />
+            </div>
+            <p>{this.props.loadingMessage}</p>
+          </div>
+        </div>
             
         <div
           className="page-loader-wrapper"

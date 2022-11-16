@@ -31,7 +31,9 @@ class Students extends React.Component {
           dateAndTime: '',
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
           studentLeaseAmmend: [],
-          listIndex: 0
+          listIndex: 0,
+          occups: ['New', 'Existing'],
+          occupancy: '',
         }
       }
 
@@ -453,8 +455,8 @@ postData().then(()=>{
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt="Rubix System"
               />
             </div>
@@ -550,6 +552,14 @@ postData().then(()=>{
           this.exportToCSV(localStorage.getItem('resID'))}}>
   Download Report
 </button>
+{  
+        <select className="form-control" onChange={(e)=>{this.getStudents(e.target.value, this.state.res); this.setState({occupancy: e.target.value})}} value={this.state.occupancy}>
+        {
+         this.state.occups.map((banktype, index)=> (
+            <option key={index} name='AccountType' value = {banktype}>{banktype} Student</option>
+        ))  
+        }
+        </select> }
               </>
               }
               />

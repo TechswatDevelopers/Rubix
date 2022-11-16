@@ -1033,7 +1033,7 @@ mergePDFHandler()
           : null
         }
           
-          <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="500px">
+          <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
     </iframe>
         </>
 
@@ -1081,7 +1081,7 @@ mergePDFHandler()
               ? <>
               <p>Loading document...</p>
             </>
-            :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="500px">
+            :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
            {/* <p>If you agree to the above document, please enter your signature:</p>
                   <div className="border border-primary border-2 p-3" style={{

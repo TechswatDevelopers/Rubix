@@ -202,14 +202,14 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+    //console.log(data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
           if(response.status == 200){
             this.props.onPresPopConfirmInfo()
           } else {
-            console.log("never")
+            //console.log("never")
           }
           console.log(response)
           //alert(response.data[0].ResponceMessage)
@@ -241,16 +241,18 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log(data)
+    console.log(data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
-          if(response.data[0].ResponceMessage == 'PasswordUpdated'){
+          console.log(response)
+          if(response.data.PostRubixUserData[0].Response == 'PasswordUpdated'){
             this.props.onPresPopConfirmInfo()
+          } else {
+            alert(response.data.PostRubixUserData[0].Response)
           }
-          //console.log(response)
-          //alert(response.data.PostRubixUserData[0].Response)
-          window.location.reload()
+          //
+          //window.location.reload()
         })
     }
     postData()
@@ -595,6 +597,7 @@ this.props.updateStudentName(
 
   //Get All User Data
   getAllUserData(userId) {
+    
     const data = {
       'RubixRegisterUserID': userId,
     };

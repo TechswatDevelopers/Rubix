@@ -223,8 +223,9 @@ class Registration extends React.Component {
                  }
             })
           }
-  
       }
+
+
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");
@@ -252,8 +253,8 @@ class Registration extends React.Component {
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt=" "
               />
             </div>

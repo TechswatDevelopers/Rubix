@@ -124,7 +124,7 @@ componentDidMount() {
       this.props.updateLoadingController(false);
       this.props.onPresPopUpEvent()
     }, 3000);
-      window.location.reload()
+      //window.location.reload()
       
       
       /* setTimeout(() => {

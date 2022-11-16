@@ -219,8 +219,8 @@ class PersonalInformation extends React.Component {
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt=" "
               />
             </div>
@@ -236,8 +236,8 @@ class PersonalInformation extends React.Component {
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
-                width: "100% !important",
-                height: "100% !important",
+                width: "10% !important",
+                height: "10% !important",
               }}
             >
               <div className="auth-box">
@@ -251,23 +251,7 @@ class PersonalInformation extends React.Component {
                   </div>
                   
                   <div className="body">
-                    {/*<label>Which year are you applying for?</label>
-                     <Row>
-                    <Col >
-                        <input 
-                        onChange={(e) => {this.onValueChange(e)}}
-                        //checked={this.state.yearOfRes === "2022"}
-                        type="radio" name="regyear" value='2022'/>
-                         2022
-                      </Col>
-                      <Col>
-                      <input 
-                      onChange={(e) => {this.onValueChange(e)}}
-                      //checked={this.state.yearOfRes === "2023"}
-                      type="radio" name="regyear" value='2023'/>
-                         2023
-                      </Col>
-                    </Row> */}
+                   
                     <form id='register' onSubmit={(e) => this.Submit(e)}>
                       
                       

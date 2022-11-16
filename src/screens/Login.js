@@ -406,8 +406,8 @@ class Login extends React.Component {
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
-                width: "100% !important",
-                height: "100% !important",
+                width: "10% !important",
+                height: "10% !important",
               }}
             >
               <div className="auth-box">
@@ -475,79 +475,12 @@ class Login extends React.Component {
                           Login Now
                         </button>
 
-                      {/*   <p
-                          className="helper-text m-b-10 bottom"
-                          style={{
-                            display: this.state.isAdmin ? "none" : "block",
-                          }}
-                        >
-                          Or Login Using:
-                        </p>
- */}
                         <div
                           style={{
                             display: this.state.isAdmin ? "none" : "block",
                           }}
                         >
-                          {/* <GoogleLogin
-                            as={Col}
-                            render={(renderProps) => (
-                              <button
-                                className="btn btn-signin-social"
-                                onClick={renderProps.onClick}
-                                disabled={renderProps.disabled}
-                              >
-                                <FaGoogle
-                                  style={{
-                                    color: "#EA4335 ",
-                                    fontSize: "1.5em",
-                                    paddingRight: "4px",
-                                  }}
-                                />
-                                Google
-                              </button>
-                            )}
-                            clientId="256115085565-b3k2c8gsuqc40vstp06r4cu0sb7kc5qs.apps.googleusercontent.com"
-                            buttonText="Google"
-                            onSuccess={this.responseGoogle}
-                            cookiePolicy={"single_host_origin"}
-                          />
-
-                          <FacebookLogin
-                            appId="552332679301004" //"284158963537717"
-                            fields="name,email,picture, first_name, about"
-                            height="10"
-                            textButton="Facebook"
-                            size="medium"
-                            icon={
-                              <FaFacebook
-                                style={{
-                                  color: "#1877f2 ",
-                                  fontSize: "1.5em",
-                                  paddingRight: "4px",
-                                }}
-                              />
-                            }
-                            callback={this.responseFacebook}
-                            cssClass="btn btn-signin-social"
-                          />
-
-                          <InstagramLogin
-                            clientId="552332679301004"
-                            buttonText="Instagram"
-                            width="10px"
-                            onSuccess={this.responseInstagram}
-                            cssClass="btn btn-signin-social"
-                          >
-                            <FaInstagram
-                              style={{
-                                color: "#cd486b",
-                                fontSize: "1.5em",
-                                paddingRight: "4px",
-                              }}
-                            />{" "}
-                            Instagram
-                          </InstagramLogin> */}
+                          
                           <span className=" bottom helper-text m-b-10">
                             <i className="fa fa-lock"></i>{" "}
                             <a
