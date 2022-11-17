@@ -40,7 +40,7 @@ constructor(props) {
 
     const fetchDocs = async()=> {
       //Get documents from DB
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/103' /* + userID */)
+      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + this.state.userID)
       .then(response => response.json())
       .then(data => {
         console.log("check: ", data)
@@ -158,12 +158,14 @@ constructor(props) {
     data.append('image', image)
     data.append('FileType', filetype)
     data.append('RubixRegisterUserID', this.state.userID)
+
     const requestOptions = {
       title: 'Student Document Upload',
       method: 'POST',
       headers: { 'Content-Type': 'multipart/form-data', },
       body: data
     };
+    
     for (var pair of data.entries()) {
       console.log(pair[0], ', ', pair[1]);
     }
