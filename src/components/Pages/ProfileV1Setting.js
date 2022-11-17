@@ -62,7 +62,7 @@ class ProfileV1Setting extends React.Component {
       errorMessage: null,
       myUserID: null,
       imageUrl: 'user.png',
-      payMethods: ['Please Select your Payment Method', 'NSFAS TUT', 'NSFAS UP ', 'Bursary', 'Agreement with University ', 'Self Funded'],
+      payMethods: [],
       value: 0,
       profilePicture: {},
       progress: '',
@@ -77,9 +77,9 @@ class ProfileV1Setting extends React.Component {
       duration: 0,
       hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
       hearAbout: '',
-      course: '',
+      course: null,
       hasCar: false,
-      prov: '',
+      prov: null,
       showSearch: false,
       myTempAddress: '',
     };
@@ -97,7 +97,7 @@ class ProfileV1Setting extends React.Component {
       await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
-          console.log("Res list data is ", data)
+          //console.log("Res list data is ", data)
           this.setState({resList: data.data})
 
           //If first call initialize res, else show selected
@@ -113,20 +113,48 @@ class ProfileV1Setting extends React.Component {
           }
           });
     }
-    fetchResses()
-    this.defaultDuration(uniID)
+    fetchResses().then(()=>{
+      this.defaultDuration(uniID)
+      
+    })
+  }
+  getResAndPayment(resID){
+    console.log("this: ", this.state.payment)
+    this.setState({
+      isLoad: true
+    })
+    const data = {
+      'RubixUniversityID': this.state.uni,
+      'RubixResidenceID': this.state.res
+    };
+    const requestOptions = {
+      title: 'Get Payment Details Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+  };
+  console.log("My Data: ", data)
+    const getData = async() => {
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
+      .then(response => {
+        console.log("My response: ", response.data.PostRubixUserData)
+        
+        this.setState({
+          //isLoad: false,
+          payMethods: response.data.PostRubixUserData
+        })
+    })
+    }
+    getData()
   }
 
   
   //Selecting Varsity
   onVarsitySelect(e){
-    this.setState({
-      uni: e.target.value,
-      showResInput: true,
-    })
+    
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
-        durations: [5,10,12]
+        durations: [0, 5, 12]
       })
     } else {
       this.setState({
@@ -134,25 +162,28 @@ class ProfileV1Setting extends React.Component {
       })
     }
     this.getRes(e.target.value, 1)
+    this.setState({
+      uni: e.target.value,
+    })
 
   }
 
   ///Set Varsity durations
   defaultDuration(uniID){
-    this.setState({
-      uni: uniID,
-      showResInput: true,
-    })
+    //console.log("The uni is: ", uniID, this.state.duration)
     if(uniID == 1 || uniID == 2){
       this.setState({
-        durations: [5,10,12]
+        durations: [0, 5, 12]
       })
     } else {
       this.setState({
-        durations: [5,10]
+        durations: [0,5,10]
       })
     }
-
+    this.setState({
+      uni: uniID,
+    })
+    this.getResAndPayment(uniID)
   }
 
   //Reset password
@@ -182,8 +213,8 @@ class ProfileV1Setting extends React.Component {
     const data = {
       'RubixRegisterUserID': localStorage.getItem('role') == 'admin' ? this.props.currentStudentiD : localStorage.getItem('userID'),
       'RegisterUserStreetNameAndNumer': street_address,
-      'RegisterUserProvince': ""/*  this.state.prov */,
-      'RegisterUserCountry': ""/*  this.state.country */,
+      'RegisterUserProvince': this.state.myProfile.Province/*  this.state.prov */,
+      'RegisterUserCountry':''/*  this.state.country */,
     };
     console.log("Data 1", data)
     for (let i = 0; i < form.elements.length; i++) {
@@ -307,12 +338,13 @@ console.log("down")
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
       'UniversityID': this.state.uni,
-      'CourseID': this.state.course,
+      'CourseID': this.state.course == null ? this.state.myProfile.RubixCourse : this.state.course,
       'ResidenceID': this.state.res,
       'StudentYearofStudyID': this.state.year,
       'PaymentMethod': this.state.payment,
       'Duration': this.state.duration,
-      'HearAbout': this.state.hearAbout
+      'HearAbout': this.state.hearAbout,
+      'CarReg' :  document.getElementById('CarReg').value
     }
     
     const requestOptions = {
@@ -553,13 +585,16 @@ console.log("down")
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
           console.log("All Student data", response.data.PostRubixUserData[0])
-          this.setState({ myProfile: response.data.PostRubixUserData[0],
+          this.setState({ 
+            myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
             year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
             duration: response.data.PostRubixUserData[0].Duration,  
-            yearOfRes: response.data.PostRubixUserData[0].RegistrationYear
+            yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
+            payment:response.data.PostRubixUserData[0].PaymentMethod,
+            hearAbout: response.data.PostRubixUserData[0].HearAbout,
           })
-           //Set Payment Method
+          /*  //Set Payment Method
            for (let i = 0; i < this.state.payMethods.length; i++){
             //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
             if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
@@ -567,7 +602,7 @@ console.log("down")
                 payment: i,
               })
             }
-          }
+          } */
 
 
           //Get Residence Name 
@@ -1428,11 +1463,11 @@ this.props.updateStudentName(
                   className="form-control"
                   id="CourseID"
                   name="CourseID"
-                  defaultValue={this.state.myProfile.RubixCourse}
+                 defaultValue={this.state.myProfile.RubixCourse}
                   placeholder="Field of Study"
                   type="text"
                   onChange={(e)=> this.setState({course: e.target.value})}
-                 // value={this.state.myProfile.RubixCourse}
+                  //value={this.state.myProfile.RubixCourse}
                   required
                 />
               </div>
@@ -1475,7 +1510,7 @@ this.props.updateStudentName(
         {
             
             this.state.durations.map((duration, index)=> (
-            <option key={index} name='Duration' value={duration}>{duration} months</option>
+            <option key={index} name='Duration' value={duration}>{duration == 0 ? "Please select contract duration in " : duration} {duration == 1 ? "Once off Payment" : "months"}</option>
         ))   
         }
     </select> }
@@ -1540,7 +1575,11 @@ this.props.updateStudentName(
                       </>
 
 
-                      <div className="form-group">
+                      {
+                        this.state.payMethods == null || this.state.payMethods.length == 0
+                        ? <></>
+                        :
+                        <div className="form-group">
                         <label >
                         Payment Method: 
                             </label>
@@ -1549,11 +1588,12 @@ this.props.updateStudentName(
         {
             
             this.state.payMethods.map((payment, index)=> (
-            <option key={index} name='PaymentMethod' value={payment}>{payment}</option>
+            <option key={index} name='PaymentMethod' value={payment.PaymentMethod}>{payment.PaymentMethod}</option>
         ))   
         }
     </select> }
-                      </div>
+                      </div>}
+
                      {body}
                      <div className="form-group">
                         <label>

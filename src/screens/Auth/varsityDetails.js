@@ -12,7 +12,7 @@ import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { updateClientBackG,
   updateLoadingController,
   updateLoadingMessage,} from "../../actions";
-import { duration } from "moment/moment";
+//import { duration } from "moment/moment";
 
 class VarsityDetails extends React.Component {
     constructor(props) {
@@ -53,8 +53,18 @@ class VarsityDetails extends React.Component {
           this.setState({
             //duration: this.state.duration.push(1)
           })
-        } else if(this.state.durations.length == 3){
-          this.state.durations.pop(1)
+        } else {
+          if(this.state.uni == 1 || this.state.uni == 2){
+            this.setState({
+              durations: [0, 5, 12]
+            })
+          } else {
+            //console.log("Sila ")
+            this.setState({
+              durations: [0,5,10]
+            })
+          }
+          //this.state.durations.pop(1)
         }
       }
 
@@ -87,7 +97,7 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        //console.log(data)
+        console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
@@ -110,7 +120,28 @@ class VarsityDetails extends React.Component {
                 //console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
-        postData()
+        if(this.state.duration == 0){
+          alert("Please select a contract duration")
+          this.props.updateLoadingMessage("Reloading...");
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 1000);
+        } else if(this.state.payment == 'Please Select Payment Method' || this.state.payment == null){
+          alert("Please select a payment method")
+          this.props.updateLoadingMessage("Reloading...");
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 1000);
+        }
+        else if(this.state.res == 'Please Select Residence' || this.state.res == null){
+          alert("Please select a Residence")
+          this.props.updateLoadingMessage("Reloading...");
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 1000);
+        } else {
+          postData()
+        }
     }
   
 
@@ -187,6 +218,7 @@ async componentDidMount(){
 
   //Fetch Residences
   getRes(uniID){
+    console.log("Location ", this.state.durations)
     //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
@@ -201,6 +233,7 @@ async componentDidMount(){
   }
 
   getResAndPayment(resID){
+    //console.log("this: ", resID)
     this.setState({
       isLoad: true
     })
@@ -214,7 +247,7 @@ async componentDidMount(){
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  console.log("My Data: ", data)
+  //console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
@@ -230,21 +263,24 @@ async componentDidMount(){
   }
 
   onVarsitySelect(e){
+    //console.log("qala la: ", e.target.value)
+    
+    if(e.target.value == 1 || e.target.value == 2){
+      this.setState({
+        durations: [0, 5, 12]
+      })
+    } else {
+      //console.log("Sila ")
+      this.setState({
+        durations: [0,5,10]
+      })
+    }
+
+    this.getRes(e.target.value)
     this.setState({
       uni: e.target.value,
       showResInput: true,
     })
-    if(e.target.value == 1 || e.target.value == 2){
-      this.setState({
-        durations: [5, 12]
-      })
-    } else {
-      this.setState({
-        durations: [5,10]
-      })
-    }
-    this.getRes(e.target.value)
-
   }
   onValueChange(e){
     //console.log(e.target.value)
@@ -428,10 +464,17 @@ async componentDidMount(){
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>{
-          this.getResAndPayment(e.target.value)
-          this.setState({res: e.target.value})}} value={this.state.res}>
+          //console.log("see: ", e.target.value)
+          if(e.target.value != "Please Select Residence"){
+            this.getResAndPayment(e.target.value)
+          } else {
+            this.setState({
+              payMethods: []
+            })
+          }
+          this.setState({res: e.target.value})
+          }} value={this.state.res}>
         {
-            
             this.state.resList.map((res, index)=> (
             <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
         ))   
@@ -459,20 +502,24 @@ async componentDidMount(){
     </select> }
                       </div>}
 
-                      <div className="form-group">
+                      { this.state.res == "Please Select Residence"
+                      ?<></>
+                      :
+                        
+                        <div className="form-group">
                         <label className="control-label sr-only" >
                         Duration: 
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>this.setState({duration: e.target.value})} value={this.state.duration}>
+        <select className="form-control" onChange={(e)=>{/* console.log("Value: ", e.target.value); */ this.setState({duration: e.target.value})}} value={this.state.duration}>
         {
             
             this.state.durations.map((duration, index)=> (
-            <option key={index} name='Duration' value={duration}>{duration} {duration == 1 ? "Once off Payment": "months"}</option>
+            <option key={index} name='Duration' value={duration}>{duration == 0 ? "Please select contract duration in " : duration} {duration == 1 ? "Once off Payment" : "months"}</option>
         ))   
         }
     </select> }
-                      </div>
+                      </div>}
 
                       <label>Do you have car?</label>
                     <Row>

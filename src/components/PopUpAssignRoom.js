@@ -13,7 +13,8 @@ class PopUpAssign extends React.Component {
 constructor(props) {
   super(props)
   this.state = {
-    dateAndTime: ''
+    dateAndTime: '',
+    done: false,
   }
 }
 componentDidMount() {
@@ -46,11 +47,11 @@ componentDidMount() {
       body: data
     };
 
-   console.log("Posted Vetting Data: ", data)
+   //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        console.log("Room response: ", response)
       })
     }
     postData().then(()=>{
@@ -88,6 +89,7 @@ componentDidMount() {
         })
       }
       postData().then(()=>{
+        //this.props.updateLoadingController(false);
         this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', this.props.currentStudentiD, 0)
         //window.location.reload()
       })
@@ -114,26 +116,13 @@ componentDidMount() {
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           console.log("Upload details:", response)
-          this.setState({ mongoID: response.data.post._id })
+          this.setState({
+            done: true
+          })
+          //this.setState({ mongoID: response.data.post._id })
         })
     }
-    postDocument().then(() => {
-      //alert("Document uploaded successfully")
-      //Set timer for loading screen
-    setTimeout(() => {
-      this.props.updateLoadingController(false);
-      this.props.onPresPopUpEvent()
-    }, 3000);
-      window.location.reload()
-      
-      
-      /* setTimeout(() => {
-        
-        this.props.history.push("/login/" + localStorage.getItem('clientID'))
-      }, 5000); */
-      
-      //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
-    })
+    postDocument()
   }
 
  //Converts base64 to file
@@ -160,9 +149,10 @@ componentDidMount() {
       const data = {
         'RubixRegisterUserID': userid,
         'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'IP_Address': '',
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature
+        'image': signature,
+        "Browser": ''
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -203,7 +193,7 @@ componentDidMount() {
   
 
   render() {
-    const {isPopUpAssign, Title, Body, roomID} = this.props;
+    const {isPopUpAssign, Title, Body, roomID, Function} = this.props;
     return (
       <div
         className={isPopUpAssign ? "modal fade show" : "modal fade"}
@@ -238,11 +228,21 @@ componentDidMount() {
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
+              
                   //this.sendVettingStatus(FileType, DocID, 'correct')
                   this.assignRoom(roomID)
-                  this.props.onPresRooms();
-                  this.props.onPresPopUpAssign()
+                  //this.props.onPresRooms();
                   //window.location.reload()
+                      this.props.onPresPopUpAssign()
+                      setTimeout(() => {
+                        console.log("this is it: ", this.state.done)
+                        if(this.state.done){
+                    
+                          this.props.updateLoadingController(false);
+                          Function()
+                        }
+                      }, 5000);
+                  
                 }}>
                 Assign
               </button>

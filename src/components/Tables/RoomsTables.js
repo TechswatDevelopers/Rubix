@@ -129,10 +129,10 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        //console.log("Posted Data:", data)
+        console.log("Posted Data:", data)
         await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
           .then(response => {
-            //console.log("Signature upload details:", response)
+            console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -195,16 +195,13 @@ class RoomsTable extends React.Component {
     return (
       <div className="col-lg-12">
         <div className="card">
-        <PopUpAssign 
+        {/* <PopUpAssign 
         roomID = {this.state.currentRoom.RubixResidenceRoomsID}
         Title= "Confirm Room Assigning"
-        Body = {"You are about to assign " + this.props.currentStudentname + " to a room: " /* + this.state.currentRoom.RoomNumber */}
-        />
-        <PopUpRemove 
-        roomID = {this.state.currentRoom.RubixResidenceRoomsID}
-        Title= "Confirm Room Removal"
-        Body = {"You are about to remove " + this.props.currentStudentname + " from a room: " /* + this.state.currentRoom.RoomNumber */}
-        />
+        Body = {"You are about to assign " + this.props.currentStudentname + " to a room: " }
+     
+        /> */}
+        
         <AmmendLease 
         StudentID= {Student}
         />
@@ -236,9 +233,13 @@ class RoomsTable extends React.Component {
                   aria-expanded="false"
                   aria-controls={"collapseComment" + index}
                   href={"#collapseComment" + index}
-                  onClick={(e)=>this.setState({
+                  onClick={(e)=>{
+                    localStorage.setItem('roomID', room.RubixResidenceRoomsID)
+                    this.setState({
                     currentRoom: room
                   })}
+                
+                }
                   >
                   <th scope="row">
                   {room.ResidenceName}
@@ -266,6 +267,7 @@ class RoomsTable extends React.Component {
                            Remove from Room
                         </span>
                       </button>
+
                     <button className="btn btn-sm btn-outline-primary ml-2" 
                     onClick={(e)=>{
                       e.preventDefault()
@@ -278,7 +280,8 @@ class RoomsTable extends React.Component {
                            Regenerate Lease
                         </span>
                       </button>
-                    <button className="btn btn-sm btn-outline-success ml-2" 
+
+                    {/* <button className="btn btn-sm btn-outline-success ml-2" 
                     onClick={(e)=>{
                       e.preventDefault()
                       //this.props.onPresRooms(e)
@@ -288,7 +291,8 @@ class RoomsTable extends React.Component {
                         <i className=" icon-pencil"></i> 
                            Ammend Lease
                         </span>
-                      </button>
+                      </button> */}
+                      
                       </>
 
 

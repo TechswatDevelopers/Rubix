@@ -258,7 +258,7 @@ class RubixSurport extends React.Component {
           <div className="loader">
             <div className="m-t-30">
               <img
-                src={this.props.rubixClientLogo}
+                src={localStorage.getItem('clientLogo')}
                 width="20%"
                 height="20%"
                 alt=" "

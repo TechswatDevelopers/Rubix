@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign, onPresRooms, onPresPopUpRemove } from "../actions";
+import { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign,
+   onPresRooms, onPresPopUpRemove, updateLoadingController, updateLoadingMessage } from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -43,7 +44,8 @@ constructor(props) {
 
   //Remove Student from Room
   removeStudent(roomID) {
-    
+    this.props.updateLoadingController(true)
+    this.props.updateLoadingMessage("Removing from room...")
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
@@ -99,13 +101,13 @@ constructor(props) {
           })
         }
         postData().then(()=>{
-         window.location.reload()
+         //window.location.reload()
         })
       }
   
 
   render() {
-    const {isPopUpRemove, Title, Body, roomID} = this.props;
+    const {isPopUpRemove, Title, Body, roomID, Function} = this.props;
     return (
       <div
         className={isPopUpRemove ? "modal fade show" : "modal fade"}
@@ -126,9 +128,13 @@ constructor(props) {
             <button type="button" className="btn btn-danger" onClick={(e) => {
                   //this.sendVettingStatus(FileType, DocID, 'correct')
                   this.removeStudent(roomID)
-                  this.props.onPresRooms();
+                  //this.props.onPresRooms();
                   this.props.onPresPopUpRemove()
                   //window.location.reload()
+                  setTimeout(() => {
+                    this.props.updateLoadingController(false);
+                    Function()
+                  }, 4000);
                 }}>
                 Remove
               </button>
@@ -137,7 +143,6 @@ constructor(props) {
                 onClick={(e) => {
                   //Remove from room assign room cancel
                   this.props.onPresPopUpRemove()
-                  //this.removeStudent(roomID)
                 }}
                 className="btn btn-simple"
                 data-dismiss="modal"
@@ -159,4 +164,4 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   currentStudentiD: navigationReducer.studentID,
 });
 
-export default connect(mapStateToProps, { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign, onPresRooms, onPresPopUpRemove  })(PopUpRemove);
+export default connect(mapStateToProps, { onPresAddEvent, updateLoadingMessage, updateLoadingController, onPresPopUpEvent, onPresPopUpAssign, onPresRooms, onPresPopUpRemove  })(PopUpRemove);

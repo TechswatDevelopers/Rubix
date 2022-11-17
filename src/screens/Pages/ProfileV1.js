@@ -166,10 +166,10 @@ class ProfileV1Page extends React.Component {
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
-      console.log('I am called')
+      //console.log('I am called')
       this.loadDocuments(this.props.currentStudentiD)
     } else {
-      console.log('I am called here')
+      //console.log('I am called here')
       this.loadDocuments(userID)
     }
     //this.setState({ progress: userProgress });
@@ -1162,7 +1162,15 @@ mergePDFHandler()
         Title= "Upload Complete!"
         Body = "Your document has been uploaded successfully."
         Function ={()=>{
-          window.location.reload()
+           //Load Documents
+    if (localStorage.getItem('role') == 'admin'){
+      //console.log('I am called')
+      this.loadDocuments(this.props.currentStudentiD)
+    } else {
+      //console.log('I am called here')
+      this.loadDocuments(this.state.myUserID)
+    }
+          //window.location.reload()
       this.setDocumentProgress()
         }}
         />
@@ -1172,6 +1180,18 @@ mergePDFHandler()
         FileType = {this.state.keyString} 
         DocID = {this.state.currentDocID}
         Filename = {'https://jjpimages.rubix.mobi:449/' + this.state.myLease}
+        Function = {()=>{
+          //Load Documents
+   if (localStorage.getItem('role') == 'admin'){
+     //console.log('I am called')
+     this.loadDocuments(this.props.currentStudentiD)
+   } else {
+     //console.log('I am called here')
+     this.loadDocuments(this.state.myUserID)
+   }
+         //window.location.reload()
+     this.setDocumentProgress()
+       }}
         />
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">

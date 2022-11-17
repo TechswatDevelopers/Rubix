@@ -5,6 +5,7 @@ import axios from "axios";
 import PageHeader from "../../components/PageHeader";
 import RoomsTable from "../../components/Tables/RoomsTables";
 import PopUpAssign from "../../components/PopUpAssignRoom";
+import PopUpRemove from "../../components/PopUpRemoveFromRoom";
 import {Grid, Row, Col, Button} from "react-bootstrap";
 
 class RoomAllocation extends React.Component {
@@ -77,7 +78,7 @@ class RoomAllocation extends React.Component {
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms List:", response)
+          console.log("Students Rooms List:", response.data.PostRubixUserData)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -370,6 +371,29 @@ class RoomAllocation extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        <PopUpAssign 
+        roomID = {localStorage.getItem('roomID')}
+        Title= "Confirm Room Assigning"
+        Body = {"You are about to assign " + this.props.currentStudentname + " to a room " /* + this.state.currentRoom.RoomNumber */}
+        Function = {()=>{
+          //console.log("Testst: ", this.props.currentStudentiD)
+          ///Reload Room List
+          this.getStudentRoomDetails(this.props.currentStudentiD)
+        }
+          
+        }
+        />
+        <PopUpRemove 
+        roomID = {localStorage.getItem('roomID')}
+        Title= "Confirm Room Removal"
+        Body = {"You are about to remove " + this.props.currentStudentname + " from a room: " /* + this.state.currentRoom.RoomNumber */}
+        Function = {()=>{
+          ///Reload Room List
+          this.getStudentRoomDetails(this.props.Students[this.state.index].RubixRegisterUserID)
+        }
+          
+        } 
+        />
 
         
 <div
@@ -379,7 +403,7 @@ class RoomAllocation extends React.Component {
           <div className="loader">
             <div className="m-t-30">
               <img
-                src={this.props.rubixClientLogo}
+                src={localStorage.getItem('clientLogo')}
                 width="10%"
                 height="10%"
                 alt=" "

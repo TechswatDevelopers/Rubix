@@ -16,6 +16,7 @@ constructor(props) {
   this.state = {
     dateAndTime: '',
     userIPAddress: '',
+    runFunc: null,
     
   }
 }
@@ -209,7 +210,7 @@ getUserWitnessData() {
 
 
   //Send Auditted status
-  sendAuttingStatus(filetype, docID, vet){
+  sendAuttingStatus(filetype, docID, vet, call){
     let vettedStatus
     if(vet == 'correct') {
       vettedStatus = 1
@@ -243,12 +244,15 @@ getUserWitnessData() {
     }
     postData().then(()=>{
       this.props.updateLoadingController(false);
-      window.location.reload()
+      //this.state.runFunc()
+      //window.location.reload()
     })
   }
 
+
+
   render() {
-    const { isPopUpConfirm, Title, Body, FileType, DocID, Filename} = this.props;
+    const { isPopUpConfirm, Title, Body, FileType, DocID, Filename, Function} = this.props;
     return (
       <div
         className={isPopUpConfirm ? "modal fade show" : "modal fade"}
@@ -275,24 +279,29 @@ getUserWitnessData() {
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
+            Function()
                   this.sendVettingStatus(FileType, DocID, 'correct')
                   if(FileType == 'lease-agreement'){
+                    
                     setTimeout(() => {
                       this.sendFinalLease(Filename)
                     }, 3000);
                   }
                   this.props.onPresPopUpConfirm();
-                }}>
+
+                }
+                }>
                 Vet as Correct
               </button>
               <button
                 type="button"
                 onClick={(e) => {
+                  Function()
                   this.sendVettingStatus(FileType, DocID, 'incorrect')
                   if(FileType == 'lease-agreement'){
                     //Set timer for loading screen
                     setTimeout(() => {
-                      this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.currentStudentiD, 0)
+                      this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', this.props.currentStudentiD, 0)
                       //this.resetLease(Filename)
                     }, 3000);
                   }

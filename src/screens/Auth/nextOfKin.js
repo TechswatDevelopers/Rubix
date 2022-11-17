@@ -303,7 +303,7 @@ else{
       <div className="theme-grey">
       <Helmet>
             <meta charSet="utf-8" />
-            <title>Next of Kin Details</title>
+            <title>Parent/Guardian Details</title>
         </Helmet>
         <div
           className="page-loader-wrapper"
@@ -351,7 +351,7 @@ else{
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Next of Kin Details</p>
+                    <p className="lead">Parent/Guardian Details</p>
                   </div>
                   <div className="body">
                     <form id='nof' onSubmit={(e) => this.Submit(e)}>
