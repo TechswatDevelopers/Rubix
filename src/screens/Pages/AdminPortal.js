@@ -511,6 +511,9 @@ class AdminDashboard extends React.Component {
   }
 
   getAllResInfo(){
+    this.setState({
+      isShow: false
+    })
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Data, Please wait...");

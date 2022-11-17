@@ -625,7 +625,10 @@ class NavbarMenu extends React.Component {
                       : null}
 
 
-                  <li className="" id={localStorage.getItem('role') == 'admin' ? 'communication' :"Residence"}>
+                 { localStorage.getItem('role') == 'admin'
+                 ?null
+                 :
+                 <li className="" id={localStorage.getItem('role') == 'admin' ? 'communication' :"Residence"}>
                     <a
                         href={localStorage.getItem('role') == 'admin' ? 'communication' :"residence"}
                         className={
@@ -639,7 +642,7 @@ class NavbarMenu extends React.Component {
                         <i className= {localStorage.getItem('role') == 'admin' ? 'icon-bubbles' : "icon-home"}></i> <span> {localStorage.getItem('role') == 'admin' ? 'Communication' :"Residence Information"}</span>
                       </a>
                     </li>
-
+}
              { 
                     
                      localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
