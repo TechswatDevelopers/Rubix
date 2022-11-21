@@ -289,11 +289,11 @@ postData().then(()=>{
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Posted data: ', pingData)
+      //console.log('Posted data: ', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
-          console.log("The Response: ", response)
+          //console.log("The Response: ", response)
           if(!response.data.PostRubixUserData){
             this.setState({
               isEmpty: true,
@@ -571,7 +571,15 @@ postData().then(()=>{
 : null}
 {
   this.props.showRooms
-  ? <RoomAllocation Students={this.state.students}/>
+  ? <RoomAllocation Students={this.state.students} 
+  Function = {()=>{
+    this.getStudents('', localStorage.getItem('resID'));
+    /* setTimeout(() => {
+    }, 4000); */
+  }
+}
+  
+  />
 :null
 }
 

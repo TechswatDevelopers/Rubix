@@ -367,7 +367,7 @@ class RoomAllocation extends React.Component {
   
 
   render() {
-    const { Student, Students } = this.props;
+    const { Student, Students, Function } = this.props;
     return (
       <div ref={this.testRef}
         style={{ flex: 1 }}
@@ -383,6 +383,7 @@ class RoomAllocation extends React.Component {
           //console.log("Testst: ", this.props.currentStudentiD)
           ///Reload Room List
           this.getStudentRoomDetails(this.props.currentStudentiD)
+          Function()
         }
           
         }
@@ -394,6 +395,7 @@ class RoomAllocation extends React.Component {
         Function = {()=>{
           ///Reload Room List
           this.getStudentRoomDetails(this.props.Students[this.state.index].RubixRegisterUserID)
+          Function()
         }
           
         } 

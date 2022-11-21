@@ -133,7 +133,7 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  console.log("My Data: ", data)
+  //console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {

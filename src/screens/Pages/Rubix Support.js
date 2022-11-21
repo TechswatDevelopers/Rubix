@@ -42,6 +42,11 @@ class RubixSurport extends React.Component {
 
     //Fetch all tickets
     getTockets(){
+
+      this.setState({
+        tickets: []
+      })
+
       const data = {
         'RubixClientID': 1,
         'RubixResidenceID': 1,
@@ -55,11 +60,11 @@ class RubixSurport extends React.Component {
         body: data
       }
 
-      //console.log("Posted Data: ", data)
+      console.log("Posted Data: ", data)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGetSupportData', data, requestOptions)
         .then(response => {
-          //console.log("Response Data:", response)
+          console.log("Response Data:", response)
           this.setState({
             tickets: response.data.PostRubixUserData
           })
@@ -232,7 +237,7 @@ class RubixSurport extends React.Component {
     //Fetch Residences
     const fetchData = async() =>{
       //Populate Residence list
-      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + localStorage.getItem('clientID'))
+      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/')
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)
