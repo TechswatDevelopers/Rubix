@@ -249,8 +249,6 @@ getUserWitnessData() {
     })
   }
 
-
-
   render() {
     const { isPopUpConfirm, Title, Body, FileType, DocID, Filename, Function} = this.props;
     return (

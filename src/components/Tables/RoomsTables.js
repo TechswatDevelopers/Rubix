@@ -252,7 +252,7 @@ class RoomsTable extends React.Component {
                     <>
                   
                   
-                  { RoomList.length == 1
+                  { RoomList.length == 1 && room.RubixRegisterUserID != 0
                     ? <>
                     
                     <button className="btn btn-sm btn-outline-danger" 
