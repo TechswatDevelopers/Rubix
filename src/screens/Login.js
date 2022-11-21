@@ -325,8 +325,8 @@ class Login extends React.Component {
     switch (client) {
       case "1":
         {
-          this.props.updateClientLogo("jjp-logo.png");
-          this.props.updateClientName("Varsity Lodge");
+          this.props.updateClientLogo("adowa-logo.png");
+          this.props.updateClientName("Adowa Living");
           this.props.onPressThemeColor("blush");
           this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg")
           this.setState({
@@ -335,8 +335,8 @@ class Login extends React.Component {
             pageTitle: "Varsity Lodge",
           });
 
-          localStorage.setItem("clientLogo", "jjp-logo.png");
-          localStorage.setItem("clientName", "Varsity Lodge");
+          localStorage.setItem("clientLogo", "adowa-logo.png");
+          localStorage.setItem("clientName", "Adowa Living");
           localStorage.setItem("clientTheme", "blush");
           localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg");
     
@@ -419,7 +419,7 @@ class Login extends React.Component {
                         alt=""
                         style={{
                           height: "10%",
-                          width: "55%",
+                          width: "35%",
                           display: "block",
                           margin: "auto",
                         }}
