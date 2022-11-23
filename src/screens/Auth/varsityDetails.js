@@ -100,7 +100,7 @@ class VarsityDetails extends React.Component {
         console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
-                await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+                await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     //console.log("The Response: ",response)
                     //Set timer for loading screen
@@ -162,7 +162,7 @@ async componentDidMount(){
 
     const fetchData = async() =>{
         //Populate university list
-        await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
+        await fetch('https://adowarest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
             console.log("data is ", data.data)
@@ -174,7 +174,7 @@ async componentDidMount(){
 
 
             //Populate Provinces list
-        await fetch('https://jjprest.rubix.mobi:88/api/RubixProvinces')
+        await fetch('https://adowarest.rubix.mobi:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -185,7 +185,7 @@ async componentDidMount(){
             });
 
             //Populate Year of Study list
-            await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
+            await fetch('https://adowarest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -222,7 +222,7 @@ async componentDidMount(){
     //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
-      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + uniID)
+      await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data)
@@ -249,7 +249,7 @@ async componentDidMount(){
   };
   //console.log("My Data: ", data)
     const getData = async() => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
         console.log("My response: ", response.data.PostRubixUserData)
         

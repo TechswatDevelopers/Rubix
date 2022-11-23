@@ -101,7 +101,7 @@ class Login extends React.Component {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
           .post(
-            "https://jjprest.rubix.mobi:88/api/RubixLogin",
+            "https://adowarest.rubix.mobi:88/api/RubixLogin",
             data,
             requestOptions
           )
@@ -183,7 +183,7 @@ class Login extends React.Component {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
           .post(
-            "https://jjprest.rubix.mobi:88/api/RubixAdminUserLogin",
+            "https://adowarest.rubix.mobi:88/api/RubixAdminUserLogin",
             data,
             requestOptions
           )
@@ -258,7 +258,7 @@ class Login extends React.Component {
     const postData = async () => {
       await axios
         .post(
-          "https://jjprest.rubix.mobi:88/api/RubixLogin",
+          "https://adowarest.rubix.mobi:88/api/RubixLogin",
           data,
           requestOptions
         )
@@ -327,18 +327,18 @@ class Login extends React.Component {
         {
           this.props.updateClientLogo("adowa-logo.png");
           this.props.updateClientName("Adowa Living");
-          this.props.onPressThemeColor("blush");
-          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg")
+          this.props.onPressThemeColor("adowa");
+          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg",
-            pageTitle: "Varsity Lodge",
+              "https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg",
+            pageTitle: "Adowa Living",
           });
 
           localStorage.setItem("clientLogo", "adowa-logo.png");
           localStorage.setItem("clientName", "Adowa Living");
-          localStorage.setItem("clientTheme", "blush");
-          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg");
+          localStorage.setItem("clientTheme", "adowa");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg");
     
         }
         break;
@@ -376,7 +376,7 @@ class Login extends React.Component {
     const { navigation } = this.props;
     const { email, password } = this.props;
     return (
-      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
+      <div className={ "theme-adowa"/* this.props.rubixThemeColor */}>
         <Helmet>
           <meta charSet="utf-8" />
           <title>{this.state.pageTitle}</title>

@@ -252,7 +252,7 @@ mergePDFHandler()
         const dataUrl = 'data:' + doc.fileextension + ';base64,' + doc.image
         const temp = this.dataURLtoFile(dataUrl, 'Merged Document-' + doc.FileType)
 
-        const myUrl = 'https://jjpimages.rubix.mobi:449/' + doc.filename
+        const myUrl = 'https://adowaimages.rubix.mobi:449/' + doc.filename
         
         const bytes = window.atob(doc.image);
         let length = bytes.length;
@@ -294,7 +294,7 @@ mergePDFHandler()
     console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
+      await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           console.log("documents data:", data)
@@ -561,7 +561,7 @@ mergePDFHandler()
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
@@ -668,7 +668,7 @@ mergePDFHandler()
     };
 
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixDocumentsProgress', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
@@ -913,7 +913,7 @@ mergePDFHandler()
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           //this.setState({ mongoID: response.data.post._id })
@@ -952,7 +952,7 @@ mergePDFHandler()
         body: data
       };
       //console.log("Posted Data:", data)
-      await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+      await axios.post('https://adowapdf.rubix.mobi:94/PDFSignature', data, requestOptions)
         .then(response => {
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
@@ -1033,7 +1033,7 @@ mergePDFHandler()
           : null
         }
           
-          <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
+          <iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
     </iframe>
         </>
 
@@ -1043,13 +1043,13 @@ mergePDFHandler()
           {
             this.state.keyString == 'booking-doc'
             ?<>
-            <iframe src={"https://jjpimages.rubix.mobi:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px"></iframe>
+            <iframe src={"https://adowaimages.rubix.mobi:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px"></iframe>
             </>
             :<>
             {
               this.state.keyString == 'rules-doc'
               ?<>
-              <iframe src={'https://jjpimages.rubix.mobi:449/General%20Rules%20and%20Regulations.pdf'}width="100%" height="500px"></iframe>
+              <iframe src={'https://adowaimages.rubix.mobi:449/General%20Rules%20and%20Regulations.pdf'}width="100%" height="500px"></iframe>
               </>
               :<>
               <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
@@ -1081,7 +1081,7 @@ mergePDFHandler()
               ? <>
               <p>Loading document...</p>
             </>
-            :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
+            :<><iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
            {/* <p>If you agree to the above document, please enter your signature:</p>
                   <div className="border border-primary border-2 p-3" style={{
@@ -1179,7 +1179,7 @@ mergePDFHandler()
         Body = "You are confirming that the document and information are in line."
         FileType = {this.state.keyString} 
         DocID = {this.state.currentDocID}
-        Filename = {'https://jjpimages.rubix.mobi:449/' + this.state.myLease}
+        Filename = {'https://adowaimages.rubix.mobi:449/' + this.state.myLease}
         Function = {()=>{
           //Load Documents
    if (localStorage.getItem('role') == 'admin'){

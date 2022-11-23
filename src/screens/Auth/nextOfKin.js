@@ -126,6 +126,7 @@ class NextOfKin extends React.Component {
       'RubixRegisterUserID': this.state.myUserID,
       'RubixUserNextOfKinAddress': street_address,
   };
+
   for (let i=0; i < form.elements.length; i++) {
       const elem = form.elements[i];
       data[elem.name] = elem.value
@@ -137,19 +138,16 @@ class NextOfKin extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
+  
   //console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
                 this.props.history.push("/relatives")
               }
-          //this.props.history.push("/relatives")
-              /* setTimeout(() => {
-                this.postStatus()
-              }, 2000); */
               this.setState({
                 isLoad: false
               })
@@ -186,7 +184,7 @@ const requestOptions = {
 
 const postData = async() => {
   if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
           //console.log()
             setTimeout(() => {
@@ -241,7 +239,7 @@ else{
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           if(response != null || response != undefined){
       //Set timer for loading screen

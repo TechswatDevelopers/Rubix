@@ -28,20 +28,19 @@ class ForgotPasswordPage extends React.Component {
   setThemeColor(client){
     switch(client){
       case '1':{
-        this.props.updateClientLogo("jjp-logo.png");
-          this.props.updateClientName("Varsity Lodge");
+        this.props.updateClientLogo("adowa-logo.png");
+          this.props.updateClientName("Adowa Living");
           this.props.onPressThemeColor("blush");
-//          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg",
-            pageTitle: "Varsity Lodge",
+              "https://github.com/TechswatDevelopers/Media/raw/main/trnava-university-CtKO4NGiEhE-unsplash.jpg",
+            pageTitle: "Adowa Living",
           });
 
-          localStorage.setItem("clientLogo", "jjp-logo.png");
-          localStorage.setItem("clientName", "Varsity Lodge");
+          localStorage.setItem("clientLogo", "adowa-logo.png");
+          localStorage.setItem("clientName", "Adowa Living");
           localStorage.setItem("clientTheme", "blush");
-          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/trnava-university-CtKO4NGiEhE-unsplash.jpg");
       }
         break
       case '2': { 

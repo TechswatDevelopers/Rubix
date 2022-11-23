@@ -138,7 +138,7 @@ class PersonalInformation extends React.Component {
     console.log("Sent: ", data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
-            await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
+            await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 console.log("Response: ",response)
                 this.props.updateStudentID(idNumber)
@@ -180,7 +180,7 @@ class PersonalInformation extends React.Component {
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Countries List...");
       //Fetch Countries List
-      await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
+      await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
           //console.log("data is ", data.data)

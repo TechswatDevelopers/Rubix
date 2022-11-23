@@ -59,7 +59,7 @@ class Students extends React.Component {
 
     const fetchData = async() =>{
     //Populate Residence list
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/'/*  + localStorage.getItem('clientID') */)
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/'/*  + localStorage.getItem('clientID') */)
     .then(response => response.json())
     .then(data => {
         console.log("data is ", data)
@@ -85,7 +85,7 @@ class Students extends React.Component {
       body: pingData
     };
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminLeaseBulkUpdate', pingData, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminLeaseBulkUpdate', pingData, requestOptions)
       .then(response => {
         //console.log("The response = ", response)
         const data = response.data.PostRubixUserData
@@ -118,7 +118,7 @@ class Students extends React.Component {
   const leaseEnd = student.RubixRentalPeriodLeaseEndDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
 
   const data = {
-    "PDFDocumentUrl" :"https://jjpimages.rubix.mobi:449/" + student.FileName,
+    "PDFDocumentUrl" :"https://adowaimages.rubix.mobi:449/" + student.FileName,
     "LeaseStartDate" : leaseStart,
     "LeaseEndDate" : leaseEnd,
     "LeaseAmount" : student.RubixMontlyRentalAmount,
@@ -136,7 +136,7 @@ class Students extends React.Component {
 
   const postData = async () => {
     //console.log("I am posting")
-    await axios.post('https://jjppdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
+    await axios.post('https://adowapdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
     .then(response => {
       //console.log("Post Response: ", response)
       if(response.data != null && response.data != undefined){
@@ -183,7 +183,7 @@ console.log("the current student is: ", this.state.studentLeaseAmmend)
   const leaseStart = student.RubixRentalPeriodLeaseStartDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
   const leaseEnd = student.RubixRentalPeriodLeaseEndDate.replace(/T./,' ').replace(/Z.*/,'').split('-').join('-')
 const data = {
-  "PDFDocumentUrl" :"https://jjpimages.rubix.mobi:449/" + student.FileName,
+  "PDFDocumentUrl" :"https://adowaimages.rubix.mobi:449/" + student.FileName,
   "LeaseStartDate" : leaseStart,
   "LeaseEndDate" : leaseEnd,
   "LeaseAmount" : student.RubixMontlyRentalAmount,
@@ -202,7 +202,7 @@ const requestOptions = {
 
 //Http Post Request
 const postData = async () => {
-  await axios.post('https://jjppdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
+  await axios.post('https://adowapdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
   .then(response => {
     //console.log("Post Response: ", response)
     if(response.data != null && response.data != undefined){
@@ -241,7 +241,7 @@ postData().then(()=>{
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -291,7 +291,7 @@ postData().then(()=>{
       };
       //console.log('Posted data: ', pingData)
       const postData = async () => {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentList', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
           //console.log("The Response: ", response)
           if(!response.data.PostRubixUserData){
@@ -343,7 +343,7 @@ postData().then(()=>{
       };
       //console.log('Posted data: ', pingData)
       const postData = async () => {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminReportExport', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminReportExport', pingData, requestOptions)
         .then(response => {
           //console.log("Students Data List:", response)
           const temp = response.data.PostRubixUserData
@@ -399,7 +399,7 @@ postData().then(()=>{
   //Get rubix color codes
   getColors(){
     const fetchData = async () => {
-      await fetch('https://jjprest.rubix.mobi:88/api/RubixGetColor')
+      await fetch('https://adowarest.rubix.mobi:88/api/RubixGetColor')
       .then(response => response.json())
       .then(data => {
         console.log("colors data: ", data.data)

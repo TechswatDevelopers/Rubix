@@ -164,7 +164,7 @@ class Registration extends React.Component {
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
                 //console.log("The response: ",response.data)
                 /*If User exists on DB:
@@ -198,7 +198,7 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post('https://jjppdf.rubix.mobi:94/validEmailCheck', pingData, requestOptions)
+        await axios.post('https://adowapdf.rubix.mobi:94/validEmailCheck', pingData, requestOptions)
             .then(response => {
                 //console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
