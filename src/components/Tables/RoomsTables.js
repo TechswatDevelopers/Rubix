@@ -188,20 +188,12 @@ class RoomsTable extends React.Component {
     postDocument()
   }
   
-
-  
   render() {
     const { RoomList, Student, Body } = this.props;
     return (
       <div className="col-lg-12">
         <div className="card">
-        {/* <PopUpAssign 
-        roomID = {this.state.currentRoom.RubixResidenceRoomsID}
-        Title= "Confirm Room Assigning"
-        Body = {"You are about to assign " + this.props.currentStudentname + " to a room: " }
-     
-        /> */}
-        
+      
         <AmmendLease 
         StudentID= {Student}
         />

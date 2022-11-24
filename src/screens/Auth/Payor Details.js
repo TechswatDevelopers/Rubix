@@ -13,7 +13,7 @@ import {onPresPopUpEvent,
 import PopUpModal from "../../components/PopUpModal";
 import { Tabs, Tab, Row, Col } from "react-bootstrap";
 
-class NextOfKin extends React.Component {
+class PayorDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +26,10 @@ class NextOfKin extends React.Component {
         isLoad: false,
         showSearch: false,
         consent: false,
+        funding: null,
+        fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship", "NSFAS"],
+        payMethods: ["Please select payment method"],
+        payment: null,
         value: 0
 
     };
@@ -126,7 +130,7 @@ class NextOfKin extends React.Component {
   
   const data = {
       'RubixRegisterUserID': this.state.myUserID,
-      'RubixUserNextOfKinAddress': street_address,
+      'RubixPayorAddress': street_address,
   };
 
   for (let i=0; i < form.elements.length; i++) {
@@ -135,7 +139,7 @@ class NextOfKin extends React.Component {
   }
 
   const requestOptions = {
-      title: 'Next of Kin Form',
+      title: 'Payor Form',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: data
@@ -144,11 +148,11 @@ class NextOfKin extends React.Component {
   //console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserPayor', data, requestOptions)
           .then(response => {
               console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
-                this.props.history.push("/relatives")
+                this.props.history.push("/nextofkin")
               }
               this.setState({
                 isLoad: false
@@ -178,7 +182,7 @@ for (let i=0; i < form.elements.length; i++) {
 }
 
 const requestOptions = {
-    title: 'Next of Kin Form',
+    title: 'Payor Details Form',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: data
@@ -258,6 +262,35 @@ else{
     postData()
   }
 
+  getResAndPayment(resID, uni){
+    //console.log("this: ", resID)
+    this.setState({
+      isLoad: true
+    })
+    const data = {
+      'RubixUniversityID': uni,
+      'RubixResidenceID': resID
+    };
+    const requestOptions = {
+      title: 'Get Payment Details Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+  };
+  console.log("My Data: ", data)
+    const getData = async() => {
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
+      .then(response => {
+        console.log("My response: ", response.data.PostRubixUserData)
+        
+        this.setState({
+          isLoad: false,
+          payMethods: response.data.PostRubixUserData
+        })
+    })
+    }
+    getData()
+  }
 
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
@@ -273,6 +306,7 @@ else{
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate + myTime })
+    this.getResAndPayment(1, "1")
 
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
@@ -303,7 +337,7 @@ else{
       <div className="theme-grey">
       <Helmet>
             <meta charSet="utf-8" />
-            <title>Parent/Guardian Details</title>
+            <title>Payment Details</title>
         </Helmet>
         <div
           className="page-loader-wrapper"
@@ -327,10 +361,11 @@ else{
         Body = "Thank you for registering with Us. We have sent you an email to verify your account, please check your emails."
         Function ={()=>this.props.history.push("/login/" + localStorage.getItem('clientID'))}
         />
+
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
-            <p>Registering please wait...</p>
+            <p>Processing informaion please wait...</p>
           </div>
         </div>
         <div >
@@ -351,42 +386,60 @@ else{
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Parent/Guardian Details</p>
+                    <p className="lead">Payment Details</p>
                   </div>
                   <div className="body">
                     <form id='nof' onSubmit={(e) => this.Submit(e)}>
+                    <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Payment Method: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>{
+          //this.onChangeDurationViaPayment(e)
+          this.setState({payment: e.target.value})}} value={this.state.payment}>
+        {
+            this.state.payMethods.map((payment, index)=> (
+            <option key={index} name='PaymentMethod' value={payment.PaymentMethod}>{payment.PaymentMethod}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+                    <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Funding Source:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({funding: e.target.value})} value={this.state.funding}>
+        {
+         this.state.fundingSources.map((source, index)=> (
+            <option key={index} name='AccountType' value = {source}>{source}</option>
+        ))  
+        }
+        </select> }
+                      </div>
+
+
                       <div className="form-group">
                         <label className="control-label sr-only" >
-                        First Name(s):
+                        Full Name(s):
                             </label>
                         <input
                           className="form-control"
                           id="NextOfKinFirstName"
                           name='NextOfKinFirstName'
-                          placeholder="Enter next of kin name"
+                          placeholder="Enter Payor's Full Name"
                           type="text"
                           required
                         />
                       </div>
+                      
                       <div className="form-group">
                         <label className="control-label sr-only" >
-                        Surname:
-                            </label>
-                        <input
-                          className="form-control"
-                          id="NextOfKinLastName"
-                          name='NextOfKinLastName'
-                          placeholder="Enter Next of kin surnme"
-                          type="text"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        ID Number:
+                        ID?Reg Number:
                             </label>
                             <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
-                    required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
+                    required='' /* maxLength = '13' minLength='13' */ placeholder='Enter Payor ID/Reg Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
                       <div className="form-group">
@@ -397,7 +450,7 @@ else{
                           className="form-control"
                           id="NextOfKinEmail"
                           name='NextOfKinEmail'
-                          placeholder="Enter Next of kin email"
+                          placeholder="Enter Payor Email"
                           type="email"
                           required
                         />
@@ -463,36 +516,6 @@ placeholder: "Search Address"
                       </div>
 
                       </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Relationship:
-                            </label>
-                        <input
-                          className="form-control"
-                          id="NextOfKinEmail"
-                          name='NextOfKiniRelationship'
-                          placeholder="Enter Next of kin relation to you"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        
-                          <input
-                          className="form-check"
-                          id="NextOfKiniConsent"
-                          name='NextOfKiniConsent'
-                          onChange={(e)=>this.setState({consent: e.target.value})}
-                          //placeholder="Enter Next of kin relation to you"
-                          type="checkbox"
-                          required
-                        />
-                        <p>I consent to a credit check.</p>
-                        
-                            
-                      </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Next
                         </button>
@@ -509,7 +532,7 @@ placeholder: "Search Address"
   }
 }
 
-NextOfKin.propTypes = {
+PayorDetails.propTypes = {
 };
 
 const mapStateToProps = ({ navigationReducer,  loginReducer, mailInboxReducer }) => ({
@@ -530,4 +553,4 @@ export default connect(mapStateToProps, {
   updateClientBackG,
   updateLoadingMessage,
   updateLoadingController
-})(NextOfKin);
+})(PayorDetails);

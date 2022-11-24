@@ -10,6 +10,7 @@ import {updateClientBackG,
   updateLoadingMessage,} from "../../actions";
 
 class Addresses extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -97,7 +98,6 @@ class Addresses extends React.Component {
       };
 
       const postData = async () => {
-
         if ( this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {

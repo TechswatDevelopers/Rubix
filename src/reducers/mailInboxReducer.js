@@ -134,6 +134,7 @@ export default (state = initialState, action) => {
         isProfileShowing: !state.isProfileShowing,
       };
     }
+    
 
 //Toggle Show Rooms
     case ON_PRESS_SHOW_ROOMS: {

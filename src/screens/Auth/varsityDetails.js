@@ -10,8 +10,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { updateClientBackG,
-  updateLoadingController,
+  updateLoadingController, onPresRooms,
   updateLoadingMessage,} from "../../actions";
+  import PopUpRooms from "../../components/PopUpRooms"
+  import RoomsTable from "../../components/Tables/RoomsTables"
 //import { duration } from "moment/moment";
 
 class VarsityDetails extends React.Component {
@@ -41,7 +43,16 @@ class VarsityDetails extends React.Component {
             hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             durations: [],
-            value: 0
+            value: 0,
+            availableRooms: [],
+            buildingNumberList: [],
+            buildingNumber: '',
+            floorNumberList: [],
+            floorNumber: '',
+            roomNumberList: [],
+            roomNumber: '',
+            genderRoomList: ['Female', 'Male'],
+            roomGender: '',
 
         };
       }
@@ -78,12 +89,10 @@ class VarsityDetails extends React.Component {
         //console.log('Uni ID: ', this.state.uni)
         const data = {
             'RubixRegisterUserID': this.state.myUserID,
-            //'ProvinceID': this.state.prov,
             'UniversityID': this.state.uni,
             'CourseID': this.state.course,
             'ResidenceID': this.state.res,
             'StudentYearofStudyID': this.state.year,
-            'PaymentMethod': this.state.payment,
             'Duration': this.state.duration,
             'HearAbout': this.state.hearAbout
         };
@@ -99,7 +108,7 @@ class VarsityDetails extends React.Component {
         };
         console.log(data)
         const postData = async()=>{
-            if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
+            if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
                     //console.log("The Response: ",response)
@@ -108,7 +117,8 @@ class VarsityDetails extends React.Component {
     setTimeout(() => {
       this.props.updateLoadingController(false);
     }, 1000);
-                    this.props.history.push("/nextofkin")
+    localStorage.setItem('resID', this.state.res)
+                    this.props.history.push("/payor")
                 })
                     
             } else{
@@ -117,7 +127,6 @@ class VarsityDetails extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
               alert("Please ensure that you entered all required information")
-                //console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
         if(this.state.duration == 0){
@@ -153,8 +162,10 @@ async componentDidMount(){
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
     const userID = localStorage.getItem('userID');
+    console.log("My UID: ",userID )
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
+    this.getStudentRoomDetails(userID)
 
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
@@ -177,11 +188,7 @@ async componentDidMount(){
         await fetch('https://adowarest.rubix.mobi:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
-            //this.state.provList = data.data
             this.setState({provList: data.data})
-            //console.log("this is the provList:", this.state.provList)
-            //setProvList(data.data)
             });
 
             //Populate Year of Study list
@@ -282,9 +289,9 @@ async componentDidMount(){
       showResInput: true,
     })
   }
+
   onValueChange(e){
     //console.log(e.target.value)
-
     if(e.target.value == 'no'){
       this.setState({
         hasCar: false
@@ -294,11 +301,149 @@ async componentDidMount(){
         hasCar: true
       })
     }
-
    
   }
 
+    //Fetch User Res Data
+    getStudentRoomDetails(studentID){
+      const pingData = {
+          'RubixClientID': localStorage.getItem('clientID'),
+          'ResidenceName': "",
+          'RubixResidenceID': 1,
+          'BuildingNumber': "",
+          'FloorNumber': "",
+          'RoomNumber': "",
+          'RubixRegisterUserID': studentID
+        };
+        //Ping Request Headers
+        const requestOptions = {
+          title: 'Get Students Room Allocation Details',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: pingData
+        };
+        console.log('Posted:', pingData)
+        const postData = async () => {
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailable', pingData, requestOptions)
+          .then(response => {
+            console.log("Students Rooms List:", response.data.PostRubixUserData)
+            if (response.data.PostRubixUserData){
+              //Show available rooms
+              this.setState({
+                availableRooms: response.data.PostRubixUserData
+              })
+              this.setState({
+                buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
+                floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
+                roomNumberList: this.populate('RoomNumber', response.data.PostRubixUserData)
+  
+              })
+  
+            } else {
+              //Show Room Details
+              this.getStudentRoomDetails(' ')
+            }
+            
+  
+          })
+        }
+        postData()
+    }
 
+      //Get Romms Filters
+  getRoomsFilters(buildingNumber, floorNumber, roomNumber, studentID, gender){
+    const pingData = {
+        'RubixClientID': localStorage.getItem('clientID'),
+        'ResidenceName': "",
+        'RubixResidenceID': 1,
+        'BuildingNumber': buildingNumber,
+        'FloorNumber': floorNumber,
+        'RoomNumber': roomNumber,
+        'Gender': gender,
+        'RubixRegisterUserID': studentID
+
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Get Students Room Allocation Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+      //console.log('Posted:', pingData)
+      const postData = async () => {
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailableDropdown', pingData, requestOptions)
+        .then(response => {
+          console.log("Students Rooms Dropdown:", response)
+          if (response.data.PostRubixUserData){
+            //Show available rooms
+            this.setState({
+              availableRooms: response.data.PostRubixUserData,
+              showFilters: true
+            })
+
+            this.setState({
+              buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
+              floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
+              roomNumberList: this.populate('RoomNumber', response.data.PostRubixUserData)
+
+            })
+          } else {
+          
+          }
+          
+
+        })
+      }
+      postData()
+  }
+
+
+  //Populate Lists
+  populate(filterType, roomList){
+    let newList = []
+
+    //Select Filter
+    switch(filterType){
+      case 'BuildingNumber':
+        {
+          for(let i = 0; i<= roomList.length - 1; i++ ){
+            
+            if(newList.includes(roomList[i].BuildingNumber)){
+              //console.log('found', roomList[i].BuildingNumber)
+              
+            } else {
+              newList.push(roomList[i].BuildingNumber)
+            }
+          }
+        }
+        break;
+      case 'FloorNumber':
+        {
+          for(let i = 0; i<= roomList.length - 1; i++ ){
+            
+            if(newList.includes(roomList[i].FloorNumber)){
+              //console.log('found')
+            } else {
+              newList.push(roomList[i].FloorNumber)
+            }
+          } 
+        }
+        break;
+      case 'RoomNumber':
+        {
+          for(let i = 0; i<= roomList.length - 1; i++ ){
+            
+            if(newList.includes(roomList[i].RoomNumber)){
+              //console.log('found')
+            } else {
+              newList.push(roomList[i].RoomNumber)
+            }
+          }
+        }
+    }
+    return newList
+  }
   render() {
     let body;
     if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
@@ -388,6 +533,76 @@ async componentDidMount(){
               <title>University Details</title>
           </Helmet>
 
+          <PopUpRooms body = {
+          <RoomsTable
+                    Student = {localStorage.getItem('userID')}
+              RoomList= {this.state.availableRooms}
+              Body = {
+                this.state.availableRooms.length === 1 || this.state.showFilters
+                ? null
+              :
+              <>
+              <Row>
+              {  <>
+              <label>Buiding Number</label>
+        <select className="form-control" onChange={(e)=>{
+          this.getRoomsFilters(e.target.value, '', '', localStorage.getItem('userID'))
+          this.setState({buildingNumber: e.target.value})}} value={this.state.buildingNumber}>
+        {
+            
+         this.state.buildingNumberList.map((buidling, index)=> (
+            <option key={index} name='BuildingNumber' value = {buidling}>{buidling}</option>
+        ))   
+        }
+    </select> 
+    </>}
+
+    { <> 
+              <label>Floor Number</label>
+        <select className="form-control" onChange={(e)=>{
+          this.getRoomsFilters('', e.target.value, '', localStorage.getItem('userID'))
+          this.setState({floorNumber: e.target.value})}} value={this.state.floorNumberList}>
+        {
+            
+         this.state.floorNumberList.map((floor, index)=> (
+            <option key={index} name='FloorNumber' value = {floor}>{floor}</option>
+        ))   
+        }
+    </select>
+    
+    </> }
+
+    {   <> 
+              <label>Room Number</label>
+        <select className="form-control" onChange={(e)=>{
+          this.getRoomsFilters('', '', e.target.value, localStorage.getItem('userID'))
+          this.setState({roomNumber: e.target.value})}} value={this.state.roomNumberList}>
+        {
+            
+         this.state.roomNumberList.map((room, index)=> (
+            <option key={index} name='RoomNumber' value = {room}>{room}</option>
+        ))   
+        }
+    </select> </>}
+
+    {   <> 
+              <label>Room Gender</label>
+        <select className="form-control" onChange={(e)=>{
+          this.getRoomsFilters('', '', '', localStorage.getItem('userID'), e.target.value == 'Female' ? 'F' : 'M')
+          this.setState({ roomGender: e.target.value == 'Female' ? 'F' : 'M'})}} value={this.state.roomNumberList}>
+        {
+            
+         this.state.genderRoomList.map((gender, index)=> (
+            <option key={index} name='RoomGender' value = {gender}>{gender}</option>
+        ))   
+        }
+    </select> </>}
+    
+              <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '', localStorage.getItem('userID'))}>Reset</button>
+              </Row>
+              </>}
+              />}></PopUpRooms>
+
           <div
           className="page-loader-wrapper"
           style={{ display: this.props.MyloadingController ? "block" : "none" }}
@@ -439,7 +654,8 @@ async componentDidMount(){
             <option key={index} name='UniversityID' value = {university.RubixUniversityID}>{university.UniversityName}</option>
         ))   
         }
-    </select> }
+    </select> 
+    }
                       </div>
                       
                       <div className="form-group">
@@ -482,7 +698,7 @@ async componentDidMount(){
     </select> }
                       </div>
 
-                      { this.state.payMethods.length == 0
+                      {/* { this.state.payMethods.length == 0
                       ?<></>
                       :
                         
@@ -500,7 +716,7 @@ async componentDidMount(){
         ))   
         }
     </select> }
-                      </div>}
+                      </div>} */}
 
                       { this.state.res == "Please Select Residence"
                       ?<></>
@@ -595,7 +811,9 @@ async componentDidMount(){
         }
     </select> }
                       </div>
-                     
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) =>{this.props.onPresRooms()} }>
+                        Choose Preffered Room
+                        </button>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         NEXT
                         </button>
@@ -629,4 +847,4 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
 export default connect(mapStateToProps, {
   updateClientBackG,
   updateLoadingMessage,
-  updateLoadingController,})(VarsityDetails);
+  updateLoadingController, onPresRooms})(VarsityDetails);

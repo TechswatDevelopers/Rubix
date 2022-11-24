@@ -78,6 +78,7 @@ import Registration from "./screens/Auth/Registration";
 import Addresses from "./screens/Auth/addresses";
 import VarsityDetails from "./screens/Auth/varsityDetails";
 import NextOfKin from "./screens/Auth/nextOfKin";
+import PayorDetails from "./screens/Auth/Payor Details";
 import Relatives from "./screens/Auth/relatives";
 import forgotPass from "./screens/Auth/ForgotPasswordPage";
 import StudentInformation from "./screens/Auth/studentdata";
@@ -155,6 +156,7 @@ class App extends React.Component {
         activeKey1 === "studentData" ||
         activeKey1 === "myDashboard" ||
         activeKey1 === "nextofkin" ||
+        activeKey1 === "payor" ||
         activeKey1 === "relatives" ||
         activeKey1 === "addresses" ||
         activeKey1 === "verifyemail" ||
@@ -206,21 +208,6 @@ class App extends React.Component {
                 path={`${process.env.PUBLIC_URL}/page404`}
                 component={page404}
               />
-              {/* <Route
-                exact
-                path={`${process.env.PUBLIC_URL}/page403`}
-                component={page403}
-              /> */}
-              {/* <Route
-                exact
-                path={`${process.env.PUBLIC_URL}/page500`}
-                component={page500}
-              /> */}
-              {/* <Route
-                exact
-                path={`${process.env.PUBLIC_URL}/page503`}
-                component={page503}
-              /> */}
               <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/tester`}
@@ -240,6 +227,11 @@ class App extends React.Component {
                 exact
                 path={`${process.env.PUBLIC_URL}/nextofkin`}
                 component={NextOfKin}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/payor`}
+                component={PayorDetails}
               />
               <Route
                 exact
