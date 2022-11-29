@@ -128,6 +128,8 @@ class Registration extends React.Component {
     }
     return correct
   }
+
+  
   //Submit Email
       Submit(e){
         e.preventDefault();
@@ -159,19 +161,21 @@ class Registration extends React.Component {
           'IDNumber': idNumber,
           'RubixClientID': localStorage.getItem('clientID'),
       };
-      //console.log("The Call: ", userExistsData)
+      console.log("The Call: ", userExistsData)
 
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                //console.log("The response: ",response.data)
+                console.log("The response: ",response.data)
+
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
                 2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
                 3. If Response is equal to One, then the user exists on the DB
                 */
+               
                 if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID == null ){
                   postData()
                  } else if(response.data.PostRubixUserData[0].Response === '0' && response.data.PostRubixUserData[0].RubixRegisterUserID != null){
@@ -241,7 +245,7 @@ class Registration extends React.Component {
     //const user = useContext(MyProvider);
     return (
       <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
-      <Helmet>
+          <Helmet>
               <meta charSet="utf-8" />
               <title>Register Email</title>
           </Helmet>

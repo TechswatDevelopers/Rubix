@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap';
 import axios from "axios";
 
 
-class PopUpAssign extends React.Component {
+class PopUpSelectPref extends React.Component {
     //Initial State
 constructor(props) {
   super(props)
@@ -285,4 +285,4 @@ export default connect(mapStateToProps, {
   onPresPopUpRemove,
   updateLoadingMessage,
   updateLoadingController,
-  })(PopUpAssign);
+  })(PopUpSelectPref);

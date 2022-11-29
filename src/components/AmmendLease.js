@@ -48,7 +48,7 @@ componentDidMount() {
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -121,7 +121,7 @@ const requestOptions = {
 
 //Http Post Request
 const postData = async () => {
-  await axios.post('https://jjppdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
+  await axios.post('https://adowapdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
   .then(response => {
     console.log("Post Response: ", response)
     if(response.data != null && response.data != undefined){
@@ -152,7 +152,7 @@ postData().then(()=>{
     var tempList
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
+      await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           //console.log("documents data:", data)
@@ -160,7 +160,7 @@ postData().then(()=>{
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 
            if(tempList.length != 0){
-             this.postLeaseData1("https://jjpimages.rubix.mobi:449/" + tempList[0].filename, userID)
+             this.postLeaseData1("https://adowaimages.rubix.mobi:449/" + tempList[0].filename, userID)
            } else {
              
       this.props.updateLoadingController(false);

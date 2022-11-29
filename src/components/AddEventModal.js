@@ -28,7 +28,7 @@ componentDidMount() {
 //Get Events Types List
 getEventsData() {
   const fetchData = async() =>{
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixEventTypess')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixEventTypess')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -103,7 +103,7 @@ getEventsData() {
 
     //Make Post
     const postData = async()=>{
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixResidenceEventsAddData', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixResidenceEventsAddData', data, requestOptions)
       .then(response => {
         console.log("Add Event Response", response)
       })
@@ -152,7 +152,7 @@ getEventsData() {
 
     //Make Post
     const postData = async()=>{
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentEventsAddData', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentEventsAddData', data, requestOptions)
       .then(response => {
         console.log("Add Student Event Response: ", response)
       })

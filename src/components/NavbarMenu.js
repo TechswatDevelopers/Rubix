@@ -59,7 +59,7 @@ class NavbarMenu extends React.Component {
  //Get User Profile Picture
  const fetchData = async () => {
   //Get documents from DB
-  await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
+  await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + userID)
     .then(response => {
       //console.log("Profile data:", response)
       response.json()})
@@ -69,14 +69,14 @@ class NavbarMenu extends React.Component {
       //If Profile Picture Exists...
       if(profilePic != null && profilePic != undefined){
         this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0]})
-        this.setState({imageUrl: 'https://jjpimages.rubix.mobi:449/' + profilePic.filename})
+        this.setState({imageUrl: 'https://adowaimages.rubix.mobi:449/' + profilePic.filename})
       }
     });
 };
     //Fetch data from DB
     const fetchUserData = async() =>{
     //Get Rubix User Details
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers/'+ userID)
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers/'+ userID)
     .then(response => response.json())
     .then(data => {
       //console.log("Check: ", data)
@@ -108,7 +108,7 @@ class NavbarMenu extends React.Component {
     //Fetch Res Gallery Images
     fetchImages() {
       const fetchData = async () => {
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + localStorage.getItem('resID'))
+      await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + localStorage.getItem('resID'))
       .then(response => response.json())
       .then(data => {
        /*  console.log("Res ID:", localStorage.getItem('resID'))
@@ -118,7 +118,7 @@ class NavbarMenu extends React.Component {
          if(data.post[i].FileType == "ResManager"){ 
           
           this.setState({
-            imageUrl: 'https://jjpimages.rubix.mobi:449/' +  data.post[i].filename
+            imageUrl: 'https://adowaimages.rubix.mobi:449/' +  data.post[i].filename
           })
           }
         }
@@ -145,7 +145,7 @@ class NavbarMenu extends React.Component {
         body: pingData
       };
       const postData = async () => {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminGetUser', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminGetUser', pingData, requestOptions)
         .then(response => {
           //console.log("Admin User Details:", response)
           this.setState({

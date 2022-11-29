@@ -14,7 +14,7 @@ import PopUpRemove from "../../components/PopUpRemoveFromRoom"
 import AmmendLease from "../../components/AmmendLease"
 import axios from "axios";
 
-class RoomsTable extends React.Component {
+class RoomsTableStudent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -213,11 +213,9 @@ console.log("I am called with: ", this.props.RoomList )
             <table className="table">
               <thead>
                 <tr>
-                  <th>Res Code</th>
                   <th>Building Number</th>
                   <th>Floor Number</th>
                   <th>Room Number</th>
-                  <th>Bed Number</th>
                   <th>QUICK ACTIONS</th>
                 </tr>
               </thead>
@@ -239,71 +237,24 @@ console.log("I am called with: ", this.props.RoomList )
                   <th scope="row">
                   {room.ResidenceName}
                     </th>
-                  <td>{room.BuildingNumber}</td>
                   <td>{room.FloorNumber}</td>
                   <td>{room.RoomNumber}</td>
-                  <td>{room.BedNumber}</td>
                   <td>
                     <>
                   
-                  
-                  { RoomList.length == 1 && room.RubixRegisterUserID != 0
-                    ? <>
-                    
-                    <button className="btn btn-sm btn-outline-danger" 
-                    onClick={(e)=>{
-                      e.preventDefault()
-                      //this.props.onPresRooms(e)
-                      this.props.onPresPopUpRemove()
-                      
-                      }}>
-                      <span>
-                        <i className=" icon-logout"></i> 
-                           Remove from Room
-                        </span>
-                      </button>
-
-                    <button className="btn btn-sm btn-outline-primary ml-2" 
-                    onClick={(e)=>{
-                      e.preventDefault()
-                      //this.props.onPresRooms(e)
-                      this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', Student, 0)
-                      
-                      }}>
-                      <span>
-                        <i className=" icon-refresh"></i> 
-                           Regenerate Lease
-                        </span>
-                      </button>
-
-                    {/* <button className="btn btn-sm btn-outline-success ml-2" 
-                    onClick={(e)=>{
-                      e.preventDefault()
-                      //this.props.onPresRooms(e)
-                      this.props.onToggleLeaseAmmend()
-                      }}>
-                      <span>
-                        <i className=" icon-pencil"></i> 
-                           Ammend Lease
-                        </span>
-                      </button> */}
-                      
-                      </>
-
-
-                    : <button className="btn btn-sm btn-outline-success" 
+                  <button className="btn btn-sm btn-outline-success" 
                   onClick={(e)=>{
                     e.preventDefault()
-                    //this.props.onPresRooms(e)
-                    this.props.onPresPopUpAssign()
+                    localStorage.setItem("roomID", room.RubixResidenceRoomsID)
+                    this.props.onPresRooms()
+                    //this.props.onPresPopUpAssign()
                     
                     }}>
                     <span>
-                      <i className=" icon-key"></i> 
-                         Assign to Room
+                      <i className="icon-check"></i> 
+                           Choose Room
                       </span>
                     </button>
-                    }
                   </></td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
@@ -339,4 +290,4 @@ export default connect(mapStateToProps, {
   onPresPopUpAssign,
   onPresPopUpRemove,
   onToggleLeaseAmmend
-})(RoomsTable);
+})(RoomsTableStudent);

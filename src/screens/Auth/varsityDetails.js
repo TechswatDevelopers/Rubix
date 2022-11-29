@@ -13,7 +13,7 @@ import { updateClientBackG,
   updateLoadingController, onPresRooms,
   updateLoadingMessage,} from "../../actions";
   import PopUpRooms from "../../components/PopUpRooms"
-  import RoomsTable from "../../components/Tables/RoomsTables"
+  import RoomsTableStudent from "../../components/Tables/RoomsTablesStudent"
 //import { duration } from "moment/moment";
 
 class VarsityDetails extends React.Component {
@@ -53,6 +53,7 @@ class VarsityDetails extends React.Component {
             roomNumber: '',
             genderRoomList: ['Female', 'Male'],
             roomGender: '',
+            showFilters: false,
 
         };
       }
@@ -94,7 +95,8 @@ class VarsityDetails extends React.Component {
             'ResidenceID': this.state.res,
             'StudentYearofStudyID': this.state.year,
             'Duration': this.state.duration,
-            'HearAbout': this.state.hearAbout
+            'HearAbout': this.state.hearAbout,
+            'PrefRoomID': localStorage.getItem('roomID')
         };
         for (let i=0; i < form.elements.length; i++) {
             const elem = form.elements[i];
@@ -106,12 +108,12 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        console.log(data)
+        console.log("Sent Data: ",data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    //console.log("The Response: ",response)
+                    console.log("The Response: ",response)
                     //Set timer for loading screen
                     
     setTimeout(() => {
@@ -135,13 +137,13 @@ class VarsityDetails extends React.Component {
           setTimeout(() => {
             this.props.updateLoadingController(false);
           }, 1000);
-        } else if(this.state.payment == 'Please Select Payment Method' || this.state.payment == null){
+        } /* else if(this.state.payment == 'Please Select Payment Method' || this.state.payment == null){
           alert("Please select a payment method")
           this.props.updateLoadingMessage("Reloading...");
           setTimeout(() => {
             this.props.updateLoadingController(false);
           }, 1000);
-        }
+        } */
         else if(this.state.res == 'Please Select Residence' || this.state.res == null){
           alert("Please select a Residence")
           this.props.updateLoadingMessage("Reloading...");
@@ -313,7 +315,7 @@ async componentDidMount(){
           'BuildingNumber': "",
           'FloorNumber': "",
           'RoomNumber': "",
-          'RubixRegisterUserID': studentID
+          'RubixRegisterUserID': ''
         };
         //Ping Request Headers
         const requestOptions = {
@@ -330,8 +332,10 @@ async componentDidMount(){
             if (response.data.PostRubixUserData){
               //Show available rooms
               this.setState({
-                availableRooms: response.data.PostRubixUserData
+                availableRooms: response.data.PostRubixUserData,
+                showFilters: true
               })
+
               this.setState({
                 buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
                 floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
@@ -361,7 +365,6 @@ async componentDidMount(){
         'RoomNumber': roomNumber,
         'Gender': gender,
         'RubixRegisterUserID': studentID
-
       };
       //Ping Request Headers
       const requestOptions = {
@@ -423,7 +426,7 @@ async componentDidMount(){
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].FloorNumber)){
-              //console.log('found')
+              //console.log('found', roomList[i].FloorNumber)
             } else {
               newList.push(roomList[i].FloorNumber)
             }
@@ -445,87 +448,7 @@ async componentDidMount(){
     return newList
   }
   render() {
-    let body;
-    if(this.state.payment == 'NSFAS' || this.state.payment == 'External Bursary' || this.state.payment == 'Student Loan'){
-      body = 
-      null
-    } else if(this.state.payment == 'Self Funded'){
-      body = <>
-      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Account Holder Name:
-                            </label>
-                            <input
-                          className="form-control"
-                          id="AccountHolderName"
-                          name='AccountHolderName'
-                          placeholder="Enter your bank account holder name"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                            <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Bank Name:
-                            </label>
-                            <input
-                          className="form-control"
-                          id="BankName"
-                          name='BankName'
-                          placeholder="Enter your bank name"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                            <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Branch Code:
-                            </label>
-                            <input
-                          className="form-control"
-                          id="BranchCode"
-                          name='BranchCode'
-                          placeholder="Enter your branch code"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Account Number:
-                            </label>
-                            <input
-                          className="form-control"
-                          id="AccountNumber"
-                          name='AccountNumber'
-                          placeholder="Enter your account number"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                      
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Account Type:
-                            </label>
-                            {  
-        <select className="form-control" onChange={(e)=>this.setState({bankType: e.target.value})} value={this.state.bankType}>
-        {
-         this.state.bankTypes.map((banktype, index)=> (
-            <option key={index} name='AccountType' value = {banktype}>{banktype}</option>
-        ))  
-        }
-        </select> }
-                      </div>
-
-      </>
-    } else {
-      body = null;
-    }
+   
     return (
       <div className="theme-grey">
         <Helmet>
@@ -533,15 +456,14 @@ async componentDidMount(){
               <title>University Details</title>
           </Helmet>
 
-          <PopUpRooms body = {
-          <RoomsTable
-                    Student = {localStorage.getItem('userID')}
+          <PopUpRooms
+          Title = "Room Preference"
+          Body = {
+          <RoomsTableStudent
+              Student = {localStorage.getItem('userID')}
               RoomList= {this.state.availableRooms}
               Body = {
-                this.state.availableRooms.length === 1 || this.state.showFilters
-                ? null
-              :
-              <>
+                <>
               <Row>
               {  <>
               <label>Buiding Number</label>
@@ -698,26 +620,6 @@ async componentDidMount(){
     </select> }
                       </div>
 
-                      {/* { this.state.payMethods.length == 0
-                      ?<></>
-                      :
-                        
-                        <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Payment Method: 
-                            </label>
-                            {  
-        <select className="form-control" onChange={(e)=>{
-          this.onChangeDurationViaPayment(e)
-          this.setState({payment: e.target.value})}} value={this.state.payment}>
-        {
-            this.state.payMethods.map((payment, index)=> (
-            <option key={index} name='PaymentMethod' value={payment.PaymentMethod}>{payment.PaymentMethod}</option>
-        ))   
-        }
-    </select> }
-                      </div>} */}
-
                       { this.state.res == "Please Select Residence"
                       ?<></>
                       :
@@ -795,7 +697,6 @@ async componentDidMount(){
                       </div>
 
                       
-                     {body}
 
                       <div className="form-group">
                         <label className="control-label sr-only" >
@@ -811,7 +712,7 @@ async componentDidMount(){
         }
     </select> }
                       </div>
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) =>{this.props.onPresRooms()} }>
+                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) =>{e.preventDefault(); this.props.onPresRooms()} }>
                         Choose Preffered Room
                         </button>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>

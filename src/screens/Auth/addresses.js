@@ -73,7 +73,7 @@ class Addresses extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
           alert("Please ensure that you entered all required information")
-          console.log("checkValidity ", document.getElementById('addresses').checkValidity())
+          //console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
       }
       postData()

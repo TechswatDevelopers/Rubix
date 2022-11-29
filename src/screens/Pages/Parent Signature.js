@@ -40,7 +40,7 @@ constructor(props) {
 
     const fetchDocs = async()=> {
       //Get documents from DB
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + this.state.userID)
+      await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + this.state.userID)
       .then(response => response.json())
       .then(data => {
         console.log("check: ", data)
@@ -97,7 +97,7 @@ constructor(props) {
         'RubixPlace': document.getElementById('RubixPlace').value,
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,
-        'PDFDocumentUrl': "https://jjpimages.rubix.mobi:449/" + this.state.leaseDoc
+        'PDFDocumentUrl': "https://adowaimages.rubix.mobi:449/" + this.state.leaseDoc
       }
       const requestOptions = {
         title: 'Parent Signature Upload',
@@ -108,7 +108,7 @@ constructor(props) {
       console.log("Posted Data:", data)
       const postDocument = async () => {
         
-        await axios.post('https://jjppdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
+        await axios.post('https://adowapdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
           .then(response => {
             console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
@@ -169,7 +169,7 @@ constructor(props) {
     for (var pair of data.entries()) {
       console.log(pair[0], ', ', pair[1]);
     }
-    await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+    await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
       .then(response => {
         console.log("Upload details:", response)
         this.setState({ mongoID: response.data.post._id })
@@ -197,16 +197,18 @@ constructor(props) {
   setThemeColor(client){
     switch(client){
       case '1':{
-        this.props.updateClientLogo("jjp-logo.png")
-        this.props.updateClientName("Varsity Lodge")
-        this.props.onPressThemeColor("blush")
+        this.props.updateClientLogo("adowa-logo.png");
+        this.props.updateClientName("Adowa Living");
+        this.props.onPressThemeColor("adowa");
+        this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg")
         this.setState({
-          backImage: "https://github.com/TechswatDevelopers/Media/raw/main/a7a8f6fb-32f3-42d7-8658-df16eebc9752.jpg"
-        })
+          backImage:
+            "https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg",
+          pageTitle: "Adowa Living",
+        });
 
-        localStorage.setItem('clientLogo', "jjp-logo.png")
-        localStorage.setItem('clientName', "Varsity Lodge")
-        localStorage.setItem('clientTheme', "blush")
+        localStorage.setItem("clientLogo", "adowa-logo.png");
+        localStorage.setItem("clientName", "Adowa Living");
       }
         break
       case '2': { 

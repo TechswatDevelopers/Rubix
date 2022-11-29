@@ -25,11 +25,13 @@ class PayorDetails extends React.Component {
         dateAndTime: null,
         isLoad: false,
         showSearch: false,
-        consent: false,
+        //consent: false,
         funding: null,
         fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship", "NSFAS"],
         payMethods: ["Please select payment method"],
+        bankTypes: ['Please select account type', 'Savings', 'Cheque'],
         payment: null,
+        consent: '0',
         value: 0
 
     };
@@ -119,7 +121,7 @@ class PayorDetails extends React.Component {
   
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
-  var nextofKinEmail = document.getElementById("NextOfKinEmail").value;
+  var nextofKinEmail = document.getElementById("PayorEmail").value;
   const studentID =  localStorage.getItem('studentIDNo')
   const studentEmail =  localStorage.getItem('email')
 
@@ -130,7 +132,11 @@ class PayorDetails extends React.Component {
   
   const data = {
       'RubixRegisterUserID': this.state.myUserID,
-      'RubixPayorAddress': street_address,
+      'PayorAdrress': street_address,
+      'ClientID': 1,
+      'PaymentMethod': this.state.payment,
+      'FundingSource': this.state.funding,
+      'Concent': this.state.consent,
   };
 
   for (let i=0; i < form.elements.length; i++) {
@@ -145,10 +151,10 @@ class PayorDetails extends React.Component {
       body: data
   };
   
-  //console.log("I am empty",data)
+  console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserPayor', data, requestOptions)
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
           .then(response => {
               console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
@@ -172,9 +178,14 @@ class PayorDetails extends React.Component {
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
-  console.log("called")
+  
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
+    'PayorAdrress': document.getElementById('streetAddress').value,
+    'ClientID': 1,
+    'PaymentMethod': this.state.payment,
+    'FundingSource': this.state.funding,
+    'Concent': this.state.consent,
 };
 for (let i=0; i < form.elements.length; i++) {
     const elem = form.elements[i];
@@ -187,34 +198,21 @@ const requestOptions = {
     headers: { 'Content-Type': 'application/json' },
     body: data
 };
-
+console.log("called", data)
 const postData = async() => {
-  if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
-      await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
-      .then(response => {
-          //console.log()
-            setTimeout(() => {
-              this.props.updateLoadingController(false);
-            }, 1000);
-            this.props.history.push("/relatives")
-          //this.props.history.push("/relatives")
-          /* setTimeout(() => {
-            this.postStatus()
-          }, 2000); */
-      })
-          
-  } else{
-    alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
-    this.setState({
-      isLoad: false
-    })
-  }
+
+  await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
+  .then(response => {
+      console.log("2nd Response: ", response)
+        setTimeout(() => {
+          this.props.updateLoadingController(false);
+        }, 1000);
+       this.props.history.push("/nextofkin")
+  })
+
 }
 postData().then(() => {
 
- 
-//this.props.onPresPopUpEvent()
-//this.props.history.push("/login/" + localStorage.getItem('clientID'))
 })
 }
 
@@ -225,8 +223,6 @@ else{
   })
 }
 }
-
-
 
   //Posting Update status
   postStatus() {
@@ -308,6 +304,8 @@ else{
     this.setState({ dateAndTime: myDate + myTime })
     this.getResAndPayment(1, "1")
 
+    //localStorage.setItem('userID', "1")
+
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
 
@@ -330,9 +328,102 @@ else{
     this.setState({showSearch: !this.state.showSearch})
   }
 
+  //Change Consent
+  changeConsent(e){
+    //console.log("My consent: ", e.target.value)
+    if (e.target.value == 'on'){
+      this.setState({
+        consent: "1"
+      })
+    } else {
+      this.setState({
+        consent: "0"
+      })
+    }
+  }
 
-  render() {
-    //const user = useContext(MyProvider);
+
+  render() { let body;
+    if(this.state.payment == 'BANKDEPOSIT' || this.state.payment == 'NSFAS' || this.state.payment == 'Student Loan'){
+      body = 
+      null
+    } else if(this.state.payment == 'EFT'){
+      body = <>
+      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Holder Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountHolderName"
+                          name='AccountHolderName'
+                          placeholder="Enter your bank account holder name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Bank Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BankName"
+                          name='BankName'
+                          placeholder="Enter your bank name"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Branch Code:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BranchCode"
+                          name='BranchCode'
+                          placeholder="Enter your branch code"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Number:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="AccountNumber"
+                          name='AccountNumber'
+                          placeholder="Enter your account number"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      
+                      <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Account Type:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({bankType: e.target.value})} value={this.state.bankType}>
+        {
+         this.state.bankTypes.map((banktype, index)=> (
+            <option key={index} name='AccountType' value = {banktype}>{banktype}</option>
+        ))  
+        }
+        </select> }
+                      </div>
+
+      </>
+    } else {
+      body = null;
+    }
     return (
       <div className="theme-grey">
       <Helmet>
@@ -405,6 +496,7 @@ else{
         }
     </select> }
                       </div>
+                      {body}
                     <div className="form-group">
                         <label className="control-label sr-only" >
                         Funding Source:
@@ -413,7 +505,7 @@ else{
         <select className="form-control" onChange={(e)=>this.setState({funding: e.target.value})} value={this.state.funding}>
         {
          this.state.fundingSources.map((source, index)=> (
-            <option key={index} name='AccountType' value = {source}>{source}</option>
+            <option key={index} name='FundingSource' value = {source}>{source}</option>
         ))  
         }
         </select> }
@@ -427,7 +519,7 @@ else{
                         <input
                           className="form-control"
                           id="NextOfKinFirstName"
-                          name='NextOfKinFirstName'
+                          name='PayorFullName'
                           placeholder="Enter Payor's Full Name"
                           type="text"
                           required
@@ -438,7 +530,7 @@ else{
                         <label className="control-label sr-only" >
                         ID?Reg Number:
                             </label>
-                            <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
+                            <input type='number' name="PayorID" className='form-control' id='IDNumber' 
                     required='' /* maxLength = '13' minLength='13' */ placeholder='Enter Payor ID/Reg Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
@@ -448,8 +540,8 @@ else{
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinEmail"
-                          name='NextOfKinEmail'
+                          id="PayorEmail"
+                          name='PayorEmail'
                           placeholder="Enter Payor Email"
                           type="email"
                           required
@@ -459,7 +551,7 @@ else{
                         <label className="control-label sr-only" >
                         Phone Number:
                             </label>
-                            <PhoneInput placeholder="Cell Phone Number" name="NextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
+                            <PhoneInput placeholder="Cell Phone Number" name="PayorHomeTell" className='PayorHomeTell' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
@@ -473,7 +565,7 @@ else{
                               !this.state.showSearch
                               ? <input
                               className="form-control"
-                              name= "RubixUserNextOfKinAddress"
+                              name= "PayorAdrress"
                               id= "streetAddress"
                               placeholder="Enter Address"
                               type="text"
@@ -500,7 +592,7 @@ placeholder: "Search Address"
                             </label>
                         <input
                           className="form-control"
-                          //name="PostCode"
+                          name="PayorPostalCode"
                           id="post-code"
                           placeholder="Enter your post code"
                           type="text"
@@ -510,12 +602,28 @@ placeholder: "Search Address"
                         <label className="control-label sr-only" >
                         Work Number:
                             </label>
-                            <PhoneInput placeholder="Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
+                            <PhoneInput placeholder="Work number" name="PayorWorkTell" className='PayorWorkTell' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
+                      
 
                       </div>
+                      <div className="form-group">
+                        
+                        <input
+                        className="form-check"
+                        id="Concent"
+                        //name='Concent'
+                        onChange={(e)=>{this.changeConsent(e)}}
+                        //placeholder="Enter Next of kin relation to you"
+                        type="checkbox"
+                        required
+                      />
+                      <p>I consent to a credit check.</p>
+                      
+                          
+                    </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Next
                         </button>

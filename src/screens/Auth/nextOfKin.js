@@ -114,7 +114,7 @@ class NextOfKin extends React.Component {
 
   
   const form = document.getElementById('nof');
-  var idNumber = document.getElementById("IDNumber").value;
+  //var idNumber = document.getElementById("IDNumber").value;
   var nextofKinEmail = document.getElementById("NextOfKinEmail").value;
   const studentID =  localStorage.getItem('studentIDNo')
   const studentEmail =  localStorage.getItem('email')
@@ -127,6 +127,7 @@ class NextOfKin extends React.Component {
   const data = {
       'RubixRegisterUserID': this.state.myUserID,
       'RubixUserNextOfKinAddress': street_address,
+      'Consent': this.state.consent,
   };
 
   for (let i=0; i < form.elements.length; i++) {
@@ -141,9 +142,9 @@ class NextOfKin extends React.Component {
       body: data
   };
   
-  //console.log("I am empty",data)
+  console.log("I am empty",data)
   const postData = async() => {
-      if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
+      if (studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
               console.log(response)
@@ -168,9 +169,10 @@ class NextOfKin extends React.Component {
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
-  console.log("called")
+  console.log("called", )
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
+    'Consent': this.state.consent,
 };
 for (let i=0; i < form.elements.length; i++) {
     const elem = form.elements[i];
@@ -184,19 +186,20 @@ const requestOptions = {
     body: data
 };
 
+console.log("I am empty",data)
 const postData = async() => {
-  if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
+  if (studentEmail != nextofKinEmail){
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          //console.log()
+          console.log("Data returned: ", response)
             setTimeout(() => {
               this.props.updateLoadingController(false);
             }, 1000);
-            this.props.history.push("/relatives")
+            //this.props.history.push("/relatives")
           //this.props.history.push("/relatives")
-          /* setTimeout(() => {
+          setTimeout(() => {
             this.postStatus()
-          }, 2000); */
+          }, 2000);
       })
           
   } else{
@@ -241,18 +244,20 @@ else{
     };
     console.log('User data:', data)
     const postData = async () => {
-      await axios.post('https://adowarest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
           if(response != null || response != undefined){
       //Set timer for loading screen
     setTimeout(() => {
+      this.props.updateLoadingController(false);
       this.setState({
         isLoad: false
       });
-    }, 1000);
+    }, 2000);
           }
           //console.log("Verify email status", response)
-          this.props.history.push("/relatives")
+          //this.props.history.push("/relatives")
+          this.props.history.push("/login/" + localStorage.getItem('clientID') )
         })
     }
     postData()
@@ -295,7 +300,19 @@ else{
     e.preventDefault() 
     this.setState({showSearch: !this.state.showSearch})
   }
-
+  //Change Consent
+  changeConsent(e){
+    //console.log("My consent: ", e.target.value)
+    if (e.target.value == 'on'){
+      this.setState({
+        consent: "1"
+      })
+    } else {
+      this.setState({
+        consent: "0"
+      })
+    }
+  }
 
   render() {
     //const user = useContext(MyProvider);
@@ -351,7 +368,7 @@ else{
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Parent/Guardian Details</p>
+                    <p className="lead">Next of Kin Details (Other than Payor)</p>
                   </div>
                   <div className="body">
                     <form id='nof' onSubmit={(e) => this.Submit(e)}>
@@ -381,14 +398,14 @@ else{
                           required
                         />
                       </div>
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label className="control-label sr-only" >
                         ID Number:
                             </label>
                             <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
                     required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
-                      </div>
+                      </div> */}
                       <div className="form-group">
                         <label className="control-label sr-only" >
                         Email:
@@ -483,8 +500,8 @@ placeholder: "Search Address"
                           <input
                           className="form-check"
                           id="NextOfKiniConsent"
-                          name='NextOfKiniConsent'
-                          onChange={(e)=>this.setState({consent: e.target.value})}
+                          //name='NextOfKiniConsent'
+                          onChange={(e)=>{this.changeConsent(e)}}
                           //placeholder="Enter Next of kin relation to you"
                           type="checkbox"
                           required

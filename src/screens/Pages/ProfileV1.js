@@ -294,7 +294,8 @@ mergePDFHandler()
     console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + userID)
+
+      await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           console.log("documents data:", data)

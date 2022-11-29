@@ -101,7 +101,7 @@ class Relatives extends React.Component {
       });
     }, 1000);
           }
-          console.log("Verify email status", response)
+          //console.log("Verify email status", response)
           this.props.history.push("/login/" + localStorage.getItem('clientID') )
         })
     }

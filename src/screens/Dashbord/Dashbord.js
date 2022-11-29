@@ -115,7 +115,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
   };
   console.log('Posted data: ', data)
     const getData = async () => {
-      const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
+      const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
       //console.log("Messages data", res.data.PostRubixUserData);
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
@@ -151,7 +151,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     };
     //console.log("Data: ", data)
     const getData = async () => {
-      const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserComments', data, requestOptions)
+      const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserComments', data, requestOptions)
       //console.log("Comment Respinse",res.data);
     }
     getData()
@@ -180,7 +180,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     };
     //console.log('message: ', postID)
     const getData = async () => {
-      const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserCommentsGet', data, requestOptions)
+      const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserCommentsGet', data, requestOptions)
       //console.log("List of Comments data", res.data.PostRubixUserData)
       const tempComments = res.data.PostRubixUserData
 
@@ -210,7 +210,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       body: data
     };
     const getData = async () => {
-      const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserLikesGet', data, requestOptions)
+      const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserLikesGet', data, requestOptions)
       //console.log("List of likes data",res.data);
       const tempLikes = res.data.PostRubixUserData
       if (tempLikes.length == 0 || tempLikes == undefined || tempLikes == false) {
@@ -269,7 +269,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     };
     //console.log('message: ', postID)
     const getData = async () => {
-      const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserLikes', data, requestOptions)
+      const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserLikes', data, requestOptions)
       //console.log("My likes Response", res.data);
     }
 

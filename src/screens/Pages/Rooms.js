@@ -78,7 +78,7 @@ class RoomAllocation extends React.Component {
       };
       console.log('Posted:', pingData)
       const postData = async () => {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
           console.log("Students Rooms List:", response.data.PostRubixUserData)
           if (response.data.PostRubixUserData){
@@ -175,7 +175,7 @@ class RoomAllocation extends React.Component {
       };
       //console.log('Posted:', pingData)
       const postData = async () => {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
           //console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
@@ -245,7 +245,7 @@ class RoomAllocation extends React.Component {
       };
       //console.log('Posted:', pingData)
       const postData = async () => {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
           console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
@@ -281,7 +281,7 @@ class RoomAllocation extends React.Component {
         for (var pair of data.entries()) {
           //console.log(pair[0], ', ', pair[1]);
         }
-        await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+        await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
             //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
@@ -333,7 +333,7 @@ class RoomAllocation extends React.Component {
           body: data
         };
         //console.log("Posted Data:", data)
-        await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+        await axios.post('https://adowapdf.rubix.mobi:94/PDFSignature', data, requestOptions)
           .then(response => {
             //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })

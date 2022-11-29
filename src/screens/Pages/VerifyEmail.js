@@ -35,7 +35,7 @@ constructor(props) {
   //console.log("client ID:", localStorage.getItem('clientID'))
   //Send verification
   const verify = async() => {
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
       .then(response => response.json())
       .then(data => {
         //console.log("response data:", data)
@@ -51,20 +51,20 @@ constructor(props) {
   setThemeColor(client){
     switch(client){
       case '1':{
-        this.props.updateClientLogo("jjp-logo.png");
+        this.props.updateClientLogo("adowa-logo.png");
           this.props.updateClientName("Varsity Lodge");
           this.props.onPressThemeColor("blush");
-//          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg")
+//          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/adowaback.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg",
+              "https://github.com/TechswatDevelopers/Media/raw/main/adowaback.jpg",
             pageTitle: "Varsity Lodge",
           });
 
-          localStorage.setItem("clientLogo", "jjp-logo.png");
+          localStorage.setItem("clientLogo", "adowa-logo.png");
           localStorage.setItem("clientName", "Varsity Lodge");
           localStorage.setItem("clientTheme", "blush");
-          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/jjpback.jpg");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/adowaback.jpg");
     
       }
         break

@@ -94,7 +94,7 @@ class ProfileV1Setting extends React.Component {
     //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
-      await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + uniID)
+      await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
           //console.log("Res list data is ", data)
@@ -135,7 +135,7 @@ class ProfileV1Setting extends React.Component {
   };
   //console.log("My Data: ", data)
     const getData = async() => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
         console.log("My response: ", response.data.PostRubixUserData)
         
@@ -235,7 +235,7 @@ console.log("down")
     };
     //console.log(data)
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
           if(response.status == 200){
             this.props.onPresPopConfirmInfo()
@@ -274,7 +274,7 @@ console.log("down")
     };
     console.log(data)
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixResetPassword', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
           console.log(response)
           if(response.data.PostRubixUserData[0].Response == 'PasswordUpdated'){
@@ -312,7 +312,7 @@ console.log("down")
     }
 
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
         .then(response => {
           if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
@@ -355,7 +355,7 @@ console.log("down")
     }
     //console.log("Posted: ", data)
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
           /* if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
@@ -470,7 +470,7 @@ console.log("down")
     //console.log("my Posted Data: ", data)
     const postData = async () => {
       if (this.Validate) {
-        await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
             //console.log("My DB Response",response)
 
@@ -505,7 +505,7 @@ console.log("down")
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
@@ -582,7 +582,7 @@ console.log("down")
     };
     console.log('Posted student data:', data)
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
           console.log("All Student data", response.data.PostRubixUserData[0])
           this.setState({ 
@@ -645,7 +645,7 @@ this.props.updateStudentName(
     };
     //console.log('All student data:', data)
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
           console.log("All profile data", response.data.PostRubixUserData)
           this.setState({ myProfile: response.data.PostRubixUserData[0],
@@ -719,7 +719,7 @@ this.props.updateStudentName(
     };
 
     const postData = async () => {
-      await axios.post('https://jjprest.rubix.mobi:88/api/RubixDocumentsProgress', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
           //console.log("document progress", response.data.PostRubixUserData)
           const temp = response.data.PostRubixUserData
@@ -774,11 +774,11 @@ this.props.updateStudentName(
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
-    //console.log('My role is: ', localStorage.getItem('role'))
+    console.log('My role is: ', userID)
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
+      await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
           //console.log("Profile data:", data)
@@ -787,11 +787,11 @@ this.props.updateStudentName(
           //If Profile Picture Exists...
           if (profilePic != null && profilePic != undefined) {
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
-            this.setState({ imageUrl: 'https://jjpimages.rubix.mobi:449/' + profilePic.filename })
+            this.setState({ imageUrl: 'https://adowaimages.rubix.mobi:449/' + profilePic.filename })
           }
         });
         //Populate university list
-        await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
+        await fetch('https://adowarest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -801,7 +801,7 @@ this.props.updateStudentName(
             })
             });
             //Populate Year of Study list
-            await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
+            await fetch('https://adowarest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -813,7 +813,7 @@ this.props.updateStudentName(
     //Admin side Dropdowns
     const fetchDropDownData = async () => {
       //Get documents from DB
-      await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + this.props.currentStudentiD)
+      await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + this.props.currentStudentiD)
         .then(response => response.json())
         .then(data => {
           //console.log("Profile data:", data)
@@ -822,11 +822,11 @@ this.props.updateStudentName(
           //If Profile Picture Exists...
           if (profilePic != null && profilePic != undefined) {
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
-            this.setState({ imageUrl: 'https://jjpimages.rubix.mobi:449/' + profilePic.filename })
+            this.setState({ imageUrl: 'https://adowaimages.rubix.mobi:449/' + profilePic.filename })
           }
         });
         //Populate university list
-        await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
+        await fetch('https://adowarest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -836,7 +836,7 @@ this.props.updateStudentName(
             })
             });
             //Populate Year of Study list
-            await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
+            await fetch('https://adowarest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
             //console.log("data is ", data.data)
@@ -856,7 +856,7 @@ this.props.updateStudentName(
 
   fetchUserUniversityData = async () => {
     //Get Rubix User University Details
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -877,7 +877,7 @@ this.props.updateStudentName(
   fetchUserAddressData = async () => {
     //console.log("User ID being used:", localStorage.getItem('userID'))
     //Get Rubix User Address Details
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -899,7 +899,7 @@ this.props.updateStudentName(
 
   fetchProvinceListData = async () => {
     //Get Rubix Provices
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixProvinces')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixProvinces')
       .then(response => response.json())
       .then(data => {
         if (data.data != null || data.data != undefined) {
@@ -912,7 +912,7 @@ this.props.updateStudentName(
 
   fetchCountriesData = async () => {
     //Fetch Countries List
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
         if (data.data != null || data.data != undefined) {
@@ -926,7 +926,7 @@ this.props.updateStudentName(
 
   fetchUniversitiesData = async () => {
     //Populate university list
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixUniversities/')
     .then(response => response.json())
     .then(data => {
         //console.log("data is ", data.data)
@@ -939,7 +939,7 @@ this.props.updateStudentName(
 
   fetchResidencesData = async () => {
     //Populate Residence list
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences')
       .then(response => response.json())
       .then(data => {
         if (data.data === null || data.data === undefined) {
@@ -953,7 +953,7 @@ this.props.updateStudentName(
 
   fetchYearOfStudyData = async () => {
     //Populate Year of Study list
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixStudentYearofStudies')
       .then(response => response.json())
       .then(data => {
         if (data.data === null || data.data === undefined) {
@@ -967,7 +967,7 @@ this.props.updateStudentName(
 
   fetchUserNextofKinData = async () => {
     //Populate Next of Kin
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
         if (data === null || data === undefined) {
@@ -1016,7 +1016,7 @@ this.props.updateStudentName(
    };
    //console.log(data)
    const postData = async() => {
-     await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
+     await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
      .then(response => {
          //console.log(response)
          
