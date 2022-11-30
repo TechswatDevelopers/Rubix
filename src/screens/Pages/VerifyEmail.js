@@ -88,8 +88,8 @@ constructor(props) {
   
   render() {
     return (
-      <div className={  "theme-grey"/* localStorage.getItem('clientTheme') */}
-      >
+      <div className={"theme-grey"/* localStorage.getItem('clientTheme') */}>
+        
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="10%" height="10%" alt="" /></div>
