@@ -59,7 +59,7 @@ class Registration extends React.Component {
 
   ///Validate ID numbers
   Validate() {
-    var idNumber = document.getElementById("IDNumber").value;
+    var idNumber = document.getElementById("idNumber").value;
     // store the error div, to save typing
     var error = document.getElementById('error');
 
@@ -194,7 +194,19 @@ class Registration extends React.Component {
                  }
             })
       }
-      checkUser()
+      if(this.Validate()){
+        checkUser()
+      } else {
+        this.setState({
+          title: "Error",
+          popMessage: 'Invalid ID',
+        })
+        //Set timer for loading screen
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 3000);
+        this.props.onPresPopUpEvent()
+       }
 
       const postData = async()=>{
         //Ping email address
