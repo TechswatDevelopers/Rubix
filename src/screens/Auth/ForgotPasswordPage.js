@@ -33,7 +33,7 @@ class ForgotPasswordPage extends React.Component {
           this.props.onPressThemeColor("blush");
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/trnava-university-CtKO4NGiEhE-unsplash.jpg",
+              "https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg",
             pageTitle: "Adowa Living",
           });
 
@@ -80,7 +80,7 @@ class ForgotPasswordPage extends React.Component {
     }
     //console.log(data)
     const postData = async() => {
-              await axios.post('https://jjprest.rubix.mobi:88/api/RubixUpdateForgetPassword', data, requestOptions)
+              await axios.post('https://adowarest.rubix.mobi:88/api/RubixUpdateForgetPassword', data, requestOptions)
             .then(response => {
                 //console.log(response)
                 //Go to login screen

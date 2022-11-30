@@ -106,12 +106,14 @@ class StudentInformation extends React.Component {
         const elem = form.elements[i];
         data[elem.name] = elem.value
     }
+
     const requestOptions = {
         title: 'Student Personal Details',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: data
-    };
+    }
+    
     //console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){

@@ -45,7 +45,8 @@ class ForgotPassword extends React.Component {
     const form = document.getElementById('forgot-pass');
     const data = {
       'RubixClientID': localStorage.getItem('clientID'),
-    };
+    }
+
     for (let i=0; i < form.elements.length; i++) {
         const elem = form.elements[i];
         data[elem.name] = elem.value
@@ -84,9 +85,9 @@ class ForgotPassword extends React.Component {
             })
     }
     postData()
-    
       }
     
+      
   render() {
     return (
       <div className={this.props.rubixThemeColor}>

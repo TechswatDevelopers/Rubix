@@ -59,7 +59,7 @@ class Registration extends React.Component {
 
   ///Validate ID numbers
   Validate() {
-    var idNumber = document.getElementById("IDNumber").value;
+    var idNumber = document.getElementById("idNumber").value;
     // store the error div, to save typing
     var error = document.getElementById('error');
 
@@ -198,13 +198,25 @@ class Registration extends React.Component {
                  }
             })
       }
-      checkUser()
+      if(this.Validate()){
+        checkUser()
+      } else {
+        this.setState({
+          title: "Error",
+          popMessage: 'ID Number Invalid',
+        })
+        //Set timer for loading screen
+      setTimeout(() => {
+        this.props.updateLoadingController(false);
+      }, 3000);
+        this.props.onPresPopUpEvent()
+       }
 
       const postData = async()=>{
         //Ping email address
-        await axios.post('https://adowapdf.rubix.mobi:94/validEmailCheck', pingData, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixEmailCheck', pingData, requestOptions)
             .then(response => {
-                //console.log(response.data.EmailResult )
+                console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");

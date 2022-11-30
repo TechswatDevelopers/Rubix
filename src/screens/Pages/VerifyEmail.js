@@ -52,13 +52,13 @@ constructor(props) {
     switch(client){
       case '1':{
         this.props.updateClientLogo("adowa-logo.png");
-          this.props.updateClientName("Varsity Lodge");
+          this.props.updateClientName("Adowa Living");
           this.props.onPressThemeColor("blush");
 //          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/adowaback.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/adowaback.jpg",
-            pageTitle: "Varsity Lodge",
+              "https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg",
+            pageTitle: "Adowa Living",
           });
 
           localStorage.setItem("clientLogo", "adowa-logo.png");
