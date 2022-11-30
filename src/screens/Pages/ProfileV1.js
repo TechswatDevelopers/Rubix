@@ -562,7 +562,7 @@ mergePDFHandler()
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })

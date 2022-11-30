@@ -240,7 +240,6 @@ class Login extends React.Component {
     postData();
   }
 
-
   //Login Using Social Media
   SocialMediaLogin(userId) {
     //Set Loading Screen ON
@@ -306,13 +305,14 @@ class Login extends React.Component {
     localStorage.setItem("userplatformID", response["googleId"]);
     this.SocialMediaLogin(response["googleId"]);
   };
+
   //Facebook response for testing
   responseFacebook = (response) => {
-    
     localStorage.setItem("platformID", "3");
     localStorage.setItem("userplatformID", response["id"]);
     this.SocialMediaLogin(response["id"]);
   };
+
   //Instagram response
   responseInstagram = (response) => {
     localStorage.setItem("platformID", "4");
@@ -328,17 +328,17 @@ class Login extends React.Component {
           this.props.updateClientLogo("adowa-logo.png");
           this.props.updateClientName("Adowa Living");
           this.props.onPressThemeColor("adowa");
-          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg")
+          this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg")
           this.setState({
             backImage:
-              "https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg",
+              "https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg",
             pageTitle: "Adowa Living",
           });
 
           localStorage.setItem("clientLogo", "adowa-logo.png");
           localStorage.setItem("clientName", "Adowa Living");
           localStorage.setItem("clientTheme", "adowa");
-          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg");
+          localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg");
     
         }
         break;
@@ -366,7 +366,6 @@ class Login extends React.Component {
   //Admin Toggle
   changeToAdmin(e) {
     e.preventDefault();
-
     this.setState({
       isAdmin: true,
     });
@@ -376,7 +375,7 @@ class Login extends React.Component {
     const { navigation } = this.props;
     const { email, password } = this.props;
     return (
-      <div className={ "theme-adowa"/* this.props.rubixThemeColor */}>
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
         <Helmet>
           <meta charSet="utf-8" />
           <title>{this.state.pageTitle}</title>
