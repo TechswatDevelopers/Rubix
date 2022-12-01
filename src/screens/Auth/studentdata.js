@@ -113,7 +113,7 @@ class StudentInformation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
     }
-    
+
     //console.log(data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
@@ -155,7 +155,7 @@ class StudentInformation extends React.Component {
 
   render() {
     return (
-      <div className={this.props.rubixThemeColor}>
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
         <div >
           <div className="vertical-align-wrap">
             <div className="vertical-align-middle auth-main">

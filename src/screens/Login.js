@@ -327,7 +327,7 @@ class Login extends React.Component {
         {
           this.props.updateClientLogo("adowa-logo.png");
           this.props.updateClientName("Adowa Living");
-          this.props.onPressThemeColor("adowa");
+          this.props.onPressThemeColor("grey");
           this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg")
           this.setState({
             backImage:
@@ -337,7 +337,7 @@ class Login extends React.Component {
 
           localStorage.setItem("clientLogo", "adowa-logo.png");
           localStorage.setItem("clientName", "Adowa Living");
-          localStorage.setItem("clientTheme", "adowa");
+          localStorage.setItem("clientTheme", "grey");
           localStorage.setItem("clientBG", "https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg");
     
         }

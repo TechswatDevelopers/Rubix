@@ -36,7 +36,6 @@ class ForgotPasswordPage extends React.Component {
               "https://github.com/TechswatDevelopers/Media/raw/main/Picture1.jpg",
             pageTitle: "Adowa Living",
           });
-
           localStorage.setItem("clientLogo", "adowa-logo.png");
           localStorage.setItem("clientName", "Adowa Living");
           localStorage.setItem("clientTheme", "blush");
@@ -99,7 +98,7 @@ class ForgotPasswordPage extends React.Component {
     
   render() {
     return (
-      <div className={this.props.rubixThemeColor}>
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
         <div >
         <PopUpModal 
         Title= {this.state.title}

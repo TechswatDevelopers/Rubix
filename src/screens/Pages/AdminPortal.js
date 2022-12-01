@@ -1602,7 +1602,7 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
 
   render() {
     return (
-        <div className="container-fluid">
+        <div className="container-fluid theme-grey">
         <Helmet>
               <meta charSet="utf-8" />
               <title>Admin Stats</title>
@@ -1623,8 +1623,8 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt="Rubix System"
               />
             </div>

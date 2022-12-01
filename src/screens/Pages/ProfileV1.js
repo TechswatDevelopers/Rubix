@@ -1128,7 +1128,7 @@ mergePDFHandler()
         }
 
     return (
-      <div ref={this.testRef}
+      <div className="theme-grey" ref={this.testRef}
         style={{ flex: 1 }}
         onClick={() => {
           document.body.classList.remove("offcanvas-active");

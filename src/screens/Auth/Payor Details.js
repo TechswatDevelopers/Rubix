@@ -151,7 +151,7 @@ class PayorDetails extends React.Component {
       body: data
   };
   
-  console.log("I am empty",data)
+  //console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)

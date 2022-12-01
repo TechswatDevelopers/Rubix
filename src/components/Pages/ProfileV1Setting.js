@@ -584,7 +584,7 @@ console.log("down")
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response.data.PostRubixUserData[0])
+          console.log("All Student data", response.data)
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -1686,7 +1686,7 @@ this.props.updateStudentName(
                   />
                 </div>
 
-                <div className="form-group">
+               {/*  <div className="form-group">
                 <label>
                     Work Number:
                   </label>
@@ -1694,7 +1694,7 @@ this.props.updateStudentName(
                     defaultValue={this.state.myProfile.RubixUserNextOfKinWorkNumber} name="RubixUserNextOfKinWorkNumber" required=''
                     value={this.state.myProfile.RubixUserNextOfKinWorkNumber}
                     onChange={() => this.setState({ value: this.state.value })} />
-                    </div>
+                    </div> */}
 
               </div>
               <div className="col-lg-6 col-md-12">
@@ -1707,7 +1707,7 @@ this.props.updateStudentName(
                     value={this.state.myProfile.RubixUserNextOfKinPhoneNumber}
                     onChange={() => this.setState({ value: this.state.value })} />
                 </div>
-                <div className="form-group">
+                {/* <div className="form-group">
                   <label>
                     ID Number:
                   </label>
@@ -1719,7 +1719,7 @@ this.props.updateStudentName(
                     defaultValue={this.state.myProfile.RubixUserNextOfKinID}
                     type="text"
                   />
-                </div>
+                </div> */}
                 <div className="form-group">
                   <label>
                     Relationship:
@@ -1761,39 +1761,52 @@ this.props.updateStudentName(
   <form id='nextOfKin1' onSubmit={(e) => this.updateNextOfKin(e)}>
     <div className="row clearfix">
       <div className="col-lg-6 col-md-12">
-        <h3>Family Members</h3>
-        <h6>First Member:</h6>
+        <h3>Payor Details</h3>
         <div className="form-group">
+          <p><strong>Payment Method: </strong> {this.state.myProfile.rPaymentMethod}</p>
+          <p><strong>Payment Method: </strong> {this.state.myProfile.rFundingSource}</p>
           <label>
-            First Name:
+            Full Name:
           </label>
           <input
             className="form-control"
             disabled=""
             placeholder="First Name"
-            id="NextOfKinFirstName1"
-            name='NextOfKinFirstName1'
+            id="PayorFullName"
+            name='PayorFullName'
             type="text"
-            defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName1}
-            onChange={() => { }}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>
-            Last Name:
-          </label>
-          <input
-            className="form-control"
-            placeholder="Last Name"
-            id="NextOfKinLastName1"
-            name='NextOfKinLastName1'
-            type="text"
-            defaultValue={this.state.myProfile.RubixUserNextOfKinLastName1}
+            defaultValue={this.state.myProfile.PayorFullName}
             onChange={() => { }}
           />
         </div>
       </div>
+      <div className="form-group">
+                        <label className="control-label" >
+                        Email:
+                            </label>
+                        <input
+                          className="form-control"
+                          id="PayorEmail"
+                          name='PayorEmail'
+                          placeholder="Enter Payor Email"
+                          defaultValue={this.state.myProfile.PayorEmail}
+                          type="email"
+                          required
+                        />
+                      </div>
+      <div className="form-group">
+                  <label>
+                    ID Number:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="ID Number"
+                    id='PayorID'
+                    name="PayorID"
+                    defaultValue={this.state.myProfile.PayorID}
+                    type="text"
+                  />
+                </div>
       <div className="col-lg-6 col-md-12">
         <div className="form-group">
           <label>
@@ -1821,7 +1834,7 @@ this.props.updateStudentName(
   </form>
 </div>
 
-<div className="body">
+{/* <div className="body">
   <form id='nextOfKin2' onSubmit={(e) => this.updateNextOfKin(e)}>
     <div className="row clearfix">
       <div className="col-lg-6 col-md-12">
@@ -1888,7 +1901,7 @@ this.props.updateStudentName(
     <button className="btn btn-default">Cancel</button>
   </form>
 </div>
-
+ */}
 
       </div>
     );

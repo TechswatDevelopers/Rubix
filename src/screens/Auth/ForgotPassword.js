@@ -87,10 +87,10 @@ class ForgotPassword extends React.Component {
     postData()
       }
     
-      
+
   render() {
     return (
-      <div className={this.props.rubixThemeColor}>
+      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
       <Helmet>
               <meta charSet="utf-8" />
               <title>Forgot Password</title>

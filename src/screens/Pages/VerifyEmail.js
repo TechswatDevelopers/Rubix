@@ -102,7 +102,7 @@ constructor(props) {
               <div className="col-lg-12 col-md-12">
                 <div className="card planned_task">
                   <div className="header">
-                  <img src={localStorage.getItem('clientLogo')} width="110" height="50" alt="Lucid" />
+                  <img src={localStorage.getItem('clientLogo')} width="5%" height="5%" alt="Lucid" />
                     <h2>Email Verification</h2>
                     <p>Thank you so much {this.state.userData.Name} {this.state.userData.Lastname} your email has been verified successfully!</p>
                   </div>

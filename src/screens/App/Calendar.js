@@ -213,7 +213,7 @@ console.log("Events :", response)
   //Fetch Res Gallery Images
   fetchImages(resID) {
     const fetchData = async () => {
-    await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + resID)
+    await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + resID)
     .then(response => response.json())
     .then(data => {
       console.log("Images:", data.post)
@@ -246,7 +246,7 @@ console.log("Events :", response)
     }
   //View Event Information
   viewEvent = (event) => {
-    console.log("I am called", event.event._instance.range.start)
+    //console.log("I am called", event.event._instance.range.start)
     //Get date and time
     let start = this.getDateFormated(event.event._instance.range.start)
     let end = this.getDateFormated(event.event._instance.range.end)
@@ -310,7 +310,7 @@ console.log("Events :", response)
   render() {
     const { isEventModal } = this.props;
     return (
-      <div style={{ flex: 1 }}>
+      <div className= "theme-grey" style={{ flex: 1 }}>
         <div style={{ opacity: isEventModal ? 0.3 : 1 }}>
           <div className="ng-star-inserted">
             <div className="container-fluid">
@@ -345,8 +345,8 @@ console.log("Events :", response)
             <div className="m-t-30">
               <img
                 src={localStorage.getItem('clientLogo')}
-                width="20%"
-                height="20%"
+                width="10%"
+                height="10%"
                 alt=" "
               />
             </div>

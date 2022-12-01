@@ -296,7 +296,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     const { cardData } = this.state;
     
     return (
-      <div
+      <div className= "theme-grey"
         onClick={() => {
           document.body.classList.remove("offcanvas-active");
         }}
