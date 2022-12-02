@@ -173,7 +173,6 @@ class PayorDetails extends React.Component {
       }
   }
   postData().then(() => {
-
     //this.props.onPresPopUpEvent()
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })

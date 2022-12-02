@@ -160,7 +160,7 @@ class Residence extends React.Component {
 
   render() {
     return (
-      <div
+      <div className="theme-grey "
         style={{ flex: 1 }}
         onClick={() => {
           document.body.classList.remove("offcanvas-active");
@@ -306,7 +306,6 @@ class Residence extends React.Component {
                       </div>
                     </div>
 
-
                     <div className=" col-3">
                       <div className="card profile-header pt-3">
                           <h3>Occupancy</h3>
@@ -404,10 +403,8 @@ class Residence extends React.Component {
                           </div>
                           ))
                         }
-
                       </div>
                     </div>
-
                     
                   </div>
 

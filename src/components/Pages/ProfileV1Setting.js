@@ -1779,8 +1779,7 @@ this.props.updateStudentName(
             onChange={() => { }}
           />
         </div>
-      </div>
-      <div className="form-group">
+        <div className="form-group">
                         <label className="control-label" >
                         Email:
                             </label>
@@ -1794,19 +1793,8 @@ this.props.updateStudentName(
                           required
                         />
                       </div>
-      <div className="form-group">
-                  <label>
-                    ID Number:
-                  </label>
-                  <input
-                    className="form-control"
-                    placeholder="ID Number"
-                    id='PayorID'
-                    name="PayorID"
-                    defaultValue={this.state.myProfile.PayorID}
-                    type="text"
-                  />
-                </div>
+      </div>
+
       <div className="col-lg-6 col-md-12">
         <div className="form-group">
           <label>
@@ -1814,7 +1802,7 @@ this.props.updateStudentName(
           </label>
           <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
             defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber1} name="NextOfKinPhoneNumber1" required=''
-            value={this.state.myProfile.RubixUserNextOfKinPhoneNumber1}
+            value={this.state.myProfile.PayorWorkTell}
             onChange={() => this.setState({ value: this.state.value })} />
         </div>
         <div className="form-group">
@@ -1829,6 +1817,20 @@ this.props.updateStudentName(
             type="text"
           />
         </div>
+
+      <div className="form-group">
+                  <label>
+                    ID Number:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="ID Number"
+                    id='PayorID'
+                    name="PayorID"
+                    defaultValue={this.state.myProfile.PayorID}
+                    type="text"
+                  />
+                </div>
       </div>
     </div>
   </form>
