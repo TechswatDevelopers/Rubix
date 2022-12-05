@@ -1686,16 +1686,6 @@ this.props.updateStudentName(
                   />
                 </div>
 
-               {/*  <div className="form-group">
-                <label>
-                    Work Number:
-                  </label>
-                <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-                    defaultValue={this.state.myProfile.RubixUserNextOfKinWorkNumber} name="RubixUserNextOfKinWorkNumber" required=''
-                    value={this.state.myProfile.RubixUserNextOfKinWorkNumber}
-                    onChange={() => this.setState({ value: this.state.value })} />
-                    </div> */}
-
               </div>
               <div className="col-lg-6 col-md-12">
                 <div className="form-group">
@@ -1707,19 +1697,6 @@ this.props.updateStudentName(
                     value={this.state.myProfile.RubixUserNextOfKinPhoneNumber}
                     onChange={() => this.setState({ value: this.state.value })} />
                 </div>
-                {/* <div className="form-group">
-                  <label>
-                    ID Number:
-                  </label>
-                  <input
-                    className="form-control"
-                    placeholder="ID Number"
-                    id='IDNumber'
-                    name="RubixUserNextOfKinID"
-                    defaultValue={this.state.myProfile.RubixUserNextOfKinID}
-                    type="text"
-                  />
-                </div> */}
                 <div className="form-group">
                   <label>
                     Relationship:
@@ -1801,21 +1778,18 @@ this.props.updateStudentName(
             Phone Number:
           </label>
           <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-            defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber1} name="NextOfKinPhoneNumber1" required=''
-            value={this.state.myProfile.PayorWorkTell}
+            defaultValue={this.state.myProfile.PayorHomeTell} name="NextOfKinPhoneNumber1" required=''
+            value={this.state.myProfile.PayorHomeTell}
             onChange={() => this.setState({ value: this.state.value })} />
         </div>
         <div className="form-group">
           <label>
-            Relationship:
+            Work Number:
           </label>
-          <input
-            className="form-control"
-            placeholder="Relationship"
-            name='NextOfKiniRelationship1'
-            defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship1}
-            type="text"
-          />
+          <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
+            defaultValue={this.state.myProfile.PayorWorkTell} name="NextOfKinPhoneNumber1" required=''
+            value={this.state.myProfile.PayorWorkTell}
+            onChange={() => this.setState({ value: this.state.value })} />
         </div>
 
       <div className="form-group">
