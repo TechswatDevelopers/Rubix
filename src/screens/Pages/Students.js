@@ -470,7 +470,6 @@ postData().then(()=>{
                 { name: "Students Details Page", navigate: "" },
               ]}
             />
-            {/* <button className="btn btn-primary" onClick={(e)=>this.bulkLease(e)}>Lease Reneg</button> */}
 
             { localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
             ? <>
