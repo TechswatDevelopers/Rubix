@@ -64,6 +64,7 @@ class Login extends React.Component {
       this.setThemeColor(this.state.currentClientId);
       //this.props.history.push('/login/1')
     }
+    localStorage.setItem('adminLevel', '0')
 
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");

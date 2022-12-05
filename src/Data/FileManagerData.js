@@ -70,10 +70,10 @@ export const fileStorageStatusCardData = [
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
   {
-    UsedSize: "Student Card",
+    UsedSize: "NSFAS Document",
     Type: "Documents",
     status: localStorage.getItem('studentProgress'),
-    FileType: "student-card",
+    FileType: "nsfas-doc",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('studentProgress'),
     ProgressBarClass:
@@ -90,32 +90,42 @@ export const fileStorageStatusCardData = [
       "progress progress-xs progress-transparent custom-color-yellow mb-0",
   },
   {
-    UsedSize: "Proof of Payment",
+    UsedSize: "Proof of Income",
     Type: "Documents",
     status: localStorage.getItem('popProgress'),
-    FileType: "proof-of-pay",
+    FileType: "proof-of-income",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('popProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-grey mb-0",
   },
   {
-    UsedSize: "Booking Form",
+    UsedSize: "Bank Statement",
     Type: "Documents",
     status: localStorage.getItem('bookFormProgress'),
-    FileType: "booking-doc",
+    FileType: "bank-statement",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('bookFormProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
   {
-    UsedSize: "Rules and Regulations",
+    UsedSize: "Surety Deed Document",
     Type: "Documents",
     status: localStorage.getItem('rulesProgress'),
     FileType: "rules-doc",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('rulesProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-grey mb-0",
+  },
+  {
+    UsedSize: "My Key Form",
+    Type: "Documents",
+    status: localStorage.getItem('keyProgress'),
+    FileType: "key-form",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('keyProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-grey mb-0",
   },

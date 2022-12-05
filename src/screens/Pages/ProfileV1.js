@@ -438,9 +438,9 @@ mergePDFHandler()
            })
         }
         break
-        case 'rules-doc':
+        case 'surety-doc':
           {
-            this.setState({ docType: "Res Rules and Regulations",
+            this.setState({ docType: "Deed of Surety",
             topBarData: <>
             
             <br></br>
@@ -448,9 +448,9 @@ mergePDFHandler()
              })
           }
           break
-          case 'booking-doc':
+          case 'bank-statement':
             {
-              this.setState({ docType: "My Booking Document",
+              this.setState({ docType: "3 Months Bank Statement",
               topBarData: <>
               
               <br></br>
@@ -468,9 +468,9 @@ mergePDFHandler()
                  })
               }
           break
-          case 'proof-of-pay':
+          case 'proof-of-income':
             {
-              this.setState({ docType: "My Proof of Payment",
+              this.setState({ docType: "My Proof of Income",
               topBarData: <>
               
               <br></br>
@@ -702,29 +702,28 @@ mergePDFHandler()
                 this.props.onUpdateLeaseMessage(this.setLeaseMessage(temp[i].Percentage, temp[i].RubixVettedResult))
               }
               break;
-            case "booking-doc": {
+            case "bank-statement": {
               this.props.onUpdateBookingForm(temp[i].Percentage)
               this.props.onUpdateBookingMessage(this.setMessage(temp[i].Percentage))
             }
               break;
-            case "proof-of-pay": {
+            case "proof-of-income": {
               this.props.onUpdateProofOfPay(temp[i].Percentage)
               this.props.onUpdateProofOfPayMessage(this.setMessage(temp[i].Percentage))
             }
               break;
-            case "rules-doc": {
+            case "surety-doc": {
               this.props.onUpdateRules(temp[i].Percentage)
               this.props.onUpdateRulesMessage(this.setMessage(temp[i].Percentage))
             }
               break;
-            case "student-card": {
+            case "nsfas-doc": {
               this.props.onUpdateStudentCard(temp[i].Percentage)
               this.props.onUpdateStudenCMessage(this.setMessage(temp[i].Percentage))
             }
             }
           }
         })
-
     }
     postData().then(()=>{
       //Set timer for loading screen
@@ -764,34 +763,28 @@ mergePDFHandler()
           progress = this.props.myLeaseProgress
         }
         break;
-      case "booking-doc":
+      case "bank-statement":
         {
           progress = this.props.myBookingFProgress
         }
         break;
-      case "proof-of-pay":
+      case "proof-of-income":
         {
           progress = this.props.myProofOfPayProgress
         }
         break;
-      case "proof-of-pay":
-        {
-          progress = this.props.myProofOfPayProgress
-        }
-        break;
-      case "rules-doc":
+      case "surety-doc":
         {
           progress = this.props.myRules
         }
         break;
-      case "student-card":
+      case "nsfas-doc":
         {
           progress = this.props.myStudentCardProgress
         }
     }
     return progress
   }
-
 
   //Get Progress
   getMessage(doc){
@@ -822,29 +815,28 @@ mergePDFHandler()
           message = this.props.myLeaseMessage
         }
         break;
-      case 'booking-doc':
+      case 'bank-statement':
         {
           message = this.props.myBookingFMessage
         }
         break;
-      case "proof-of-pay":
+      case "proof-of-income":
         {
           message = this.props.myProofOfPayMessage
         }
         break;
-      case "rules-doc":
+      case "surety-doc":
         {
           message = this.props.myBookingFMessage
         }
         break;
-      case "student-card":
+      case "nsfas-doc":
         {
           message = this.props.myStudentCardMessage
         }
     }
     return message
   }
-
 
   //When User Presses Cancel on Document Uploading
   onPressCancel() {
@@ -876,7 +868,6 @@ mergePDFHandler()
   clear = () => {
     this.sigPad.clear()
   }
-
   
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
@@ -1048,9 +1039,9 @@ mergePDFHandler()
             </>
             :<>
             {
-              this.state.keyString == 'rules-doc'
+              this.state.keyString == 'surety-doc'
               ?<>
-              <iframe src={'https://adowaimages.rubix.mobi:449/General%20Rules%20and%20Regulations.pdf'}width="100%" height="500px"></iframe>
+              <iframe src={'https://adowaimages.rubix.mobi:449/17_surety-doc_Samkelo_Zondi_21458321.pdf'}width="100%" height="500px"></iframe>
               </>
               :<>
               <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
@@ -1084,19 +1075,6 @@ mergePDFHandler()
             </>
             :<><iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
-           {/* <p>If you agree to the above document, please enter your signature:</p>
-                  <div className="border border-primary border-2 p-3" style={{
-                    width: '100%'
-                    }}>
-                    <SignatureCanvas className="border border-primary border-2" penColor='black'
-                    canvasProps={{  height: '100%', width: '400px', className: 'sigCanvas' }} ref={(ref) => { this.sigPad = ref }} />
-                    </div>
-                  <button className="btn btn-primary rounded-0" onClick={() => this.trim()}>
-                    Submit Signature
-                  </button>
-                  <button className="btn btn-default" onClick={this.clear}>
-                    Clear
-                  </button> */}
             </>
            
            }

@@ -663,6 +663,7 @@ this.props.updateStudentName(
               })
             }
           }
+          
           //Get Residence Name 
           this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)
           //console.log("Heyyyyyyyyyyyyyyyyyyyyy", this.state.resList)
