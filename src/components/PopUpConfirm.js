@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, 
+import { 
+  onPresAddEvent, 
   onPresPopUpEvent, 
   onPresPopUpConfirm,
   updateLoadingMessage,
@@ -10,7 +11,7 @@ import { Form } from 'react-bootstrap';
 import axios from "axios";
 
 class PopUpConfirm extends React.Component {
-    //Initial State
+//Initial State
 constructor(props) {
   super(props)
   this.state = {
@@ -22,7 +23,6 @@ constructor(props) {
 }
 componentDidMount() {
   window.scrollTo(0, 0);
- 
   this.getUserWitnessData()
   const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
@@ -47,12 +47,9 @@ componentDidMount() {
         headers: { 'Content-Type': 'multipart/form-data', },
         body: data
       };
-    /*   for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
-      } */
+   
       await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
