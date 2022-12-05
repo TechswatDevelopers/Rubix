@@ -548,7 +548,7 @@ postData().then(()=>{
               </form>
               <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('', this.state.res)}>Clear Search</button>
         <button className="btn btn-outline-primary ml-5" onClick={()=>{
-          console.log("data: ", localStorage.getItem('resID'))
+          //console.log("data: ", localStorage.getItem('resID'))
           this.exportToCSV(localStorage.getItem('resID'))}}>
   Download Report
 </button>
