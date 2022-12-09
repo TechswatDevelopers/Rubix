@@ -249,12 +249,14 @@ class Login extends React.Component {
       RubixUserPlatformID: userId,
       RubixClientID: localStorage.getItem("clientID"),
     };
+    
     const requestOptions = {
       title: "Login Form",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: data,
     };
+
     const postData = async () => {
       await axios
         .post(

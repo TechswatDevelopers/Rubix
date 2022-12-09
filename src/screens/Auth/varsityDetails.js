@@ -54,6 +54,7 @@ class VarsityDetails extends React.Component {
             genderRoomList: ['Female', 'Male'],
             roomGender: '',
             showFilters: false,
+            isShowOtherDetails: false,
 
         };
       }
@@ -137,13 +138,7 @@ class VarsityDetails extends React.Component {
           setTimeout(() => {
             this.props.updateLoadingController(false);
           }, 1000);
-        } /* else if(this.state.payment == 'Please Select Payment Method' || this.state.payment == null){
-          alert("Please select a payment method")
-          this.props.updateLoadingMessage("Reloading...");
-          setTimeout(() => {
-            this.props.updateLoadingController(false);
-          }, 1000);
-        } */
+        } 
         else if(this.state.res == 'Please Select Residence' || this.state.res == null){
           alert("Please select a Residence")
           this.props.updateLoadingMessage("Reloading...");
@@ -154,7 +149,6 @@ class VarsityDetails extends React.Component {
           postData()
         }
     }
-  
 
 async componentDidMount(){
     document.body.classList.remove("theme-cyan");
@@ -168,6 +162,8 @@ async componentDidMount(){
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
     this.getStudentRoomDetails(userID)
+
+    localStorage.setItem('roomDetails', '')
 
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
@@ -214,12 +210,14 @@ async componentDidMount(){
     this.setState({selectedFile: null})
     this.setState({isSelected: false})
   }
+
   changeHandler = (event) => {
     this.setState({selectedFile: event.target.files[0]})
     //console.log("selcted file", event.target.files[0])
     this.setState({isSelected: true})
     this.getBase64(event)
   }
+
   handleUpdate(){
     const inputFile = document.getElementById('upload-button')
     inputFile.click()
@@ -227,14 +225,14 @@ async componentDidMount(){
 
   //Fetch Residences
   getRes(uniID){
-    console.log("Location ", this.state.durations)
+    //1console.log("Location ", this.state.durations)
     //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
       await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
-          //console.log("data is ", data)
+          console.log("This data is for viewing: ", data)
           this.setState({resList: data.data})
           });
     }
@@ -272,24 +270,34 @@ async componentDidMount(){
   }
 
   onVarsitySelect(e){
-    //console.log("qala la: ", e.target.value)
-    
+    //console.log("this is coming through as: ", e.target.value)
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
-        durations: [0, 5, 12]
+        uni: e.target.value,
+        showResInput: true,
+        durations: [0, 5, 12],
+        isShowOtherDetails: true
       })
-    } else {
-      //console.log("Sila ")
+      this.getRes(e.target.value)
+    } 
+    else if(e.target.value == "Please Select University"){
       this.setState({
-        durations: [0,5,10]
+        uni: e.target.value,
+        showResInput: false,
+        durations: [],
+        isShowOtherDetails: false
       })
     }
-
-    this.getRes(e.target.value)
-    this.setState({
-      uni: e.target.value,
-      showResInput: true,
-    })
+    else {
+      //console.log("Sila ")
+      this.setState({
+        uni: e.target.value,
+        showResInput: true,
+        durations: [0,5,10],
+        isShowOtherDetails: true
+      })
+      this.getRes(e.target.value)
+    }
   }
 
   onValueChange(e){
@@ -303,8 +311,8 @@ async componentDidMount(){
         hasCar: true
       })
     }
-   
   }
+
 
     //Fetch User Res Data
     getStudentRoomDetails(studentID){
@@ -324,11 +332,11 @@ async componentDidMount(){
           headers: { 'Content-Type': 'application/json' },
           body: pingData
         };
-        console.log('Posted:', pingData)
+        //console.log('Posted:', pingData)
         const postData = async () => {
-          await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailable', pingData, requestOptions)
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailablePref', pingData, requestOptions)
           .then(response => {
-            console.log("Students Rooms List:", response.data.PostRubixUserData)
+            //console.log("Students Rooms List:", response.data.PostRubixUserData)
             if (response.data.PostRubixUserData){
               //Show available rooms
               this.setState({
@@ -347,12 +355,11 @@ async componentDidMount(){
               //Show Room Details
               this.getStudentRoomDetails(' ')
             }
-            
-  
           })
         }
         postData()
     }
+
 
       //Get Romms Filters
   getRoomsFilters(buildingNumber, floorNumber, roomNumber, studentID, gender){
@@ -377,7 +384,7 @@ async componentDidMount(){
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms Dropdown:", response)
+          //console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -405,7 +412,6 @@ async componentDidMount(){
   //Populate Lists
   populate(filterType, roomList){
     let newList = []
-
     //Select Filter
     switch(filterType){
       case 'BuildingNumber':
@@ -559,19 +565,20 @@ async componentDidMount(){
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{  height: "40%",  width:"44%",  display: "block", display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Student University Details</p>
+                    <h1 className="lead">Student University Details</h1>
+                    <p className="text-secondary">Please fill in the following informaion regarding the person/organisation who stand surety for the tenant.</p>
+                
                   </div>
                   
                   <div className="body">
                     <form id='uniDetails'>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        University:
+                        <label className="control-label" >
+                        University
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>this.onVarsitySelect(e)} value={this.state.uni}>
-        {
-            
+        { 
          this.state.uniList.map((university, index)=> (
             <option key={index} name='UniversityID' value = {university.RubixUniversityID}>{university.UniversityName}</option>
         ))   
@@ -579,10 +586,14 @@ async componentDidMount(){
     </select> 
     }
                       </div>
-                      
+
+                   {   
+                   this.state.isShowOtherDetails 
+
+                   ? <>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Course:
+                        <label className="control-label" >
+                        Course
                             </label>
                             <input
                           className="form-control"
@@ -597,8 +608,8 @@ async componentDidMount(){
                       {
                         this.state.showResInput
                         ? <><div className="form-group">
-                        <label className="control-label sr-only" >
-                        Residence:
+                        <label className="control-label" >
+                        Residence
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>{
@@ -625,8 +636,8 @@ async componentDidMount(){
                       :
                         
                         <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Duration: 
+                        <label className="control-label" >
+                        Duration
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>{/* console.log("Value: ", e.target.value); */ this.setState({duration: e.target.value})}} value={this.state.duration}>
@@ -659,8 +670,8 @@ async componentDidMount(){
                     {
                       this.state.hasCar
                       ? <div className="form-group">
-                      <label className="control-label sr-only" >
-                      Car Number Plate:
+                      <label className="control-label" >
+                      Car Number Plate
                           </label>
                           <input
                         className="form-control"
@@ -678,29 +689,24 @@ async componentDidMount(){
                     : null  
                     }
 
-                 
-                      
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Year of Study:
+<div className="form-group">
+                        <label className="control-label" >
+                        Year of Study
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>this.setState({year: e.target.value})} value={this.state.year}>
-        {
-            
+        { 
             this.state.yearList.map((year, index)=> (
             <option key={index} name='StudentYearofStudyID' value = {year.RubixStudentYearofStudyID}>{year.YearofStudy}</option>
         ))   
         }
-    </select> }
+    </select> 
+    }
                       </div>
 
-                      
-
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Hear About Us: 
+                        <label className="control-labe" >
+                        Hear About Us
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>this.setState({hearAbout: e.target.value})} value={this.state.hearAbout}>
@@ -712,16 +718,26 @@ async componentDidMount(){
         }
     </select> }
                       </div>
+
+                      <p>{localStorage.getItem('roomDetails')}</p>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) =>{e.preventDefault(); this.props.onPresRooms()} }>
                         Choose Preffered Room
                         </button>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         NEXT
                         </button>
+
+
+                      </>
+                      : null
+                      
+                      
+                      }
+                      
+                      
                     </form>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

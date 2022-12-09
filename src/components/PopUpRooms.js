@@ -25,15 +25,11 @@ componentDidMount() {
   render() {
     const { isPopUpModal, Title, Body, Function} = this.props;
     return (
-     /*  <div
-        className={isPopUpModal ? "modal fade show " : "modal fade"}
-        role="dialog"
-      > */
       <>
         <Modal 
         className="w-93"
         show={isPopUpModal}
-        //onHide={this.props.onPresRooms()}
+        onHide={(e) => this.props.onPresRooms()}
         backdrop="static"
         keyboard={false}
       >
@@ -48,7 +44,6 @@ componentDidMount() {
       </Modal>
       </>
        
-      //</div>
     );
   }
 }

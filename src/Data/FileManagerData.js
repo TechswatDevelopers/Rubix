@@ -113,7 +113,7 @@ export const fileStorageStatusCardData = [
     UsedSize: "Surety Deed Document",
     Type: "Documents",
     status: localStorage.getItem('rulesProgress'),
-    FileType: "rules-doc",
+    FileType: "surety-doc",
     TotalSize: "1tb",
     UsedPer: localStorage.getItem('rulesProgress'),
     ProgressBarClass:

@@ -602,7 +602,6 @@ class AdminDashboard extends React.Component {
       this.getAllReports()
       }, 2000);
     })
-    //console.log("Final List: ", this.state.resInfoList)
   }
 
   //Get Admin Report

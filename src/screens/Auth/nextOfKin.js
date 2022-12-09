@@ -226,7 +226,6 @@ else{
 }
 
 
-
   //Posting Update status
   postStatus() {
     //Set Loading Screen ON
@@ -255,8 +254,6 @@ else{
       });
     }, 2000);
           }
-          //console.log("Verify email status", response)
-          //this.props.history.push("/relatives")
           this.props.history.push("/login/" + localStorage.getItem('clientID') )
         })
     }
@@ -368,78 +365,102 @@ else{
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Next of Kin Details (Other than Payor)</p>
+                    <h1 className="lead">Surety Details</h1>
+                    <p className="text-secondary">Please fill in the following informaion regarding the person/organisation who stand surety for the tenant.</p>
+                  
                   </div>
                   <div className="body">
                     <form id='nof' onSubmit={(e) => this.Submit(e)}>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        First Name(s):
+                        <label className="control-label" >
+                        First Name(s)
                             </label>
                         <input
                           className="form-control"
                           id="NextOfKinFirstName"
                           name='NextOfKinFirstName'
-                          placeholder="Enter next of kin name"
+                          placeholder="Enter Surety first name(s)"
                           type="text"
                           required
                         />
                       </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Surname:
+                        <label className="control-label" >
+                        Surname
                             </label>
                         <input
                           className="form-control"
                           id="NextOfKinLastName"
                           name='NextOfKinLastName'
-                          placeholder="Enter Next of kin surnme"
+                          placeholder="Enter Surety Surnme"
                           type="text"
                           required
                         />
                       </div>
-                      {/* <div className="form-group">
-                        <label className="control-label sr-only" >
-                        ID Number:
+                      <div className="form-group">
+                        <label className="control-label" >
+                        ID Number
                             </label>
                             <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
                     required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
-                      </div> */}
+                      </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Email:
+                        <label className="control-label" >
+                        Vat Number
+                            </label>
+                        <input
+                          className="form-control"
+                          id="NextOfKinVat"
+                          name='NextOfKinVat'
+                          placeholder="Enter Surety VAT number (optional)"
+                          type="number"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Email
                             </label>
                         <input
                           className="form-control"
                           id="NextOfKinEmail"
                           name='NextOfKinEmail'
-                          placeholder="Enter Next of kin email"
+                          placeholder="Enter Surety Email Address"
                           type="email"
                           required
                         />
                       </div>
+
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Phone Number:
+                        <label className="control-label">
+                        Home Tellephone Number
                             </label>
-                            <PhoneInput placeholder="Cell Phone Number" name="NextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
+                            <PhoneInput placeholder="Surety Home Tellephone Number" name="NextOfKinHomeTell" className='NextOfKinHomeTell' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
+                        Phone Number
+                            </label>
+                            <PhoneInput placeholder="Surety Cell Phone Number" name="NextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
+                    value={this.state.value}
+                    onChange={()=> this.setState({value: this.state.value})}/>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
                           Home Address
                             </label>
-                            
                          {
                               !this.state.showSearch
                               ? <input
                               className="form-control"
                               name= "RubixUserNextOfKinAddress"
                               id= "streetAddress"
-                              placeholder="Enter Address"
+                              placeholder="Enter Surety Physical Address"
                               type="text"
                             />
                               :<GooglePlacesAutocomplete
@@ -459,22 +480,22 @@ placeholder: "Search Address"
                             
 <br/>
 <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Postal Code:
+                        <label className="control-label" >
+                        Postal Code
                             </label>
                         <input
                           className="form-control"
                           //name="PostCode"
                           id="post-code"
-                          placeholder="Enter your post code"
+                          placeholder="Post Code"
                           type="text"
                           required/>
                       </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Work Number:
+                        <label className="control-label" >
+                        Work Number
                             </label>
-                            <PhoneInput placeholder="Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
+                            <PhoneInput placeholder="Surety Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
@@ -482,21 +503,20 @@ placeholder: "Search Address"
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Relationship:
+                        <label className="control-label" >
+                        Relationship
                             </label>
                         <input
                           className="form-control"
                           id="NextOfKinEmail"
                           name='NextOfKiniRelationship'
-                          placeholder="Enter Next of kin relation to you"
+                          placeholder="Enter Surety's relation to you"
                           type="text"
                           required
                         />
                       </div>
 
                       <div className="form-group">
-                        
                           <input
                           className="form-check"
                           id="NextOfKiniConsent"
@@ -507,8 +527,6 @@ placeholder: "Search Address"
                           required
                         />
                         <p>I consent to a credit check.</p>
-                        
-                            
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Next
@@ -516,7 +534,6 @@ placeholder: "Search Address"
                     </form>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

@@ -33,7 +33,7 @@ class RoomsTableStudent extends React.Component {
   const myTime = new Date().toLocaleTimeString('en-ZA')
   this.setState({ dateAndTime: myDate + myTime })
 
-console.log("I am called with: ", this.props.RoomList )
+//console.log("I am called with: ", this.props.RoomList )
   }
    //Send Auditted status
    sendAuttingStatus(studentID){
@@ -55,7 +55,7 @@ console.log("I am called with: ", this.props.RoomList )
       body: data
     };
 
-    console.log("Posted Vetting Data: ", data)
+    //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
@@ -99,7 +99,7 @@ console.log("I am called with: ", this.props.RoomList )
   
    //Converts base64 to file
    dataURLtoFile(dataurl, filename) {
-  
+
     var arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
@@ -134,7 +134,7 @@ console.log("I am called with: ", this.props.RoomList )
         console.log("Posted Data:", data)
         await axios.post('https://adowapdf.rubix.mobi:94/PDFSignature', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
@@ -246,7 +246,12 @@ console.log("I am called with: ", this.props.RoomList )
                   onClick={(e)=>{
                     e.preventDefault()
                     localStorage.setItem("roomID", room.RubixResidenceRoomsID)
+                    localStorage.setItem("roomDetails", room.ResidenceName + " " + room.FloorNumber + " " + room.RoomNumber)
+                    this.setState({
+                      
+                    })
                     this.props.onPresRooms()
+                    
                     //this.props.onPresPopUpAssign()
                     
                     }}>

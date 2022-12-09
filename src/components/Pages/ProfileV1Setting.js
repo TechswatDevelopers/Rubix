@@ -42,8 +42,10 @@ class ProfileV1Setting extends React.Component {
       courseList: [],
       yearList: [],
       countryList: [],
+      fundingSources: ["Please select funding source"],
       bankTypes: ['Please select account type', 'Savings', 'Cheque'],
       payment: '',
+      paymentID: 0,
       address: {},
       university: {},
       nextOfKin: {},
@@ -82,8 +84,11 @@ class ProfileV1Setting extends React.Component {
       prov: null,
       showSearch: false,
       myTempAddress: '',
+      funding: '',
     };
   }
+
+ 
    //Show Search
    showSearch(e){
     e.preventDefault() 
@@ -118,6 +123,8 @@ class ProfileV1Setting extends React.Component {
       
     })
   }
+
+
   getResAndPayment(resID){
     console.log("this: ", this.state.payment)
     this.setState({
@@ -133,16 +140,24 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        console.log("My response: ", response.data.PostRubixUserData)
+        console.log("My response: ", response.data.PostRubixUserData )
         
         this.setState({
           //isLoad: false,
           payMethods: response.data.PostRubixUserData
         })
+
+        for (let i = 0; i < response.data.PostRubixUserData.length; i++){
+          console.log("I reach here with: ", response.data.PostRubixUserData[i].PaymentMethod, "and ", this.state.payment)
+          if (response.data.PostRubixUserData[i].PaymentMethod == this.state.payment.PaymentMethod){
+            this.setState({
+              paymentID: i,
+            })
+          }
+        } 
     })
     }
     getData()
@@ -151,7 +166,6 @@ class ProfileV1Setting extends React.Component {
   
   //Selecting Varsity
   onVarsitySelect(e){
-    
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
         durations: [0, 5, 12]
@@ -165,7 +179,6 @@ class ProfileV1Setting extends React.Component {
     this.setState({
       uni: e.target.value,
     })
-
   }
 
   ///Set Varsity durations
@@ -177,7 +190,7 @@ class ProfileV1Setting extends React.Component {
       })
     } else {
       this.setState({
-        durations: [0,5,10]
+        durations: [0, 5 ,10]
       })
     }
     this.setState({
@@ -357,12 +370,7 @@ console.log("down")
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
-          /* if(response.data[0].ResponceMessage == 'Successfully Update Record'){
-            this.props.onPresPopConfirmInfo()
-          } */
-          //console.log("Update Varsity information Response: ", response)
-          //alert("Information Updated")
-          //window.location.reload()
+        
           this.props.onPresPopConfirmInfo()
         })
     }
@@ -591,19 +599,12 @@ console.log("down")
             year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
             duration: response.data.PostRubixUserData[0].Duration,  
             yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
-            payment:response.data.PostRubixUserData[0].PaymentMethod,
+            payment:response.data.PostRubixUserData[0].rPaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
+            funding: response.data.PostRubixUserData[0].rFundingSource,
           })
-          /*  //Set Payment Method
-           for (let i = 0; i < this.state.payMethods.length; i++){
-            //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
-            if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
-              this.setState({
-                payment: i,
-              })
-            }
-          } */
 
+          this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
 
           //Get Residence Name 
           this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)
@@ -648,21 +649,18 @@ this.props.updateStudentName(
       await axios.post('https://adowarest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
           console.log("All profile data", response.data.PostRubixUserData)
-          this.setState({ myProfile: response.data.PostRubixUserData[0],
+          this.setState({ 
+          myProfile: response.data.PostRubixUserData[0],
           uni: response.data.PostRubixUserData[0].RubixUniversityID,
           year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
-          duration: response.data.PostRubixUserData[0].Duration
+          duration: response.data.PostRubixUserData[0].Duration,
+          yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
+          payment:response.data.PostRubixUserData[0].rPaymentMethod,
+          hearAbout: response.data.PostRubixUserData[0].HearAbout,
+          funding: response.data.PostRubixUserData[0].rFundingSource,
           })
 
-          //Set Payment Method
-          for (let i = 0; i < this.state.payMethods.length; i++){
-            //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
-            if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
-              this.setState({
-                payment: i,
-              })
-            }
-          }
+          this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
           
           //Get Residence Name 
           this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)
@@ -776,6 +774,7 @@ this.props.updateStudentName(
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
     console.log('My role is: ', userID)
+
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB
@@ -1038,6 +1037,19 @@ this.props.updateStudentName(
       hasCar: !this.state.hasCar
     })
   }
+      ///Set funding source
+      setFundingSource(value){
+        if(value == 'BankDeposit' || value == 'EFT'){
+          this.setState({
+            fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship"]
+          })
+    
+        } else if(value == 'NSFAS') {
+          this.setState({
+            fundingSources: ["Please select funding source", "NSFAS"]
+          })
+        }
+      }
 
   render() {
     const { StudentID } = this.props;
@@ -1143,6 +1155,7 @@ this.props.updateStudentName(
         </button>
       </>
     }
+  
 
     //Toggle image select button
 
@@ -1363,8 +1376,6 @@ this.props.updateStudentName(
           <button className="btn btn-default">Cancel</button>
         </div>
 }
-
-
         {
         //Residential Address Section
         }
@@ -1432,8 +1443,6 @@ this.props.updateStudentName(
             <button className="btn btn-default">Cancel</button>
           </form>
         </div>
-
-
 {
   ///University Information
 }
@@ -1571,12 +1580,8 @@ this.props.updateStudentName(
                       : null
                     }</>
                       }
-
-                      
                       </>
-
-
-                      {
+                      {/* {
                         this.state.payMethods == null || this.state.payMethods.length == 0
                         ? <></>
                         :
@@ -1593,7 +1598,7 @@ this.props.updateStudentName(
         ))   
         }
     </select> }
-                      </div>}
+                      </div>} */}
 
                      {body}
                      <div className="form-group">
@@ -1732,7 +1737,8 @@ this.props.updateStudentName(
           </form>
         </div>
 
-        {///2 extra family members setion
+        {
+        ///Payment Details
         }
 
 <div className="body">
@@ -1740,9 +1746,39 @@ this.props.updateStudentName(
     <div className="row clearfix">
       <div className="col-lg-6 col-md-12">
         <h3>Payor Details</h3>
+
         <div className="form-group">
-          <p><strong>Payment Method: </strong> {this.state.myProfile.rPaymentMethod}</p>
-          <p><strong>Payment Method: </strong> {this.state.myProfile.rFundingSource}</p>
+                        <label className="control-label" >
+                        Payment Method: 
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>{
+          //this.onChangeDurationViaPayment(e)
+          this.setFundingSource(e.target.value)
+          this.setState({payment: e.target.value})}} value={this.state.payment}>
+        {
+            this.state.payMethods.map((payment, index)=> (
+            <option key={index} name='PaymentMethod' value={payment.PaymentMethod}>{payment.PaymentMethod}</option>
+        ))   
+        }
+    </select> }
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Funding Source:
+                            </label>
+                            {  
+        <select className="form-control" onChange={(e)=>this.setState({funding: e.target.value})} value={this.state.funding}>
+        {
+         this.state.fundingSources.map((source, index)=> (
+            <option key={index} name='FundingSource' value = {source}>{source}</option>
+        ))  
+        }
+        </select> }
+                      </div>
+
+        <div className="form-group">
           <label>
             Full Name:
           </label>
@@ -1795,7 +1831,7 @@ this.props.updateStudentName(
 
       <div className="form-group">
                   <label>
-                    ID Number:
+                    ID/REG Number:
                   </label>
                   <input
                     className="form-control"
@@ -1810,75 +1846,6 @@ this.props.updateStudentName(
     </div>
   </form>
 </div>
-
-{/* <div className="body">
-  <form id='nextOfKin2' onSubmit={(e) => this.updateNextOfKin(e)}>
-    <div className="row clearfix">
-      <div className="col-lg-6 col-md-12">
-        <h6>Second Member:</h6>
-        <div className="form-group">
-          <label>
-            First Name:
-          </label>
-          <input
-            className="form-control"
-            disabled=""
-            placeholder="First Name"
-            id="NextOfKinFirstName2"
-            name='NextOfKinFirstName2'
-            type="text"
-            defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName2}
-            onChange={() => { }}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>
-            Last Name:
-          </label>
-          <input
-            className="form-control"
-            placeholder="Last Name"
-            id="NextOfKinLastName2"
-            name='NextOfKinLastName2'
-            type="text"
-            defaultValue={this.state.myProfile.RubixUserNextOfKinLastName2}
-            onChange={() => { }}
-          />
-        </div>
-      </div>
-      <div className="col-lg-6 col-md-12">
-        <div className="form-group">
-          <label>
-            Phone Number:
-          </label>
-          <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-            defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber2} name="NextOfKinPhoneNumber2" required=''
-            value={this.state.myProfile.RubixUserNextOfKinPhoneNumber2}
-            onChange={() => this.setState({ value: this.state.value })} />
-        </div>
-        <div className="form-group">
-          <label>
-            Relationship:
-          </label>
-          <input
-            className="form-control"
-            placeholder="Relationship"
-            name='NextOfKiniRelationship2'
-            defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship2}
-            type="text"
-          />
-        </div>
-      </div>
-    </div>
-    <button className="btn btn-primary" type="button" onClick={(e) => this.SubmitRelatives(e)}>
-      Update
-    </button>{" "}
-    &nbsp;&nbsp;
-    <button className="btn btn-default">Cancel</button>
-  </form>
-</div>
- */}
 
       </div>
     );

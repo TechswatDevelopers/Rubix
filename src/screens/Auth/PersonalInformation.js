@@ -247,7 +247,8 @@ class PersonalInformation extends React.Component {
                       height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
-                    <p className="lead">Student User Details</p>
+                    <h1 className="lead">Student Details</h1>
+                    <p className="text-secondary">Please fill in the following informaion regarding the person that will be living in the property.</p>
                   </div>
                   
                   <div className="body">
@@ -256,7 +257,7 @@ class PersonalInformation extends React.Component {
                       
                       
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           First Name
                         </label>
                         <input
@@ -270,7 +271,7 @@ class PersonalInformation extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           Middle Name
                         </label>
                         <input
@@ -283,7 +284,7 @@ class PersonalInformation extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           Last Name
                         </label>
                         <input
@@ -297,42 +298,7 @@ class PersonalInformation extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Country:
-                        </label>
-                        <select className="form-control" onChange={(e) => this.setState({ country: e.target.value })} value={this.state.country}>
-                          {
-                            this.state.countryList.map((country, index) => (
-                              <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>
-                            ))
-                          }
-                        </select>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                          ID Number
-                        </label>
-                        <input type='number' name="IDNumber" className="form-control" id='IDNumber'
-                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
-                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
-                      </div>
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Your Email
-                        </label>
-                        <input
-                          className="form-control"
-                          name="UserEmail"
-                          id="email"
-                          required
-                          value={localStorage.getItem('studentEmail')}
-                          placeholder="Enter your email"
-                          type="email" />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           Password
                         </label>
                         <input
@@ -347,7 +313,42 @@ class PersonalInformation extends React.Component {
                       </div>
 
                       <div className="form-group">
+                        <label className="control-label" >
+                          Country
+                        </label>
+                        <select className="form-control" onChange={(e) => this.setState({ country: e.target.value })} value={this.state.country}>
+                          {
+                            this.state.countryList.map((country, index) => (
+                              <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+
+                      <div className="form-group d-none">
                         <label className="control-label sr-only" >
+                          ID Number
+                        </label>
+                        <input type='number' name="IDNumber" className="form-control" id='IDNumber'
+                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
+                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
+                      </div>
+                      <div className="form-group d-none">
+                        <label className="control-label sr-only" >
+                          Your Email
+                        </label>
+                        <input
+                          className="form-control"
+                          name="UserEmail"
+                          id="email"
+                          required
+                          value={localStorage.getItem('studentEmail')}
+                          placeholder="Enter your email"
+                          type="email" />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
                           Phone Number
                         </label>
                         <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348" name="PhoneNumber" required=''
@@ -355,7 +356,7 @@ class PersonalInformation extends React.Component {
                           onChange={() => this.setState({ value: this.state.value })} />
                       </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           Your Student Number
                         </label>
                         <input
@@ -368,8 +369,16 @@ class PersonalInformation extends React.Component {
                         />
                       </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Medical Conditions:
+                        <label className="control-label" >
+                          Phone Number
+                        </label>
+                        <PhoneInput id='register-page-phone-number' placeholder="Emergency Contact No." name="EmergencyNumber" required=''
+                          value={this.state.value}
+                          onChange={() => this.setState({value: this.state.value })} />
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label" >
+                          Medical Conditions
                         </label>
                         <input
                           className="form-control"

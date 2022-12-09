@@ -228,7 +228,7 @@ const mergePDFHandler = async () => {
   
   })
   
-  console.log("MergedPDF: ", this.state.myDocs)
+  //console.log("MergedPDF: ", this.state.myDocs)
   // Merging The PDF Files to A PDFDocument
   const mergedPDFDocument = await mergePDF(this.state.myDocs)
   console.log("MergedPDF: ", mergedPDFDocument)
@@ -239,7 +239,6 @@ const mergePDFHandler = async () => {
 }
 mergePDFHandler()
 }
-
   
   mergeFiles(){
     const merger = new PDFMerger();
@@ -380,9 +379,7 @@ mergePDFHandler()
         currentDocID: temp[0].ImageID
       })
     }
-    
     this.setState({ keyString: file,
-    
     })
     localStorage.setItem('docType', file)
 
@@ -392,8 +389,6 @@ mergePDFHandler()
     this.props.updateLoadingController(false);
   }, 1000);
 
-    
-    
     if (temp.length != 0) {
       this.setState({ doc: temp[0] })
     } else {
@@ -458,9 +453,9 @@ mergePDFHandler()
                })
             }
             break
-            case 'student-card':
+            case 'key-form':
               {
-                this.setState({ docType: "My Student Card",
+                this.setState({ docType: "Key Receipt Form",
                 topBarData: <>
                 
                 <br></br>
@@ -566,7 +561,6 @@ mergePDFHandler()
         .then(response => {
           //console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
-          //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
     }
     postDocument().then(() => {
@@ -580,7 +574,6 @@ mergePDFHandler()
     })
       
   }
-
 
    //Set Message according to percentage
    setMessage(percent) {
@@ -1028,20 +1021,19 @@ mergePDFHandler()
           <iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
     </iframe>
         </>
-
         : <>
           {this.state.keyString != 'lease-agreement'
           ? <>
           {
-            this.state.keyString == 'booking-doc'
+            this.state.keyString == 'key-form'
             ?<>
-            <iframe src={"https://adowaimages.rubix.mobi:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px"></iframe>
+            <iframe src={"https://adowaimages.rubix.mobi:449/2a32ee9c-d6fb-4f2c-9665-0c78e119385e.pdf"}width="100%" height="800px"></iframe>
             </>
             :<>
             {
               this.state.keyString == 'surety-doc'
               ?<>
-              <iframe src={'https://adowaimages.rubix.mobi:449/17_surety-doc_Samkelo_Zondi_21458321.pdf'}width="100%" height="500px"></iframe>
+              <iframe src={'https://adowaimages.rubix.mobi:449/17_surety-doc_Samkelo_Zondi_21458321.pdf'}width="100%" height="800px"></iframe>
               </>
               :<>
               <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
@@ -1180,7 +1172,9 @@ mergePDFHandler()
         </div>
         <div>
           <div className="container-fluid" >
-            {localStorage.getItem('role') == 'admin'
+
+            {
+            localStorage.getItem('role') == 'admin'
             ? null
             : <PageHeader
               HeaderText="Rubix User Profile"
@@ -1189,6 +1183,7 @@ mergePDFHandler()
                 { name: "My Profile", navigate: "" },
               ]}
             />}
+
             <div
               className="progress-bar bg-success progress-bar-striped"
               data-transitiongoal={this.props.studentProgress}
@@ -1207,7 +1202,7 @@ mergePDFHandler()
                       id="controlled-tab-example"
                     >
                       <Tab eventKey="settings" title="Personal Information">
-                        <ProfileV1Setting  />
+                        <ProfileV1Setting />
                       </Tab>
           
                       <Tab  eventKey="documents" title="Documents">
@@ -1221,8 +1216,14 @@ mergePDFHandler()
                             <div className="container-fluid">
                               <div className="row clearfix">
                                 <div className="col-lg-3 col-md-5 col-sm-12">
-                                  {/* <FileStorageCard TotalSize="Storage Used" UsedSize={90} /> */}
-                                  {fileStorageStatusCardData.map((data, index) => {
+                                  {
+                                  fileStorageStatusCardData.map((data, index) => {
+
+                                    /* if(data.FileType == 'nsfas-doc' && localStorage.getItem('payMethod') == 'NSFAS'){
+
+                                    } else {
+                                      
+                                    } */
                                     
                                     return (
                                       <div 
@@ -1259,13 +1260,6 @@ mergePDFHandler()
                         </div>
                       </Tab>
 {myLease}
-
-                    {/* <Tab  eventKey="Test" title="Test">
-                    <>
-                    <iframe src={this.state.mergedFile} width="100%" height="500px">
-           </iframe>
-                </>
-                    </Tab> */}
                     </Tabs>
                   </div>
                 </div>

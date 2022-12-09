@@ -43,7 +43,7 @@ class RoomAllocation extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
 
-    this.getStudentRoomDetails(this.props.currentStudentiD)
+    this.getStudentRoomDetails(localStorage.getItem('userID'))
     const scrollToElement = () => this.testRef.current.scrollIntoView();
     scrollToElement()
 
@@ -66,7 +66,7 @@ class RoomAllocation extends React.Component {
         'BuildingNumber': "",
         'FloorNumber': "",
         'RoomNumber': "",
-        'RubixRegisterUserID': studentID
+        'RubixRegisterUserID': localStorage.getItem('userID')
 
       };
       //Ping Request Headers
@@ -80,7 +80,7 @@ class RoomAllocation extends React.Component {
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms List:", response.data.PostRubixUserData)
+          console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({

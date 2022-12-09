@@ -224,13 +224,15 @@ class Addresses extends React.Component {
                     <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%", display: "block", margin: "auto" }} />
                   </div>
                   <div className="header">
-                    <p className="lead">Student Address Details</p>
+                    <h1 className="lead">Address Details</h1>
+                    <p className="text-secondary">Please fill in the following informaion regarding the home address for the person occupying the property.</p>
+                  
                   </div>
 
                   <div className="body">
                     <form id='addresses' onSubmit={(e) => this.AddressSubmit(e)}>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           Home Address
                         </label>
                         { this.state.showSearch
@@ -260,8 +262,8 @@ class Addresses extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Complex/Building Name:
+                        <label className="control-label" >
+                          Complex/Building Name
                         </label>
                         <input
                           className="form-control"
@@ -273,8 +275,8 @@ class Addresses extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Complex/Apartnment Unit Number:
+                        <label className="control-label" >
+                          Complex/Apartnment Unit Number
                         </label>
                         <input
                           className="form-control"
@@ -286,8 +288,8 @@ class Addresses extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Postal Code:
+                        <label className="control-label" >
+                          Postal Code
                         </label>
                         <input
                           className="form-control"
@@ -299,8 +301,8 @@ class Addresses extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Province:
+                        <label className="control-label" >
+                          Province
                         </label>
                         {
                           <select className="form-control" onChange={(e) => this.setState({ prov: e.target.value })} value={this.state.prov}>
@@ -313,8 +315,8 @@ class Addresses extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Country:
+                        <label className="control-label" >
+                          Country
                         </label>
                         <select className="form-control" onChange={(e) => this.setState({ country: e.target.value })} value={this.state.country}>
                           {

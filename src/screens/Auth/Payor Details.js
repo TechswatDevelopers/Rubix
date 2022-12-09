@@ -27,11 +27,12 @@ class PayorDetails extends React.Component {
         showSearch: false,
         //consent: false,
         funding: null,
-        fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship", "NSFAS"],
+        fundingSources: ["Please select funding source"],
         payMethods: ["Please select payment method"],
         bankTypes: ['Please select account type', 'Savings', 'Cheque'],
         payment: null,
         consent: '0',
+        MarketingConsent: '0',
         value: 0
 
     };
@@ -118,7 +119,6 @@ class PayorDetails extends React.Component {
   })
   e.preventDefault();
 
-  
   const form = document.getElementById('nof');
   var idNumber = document.getElementById("IDNumber").value;
   var nextofKinEmail = document.getElementById("PayorEmail").value;
@@ -137,6 +137,7 @@ class PayorDetails extends React.Component {
       'PaymentMethod': this.state.payment,
       'FundingSource': this.state.funding,
       'Concent': this.state.consent,
+      'Marketing': this.state.MarketingConsent,
   };
 
   for (let i=0; i < form.elements.length; i++) {
@@ -185,6 +186,7 @@ class PayorDetails extends React.Component {
     'PaymentMethod': this.state.payment,
     'FundingSource': this.state.funding,
     'Concent': this.state.consent,
+    'Marketing': this.state.MarketingConsent,
 };
 for (let i=0; i < form.elements.length; i++) {
     const elem = form.elements[i];
@@ -199,7 +201,6 @@ const requestOptions = {
 };
 console.log("called", data)
 const postData = async() => {
-
   await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
   .then(response => {
       console.log("2nd Response: ", response)
@@ -272,12 +273,12 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  console.log("My Data: ", data)
+  //console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        console.log("My response: ", response.data.PostRubixUserData)
-        
+        //console.log("My response: ", response.data.PostRubixUserData)
+
         this.setState({
           isLoad: false,
           payMethods: response.data.PostRubixUserData
@@ -285,6 +286,20 @@ else{
     })
     }
     getData()
+  }
+
+  ///Set funding source
+  setFundingSource(value){
+    if(value == 'BankDeposit' || value == 'EFT'){
+      this.setState({
+        fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship"]
+      })
+
+    } else if(value == 'NSFAS') {
+      this.setState({
+        fundingSources: ["Please select funding source", "NSFAS"]
+      })
+    }
   }
 
   componentDidMount(){
@@ -313,7 +328,8 @@ else{
     }, 2000)
 
   }
-  setLoadingPage(time,) {
+
+  setLoadingPage(time) {
     this.setState({ isLoad: true, })
     setTimeout(() => {
       this.setState({
@@ -321,13 +337,14 @@ else{
       })
     }, time);
   }
+
   //Show Search
   showSearch(e){
     e.preventDefault() 
     this.setState({showSearch: !this.state.showSearch})
   }
 
-  //Change Consent
+  //Change Credit Check Consent
   changeConsent(e){
     //console.log("My consent: ", e.target.value)
     if (e.target.value == 'on'){
@@ -341,9 +358,23 @@ else{
     }
   }
 
+  //Change Marketing Consent
+  changeMarketingConsent(e){
+    //console.log("My consent: ", e.target.value)
+    if (e.target.value == 'on'){
+      this.setState({
+        MarketingConsent: "1"
+      })
+    } else {
+      this.setState({
+        MarketingConsent: "0"
+      })
+    }
+  }
 
-  render() { let body;
-    if(this.state.payment == 'BANKDEPOSIT' || this.state.payment == 'NSFAS' || this.state.payment == 'Student Loan'){
+  render() { 
+    let body;
+    if(this.state.payment == 'BankDeposit' || this.state.payment == 'NSFAS' || this.state.payment == 'Student Loan'){
       body = 
       null
     } else if(this.state.payment == 'EFT'){
@@ -375,10 +406,24 @@ else{
                           required
                         />
                       </div>
+                      
+                            <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Bank Name:
+                            </label>
+                            <input
+                          className="form-control"
+                          id="BranchName"
+                          name='BranchName'
+                          placeholder="Enter the branch name"
+                          type="text"
+                          required
+                        />
+                      </div>
 
                             <div className="form-group">
                         <label className="control-label sr-only" >
-                        Branch Code:
+                        Branch Name:
                             </label>
                             <input
                           className="form-control"
@@ -476,17 +521,19 @@ else{
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Payment Details</p>
+                    <h1 className="lead"><strong>Payor Details</strong></h1>
+                    <p className="text-secondary">Please fill in the following informaion regarding the person/organisation responsoble for rent payment.</p>
                   </div>
                   <div className="body">
                     <form id='nof' onSubmit={(e) => this.Submit(e)}>
                     <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Payment Method: 
+                        <label className="control-label" >
+                        Payment Method
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>{
           //this.onChangeDurationViaPayment(e)
+          this.setFundingSource(e.target.value)
           this.setState({payment: e.target.value})}} value={this.state.payment}>
         {
             this.state.payMethods.map((payment, index)=> (
@@ -497,23 +544,24 @@ else{
                       </div>
                       {body}
                     <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Funding Source:
+                        <label className="control-label" >
+                        Funding Source
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>this.setState({funding: e.target.value})} value={this.state.funding}>
+        <select 
+        className="form-control" 
+        onChange={(e)=>{this.setState({funding: e.target.value})}} 
+        value={this.state.funding}>
         {
          this.state.fundingSources.map((source, index)=> (
             <option key={index} name='FundingSource' value = {source}>{source}</option>
         ))  
         }
         </select> }
-                      </div>
-
-
+        </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Full Name(s):
+                        <label className="control-label" >
+                        Full Name(s)
                             </label>
                         <input
                           className="form-control"
@@ -526,16 +574,30 @@ else{
                       </div>
                       
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        ID?Reg Number:
+                        <label className="control-label" >
+                        ID/Reg Number
                             </label>
                             <input type='number' name="PayorID" className='form-control' id='IDNumber' 
-                    required='' /* maxLength = '13' minLength='13' */ placeholder='Enter Payor ID/Reg Number'></input>
+                    required='' /* maxLength = '13' minLength='13' */ placeholder='Enter ID/Reg Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
+
                       <div className="form-group">
                         <label className="control-label sr-only" >
-                        Email:
+                        Vat Number
+                            </label>
+                        <input
+                          className="form-control"
+                          id="NextOfKinVat"
+                          name='NextOfKinVat'
+                          placeholder="Enter VAT number (optional)"
+                          type="number"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Email
                             </label>
                         <input
                           className="form-control"
@@ -547,16 +609,24 @@ else{
                         />
                       </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Phone Number:
+                        <label className="control-label" >
+                        Home Phone Number
                             </label>
-                            <PhoneInput placeholder="Cell Phone Number" name="PayorHomeTell" className='PayorHomeTell' required='' 
+                            <PhoneInput placeholder="Home Phone Number" name="PayorHomeTell" className='PayorHomeTell' required='' 
+                    value={this.state.value}
+                    onChange={()=> this.setState({value: this.state.value})}/>
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Cellphone Number
+                            </label>
+                            <PhoneInput placeholder="Cellphone Number" name="PayorCellPhone" className='PayorCellPhone' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                           Home Address
                             </label>
                             
@@ -586,8 +656,8 @@ placeholder: "Search Address"
                             
 <br/>
 <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Postal Code:
+                        <label className="control-label" >
+                        Postal Code
                             </label>
                         <input
                           className="form-control"
@@ -598,18 +668,15 @@ placeholder: "Search Address"
                           required/>
                       </div>
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Work Number:
+                        <label className="control-label" >
+                        Work Number
                             </label>
                             <PhoneInput placeholder="Work number" name="PayorWorkTell" className='PayorWorkTell' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
-                      
-
                       </div>
                       <div className="form-group">
-                        
                         <input
                         className="form-check"
                         id="Concent"
@@ -619,9 +686,19 @@ placeholder: "Search Address"
                         type="checkbox"
                         required
                       />
-                      <p>I consent to a credit check.</p>
-                      
-                          
+                      <p>I consent to a credit check.</p> 
+                    </div>
+                      <div className="form-group">
+                        <input
+                        className="form-check"
+                        id="Concent"
+                        //name='Concent'
+                        onChange={(e)=>{this.changeMarketingConsent(e)}}
+                        //placeholder="Enter Next of kin relation to you"
+                        type="checkbox"
+                        required
+                      />
+                      <p>I consent to receiving marketing content from Adowa Living.</p> 
                     </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Next
