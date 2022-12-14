@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import { connect } from "react-redux";
 import { onPresAddEvent, onPresPopNewNotice,
   onUpdateVarsity,updateLoadingMessage,updateLoadingController } from "../actions";
@@ -360,3 +360,4 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
 export default connect(mapStateToProps, { onPresAddEvent, onPresPopNewNotice, 
   onUpdateVarsity,
   updateLoadingMessage,updateLoadingController  })(PopUpVarsity);
+ */

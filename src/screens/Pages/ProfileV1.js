@@ -555,11 +555,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("The reponse: ", response)
+          console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -878,7 +878,6 @@ mergePDFHandler()
       alert("Please provide a signature")
     } 
   }
-
   
   //Update Profile Picture
   onPressSignatureUpload(file) {
@@ -898,7 +897,7 @@ mergePDFHandler()
       for (var pair of data.entries()) {
         //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
           //console.log("Upload details:", response)
           //this.setState({ mongoID: response.data.post._id })
@@ -917,7 +916,6 @@ mergePDFHandler()
       this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
-    
   }
 
   //Function to post signature to API
@@ -925,10 +923,9 @@ mergePDFHandler()
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'ClientId': localStorage.getItem('clientID'),
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature
+        'Signature': signature
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -936,18 +933,18 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
-      await axios.post('https://adowapdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+      console.log("Posted Data:", data)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          //console.log("Signature upload details:", response)
+          console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
           if (tryval === 1) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
@@ -956,7 +953,6 @@ mergePDFHandler()
     }
     postDocument()
   }
-
 
   //On Press loading data
   setLoadingPage(time,) {
@@ -967,7 +963,6 @@ mergePDFHandler()
       })
     }, time);
   }
-
   
   //On Press loading data
   setLoadingDocumentPage() {
@@ -1126,9 +1121,9 @@ mergePDFHandler()
         </div>
 
 
-        <PopUpVarsity
+        {/* <PopUpVarsity
         StudentID = {this.state.myUserID}
-        />
+        /> */}
         <PopUpModal 
         Title= "Upload Complete!"
         Body = "Your document has been uploaded successfully."

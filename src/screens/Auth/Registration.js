@@ -23,6 +23,7 @@ class Registration extends React.Component {
       title: '',
       popMessage: '',
       myFunction: null,
+      idType: '',
       errorMessage: '',
       userGender: 'Male',
     }
@@ -221,6 +222,7 @@ class Registration extends React.Component {
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
                   localStorage.setItem('platformID', "1")
+                  localStorage.setItem('IDType', this.state.idType)
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
@@ -239,6 +241,14 @@ class Registration extends React.Component {
                  }
             })
           }
+      }
+
+      ///On Change ID Type
+      onChangeValue(event) {
+        this.setState({
+          idType: event.target.value,
+        })
+        console.log(event.target.value);
       }
 
 
@@ -316,7 +326,22 @@ class Registration extends React.Component {
                           type="email"
                         />
                       </div>
-                      <div className="form-group">
+
+                      <div className="form-group" onChange={(e) => this.onChangeValue(e)}>
+                      <label className="control-label sr-only" >
+                          Identification Type
+                        </label>
+                        <input type="radio" value="SA ID" name="idType"/> SA ID Number
+                        <p>   </p>
+                        <input type="radio" value="Passport" name="iidTyped" /> Passport Number
+
+                      </div>
+
+
+                     {
+                      this.state.idType == 'SA ID'
+                     ?
+                     <div className="form-group">
                         <label className="control-label sr-only" >
                           ID Number
                         </label>
@@ -324,6 +349,20 @@ class Registration extends React.Component {
                           required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' ></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>
+
+                      : this.state.idType == 'Passport' 
+                      ?
+                     <div className="form-group">
+                        <label className="control-label sr-only" >
+                          ID Number
+                        </label>
+                        <input type='number' name="passportNumber" className="form-control" id='passportNumber'
+                          required='' placeholder='Enter your valid Passport Number' ></input>
+                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
+                      </div>
+                      : null
+                      
+                      }
                       
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue

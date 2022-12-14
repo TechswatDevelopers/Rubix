@@ -32,6 +32,20 @@ class PersonalInformation extends React.Component {
     };
   }
 
+    //Change Marketing Consent
+    changeMarketingConsent(e){
+      //console.log("My consent: ", e.target.value)
+      if (e.target.value == 'on'){
+        this.setState({
+          MarketingConsent: "1"
+        })
+      } else {
+        this.setState({
+          MarketingConsent: "0"
+        })
+      }
+    }
+
   ///Validate ID numbers
   Validate() {
     var idNumber = document.getElementById("IDNumber").value;
@@ -165,12 +179,6 @@ class PersonalInformation extends React.Component {
 
   //On Page load complete
   componentDidMount() {
-    document.body.classList.remove("theme-cyan");
-    document.body.classList.remove("theme-purple");
-    document.body.classList.remove("theme-blue");
-    document.body.classList.remove("theme-green");
-    document.body.classList.remove("theme-orange");
-    document.body.classList.remove("theme-blush");
 
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     //console.log('platform ID', localStorage.getItem('platformID'))
@@ -389,13 +397,25 @@ class PersonalInformation extends React.Component {
                           onChange={(e) => this.setState({ medicalConditions: e.target.value })}
                         />
                       </div>
+
+                      <div className="form-group">
+                        <input
+                        className="form-check"
+                        id="Concent"
+                        //name='Concent'
+                        onChange={(e)=>{this.changeMarketingConsent(e)}}
+                        //placeholder="Enter Next of kin relation to you"
+                        type="checkbox"
+                        required
+                      />
+                      <p>I consent to receiving marketing content from Adowa Living.</p> 
+                    </div>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e)}>
                         Continue
                       </button>
                     </form>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -404,7 +424,6 @@ class PersonalInformation extends React.Component {
     );
   }
 }
-
 PersonalInformation.propTypes = {
 };
 

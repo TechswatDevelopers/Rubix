@@ -47,11 +47,11 @@ componentDidMount() {
       body: data
     };
 
-   //console.log("Posted Vetting Data: ", data)
+   //console.log("Room assign Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        console.log("Room response: ", response)
+        //console.log("Room response: ", response)
       })
     }
     postData().then(()=>{
@@ -81,11 +81,11 @@ componentDidMount() {
         body: data
       };
   
-      console.log("Posted Vetting Data: ", data)
+      //console.log("Posted Vetting Data: ", data)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
-          console.log("DB response: ", response)
+          //console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
@@ -111,11 +111,11 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
-      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({
             done: true
           })
@@ -147,12 +147,10 @@ componentDidMount() {
     //console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
-        'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': '',
+        'RubixRegisterUserID': parseInt(userid),
+        'ClientId': 1,
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature,
-        "Browser": ''
+        'Signature': signature,
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -160,18 +158,18 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log(" mY Posted Data:", data)
-      await axios.post('https://adowapdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+      //console.log(" mY Posted Data:", data)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          //console.log("Signature upload details:", response.data.Base)
+          //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
           if (tryval === 1) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
@@ -235,7 +233,7 @@ componentDidMount() {
                   //window.location.reload()
                       this.props.onPresPopUpAssign()
                       setTimeout(() => {
-                        console.log("this is it: ", this.state.done)
+                        //console.log("this is it: ", this.state.done)
                         if(this.state.done){
                     
                           this.props.updateLoadingController(false);

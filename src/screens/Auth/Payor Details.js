@@ -136,8 +136,14 @@ class PayorDetails extends React.Component {
       'ClientID': 1,
       'PaymentMethod': this.state.payment,
       'FundingSource': this.state.funding,
-      'Concent': this.state.consent,
-      'Marketing': this.state.MarketingConsent,
+      'PayorConcent': this.state.consent,
+      'PayorMarketingConcent': this.state.MarketingConsent,
+      'PayorAccountHolderName': '',
+      'PayorBankName': '',
+      'PayorBranchCode': '',
+      'PayorAccountNumber': '',
+      'PayorRef': '',
+      'PayorBranchName': '',
   };
 
   for (let i=0; i < form.elements.length; i++) {
@@ -185,8 +191,14 @@ class PayorDetails extends React.Component {
     'ClientID': 1,
     'PaymentMethod': this.state.payment,
     'FundingSource': this.state.funding,
-    'Concent': this.state.consent,
-    'Marketing': this.state.MarketingConsent,
+    'PayorConcent': this.state.consent,
+    'PayorMarketingConcent': this.state.MarketingConsent,
+    'PayorAccountHolderName': '',
+    'PayorBankName': '',
+    'PayorBranchCode': '',
+    'PayorAccountNumber': '',
+    'PayorRef': '',
+    'PayorBranchName': '',
 };
 for (let i=0; i < form.elements.length; i++) {
     const elem = form.elements[i];
@@ -385,8 +397,8 @@ else{
                             </label>
                             <input
                           className="form-control"
-                          id="AccountHolderName"
-                          name='AccountHolderName'
+                          id="PayorAccountHolderName"
+                          name='PayorAccountHolderName'
                           placeholder="Enter your bank account holder name"
                           type="text"
                           required
@@ -399,8 +411,8 @@ else{
                             </label>
                             <input
                           className="form-control"
-                          id="BankName"
-                          name='BankName'
+                          id="PayorBankName"
+                          name='PayorBankName'
                           placeholder="Enter your bank name"
                           type="text"
                           required
@@ -409,12 +421,12 @@ else{
                       
                             <div className="form-group">
                         <label className="control-label sr-only" >
-                        Bank Name:
+                        Branch Name:
                             </label>
                             <input
                           className="form-control"
-                          id="BranchName"
-                          name='BranchName'
+                          id="PayorBranchName"
+                          name='PayorBranchName'
                           placeholder="Enter the branch name"
                           type="text"
                           required
@@ -423,12 +435,12 @@ else{
 
                             <div className="form-group">
                         <label className="control-label sr-only" >
-                        Branch Name:
+                        Branch Code:
                             </label>
                             <input
                           className="form-control"
-                          id="BranchCode"
-                          name='BranchCode'
+                          id="PayorBranchCode"
+                          name='PayorBranchCode'
                           placeholder="Enter your branch code"
                           type="text"
                           required
@@ -441,16 +453,30 @@ else{
                             </label>
                             <input
                           className="form-control"
-                          id="AccountNumber"
-                          name='AccountNumber'
+                          id="PayorAccountNumber"
+                          name='PayorAccountNumber'
                           placeholder="Enter your account number"
                           type="text"
                           required
                         />
                       </div>
 
-                      
                       <div className="form-group">
+                        <label className="control-label sr-only" >
+                        Payor Reff
+                            </label>
+                            <input
+                          className="form-control"
+                          id="PayorRef"
+                          name='PayorRef'
+                          placeholder="Enter your Payment Refference"
+                          type="text"
+                          required
+                        />
+                      </div>
+
+                      
+                     {/*  <div className="form-group">
                         <label className="control-label sr-only" >
                         Account Type:
                             </label>
@@ -462,7 +488,7 @@ else{
         ))  
         }
         </select> }
-                      </div>
+                      </div> */}
 
       </>
     } else {
@@ -583,13 +609,13 @@ else{
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
+                        <label className="control-label" >
                         Vat Number
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinVat"
-                          name='NextOfKinVat'
+                          id="PayorVat"
+                          name='PayorVat'
                           placeholder="Enter VAT number (optional)"
                           type="number"
                         />
@@ -629,7 +655,6 @@ else{
                         <label className="control-label" >
                           Home Address
                             </label>
-                            
                          {
                               !this.state.showSearch
                               ? <input
@@ -671,7 +696,7 @@ placeholder: "Search Address"
                         <label className="control-label" >
                         Work Number
                             </label>
-                            <PhoneInput placeholder="Work number" name="PayorWorkTell" className='PayorWorkTell' required='' 
+                            <PhoneInput placeholder="Work number" name="Payorworktel" className='Payorworktel' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>

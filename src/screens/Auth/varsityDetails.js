@@ -313,7 +313,6 @@ async componentDidMount(){
     }
   }
 
-
     //Fetch User Res Data
     getStudentRoomDetails(studentID){
       const pingData = {
@@ -325,6 +324,7 @@ async componentDidMount(){
           'RoomNumber': "",
           'RubixRegisterUserID': ''
         };
+
         //Ping Request Headers
         const requestOptions = {
           title: 'Get Students Room Allocation Details',
@@ -332,11 +332,13 @@ async componentDidMount(){
           headers: { 'Content-Type': 'application/json' },
           body: pingData
         };
-        //console.log('Posted:', pingData)
+
+        console.log('Posted:', pingData)
+
         const postData = async () => {
-          await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailablePref', pingData, requestOptions)
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailablePref', pingData, requestOptions)
           .then(response => {
-            //console.log("Students Rooms List:", response.data.PostRubixUserData)
+            console.log("Students Rooms List:", response.data.PostRubixUserData)
             if (response.data.PostRubixUserData){
               //Show available rooms
               this.setState({
@@ -348,7 +350,6 @@ async componentDidMount(){
                 buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
                 floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
                 roomNumberList: this.populate('RoomNumber', response.data.PostRubixUserData)
-  
               })
   
             } else {
@@ -357,6 +358,7 @@ async componentDidMount(){
             }
           })
         }
+
         postData()
     }
 

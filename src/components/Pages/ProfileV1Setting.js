@@ -599,9 +599,9 @@ console.log("down")
             year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
             duration: response.data.PostRubixUserData[0].Duration,  
             yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
-            payment:response.data.PostRubixUserData[0].rPaymentMethod,
+            payment:response.data.PostRubixUserData[0].PaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
-            funding: response.data.PostRubixUserData[0].rFundingSource,
+            funding: response.data.PostRubixUserData[0].FundingSource,
           })
 
           this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
@@ -644,20 +644,21 @@ this.props.updateStudentName(
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
+
     //console.log('All student data:', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          console.log("All profile data", response.data.PostRubixUserData)
+          console.log("All profile data", response)
           this.setState({ 
           myProfile: response.data.PostRubixUserData[0],
           uni: response.data.PostRubixUserData[0].RubixUniversityID,
           year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
           duration: response.data.PostRubixUserData[0].Duration,
           yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
-          payment:response.data.PostRubixUserData[0].rPaymentMethod,
+          payment:response.data.PostRubixUserData[0].PaymentMethod,
           hearAbout: response.data.PostRubixUserData[0].HearAbout,
-          funding: response.data.PostRubixUserData[0].rFundingSource,
+          funding: response.data.PostRubixUserData[0].FundingSource,
           })
 
           this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
@@ -674,7 +675,6 @@ this.props.updateStudentName(
           if(response.data.PostRubixUserData[0].LeaseShow == 1){
             this.props.onPresLease()
           } 
-
         }).then(() => {
           localStorage.setItem('resName', this.state.myProfile.ResidenceName)
           localStorage.setItem('resPhoto', this.state.myProfile.ResidencePhoto)

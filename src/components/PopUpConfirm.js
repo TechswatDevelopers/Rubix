@@ -48,8 +48,9 @@ componentDidMount() {
         body: data
       };
    
-      await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+      await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
+          console.log("Check me ...", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -77,24 +78,27 @@ componentDidMount() {
 }
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
+
     this.props.updateLoadingMessage("Generating Lease...");
     //console.log("I am called incorrectly")
+
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'ClientId': localStorage.getItem('clientID'),
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature,
+        'Signature': signature,
       }
+
       const requestOptions = {
         title: 'Student Signature Upload',
         method: 'POST',
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
-      await axios.post('https://adowapdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+
+      //console.log(" Lease Posted Data:", data)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
@@ -132,12 +136,8 @@ getUserWitnessData() {
     this.props.updateLoadingMessage("Generating Lease...");
     //Request Data
     const data = {
-   "PDFDocumentUrl" : filename,
+   "ImageUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
-   "ClientId" : localStorage.getItem('clientID'),
-   "IP_Address" :'102.65.77.244' /* this.state.userIPAddress */,
-   "Time_and_Date" : this.state.dateAndTime,
-   "Browser" : ""
     }
 
     const requestOptions = {
@@ -146,14 +146,14 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log('My data: ', data)
+    console.log('My data: ', data)
     const postData = async () => {
-      await axios.post('https://adowapdf.rubix.mobi:94/PDFFinalSignature', data, requestOptions)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
-        //console.log("Final Lease Response: ", response)
+        console.log("Final Lease Response: ", response)
         
         //Send documents API
-        const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+        const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
         const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement')
         //Set Loading Screen OFF
         this.props.updateLoadingController(false);
@@ -310,7 +310,6 @@ getUserWitnessData() {
               <button
                 type="button"
                 onClick={(e) => {
-                  console.log('pressed')
                   this.props.onPresPopUpConfirm();
                 }}
                 className="btn btn-danger"

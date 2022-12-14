@@ -40,15 +40,15 @@ constructor(props) {
 
     const fetchDocs = async()=> {
       //Get documents from DB
-      await fetch('https://adowadocument.rubix.mobi:86/feed/post/' + this.state.userID)
+      await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + this.state.userID)
       .then(response => response.json())
       .then(data => {
         console.log("check: ", data)
         if(data.post.length != 0 && data.post != null){
           this.setState({
-            bookingDoc: data.post.filter(doc => doc.FileType == 'booking-doc')[0].filename,
+            bookingDoc: data.post.filter(doc => doc.FileType == 'surety-doc')[0].filename,
             leaseDoc: data.post.filter(doc => doc.FileType == "lease-agreement")[0].filename,
-            currentDoc: data.post.filter(doc => doc.FileType == 'booking-doc')[0].filename
+            currentDoc: data.post.filter(doc => doc.FileType == "surety-doc")[0].filename
           })
         }
       })
@@ -92,12 +92,10 @@ constructor(props) {
     //Function to post signature to API
     postSignature(signature, tryval) {
       const data = {
-        'NameSurname': document.getElementById('NameSurname').value,
-        'ClientId': this.state.userID,
-        'RubixPlace': document.getElementById('RubixPlace').value,
+        'RubixRegisterUserID': 105,
+        'ClientId': 1,
         'Time_and_Date': this.state.dateAndTime,
-        'Signature': signature,
-        'PDFDocumentUrl': "https://adowaimages.rubix.mobi:449/" + this.state.leaseDoc
+        'ImageUrl': signature,
       }
       const requestOptions = {
         title: 'Parent Signature Upload',
@@ -108,31 +106,78 @@ constructor(props) {
       console.log("Posted Data:", data)
       const postDocument = async () => {
         
-        await axios.post('https://adowapdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDFNEKSign', data, requestOptions)
           .then(response => {
             console.log("Signature upload details:", response)
-            this.setState({ docUrl: response.data.Base })
-            if (tryval === 1) {
-              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
-              const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
-              this.onPressUpload(temp, 'lease-agreement', 'signing')
-            } else if (tryval === 0) {
-              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
-              const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
-              this.onPressUpload(temp, 'unsigned-agreement', 'signing')
-            }
+            this.setState({ docUrl: response.data.PostRubixUserData })
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+            const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
+            this.onPressUpload(temp, 'surety-doc', 'signing')
+           
           })
       }
-      if( document.getElementById('RubixPlace').value =='' ||  document.getElementById('NameSurname').value == ''){
-
-      } else {
-        postDocument()
-      }
+      postDocument()
     }
-    
 
+
+    postDeed(signature, tryval) {
+      const data = {
+        'RubixRegisterUserID': 105,
+        'ClientId': 1,
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature,
+      }
+      const requestOptions = {
+        title: 'Parent Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      console.log("Posted Data:", data)
+      const postDocument = async () => {
+        
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateDeedofSuretyPDF', data, requestOptions)
+          .then(response => {
+            console.log("Signature upload details:", response)
+            this.setState({ docUrl: response.data.PostRubixUserData })
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+            const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
+            this.onPressUpload(temp, 'surety-doc', 'signing')
+           
+          })
+      }
+      postDocument()
+    }
+
+/*     postKey(signature, tryval) {
+      const data = {
+        'RubixRegisterUserID': 105,
+        'ClientId': 1,
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature,
+      }
+      const requestOptions = {
+        title: 'Parent Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      console.log("Posted Data:", data)
+      const postDocument = async () => {
+        
+        await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateKeyReceiptFormPDF', data, requestOptions)
+          .then(response => {
+            console.log("Signature upload details:", response)
+            this.setState({ docUrl: response.data.PostRubixUserData })
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+            const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
+            this.onPressUpload(temp, 'surety-doc', 'signing')
+           
+          })
+      }
+      postDocument()
+    } */
+    
     //Converts base64 to file
  dataURLtoFile(dataurl, filename) {
 
@@ -169,7 +214,7 @@ constructor(props) {
     for (var pair of data.entries()) {
       console.log(pair[0], ', ', pair[1]);
     }
-    await axios.post('https://adowadocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+    await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
       .then(response => {
         console.log("Upload details:", response)
         this.setState({ mongoID: response.data.post._id })
@@ -184,13 +229,7 @@ constructor(props) {
   }, 3000);
     window.location.reload()
     
-    
-    /* setTimeout(() => {
-      
-      this.props.history.push("/login/" + localStorage.getItem('clientID'))
-    }, 5000); */
-    
-    //document.getElementById('uncontrolled-tab-example').activeKey = currentActiveKey
+ 
   })
 }
   //Set Theme Color
@@ -200,7 +239,7 @@ constructor(props) {
         this.props.updateClientLogo("adowa-logo.png");
         this.props.updateClientName("Adowa Living");
         this.props.onPressThemeColor("adowa");
-        this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg")
+        //this.props.updateClientBackG("https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg")
         this.setState({
           backImage:
             "https://github.com/TechswatDevelopers/Media/raw/main/project-4-1.jpg",
@@ -232,7 +271,7 @@ constructor(props) {
   //Change Doc
   changeDocument(key){
     switch(key){
-      case 'booking-doc':
+      case 'surety-doc':
         {
           this.setState({
             currentDoc: this.state.bookingDoc
@@ -252,17 +291,27 @@ constructor(props) {
   render() {
     let fileStorageStatusCardData = [
      {
-        UsedSize: "Booking Form",
+        UsedSize: "Deed of Surety",
         Type: "Documents",
         status: localStorage.getItem('bookFormProgress'),
-        FileType: "booking-doc",
+        FileType: "surety-doc",
         TotalSize: "1tb",
         UsedPer: localStorage.getItem('bookFormProgress'),
         ProgressBarClass:
           "progress progress-xs progress-transparent custom-color-blue mb-0",
       },
+     /* {
+        UsedSize: "Key Form",
+        Type: "Documents",
+        status: localStorage.getItem('bookFormProgress'),
+        FileType: "key-form",
+        TotalSize: "1tb",
+        UsedPer: localStorage.getItem('bookFormProgress'),
+        ProgressBarClass:
+          "progress progress-xs progress-transparent custom-color-blue mb-0",
+      }, */
        {
-        UsedSize: "My Lease Agreement",
+        UsedSize: "Lease Agreement",
         Type: "Documents",
         status: localStorage.getItem('leaseProgressMsg'),
         FileType: "lease-agreement",
@@ -321,7 +370,7 @@ constructor(props) {
                                 <div className="col-lg-9 col-md-7 col-sm-12">
                                   <div style={{ height: '100%' }} className="pdf-div">
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
-                                    <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.currentDoc} width="100%" height="500px">
+                                    <iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.currentDoc} width="100%" height="500px">
            </iframe>
            <p>I:</p>
            <input

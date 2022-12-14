@@ -172,7 +172,7 @@ class NextOfKin extends React.Component {
   console.log("called", )
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
-    'Consent': this.state.consent,
+    'RubixNextOfKiniConsent': this.state.consent,
 };
 for (let i=0; i < form.elements.length; i++) {
     const elem = form.elements[i];
@@ -377,8 +377,8 @@ else{
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinFirstName"
-                          name='NextOfKinFirstName'
+                          id="RubixUserNextOfKinFirstName"
+                          name='RubixUserNextOfKinFirstName'
                           placeholder="Enter Surety first name(s)"
                           type="text"
                           required
@@ -390,8 +390,8 @@ else{
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinLastName"
-                          name='NextOfKinLastName'
+                          id="RubixUserNextOfKinLastName"
+                          name='RubixUserNextOfKinLastName'
                           placeholder="Enter Surety Surnme"
                           type="text"
                           required
@@ -411,8 +411,8 @@ else{
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinVat"
-                          name='NextOfKinVat'
+                          id="RubixNextOfKinVat"
+                          name='RubixNextOfKinVat'
                           placeholder="Enter Surety VAT number (optional)"
                           type="number"
                         />
@@ -424,8 +424,8 @@ else{
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinEmail"
-                          name='NextOfKinEmail'
+                          id="RubixUserNextOfKinEmail"
+                          name='RubixUserNextOfKinEmail'
                           placeholder="Enter Surety Email Address"
                           type="email"
                           required
@@ -436,7 +436,7 @@ else{
                         <label className="control-label">
                         Home Tellephone Number
                             </label>
-                            <PhoneInput placeholder="Surety Home Tellephone Number" name="NextOfKinHomeTell" className='NextOfKinHomeTell' required='' 
+                            <PhoneInput placeholder="Surety Home Tellephone Number" name="RubixUserNextOfKinHomeTell" className='RubixUserNextOfKinHomeTell' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
@@ -445,11 +445,10 @@ else{
                         <label className="control-label" >
                         Phone Number
                             </label>
-                            <PhoneInput placeholder="Surety Cell Phone Number" name="NextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
+                            <PhoneInput placeholder="Surety Cell Phone Number" name="RubixUserNextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
-
                       <div className="form-group">
                         <label className="control-label" >
                           Home Address
@@ -485,7 +484,7 @@ placeholder: "Search Address"
                             </label>
                         <input
                           className="form-control"
-                          //name="PostCode"
+                          name="RubixUserNextOfKinPostalcode"
                           id="post-code"
                           placeholder="Post Code"
                           type="text"
@@ -499,7 +498,6 @@ placeholder: "Search Address"
                     value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
-
                       </div>
 
                       <div className="form-group">
@@ -509,7 +507,7 @@ placeholder: "Search Address"
                         <input
                           className="form-control"
                           id="NextOfKinEmail"
-                          name='NextOfKiniRelationship'
+                          name='RubixUserNextOfKiniRelationship'
                           placeholder="Enter Surety's relation to you"
                           type="text"
                           required
