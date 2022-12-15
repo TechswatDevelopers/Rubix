@@ -97,7 +97,7 @@ constructor(props) {
         'RubixPlace': document.getElementById('RubixPlace').value,
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,
-        'PDFDocumentUrl': "https://jjpimages.rubix.mobi:449/" + this.state.leaseDoc
+        'ImageUrl': "https://jjpimages.rubix.mobi:449/" + this.state.leaseDoc
       }
       const requestOptions = {
         title: 'Parent Signature Upload',
@@ -108,7 +108,7 @@ constructor(props) {
       console.log("Posted Data:", data)
       const postDocument = async () => {
         
-        await axios.post('https://jjppdf.rubix.mobi:94/PDFNEKSignature', data, requestOptions)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFNEKSign', data, requestOptions)
           .then(response => {
             console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })

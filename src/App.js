@@ -206,21 +206,6 @@ class App extends React.Component {
                 path={`${process.env.PUBLIC_URL}/page404`}
                 component={page404}
               />
-              {/* <Route
-                exact
-                path={`${process.env.PUBLIC_URL}/page403`}
-                component={page403}
-              /> */}
-              {/* <Route
-                exact
-                path={`${process.env.PUBLIC_URL}/page500`}
-                component={page500}
-              /> */}
-              {/* <Route
-                exact
-                path={`${process.env.PUBLIC_URL}/page503`}
-                component={page503}
-              /> */}
               <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/tester`}

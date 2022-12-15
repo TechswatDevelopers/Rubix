@@ -118,10 +118,9 @@ class RoomsTable extends React.Component {
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
-          'ClientIdFronEnd': localStorage.getItem('clientID'),
-          'IP_Address': '',
+          'ClientId': localStorage.getItem('clientID'),
           'Time_and_Date': this.state.dateAndTime,
-          'image': signature
+          'Signature': signature
         }
         const requestOptions = {
           title: 'Student Signature Upload',
@@ -130,7 +129,7 @@ class RoomsTable extends React.Component {
           body: data
         };
         console.log("Posted Data:", data)
-        await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
           .then(response => {
             console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
@@ -188,7 +187,6 @@ class RoomsTable extends React.Component {
     postDocument()
   }
   
-
   
   render() {
     const { RoomList, Student, Body } = this.props;
@@ -280,18 +278,6 @@ class RoomsTable extends React.Component {
                            Regenerate Lease
                         </span>
                       </button>
-
-                    {/* <button className="btn btn-sm btn-outline-success ml-2" 
-                    onClick={(e)=>{
-                      e.preventDefault()
-                      //this.props.onPresRooms(e)
-                      this.props.onToggleLeaseAmmend()
-                      }}>
-                      <span>
-                        <i className=" icon-pencil"></i> 
-                           Ammend Lease
-                        </span>
-                      </button> */}
                       
                       </>
 

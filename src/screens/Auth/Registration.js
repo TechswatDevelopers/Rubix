@@ -210,7 +210,7 @@ class Registration extends React.Component {
 
       const postData = async()=>{
         //Ping email address
-        await axios.post('https://jjppdf.rubix.mobi:94/validEmailCheck', pingData, requestOptions)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixEmailCheck', pingData, requestOptions)
             .then(response => {
                 //console.log(response.data.EmailResult )
                 if(response.data.EmailResult){

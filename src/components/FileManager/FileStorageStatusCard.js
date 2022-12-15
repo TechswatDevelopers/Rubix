@@ -14,6 +14,7 @@ class FileStorageStatusCard extends React.Component {
             {Type}{" "}
             &nbsp;&nbsp;
             
+            <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
           {
             localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 
             

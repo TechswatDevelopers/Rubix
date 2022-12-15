@@ -563,7 +563,7 @@ mergePDFHandler()
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("The reponse: ", response)
+          //console.log("The Upload reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
           //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
@@ -940,10 +940,9 @@ mergePDFHandler()
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': this.state.userIPAddress,
+        'ClientId': localStorage.getItem('clientID'),
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature
+        'Signature': signature
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -952,26 +951,93 @@ mergePDFHandler()
         body: data
       };
       //console.log("Posted Data:", data)
-      await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          //console.log("Signature upload details:", response)
-          this.setState({ docUrl: response.data.Base })
+          console.log("Signature upload details:", response)
+          this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
           }
         })
     }
+    postDocument().then(()=>{
+      setTimeout(() => {
+        this.props.postBookingForm(signature, userid);
+      }, 7000);
+    })
+  }
+
+  //Populate Booking Form
+  postRulesDoc(signature, userid) {
+    const postDocument = async () => {
+      const data = {
+        'RubixRegisterUserID': userid,
+        'ClientId': localStorage.getItem('clientID'),
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature
+      }
+      const requestOptions = {
+        title: 'Student Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      //console.log("Posted Data:", data)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateRulesPDF', data, requestOptions)
+        .then(response => {
+          const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+          const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+          //console.log("temp file:", temp)
+          this.onPressUpload(temp, 'booking-doc', 'signing')
+          //console.log("Signature upload details:", response)
+          this.setState({ docUrl: response.data.PostRubixUserData })
+          
+        })
+    }
     postDocument()
   }
 
+  //Populate Booking Form
+  postBookingForm(signature, userid) {
+    const postDocument = async () => {
+      const data = {
+        'RubixRegisterUserID': userid,
+        'ClientId': localStorage.getItem('clientID'),
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature
+      }
+      const requestOptions = {
+        title: 'Student Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      //console.log("Posted Data:", data)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
+        .then(response => {
+          const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+          const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+          //console.log("temp file:", temp)
+          this.onPressUpload(temp, 'booking-doc', 'signing')
+          //console.log("Signature upload details:", response)
+          this.setState({ docUrl: response.data.PostRubixUserData })
+          
+        })
+    }
+    postDocument().then(()=>{
+      setTimeout(() => {
+        this.props.postRulesDoc(signature, userid);
+      }, 7000);
+    })
+  }
 
   //On Press loading data
   setLoadingPage(time,) {
@@ -1335,7 +1401,7 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   myLeaseMessage: navigationReducer.leaseMessage,
 
   myStudentCardProgress: navigationReducer.studentCProgress,
-  myStudentCardMessage: navigationReducer.bookingFMessage,
+  myStudentCardMessage: navigationReducer.studentCMessage,
 
   myProofOfPayProgress: navigationReducer.proofOfPayProgress,
   myProofOfPayMessage: navigationReducer.proofOfPayMessage,

@@ -148,11 +148,9 @@ componentDidMount() {
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': userid,
-        'ClientIdFronEnd': localStorage.getItem('clientID'),
-        'IP_Address': '',
+        'ClientId': localStorage.getItem('clientID'),
         'Time_and_Date': this.state.dateAndTime,
-        'image': signature,
-        "Browser": ''
+        'Signature': signature,
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -161,17 +159,17 @@ componentDidMount() {
         body: data
       };
       console.log(" mY Posted Data:", data)
-      await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
           //console.log("Signature upload details:", response.data.Base)
-          this.setState({ docUrl: response.data.Base })
+          this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
-            const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
