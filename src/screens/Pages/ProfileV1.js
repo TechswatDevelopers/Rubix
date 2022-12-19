@@ -573,7 +573,48 @@ mergePDFHandler()
       this.setState({
         isLoad: false
       })
+           //Populate Pop Up Event
+           this.props.onPresPopUpEvent()
+    })
       
+  }
+  //Post File Using Mongo
+  onPressUpload2(image, filetype, currentActiveKey) {
+    let userID
+    if(localStorage.getItem('role') == 'admin'){
+      userID = this.props.currentStudentiD
+    } else {
+      userID = this.state.myUserID
+    }
+    this.setState({ isLoad: true, })
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', image)
+      data.append('FileType', filetype)
+      data.append('RubixRegisterUserID', userID)
+      const requestOptions = {
+        title: 'Student Document Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        //console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          //console.log("The Upload reponse: ", response)
+          this.setState({ mongoID: response.data.post._id })
+          //this.onPressSignatureUpload(this.state.trimmedDataURL)
+        })
+    }
+    postDocument().then(() => {
+      localStorage.setItem('tab', currentActiveKey)
+      this.setState({
+        isLoad: false
+      })
+           /* //Populate Pop Up Event
+           this.props.onPresPopUpEvent() */
     })
       
   }
@@ -965,12 +1006,12 @@ mergePDFHandler()
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'lease-agreement', 'signing')
+            this.onPressUpload2(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'unsigned-agreement', 'signing')
+            this.onPressUpload2(temp, 'unsigned-agreement', 'signing')
           }
         })
     }
@@ -999,7 +1040,7 @@ mergePDFHandler()
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Rules Doc') //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
-          this.onPressUpload(temp, 'rules-doc', 'signing')
+          this.onPressUpload2(temp, 'rules-doc', 'signing')
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           
@@ -1032,7 +1073,7 @@ mergePDFHandler()
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
-          this.onPressUpload(temp, 'booking-doc', 'signing')
+          this.onPressUpload2(temp, 'booking-doc', 'signing')
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           
@@ -1061,7 +1102,6 @@ mergePDFHandler()
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
-          this.onPressUpload(temp, 'booking-doc', 'signing')
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           
