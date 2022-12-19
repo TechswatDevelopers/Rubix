@@ -154,6 +154,7 @@ class ProfileV1Page extends React.Component {
       pageTitle: 'User Profile',
       mergedFile: null,
       myDocs: [],
+      email: '',
     }
   }
 
@@ -1061,6 +1062,7 @@ mergePDFHandler()
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature
       }
+
       const requestOptions = {
         title: 'Student Signature Upload',
         method: 'POST',
@@ -1083,12 +1085,11 @@ mergePDFHandler()
   }
 
   //Send Out Email to next of kin
-  nextofKinEmail( userid, email) {
-    const inputFile = document.getElementById('upload-button')
+  nextofKinEmail() {
     const postDocument = async () => {
       const data = {
-        'RubixRegisterUserID': userid,
-        'SuretyEmail': email
+        'RubixRegisterUserID':  localStorage.getItem('userID'),
+        'SuretyEmail':  this.state.email
       }
       const requestOptions = {
         title: 'Student Signature Upload',
@@ -1099,11 +1100,13 @@ mergePDFHandler()
       console.log("Posted 2nd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixDeedofSuretyEmail', data, requestOptions)
         .then(response => {
+          //console.log("This is the response: ", response)
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
+          window.location.reload()
           
         })
     }
@@ -1220,7 +1223,10 @@ mergePDFHandler()
             </>
             :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
-           <button className="btn btn-primary rounded-0" onClick={() => this.emailNextofKin()}>
+           <input type= 'text' placeholder="Please enter next of kin email..." onChange={(e) => {this.setState({
+            email: e.target.value
+           })}}></input>
+           <button className="btn btn-primary rounded-0" onClick={() => this.nextofKinEmail()}>
                     Request Next of Kin Signature
                   </button>
            {/* <p>If you agree to the above document, please enter your signature:</p>

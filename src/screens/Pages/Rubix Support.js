@@ -49,7 +49,7 @@ class RubixSurport extends React.Component {
 
       const data = {
         'RubixClientID': 1,
-        'RubixResidenceID': 1,
+        'RubixResidenceID': localStorage.getItem('resID'),
         'UserCode': localStorage.getItem('userCode')
       }
 
@@ -211,7 +211,7 @@ class RubixSurport extends React.Component {
   const postData = async()=>{
     await axios.post('https://jjprest.rubix.mobi:88/api/RubixSupportAdd', data, requestOptions)
     .then(response => {
-      //console.log('done', response)
+      console.log('done', response)
       if(response.data.PostRubixUserData[0].Response == 1){
         
       }

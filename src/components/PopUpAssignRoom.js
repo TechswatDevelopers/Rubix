@@ -147,7 +147,7 @@ componentDidMount() {
     //console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
-        'RubixRegisterUserID': userid,
+        'RubixRegisterUserID': localStorage.getItem('userID'),
         'ClientId': localStorage.getItem('clientID'),
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,

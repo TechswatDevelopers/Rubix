@@ -57,10 +57,13 @@ componentDidMount() {
         })
     }
     postDocument().then(() => {
-      this.setState({
-        isLoad: false
-      })
-      this.props.updateLoadingController(false);
+      setTimeout(() => {
+        this.setState({
+          isLoad: false
+        })
+        this.props.updateLoadingController(false);
+      }, 4000);
+    
     })
   }
 
@@ -150,7 +153,7 @@ getUserWitnessData() {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
-        console.log("Final Lease Response: ", response)
+        //console.log("Final Lease Response: ", response)
         
         //Send documents API
         const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
