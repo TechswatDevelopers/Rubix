@@ -573,8 +573,6 @@ mergePDFHandler()
       this.setState({
         isLoad: false
       })
-      //Populate Pop Up Event
-      this.props.onPresPopUpEvent()
       
     })
       
@@ -889,6 +887,14 @@ mergePDFHandler()
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
+        setTimeout(() => {
+      
+          this.postBookingForm(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID,)
+    }, 2000);
+        setTimeout(() => {
+      
+          this.postRulesDoc(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID,)
+    }, 5000);
     } else {
       alert("Please provide a signature")
     } 
@@ -950,7 +956,7 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
+      //console.log("Posted Data1:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
           console.log("Signature upload details:", response)
@@ -968,11 +974,7 @@ mergePDFHandler()
           }
         })
     }
-    postDocument().then(()=>{
-      setTimeout(() => {
-        this.props.postBookingForm(signature, userid);
-      }, 7000);
-    })
+    postDocument()
   }
 
   //Populate Booking Form
@@ -990,19 +992,23 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
+      console.log("Posted 3rd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateRulesPDF', data, requestOptions)
         .then(response => {
+          console.log("Rules Doc response: ", response)
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
-          const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+          const temp = this.dataURLtoFile(dataUrl, 'Rules Doc') //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
-          this.onPressUpload(temp, 'booking-doc', 'signing')
+          this.onPressUpload(temp, 'rules-doc', 'signing')
           //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           
         })
     }
     postDocument()
+    
+      //Populate Pop Up Event
+      this.props.onPresPopUpEvent()
   }
 
   //Populate Booking Form
@@ -1020,7 +1026,7 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
+      console.log("Posted 2nd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
         .then(response => {
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -1032,11 +1038,36 @@ mergePDFHandler()
           
         })
     }
-    postDocument().then(()=>{
-      setTimeout(() => {
-        this.props.postRulesDoc(signature, userid);
-      }, 7000);
-    })
+    postDocument()
+  }
+
+  //Send Out Email to next of kin
+  nextofKinEmail( userid, email) {
+    const inputFile = document.getElementById('upload-button')
+    const postDocument = async () => {
+      const data = {
+        'RubixRegisterUserID': userid,
+        'SuretyEmail': email
+      }
+      const requestOptions = {
+        title: 'Student Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      console.log("Posted 2nd Data:", data)
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixDeedofSuretyEmail', data, requestOptions)
+        .then(response => {
+          const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+          const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+          //console.log("temp file:", temp)
+          this.onPressUpload(temp, 'booking-doc', 'signing')
+          //console.log("Signature upload details:", response)
+          this.setState({ docUrl: response.data.PostRubixUserData })
+          
+        })
+    }
+    postDocument()
   }
 
   //On Press loading data
@@ -1149,6 +1180,9 @@ mergePDFHandler()
             </>
             :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
+           <button className="btn btn-primary rounded-0" onClick={() => this.emailNextofKin()}>
+                    Request Next of Kin Signature
+                  </button>
            {/* <p>If you agree to the above document, please enter your signature:</p>
                   <div className="border border-primary border-2 p-3" style={{
                     width: '100%'

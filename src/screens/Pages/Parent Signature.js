@@ -75,12 +75,6 @@ constructor(props) {
 
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
-    //var myBlob = this.sigPad.getTrimmedCanvas().toBlob
-    //var myFile = new File([myBlob], 'mySignature', { type: "image/png", })
-   // var my2ndFile = this.dataURLtoFile(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'Parent signature')
-    //console.log('The file: ', my2ndFile)
-   // this.onPressSignatureUpload(my2ndFile)
-    //this.setLoadingPage(3000)
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
@@ -97,8 +91,9 @@ constructor(props) {
         'RubixPlace': document.getElementById('RubixPlace').value,
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,
-        'ImageUrl': "https://jjpimages.rubix.mobi:449/" + this.state.leaseDoc
+        'ImageUrl': "https://jjpimages.rubix.mobi:449/"  +  this.state.leaseDoc
       }
+
       const requestOptions = {
         title: 'Parent Signature Upload',
         method: 'POST',
@@ -111,14 +106,14 @@ constructor(props) {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFNEKSign', data, requestOptions)
           .then(response => {
             console.log("Signature upload details:", response)
-            this.setState({ docUrl: response.data.Base })
+            this.setState({ docUrl: response.data.PostRubixUserData })
             if (tryval === 1) {
-              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
               //console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', 'signing')
             } else if (tryval === 0) {
-              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
               //console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', 'signing')

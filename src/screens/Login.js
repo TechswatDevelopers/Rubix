@@ -44,6 +44,10 @@ class Login extends React.Component {
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Setting everything up...");
 
+    localStorage.setItem(
+      "adminLevel",'0'
+    )
+
     //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
