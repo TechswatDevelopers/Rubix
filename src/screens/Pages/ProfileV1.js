@@ -1101,11 +1101,11 @@ mergePDFHandler()
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixDeedofSuretyEmail', data, requestOptions)
         .then(response => {
           //console.log("This is the response: ", response)
-          const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
-          const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+       //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
-          //console.log("Signature upload details:", response)
-          this.setState({ docUrl: response.data.PostRubixUserData })
+          //Populate Pop Up Event
+          alert("Email sent out successfully")
+           //this.props.onPresPopUpEvent()
           window.location.reload()
           
         })

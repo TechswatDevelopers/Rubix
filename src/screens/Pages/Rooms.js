@@ -402,7 +402,6 @@ class RoomAllocation extends React.Component {
         } 
         />
 
-        
 <div
           className="page-loader-wrapper"
           style={{ display: this.props.MyloadingController ? "block" : "none" }}
