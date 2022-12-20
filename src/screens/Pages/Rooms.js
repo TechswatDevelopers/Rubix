@@ -375,14 +375,15 @@ class RoomAllocation extends React.Component {
           document.body.classList.remove("offcanvas-active");
         }}
       >
+        
         <PopUpAssign 
         roomID = {localStorage.getItem('roomID')}
         Title= "Confirm Room Assigning"
-        Body = {"You are about to assign " + this.props.currentStudentname + " to a room " /* + this.state.currentRoom.RoomNumber */}
+        Body = {"You are about to assign " + localStorage.getItem('userName') + " to a room " /* + this.state.currentRoom.RoomNumber */}
         Function = {()=>{
           //console.log("Testst: ", this.props.currentStudentiD)
           ///Reload Room List
-          this.getStudentRoomDetails(this.props.currentStudentiD)
+          this.getStudentRoomDetails(localStorage.getItem("userID"))
           Function()
         }
           
@@ -391,10 +392,10 @@ class RoomAllocation extends React.Component {
         <PopUpRemove 
         roomID = {localStorage.getItem('roomID')}
         Title= "Confirm Room Removal"
-        Body = {"You are about to remove " + this.props.currentStudentname + " from a room: " /* + this.state.currentRoom.RoomNumber */}
+        Body = {"You are about to remove " + localStorage.getItem('userName') + " from a room: " /* + this.state.currentRoom.RoomNumber */}
         Function = {()=>{
           ///Reload Room List
-          this.getStudentRoomDetails(this.props.Students[this.state.index].RubixRegisterUserID)
+          this.getStudentRoomDetails(localStorage.getItem("userID"))
           Function()
         }
           
@@ -417,8 +418,7 @@ class RoomAllocation extends React.Component {
             </div>
             <p>{this.props.loadingMessage}</p>
           </div>
-        </div>
-        
+        </div>  
         
         <div>
           <div className="container-fluid">
