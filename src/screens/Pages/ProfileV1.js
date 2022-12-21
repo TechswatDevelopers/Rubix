@@ -34,6 +34,7 @@ import {
   updateLoadingController,
   onPresPopConfirmInfo,
   onUpdateVarsity,
+
 } from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
@@ -516,7 +517,7 @@ mergePDFHandler()
       //console.log("This is the img:", this.state.imgUpload)
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
+      //console.log('Error: ', error);
     }
   }
 
@@ -570,6 +571,47 @@ mergePDFHandler()
       })
       //Populate Pop Up Event
       this.props.onPresPopUpEvent()
+      
+    })
+      
+  }
+
+  //Post File Using Mongo
+  onPressUpload2(image, filetype, currentActiveKey) {
+    let userID
+    if(localStorage.getItem('role') == 'admin'){
+      userID = this.props.currentStudentiD
+    } else {
+      userID = this.state.myUserID
+    }
+    this.setState({ isLoad: true, })
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', image)
+      data.append('FileType', filetype)
+      data.append('RubixRegisterUserID', userID)
+      const requestOptions = {
+        title: 'Student Document Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          console.log("The reponse: ", response)
+          this.setState({ mongoID: response.data.post._id })
+        })
+    }
+    postDocument().then(() => {
+      //localStorage.setItem('tab', currentActiveKey)
+      this.setState({
+        isLoad: false
+      })
+      //Populate Pop Up Event
+      //this.props.onPresPopUpEvent()
       
     })
       
@@ -874,6 +916,11 @@ mergePDFHandler()
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
+      setTimeout(() => {
+        this.postKeyForm(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID)
+      }, 3000)
+      
+
     } else {
       alert("Please provide a signature")
     } 
@@ -942,16 +989,51 @@ mergePDFHandler()
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'lease-agreement', 'signing')
+            this.onPressUpload2(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'unsigned-agreement', 'signing')
+            this.onPressUpload2(temp, 'unsigned-agreement', 'signing')
           }
         })
     }
     postDocument()
+  }
+
+  //Function to post signature to API
+  postKeyForm(signature, userid) {
+    const postDocument = async () => {
+      const data = {
+        'RubixRegisterUserID': userid,
+        'ClientId': localStorage.getItem('clientID'),
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature
+      }
+      const requestOptions = {
+        title: 'Student Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      console.log("Posted Data:", data)
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateKeyReceiptFormPDF', data, requestOptions)
+        .then(response => {
+          console.log("Signature upload details:", response)
+          const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+          const temp = this.dataURLtoFile(dataUrl, 'Key Form') //this.convertBase64ToBlob(response.data.Base)
+          //console.log("temp file:", temp)
+          this.onPressUpload2(temp, 'key-form', 'signing')
+        })
+    }
+    postDocument().then(() => {
+      this.setState({
+        isLoad: false
+      })
+      //Populate Pop Up Event
+      this.props.onPresPopUpEvent()
+  })
+
   }
 
   //On Press loading data
@@ -973,6 +1055,35 @@ mergePDFHandler()
       })
     }, 700);
   }
+
+  
+  nextOfKinEmail(){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Details, Please wait...");
+    const pingData = {
+      'RubixRegisterUserID': localStorage.getItem('userID'),
+      'SuretyEmail': this.state.suretyEmail,
+    };
+    const requestOptions = {
+      title: 'Send Out Student Email',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: pingData
+    };
+    console.log("The information sent: ", pingData)
+    const postData = async () => {
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixDeedofSuretyEmail', pingData, requestOptions)
+      .then(response => {
+        console.log("The response = ", response)
+        alert("Email sent out.")
+      })
+    }
+    postData().then(()=>{
+      this.props.updateLoadingController(false);
+    })
+  }
+
 
 
   //Set Key
@@ -1062,6 +1173,8 @@ mergePDFHandler()
             </>
             :<><iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
+           <input type="email" placeholder="Please enter surety email" onChange={(e) => {this.setState({suretyEmail: e.target.value})}}></input>
+           <button className="btn btn-primary" onClick={(e) => {this.nextOfKinEmail()}}>Send Surety Sign Email</button>
             </>
            
            }
@@ -1303,7 +1416,7 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   myLeaseMessage: navigationReducer.leaseMessage,
 
   myStudentCardProgress: navigationReducer.studentCProgress,
-  myStudentCardMessage: navigationReducer.bookingFMessage,
+  myStudentCardMessage: navigationReducer.studentCMessage,
 
   myProofOfPayProgress: navigationReducer.proofOfPayProgress,
   myProofOfPayMessage: navigationReducer.proofOfPayMessage,

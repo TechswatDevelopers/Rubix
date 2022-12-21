@@ -46,9 +46,9 @@ constructor(props) {
         console.log("check: ", data)
         if(data.post.length != 0 && data.post != null){
           this.setState({
-            bookingDoc: data.post.filter(doc => doc.FileType == 'surety-doc')[0].filename,
+           bookingDoc: '17_surety-doc_Samkelo_Zondi_21458321.pdf',
             leaseDoc: data.post.filter(doc => doc.FileType == "lease-agreement")[0].filename,
-            currentDoc: data.post.filter(doc => doc.FileType == "surety-doc")[0].filename
+            currentDoc: data.post.filter(doc => doc.FileType == "lease-agreement")[0].filename
           })
         }
       })
@@ -75,16 +75,16 @@ constructor(props) {
 
   //Function for triming Signature Pad array and save as one png file
   trim = () => {
-    //var myBlob = this.sigPad.getTrimmedCanvas().toBlob
-    //var myFile = new File([myBlob], 'mySignature', { type: "image/png", })
-   // var my2ndFile = this.dataURLtoFile(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'Parent signature')
-    //console.log('The file: ', my2ndFile)
-   // this.onPressSignatureUpload(my2ndFile)
-    //this.setLoadingPage(3000)
+    
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      //console.log("IP Address:", this.state.userIPAddress)
+      
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 1)
+
+      setTimeout(() => {
+        this.postDeed(this.sigPad.getTrimmedCanvas().toDataURL('image/png'))
+      }, 3000)
+
     } else {
       alert("Please provide a signature")
     } 
@@ -92,7 +92,7 @@ constructor(props) {
     //Function to post signature to API
     postSignature(signature, tryval) {
       const data = {
-        'RubixRegisterUserID': 105,
+        'RubixRegisterUserID': this.state.userID,
         'ClientId': 1,
         'Time_and_Date': this.state.dateAndTime,
         'ImageUrl': signature,
@@ -111,18 +111,17 @@ constructor(props) {
             console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
-            const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
-            this.onPressUpload(temp, 'surety-doc', 'signing')
-           
+            const temp = this.dataURLtoFile(dataUrl, 'Lease agreement')
+            this.onPressUpload(temp, 'lease-agreement', 'signing')
           })
       }
       postDocument()
     }
 
 
-    postDeed(signature, tryval) {
+    postDeed(signature) {
       const data = {
-        'RubixRegisterUserID': 105,
+        'RubixRegisterUserID': this.state.userID,
         'ClientId': 1,
         'Time_and_Date': this.state.dateAndTime,
         'Signature': signature,
@@ -300,16 +299,6 @@ constructor(props) {
         ProgressBarClass:
           "progress progress-xs progress-transparent custom-color-blue mb-0",
       },
-     /* {
-        UsedSize: "Key Form",
-        Type: "Documents",
-        status: localStorage.getItem('bookFormProgress'),
-        FileType: "key-form",
-        TotalSize: "1tb",
-        UsedPer: localStorage.getItem('bookFormProgress'),
-        ProgressBarClass:
-          "progress progress-xs progress-transparent custom-color-blue mb-0",
-      }, */
        {
         UsedSize: "Lease Agreement",
         Type: "Documents",
@@ -372,7 +361,7 @@ constructor(props) {
                                     <p className="lead" style={{ textAlign: 'center' }}>{this.state.docType}</p>
                                     <iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.currentDoc} width="100%" height="500px">
            </iframe>
-           <p>I:</p>
+           <p>I: </p>
            <input
                             className="form-control"
                             id="NameSurname"

@@ -101,7 +101,6 @@ class Students extends React.Component {
       this.props.updateLoadingController(false);
     })
   }
-
   //Ammend Leases
   ammendLeases() {
     const leases = this.state.studentLeaseAmmend
@@ -289,11 +288,11 @@ postData().then(()=>{
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      //console.log('Posted data: ', pingData)
+      console.log('Posted student list data: ', pingData)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentList', pingData, requestOptions)
         .then(response => {
-          //console.log("The Response: ", response)
+          console.log("The student list Response: ", response)
           if(!response.data.PostRubixUserData){
             this.setState({
               isEmpty: true,

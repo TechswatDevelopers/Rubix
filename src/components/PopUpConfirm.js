@@ -18,6 +18,7 @@ constructor(props) {
     dateAndTime: '',
     userIPAddress: '',
     runFunc: null,
+    tenentCode: null,
     
   }
 }
@@ -134,10 +135,13 @@ getUserWitnessData() {
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Generating Lease...");
+
     //Request Data
     const data = {
    "ImageUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
+   "TenantCode" : this.state.tenentCode,
+   "RubixRegisterUserID" : localStorage.getItem('userID')
     }
 
     const requestOptions = {
@@ -160,9 +164,12 @@ getUserWitnessData() {
         this.onPressUpload(temp, 'lease-agreement', 'signing')
       })
     }
-    postData()
+    if(this.state.tenentCode == null){
+      alert("Please enter tenent code.")
+    } else {
+      postData()
+    }
   }
-
 
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
@@ -262,15 +269,30 @@ getUserWitnessData() {
             </div>
             <div className="modal-body">
               {Body}
-              <label className="control-label sr-only" >
+              <label className="control-label" >
                           Vet Comment
                             </label>
                         <input
                           className="form-control"
                           id="comment"
                           placeholder="Vetting comment..."
+                          type="text"
+                        />
+
+                        {
+                          FileType == 'lease-agreement'
+                          ?
+                          <>
+                          <input
+                          className="form-control"
+                          onChange={(e)=> {this.setState({ tenentCode: e.target.value})}}
+                          id="tenentCode"
+                          placeholder="Enter Tenent Code"
                           type="email"
                         />
+                        </>
+                        : null
+                        }
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
