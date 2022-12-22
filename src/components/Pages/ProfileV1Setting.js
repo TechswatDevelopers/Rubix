@@ -604,6 +604,12 @@ console.log("down")
             funding: response.data.PostRubixUserData[0].FundingSource,
           })
 
+           //Set Temp Local Storage
+           localStorage.setItem('paymentMethod', response.data.PostRubixUserData[0].PaymentMethod)
+           //Set Temp Local Storage
+           localStorage.setItem('yearOfStudy', response.data.PostRubixUserData[0].RubixStudentYearofStudyID)
+           localStorage.setItem('nationality', response.data.PostRubixUserData[0].Nationality)
+
           this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
 
           //Get Residence Name 
@@ -660,6 +666,12 @@ this.props.updateStudentName(
           hearAbout: response.data.PostRubixUserData[0].HearAbout,
           funding: response.data.PostRubixUserData[0].FundingSource,
           })
+
+          //Set Temp Local Storage
+          localStorage.setItem('paymentMethod', response.data.PostRubixUserData[0].PaymentMethod)
+          //Set Temp Local Storage
+          localStorage.setItem('yearOfStudy', response.data.PostRubixUserData[0].RubixStudentYearofStudyID)
+          localStorage.setItem('nationality', response.data.PostRubixUserData[0].Nationality)
 
           this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
           

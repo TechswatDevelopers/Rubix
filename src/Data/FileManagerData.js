@@ -40,7 +40,8 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
 
 export const fileStorageStatusCardData = [
   {
-    UsedSize: "ID Document",
+    UsedSize: localStorage.getItem('nationality') == 
+"South Africa, Republic of" ?  "ID Document" : "Passport",
     Type: "Documents",
     status: localStorage.getItem('idProgressMsg'),
     FileType: "id-document",
@@ -50,7 +51,8 @@ export const fileStorageStatusCardData = [
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
   {
-    UsedSize: "Proof of Residence",
+    UsedSize: localStorage.getItem('nationality') == 
+    "South Africa, Republic of" ? "Proof of Residence" : "Study Permit",
     Type: "Documents",
     status: localStorage.getItem('proofOfResProgressMsg'),
     FileType: "proof-of-res",
@@ -70,7 +72,8 @@ export const fileStorageStatusCardData = [
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
   {
-    UsedSize: "NSFAS Document",
+    UsedSize: localStorage.getItem('yearOfStudy') == 
+    "First Year" && localStorage.getItem('PaymentMethod') == "NSFAS" ? "NSFAS Approval Document" : "Previous Year Results",
     Type: "Documents",
     status: localStorage.getItem('studentProgress'),
     FileType: "nsfas-doc",
