@@ -84,7 +84,16 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-grey mb-0",
   }
-  : null,
+  :  {
+    UsedSize: "Proof of Income",
+    Type: "Documents",
+    status: localStorage.getItem('popProgress'),
+    FileType: "proof-of-income",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('popProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-grey mb-0",
+  },
    {
     UsedSize: "Surety ID",
     Type: "Documents",
@@ -95,16 +104,7 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-yellow mb-0",
   },
-  {
-    UsedSize: "Proof of Income",
-    Type: "Documents",
-    status: localStorage.getItem('popProgress'),
-    FileType: "proof-of-income",
-    TotalSize: "1tb",
-    UsedPer: localStorage.getItem('popProgress'),
-    ProgressBarClass:
-      "progress progress-xs progress-transparent custom-color-grey mb-0",
-  },
+ 
   {
     UsedSize: "Bank Statement",
     Type: "Documents",
