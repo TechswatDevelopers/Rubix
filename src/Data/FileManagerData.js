@@ -71,9 +71,11 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
+  localStorage.getItem('paymentMethod') == "NSFAS"
+  ?
   {
     UsedSize: localStorage.getItem('yearOfStudy') == 
-    "First Year" && localStorage.getItem('PaymentMethod') == "NSFAS" ? "NSFAS Approval Document" : "Previous Year Results",
+    "First Year" && localStorage.getItem('paymentMethod') == "NSFAS" ? "NSFAS Approval Document" : "Previous Year Results",
     Type: "Documents",
     status: localStorage.getItem('studentProgress'),
     FileType: "nsfas-doc",
@@ -81,9 +83,10 @@ export const fileStorageStatusCardData = [
     UsedPer: localStorage.getItem('studentProgress'),
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-grey mb-0",
-  },
+  }
+  : null,
    {
-    UsedSize: "Next of Kin ID",
+    UsedSize: "Surety ID",
     Type: "Documents",
     status: localStorage.getItem('nextOfKinProgressMsg'),
     FileType: "next-of-kin",

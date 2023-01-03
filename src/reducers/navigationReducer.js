@@ -31,6 +31,7 @@ import {
   ON_PROOF_OF_PAY_MESSAGE,
   ON_RULES_MESSAGE,
   ON_BOOKING_MESSAGE,
+  ON_ROOM_PREF_SELECT,
   ON_PROOF_OF_PAY_UPDATE,
   ON_STUDENT_CARD_UPDATE,
   ON_REG_MESSAGE,
@@ -103,6 +104,9 @@ const initialState = {
   studentIndex: null,
 
   backImage: "",
+
+  
+  roomPreff: '',
 
   loadingMessage: '',
   loadingController: false,
@@ -676,6 +680,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         bookingFMessage: action.payload,
+      };
+    }
+
+//Room Pref
+    case ON_ROOM_PREF_SELECT: {
+      return {
+        ...state,
+        roomPreff: action.payload,
       };
     }
     

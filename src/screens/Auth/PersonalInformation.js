@@ -27,7 +27,8 @@ class PersonalInformation extends React.Component {
       yearOfRes: '2022',
       errorMessage: '',
       countryList: [],
-      value: 0
+      value: 0,
+      MarketingConsent: "0"
 
     };
   }
@@ -137,7 +138,8 @@ class PersonalInformation extends React.Component {
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
         'Nationality': this.state.country,
-        'RegistrationYear': "2023"
+        'RegistrationYear': "2023",
+        'MarketingConcent': this.state.MarketingConsent,
     };
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -151,21 +153,31 @@ class PersonalInformation extends React.Component {
     };
     console.log("Sent: ", data)
     const postData = async()=>{
-        if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
+        if (/* this.Validate() && this.state.userGender != null  &&  */document.getElementById('register').checkValidity() == true){
             await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                console.log("Response: ",response)
-                this.props.updateStudentID(idNumber)
-                localStorage.setItem('studentIDNo', idNumber)
-                //localStorage.setItem('idNumber', " ")
-                localStorage.setItem('studentEmail', email)
-                localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
-                this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
-                //Set timer for loading screen
-                setTimeout(() => {
-                  this.props.updateLoadingController(false);
-                  this.props.history.push("/addresses")
-                }, 1000);
+                //console.log("Response: ",response)
+
+                //Check if successful 
+                if(response.data.PostRubixUserData[0].ResponceMessage != undefined && response.data.PostRubixUserData[0].ResponceMessage != null && response.data.PostRubixUserData[0].ResponceMessage == "Record successfully inserted"){
+
+                  this.props.updateStudentID(idNumber)
+                  localStorage.setItem('studentIDNo', idNumber)
+                  //localStorage.setItem('idNumber', " ")
+                  localStorage.setItem('studentEmail', email)
+                  localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
+                  this.props.updateUserID(response.data.PostRubixUserData[0].RubixRegisterUserID)
+                  //Set timer for loading screen
+                  setTimeout(() => {
+                    this.props.updateLoadingController(false);
+                    this.props.history.push("/addresses")
+                  }, 1000);
+                } else {
+                  setTimeout(() => {
+                    this.props.updateLoadingController(false);
+                  }, 1000)
+                  alert("There was an error in submitting your information, please try again")
+                }
                 
             })
                 
@@ -174,12 +186,11 @@ class PersonalInformation extends React.Component {
           alert("Please ensure that you entered all required information")
         }
     }
-    postData()
+    //postData()
   }
 
   //On Page load complete
   componentDidMount() {
-
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     //console.log('platform ID', localStorage.getItem('platformID'))
     //Fetch Data
@@ -337,8 +348,8 @@ class PersonalInformation extends React.Component {
                         <label className="control-label sr-only" >
                           ID Number
                         </label>
-                        <input type='number' name="IDNumber" className="form-control" id='IDNumber'
-                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
+                        <input type='text' name="IDNumber" className="form-control" id='IDNumber'
+                          required='' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>
                       <div className="form-group d-none">
@@ -378,7 +389,7 @@ class PersonalInformation extends React.Component {
                       </div>
                       <div className="form-group">
                         <label className="control-label" >
-                          Phone Number
+                          Emergency Phone Number
                         </label>
                         <PhoneInput id='register-page-phone-number' placeholder="Emergency Contact No." name="EmergencyNumber" required=''
                           value={this.state.value}
@@ -401,7 +412,7 @@ class PersonalInformation extends React.Component {
                       <div className="form-group">
                         <input
                         className="form-check"
-                        id="Concent"
+                        id="MarketingConcent"
                         //name='Concent'
                         onChange={(e)=>{this.changeMarketingConsent(e)}}
                         //placeholder="Enter Next of kin relation to you"

@@ -670,7 +670,7 @@ this.props.updateStudentName(
           //Set Temp Local Storage
           localStorage.setItem('paymentMethod', response.data.PostRubixUserData[0].PaymentMethod)
           //Set Temp Local Storage
-          localStorage.setItem('yearOfStudy', response.data.PostRubixUserData[0].RubixStudentYearofStudyID)
+          localStorage.setItem('yearOfStudy', response.data.PostRubixUserData[0].YearofStudy)
           localStorage.setItem('nationality', response.data.PostRubixUserData[0].Nationality)
 
           this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
@@ -1267,18 +1267,16 @@ this.props.updateStudentName(
                 </div>
                 <div className="form-group">
                   <label>
-                    ID Number:
+                  {this.state.myProfile.IDNumber == "South Africa, Republic of" ? "ID Number:" : "Passport Number:"}
                   </label>
                   <input
                     className="form-control"
                     id='IDNumber'
                     name="IDNumber"
                     required=''
-                    maxLength='13'
-                    minLength='13'
                     placeholder='Enter your ID Number'
                     defaultValue={this.state.myProfile.IDNumber}
-                    type='number'
+                    type='text'
                   />
                   <br></br>
                   <div id="error">{this.state.errorMessage}</div>

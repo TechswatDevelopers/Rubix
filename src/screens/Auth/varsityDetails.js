@@ -11,7 +11,7 @@ import Col from 'react-bootstrap/Col';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { updateClientBackG,
   updateLoadingController, onPresRooms,
-  updateLoadingMessage,} from "../../actions";
+  updateLoadingMessage, onUpdateRoomPreff} from "../../actions";
   import PopUpRooms from "../../components/PopUpRooms"
   import RoomsTableStudent from "../../components/Tables/RoomsTablesStudent"
 //import { duration } from "moment/moment";
@@ -164,6 +164,7 @@ async componentDidMount(){
     this.getStudentRoomDetails(userID)
 
     localStorage.setItem('roomDetails', '')
+    localStorage.setItem('roomID', '')
 
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
@@ -721,14 +722,18 @@ async componentDidMount(){
     </select> }
                       </div>
 
-                      <p>{localStorage.getItem('roomDetails')}</p>
+                      {
+                        this.props.roomChoice != ''
+                        ?
+                        <p>{"Your chosen room: " + this.props.roomChoice}</p>
+                      : <></>
+                      }
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) =>{e.preventDefault(); this.props.onPresRooms()} }>
                         Choose Preffered Room
                         </button>
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         NEXT
                         </button>
-
 
                       </>
                       : null
@@ -759,6 +764,8 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
   
   clientBG: navigationReducer.backImage,
 
+  roomChoice: navigationReducer.roomPreff,
+
   MyloadingController: navigationReducer.loadingController,
   loadingMessage: navigationReducer.loadingMessage,
 });
@@ -766,4 +773,4 @@ const mapStateToProps = ({ navigationReducer, loginReducer }) => ({
 export default connect(mapStateToProps, {
   updateClientBackG,
   updateLoadingMessage,
-  updateLoadingController, onPresRooms})(VarsityDetails);
+  updateLoadingController, onPresRooms, onUpdateRoomPreff})(VarsityDetails);

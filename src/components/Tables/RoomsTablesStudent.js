@@ -8,6 +8,7 @@ import {
   onPresRooms,
   onPresPopUpAssign,
   onPresPopUpRemove,
+  onUpdateRoomPreff,
   onToggleLeaseAmmend} from "../../actions";
 import PopUpAssign from "../../components/PopUpAssignRoom"
 import PopUpRemove from "../../components/PopUpRemoveFromRoom"
@@ -27,7 +28,7 @@ class RoomsTableStudent extends React.Component {
     window.scrollTo(0, 0);
     this.getUserWitnessData()
 
-    
+    localStorage.setItem('roomDetails', '')
   const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
   const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
   const myTime = new Date().toLocaleTimeString('en-ZA')
@@ -227,7 +228,8 @@ class RoomsTableStudent extends React.Component {
                   aria-controls={"collapseComment" + index}
                   href={"#collapseComment" + index}
                   onClick={(e)=>{
-                    localStorage.setItem('roomID', room.RubixResidenceRoomsID)
+                    /* localStorage.setItem('roomID', room.RubixResidenceRoomsID)
+                    localStorage.setItem("roomDetails", room.ResidenceName + " " + room.FloorNumber + " " + room.RoomNumber) */
                     this.setState({
                     currentRoom: room
                   })}
@@ -247,6 +249,7 @@ class RoomsTableStudent extends React.Component {
                     e.preventDefault()
                     localStorage.setItem("roomID", room.RubixResidenceRoomsID)
                     localStorage.setItem("roomDetails", room.ResidenceName + " " + room.FloorNumber + " " + room.RoomNumber)
+                    this.props.onUpdateRoomPreff(room.ResidenceName + " " + room.FloorNumber + " " + room.RoomNumber)
                     this.setState({
                       
                     })
@@ -294,5 +297,6 @@ export default connect(mapStateToProps, {
   onPresRooms,
   onPresPopUpAssign,
   onPresPopUpRemove,
-  onToggleLeaseAmmend
+  onToggleLeaseAmmend,
+  onUpdateRoomPreff
 })(RoomsTableStudent);

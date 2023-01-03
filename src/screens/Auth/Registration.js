@@ -139,7 +139,7 @@ class Registration extends React.Component {
      localStorage.setItem('userplatformID', ' ')
      this.props.updateLoadingMessage("Submitting Information...");
         const email = document.getElementById('email').value;
-        const idNumber = document.getElementById('idNumber').value;
+        const idNumber = this.state.idType == "SA ID" ? document.getElementById('idNumber').value : document.getElementById('passportNumber').value ;
         localStorage.setItem('idNumber', idNumber)
         localStorage.setItem('studentEmail', email)
         //console.log(email)
@@ -199,12 +199,29 @@ class Registration extends React.Component {
                  }
             })
       }
-      if(this.Validate()){
-        checkUser()
+      if(idNumber != null && idNumber != ''){
+        if(this.state.idType == "SA ID"){
+          if(this.Validate()){
+            checkUser()
+          }
+        } else if(this.state.idType == "Passport"){
+          checkUser()
+        } else {
+          this.setState({
+            title: "Error",
+            popMessage: this.state.idType == 'SA ID'? 'ID Number Invalid' : 'Passport number not valid',
+          })
+          //Set timer for loading screen
+        setTimeout(() => {
+          this.props.updateLoadingController(false);
+        }, 3000);
+          this.props.onPresPopUpEvent()
+        }
+        
       } else {
         this.setState({
           title: "Error",
-          popMessage: 'ID Number Invalid',
+          popMessage: this.state.idType == 'Identification cannot be empty',
         })
         //Set timer for loading screen
       setTimeout(() => {
@@ -218,11 +235,13 @@ class Registration extends React.Component {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixEmailCheck', pingData, requestOptions)
             .then(response => {
                 console.log(response.data.EmailResult )
+                console.log("Chek it out here: ", idNumber )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
                   localStorage.setItem('platformID', "1")
                   localStorage.setItem('IDType', this.state.idType)
+                  localStorage.setItem('idNumber', idNumber)
                   //Set timer for loading screen
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
@@ -333,10 +352,9 @@ class Registration extends React.Component {
                         </label>
                         <input type="radio" value="SA ID" name="idType"/> SA ID Number
                         <p>   </p>
-                        <input type="radio" value="Passport" name="iidTyped" /> Passport Number
+                        <input type="radio" value="Passport" name="idType" /> Passport Number
 
                       </div>
-
 
                      {
                       this.state.idType == 'SA ID'
@@ -354,9 +372,9 @@ class Registration extends React.Component {
                       ?
                      <div className="form-group">
                         <label className="control-label sr-only" >
-                          ID Number
+                          Passport Number
                         </label>
-                        <input type='number' name="passportNumber" className="form-control" id='passportNumber'
+                        <input type='text' name="passportNumber" className="form-control" id='passportNumber'
                           required='' placeholder='Enter your valid Passport Number' ></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>

@@ -494,7 +494,7 @@ mergePDFHandler()
         break
       case 'next-of-kin':
         {
-          this.setState({ docType: "Next of Kin ID",
+          this.setState({ docType: "Surety ID",
           topBarData: <>
           <span><strong>Next of Kin ID number is: </strong>{this.props.nextOfKinId
 }</span>

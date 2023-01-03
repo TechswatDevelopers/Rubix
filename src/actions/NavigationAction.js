@@ -54,6 +54,7 @@ export const ON_REG_MESSAGE = "navigationReducer/ON_REG_MESSAGE";
 export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
 export const ON_LEASE_MESSAGE = "navigationReducer/ON_LEASE_MESSAGE";
 export const ON_BOOKING_MESSAGE = "navigationReducer/ON_BOOKING_MESSAGE";
+export const ON_ROOM_PREF_SELECT = "navigationReducer/ON_ROOM_PREF_SELECT";
 export const ON_PROOF_OF_PAY_MESSAGE = "navigationReducer/ON_PROOF_OF_PAY_MESSAGE";
 export const ON_STUDENT_CARD_MESSAGE = "navigationReducer/ON_STUDENT_CARD_MESSAGE";
 export const ON_RULES_MESSAGE = "navigationReducer/ON_RULES_MESSAGE";
@@ -236,6 +237,13 @@ export const onUpdateBookingForm = (val) => (dispatch) => {
 export const onUpdateBookingMessage = (val) => (dispatch) => {
   dispatch({
     type: ON_BOOKING_MESSAGE,
+    payload: val,
+  });
+};
+
+export const onUpdateRoomPreff = (val) => (dispatch) => {
+  dispatch({
+    type: ON_ROOM_PREF_SELECT,
     payload: val,
   });
 };
