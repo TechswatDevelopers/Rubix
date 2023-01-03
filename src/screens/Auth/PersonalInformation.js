@@ -186,7 +186,7 @@ class PersonalInformation extends React.Component {
           alert("Please ensure that you entered all required information")
         }
     }
-    //postData()
+    postData()
   }
 
   //On Page load complete
