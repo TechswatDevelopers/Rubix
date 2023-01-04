@@ -39,6 +39,7 @@ export const UPDATE_RES_ID = "navigationReducer/UPDATE_RES_ID";
 
 export const ON_NOK_PROGRESS = "navigationReducer/ON_NOK_PROGRESS";
 export const ON_REG_PROGRESS = "navigationReducer/ON_REG_PROGRESS";
+export const ON_KEY_PROGRESS = "navigationReducer/ON_KEY_PROGRESS";
 export const ON_RES_PROGRESS = "navigationReducer/ON_RES_PROGRESS";
 export const ON_ID_PROGRESS = "navigationReducer/ON_ID_PROGRESS";
 export const ON_LEASE_PROGRESS = "navigationReducer/ON_LEASE_PROGRESS";
@@ -49,6 +50,7 @@ export const ON_STUDENT_CARD_UPDATE = "navigationReducer/ON_STUDENT_CARD_UPDATE"
 
 
 export const ON_ID_MESSAGE = "navigationReducer/ON_ID_MESSAGE";
+export const ON_KEY_MESSAGE = "navigationReducer/ON_KEY_MESSAGE";
 export const ON_RES_MESSAGE = "navigationReducer/ON_RES_MESSAGE";
 export const ON_REG_MESSAGE = "navigationReducer/ON_REG_MESSAGE";
 export const ON_NOK_MESSAGE = "navigationReducer/ON_NOK_MESSAGE";
@@ -333,6 +335,20 @@ export const onUpdateIDProgress = (val) => (dispatch) => {
 export const onUpdateIDMessage = (val) => (dispatch) => {
   dispatch({
     type: ON_ID_MESSAGE,
+    payload: val,
+  });
+};
+
+//Key Form Update and Message
+export const onUpdateKeyProgress = (val) => (dispatch) => {
+  dispatch({
+    type: ON_KEY_PROGRESS,
+    payload: val,
+  });
+};
+export const onUpdateKeyMessage = (val) => (dispatch) => {
+  dispatch({
+    type: ON_KEY_MESSAGE,
     payload: val,
   });
 };

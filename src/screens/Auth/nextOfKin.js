@@ -527,7 +527,7 @@ placeholder: "Search Address"
                         <p>I consent to a credit check.</p>
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
-                        Next
+                        Register
                         </button>
                     </form>
                   </div>

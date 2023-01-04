@@ -40,6 +40,8 @@ import {
   ON_RES_MESSAGE,
   ON_ID_PROGRESS,
   ON_ID_MESSAGE,
+  ON_KEY_PROGRESS,
+  ON_KEY_MESSAGE,
   UPDATE_STUDENT_ADDRESS,
   UPDATE_STUDENT_UNIVERRSITY,
   UPDATE_STUDENT_COURSE,
@@ -79,6 +81,9 @@ const initialState = {
 
   idProgress: '0',
   idMessage: '',
+
+  keyProgress: '0',
+  keyMessage: '',
 
   proofOfResProgress: '0',
   proofOfResMessage: '',
@@ -579,6 +584,21 @@ export default (state = initialState, action) => {
       return {
         ...state,
         idMessage: action.payload,
+      };
+    }
+
+    //Id Progress and Message
+    case ON_KEY_PROGRESS: {
+      return {
+        ...state,
+        keyProgress: action.payload,
+      };
+    }
+
+    case ON_KEY_MESSAGE: {
+      return {
+        ...state,
+        keyMessage: action.payload,
       };
     }
 

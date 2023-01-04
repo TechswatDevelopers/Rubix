@@ -35,6 +35,8 @@ import {
   onPresPopConfirmInfo,
   onUpdateVarsity,
 
+  onUpdateKeyMessage,
+  onUpdateKeyProgress,
 } from '../../actions';
 import PopUpModal from '../../components/PopUpModal';
 import PopUpConfirm from '../../components/PopUpConfirm';
@@ -668,6 +670,7 @@ mergePDFHandler()
     this.props.onUpdateRules(0)
     this.props.onUpdateProofOfPay(0)
     this.props.onUpdateBookingForm(0)
+    this.props.onUpdateKeyProgress(0)
 
     //Reset Messages
     this.props.onUpdateIDMessage(this.setMessage(0))
@@ -679,6 +682,7 @@ mergePDFHandler()
     this.props.onUpdateProofOfPayMessage(this.setMessage(0))
     this.props.onUpdateRulesMessage(this.setMessage(0))
     this.props.onUpdateStudenCMessage(this.setMessage(0))
+    this.props.onUpdateKeyMessage(this.setMessage(0))
   }
 
   
@@ -756,6 +760,11 @@ mergePDFHandler()
               this.props.onUpdateStudentCard(temp[i].Percentage)
               this.props.onUpdateStudenCMessage(this.setMessage(temp[i].Percentage))
             }
+              break;
+            case "key-form": {
+              this.props.onUpdateKeyProgress(temp[i].Percentage)
+              this.props.onUpdateKeyMessage(this.setMessage(temp[i].Percentage))
+            }
             }
           }
         })
@@ -817,6 +826,11 @@ mergePDFHandler()
         {
           progress = this.props.myStudentCardProgress
         }
+        break;
+      case "key-form":
+        {
+          progress = this.props.myKeyFormProgress
+        }
     }
     return progress
   }
@@ -862,12 +876,17 @@ mergePDFHandler()
         break;
       case "surety-doc":
         {
-          message = this.props.myBookingFMessage
+          message = this.props.myRulesMessage
         }
         break;
       case "nsfas-doc":
         {
           message = this.props.myStudentCardMessage
+        }
+        break;
+      case "key-form":
+        {
+          message = this.props.myKeyFormMessage
         }
     }
     return message
@@ -1424,8 +1443,11 @@ const mapStateToProps = ({ navigationReducer, ioTReducer, mailInboxReducer }) =>
   myBookingFProgress: navigationReducer.bookingProgress,
   myBookingFMessage: navigationReducer.bookingFMessage,
 
+  myKeyFormProgress: navigationReducer.keyProgress,
+  myKeyFormMessage: navigationReducer.keyMessage,
+
   myRules: navigationReducer.rulesProgress,
-  myBookingFMessage: navigationReducer.rulesMessage,
+  myRulesMessage: navigationReducer.rulesMessage,
   
   showLease: mailInboxReducer.isShowLease,
 
@@ -1469,4 +1491,7 @@ export default connect(mapStateToProps, {
   onUpdateVarsity,
 
   onPresPopConfirmInfo,
+
+  onUpdateKeyMessage,
+  onUpdateKeyProgress,
 })(ProfileV1Page);
