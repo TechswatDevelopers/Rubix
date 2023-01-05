@@ -79,7 +79,7 @@ constructor(props) {
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       
-      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 1)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.leasDoc)
 
       setTimeout(() => {
         this.postDeed(this.sigPad.getTrimmedCanvas().toDataURL('image/png'))
@@ -90,12 +90,13 @@ constructor(props) {
     } 
   }
     //Function to post signature to API
-    postSignature(signature, tryval) {
+    postSignature(signature, image) {
       const data = {
         'RubixRegisterUserID': this.state.userID,
         'ClientId': 1,
         'Time_and_Date': this.state.dateAndTime,
-        'ImageUrl': signature,
+        'ImageUrl': image,
+        'Signature': signature,
       }
       const requestOptions = {
         title: 'Parent Signature Upload',

@@ -1655,7 +1655,7 @@ this.props.updateStudentName(
           <form id='nextOfKin' onSubmit={(e) => this.updateNextOfKin(e)}>
             <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
-                <h3>Next of Kin Information</h3>
+                <h3>Surety Information</h3>
                 <div className="form-group">
                   <label>
                     First Name:
