@@ -672,6 +672,7 @@ this.props.updateStudentName(
           //Set Temp Local Storage
           localStorage.setItem('yearOfStudy', response.data.PostRubixUserData[0].YearofStudy)
           localStorage.setItem('nationality', response.data.PostRubixUserData[0].Nationality)
+          localStorage.setItem('roomPref', response.data.PostRubixUserData[0].PrefResidenceRoomNameFull)
 
           this.setFundingSource(response.data.PostRubixUserData[0].rPaymentMethod)
           

@@ -419,7 +419,7 @@ class RoomAllocation extends React.Component {
         
         <div>
           <div className="container-fluid">
-           <div><strong>Student:</strong> {this.props.currentStudentName}</div>
+           <div><strong>Student:</strong> {this.props.currentStudentName}, <strong>Room Preference: </strong>{localStorage.getItem('roomPref')}</div>
             <div className="row clearfix">
               <div className="col-lg-12 col-md-12">
                 <div className="card planned_task">

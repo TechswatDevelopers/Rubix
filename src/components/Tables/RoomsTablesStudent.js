@@ -214,9 +214,10 @@ class RoomsTableStudent extends React.Component {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Building Number</th>
+                  {/* <th>Building Number</th> */}
                   <th>Floor Number</th>
                   <th>Room Number</th>
+                  <th>Bed Number</th>
                   <th>QUICK ACTIONS</th>
                 </tr>
               </thead>
@@ -236,11 +237,12 @@ class RoomsTableStudent extends React.Component {
                 
                 }
                   >
-                  <th scope="row">
+                 {/*  <th scope="row">
                   {room.ResidenceName}
-                    </th>
+                    </th> */}
                   <td>{room.FloorNumber}</td>
                   <td>{room.RoomNumber}</td>
+                  <td>{room.BedNumber}</td>
                   <td>
                     <>
                   

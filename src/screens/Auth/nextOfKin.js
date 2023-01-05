@@ -434,7 +434,7 @@ else{
 
                       <div className="form-group">
                         <label className="control-label">
-                        Home Tellephone Number
+                        Next of kin Home Tellephone Number
                             </label>
                             <PhoneInput placeholder="Surety Home Tellephone Number" name="RubixUserNextOfKinHomeTell" className='RubixUserNextOfKinHomeTell' required='' 
                     value={this.state.value}
@@ -443,7 +443,7 @@ else{
 
                       <div className="form-group">
                         <label className="control-label" >
-                        Phone Number
+                        Next of Kin Mobile Number
                             </label>
                             <PhoneInput placeholder="Surety Cell Phone Number" name="RubixUserNextOfKinPhoneNumber" className='NextOfKinPhoneNumber' required='' 
                     value={this.state.value}
