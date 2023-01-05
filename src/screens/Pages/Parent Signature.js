@@ -79,7 +79,7 @@ constructor(props) {
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       
-      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.leasDoc)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'https://adowaimages.rubix.mobi:449/' + this.state.leaseDoc)
 
       setTimeout(() => {
         this.postDeed(this.sigPad.getTrimmedCanvas().toDataURL('image/png'))
