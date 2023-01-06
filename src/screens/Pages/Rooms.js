@@ -360,8 +360,7 @@ class RoomAllocation extends React.Component {
           this.setState({userIPAddress: res.data.IPv4 })
         }
         getData()
-      } 
-  
+      }
 
   render() {
     const { Student, Students, Function } = this.props;
@@ -416,7 +415,6 @@ class RoomAllocation extends React.Component {
           </div>
         </div>
         
-        
         <div>
           <div className="container-fluid">
            <div><strong>Student:</strong> {this.props.currentStudentName}, <strong>Room Preference: </strong>{localStorage.getItem('roomPref')}</div>
@@ -446,7 +444,6 @@ class RoomAllocation extends React.Component {
         }
     </select> 
     </>}
-
     { <> 
               <label>Floor Number</label>
         <select className="form-control" onChange={(e)=>{
@@ -503,12 +500,11 @@ class RoomAllocation extends React.Component {
   }
 }
 
-const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
+const mapStateToProps = ({ioTReducer, navigationReducer }) => ({
   isSecuritySystem: ioTReducer.isSecuritySystem,
   currentStudentiD: navigationReducer.studentID,
   currentResID: navigationReducer.studentResID,
 
-  
   currentRES: navigationReducer.studentResID,
 
   MyloadingController: navigationReducer.loadingController,
