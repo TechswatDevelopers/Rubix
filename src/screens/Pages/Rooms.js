@@ -309,10 +309,9 @@ class RoomAllocation extends React.Component {
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
-  
     return new File([u8arr], filename, { type: mime });
   }
-  
+
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
