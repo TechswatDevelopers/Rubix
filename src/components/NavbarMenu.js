@@ -248,6 +248,8 @@ class NavbarMenu extends React.Component {
       this.activeMenutabContainer("Calendar")
     } else if (activeKey === "/residence"){
       this.activeMenutabContainer("Residence")
+    }  else if (activeKey === "/rooms"){
+      this.activeMenutabContainer("rooms")
     }
   }
 
@@ -267,10 +269,7 @@ class NavbarMenu extends React.Component {
        // parents.children[index].children[1].classList.remove("in");
       }
     }
-    /* setTimeout(() => {
-      activeMenu.classList.toggle("active");
-      activeMenu.children[1].classList.toggle("in");
-    }, 10); */
+    
   } 
   render() {
     const {
@@ -571,9 +570,7 @@ class NavbarMenu extends React.Component {
                   Menu
                 </a>
               </li>
-             
             </ul> 
-
 
             <div className="tab-content p-l-0 p-r-0">
               <div
@@ -608,6 +605,21 @@ class NavbarMenu extends React.Component {
                         <i className="icon-user"></i> <span>{localStorage.getItem('role') == 'admin' ? "Students" : "My Profile"}</span>
                       </a>
                     </li>
+
+
+                    { 
+      localStorage.getItem('role') == 'admin'
+                    ?
+                    <li className="" id="rooms">
+                      <a
+                          href="rooms"
+                          className="">
+                          <i className="icon-key"></i> <span>Rooms</span>
+                        </a>
+                      </li>
+                      : null
+                      }
+
                     { localStorage.getItem('role') == 'admin'
                     ?
                     <li className="" id="adminDash">
@@ -634,17 +646,15 @@ class NavbarMenu extends React.Component {
                         className={
                           activeKey === "residence" ? "active" : ""
                         }
-                        /* onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("AppContainer");
-                        }} */
                       >
                         <i className= {localStorage.getItem('role') == 'admin' ? 'icon-bubbles' : "icon-home"}></i> <span> {localStorage.getItem('role') == 'admin' ? 'Communication' :"Residence Information"}</span>
                       </a>
                     </li>
-}
-             { 
-                    
+      }
+      
+    
+
+             {    
                      localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2'
                       ? null    
                   : localStorage.getItem('adminLevel') == 1 || localStorage.getItem('adminLevel') == '1' || localStorage.getItem('role') == 'student'
@@ -665,8 +675,8 @@ class NavbarMenu extends React.Component {
                     </li>
                     : null
                   }
-
-{ localStorage.getItem('role') == 'admin'
+    { 
+      localStorage.getItem('role') == 'admin'
                     ?
                     <li className="" id="support">
                       <a
@@ -677,7 +687,8 @@ class NavbarMenu extends React.Component {
                           <i className="icon-earphones-alt"></i> <span>Rubix Support</span>
                         </a>
                       </li>
-                      : null}
+                      : null
+                      }
 
                   </ul>
                 </Nav>

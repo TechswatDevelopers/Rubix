@@ -20,7 +20,7 @@ class ForgotPasswordPage extends React.Component {
     window.scrollTo(0, 0);
     this.setThemeColor(this.props.match.params.clientID )
     localStorage.setItem('clientID', this.props.match.params.clientID)
-    //console.log("client ID:")
+    ////console.log("client ID:")
   }
   
   
@@ -59,7 +59,7 @@ class ForgotPasswordPage extends React.Component {
       localStorage.setItem('clientTheme', 'purple')
     }
     }
-    //console.log('client:', this.state.backImage)
+    ////console.log('client:', this.state.backImage)
   }
   //Reset Password
   resetPassword(e){
@@ -79,11 +79,11 @@ class ForgotPasswordPage extends React.Component {
       const elem = form.elements[i];
       data[elem.name] = elem.value
     }
-    //console.log(data)
+    ////console.log(data)
     const postData = async() => {
               await axios.post('https://jjprest.rubix.mobi:88/api/RubixUpdateForgetPassword', data, requestOptions)
             .then(response => {
-                //console.log(response)
+                ////console.log(response)
                 //Go to login screen
                 this.setState({
                   title: "Password Reset",

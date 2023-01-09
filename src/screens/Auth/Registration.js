@@ -84,7 +84,7 @@ class Registration extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    //console.log(id_date, id_month, id_year)
+    ////console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -139,7 +139,7 @@ class Registration extends React.Component {
         const idNumber = document.getElementById('idNumber').value;
         localStorage.setItem('idNumber', idNumber)
         localStorage.setItem('studentEmail', email)
-        //console.log(email)
+        ////console.log(email)
 
         // PingRequest data
         const pingData = {
@@ -159,14 +159,14 @@ class Registration extends React.Component {
           'IDNumber': idNumber,
           'RubixClientID': localStorage.getItem('clientID'),
       };
-      //console.log("The Call: ", userExistsData)
+      ////console.log("The Call: ", userExistsData)
 
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                //console.log("The response: ",response.data)
+                ////console.log("The response: ",response.data)
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
                 2. If Response is equal to Zero and Rubix User ID exists, then the user exists but has incomplete information on DB
@@ -212,7 +212,7 @@ class Registration extends React.Component {
         //Ping email address
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixEmailCheck', pingData, requestOptions)
             .then(response => {
-                //console.log(response.data.EmailResult )
+                ////console.log(response.data.EmailResult )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
@@ -247,7 +247,7 @@ class Registration extends React.Component {
     document.body.classList.remove("theme-blush");
 
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
-    //console.log("client logo", this.props.clientBG)
+    ////console.log("client logo", this.props.clientBG)
   }
   render() {
     //const user = useContext(MyProvider);

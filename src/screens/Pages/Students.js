@@ -62,7 +62,7 @@ class Students extends React.Component {
     await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/'/*  + localStorage.getItem('clientID') */)
     .then(response => response.json())
     .then(data => {
-        console.log("data is ", data)
+        //console.log("data is ", data)
         this.setState({resList: data.data})
         });
     } 
@@ -175,7 +175,7 @@ class Students extends React.Component {
 
 postLeaseData1(i) {
   const student = this.state.studentLeaseAmmend[i]
-console.log("the current student is: ", this.state.studentLeaseAmmend)
+//console.log("the current student is: ", this.state.studentLeaseAmmend)
   //Set Loading Screen ON
   this.props.updateLoadingController(true);
   this.props.updateLoadingMessage("Ammending Lease Information...");
@@ -402,7 +402,7 @@ postData().then(()=>{
       await fetch('https://jjprest.rubix.mobi:88/api/RubixGetColor')
       .then(response => response.json())
       .then(data => {
-        console.log("colors data: ", data.data)
+        //console.log("colors data: ", data.data)
         this.setState({
           colors: data.data
         })
@@ -481,7 +481,7 @@ postData().then(()=>{
           })
           this.getStudents('', e.target.value)
           this.props.updateResidenceID(e.target.value)
-          console.log('ResID1: ', e.target.value)
+          //console.log('ResID1: ', e.target.value)
           localStorage.setItem('resID', e.target.value)
           }} value={this.state.res}>
         {
@@ -547,7 +547,7 @@ postData().then(()=>{
               </form>
               <button className="btn btn-primary ml-5" onClick={()=>this.getStudents('', this.state.res)}>Clear Search</button>
         <button className="btn btn-outline-primary ml-5" onClick={()=>{
-          console.log("data: ", localStorage.getItem('resID'))
+          //console.log("data: ", localStorage.getItem('resID'))
           this.exportToCSV(localStorage.getItem('resID'))}}>
   Download Report
 </button>

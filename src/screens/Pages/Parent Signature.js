@@ -43,7 +43,7 @@ constructor(props) {
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + this.state.userID)
       .then(response => response.json())
       .then(data => {
-        console.log("check: ", data)
+        //console.log("check: ", data)
         if(data.post.length != 0 && data.post != null){
           this.setState({
             bookingDoc: data.post.filter(doc => doc.FileType == 'booking-doc')[0].filename,
@@ -100,12 +100,12 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      //console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFNEKSign', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+           // console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -162,11 +162,11 @@ constructor(props) {
     };
     
     for (var pair of data.entries()) {
-      console.log(pair[0], ', ', pair[1]);
+      //console.log(pair[0], ', ', pair[1]);
     }
     await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
       .then(response => {
-        console.log("Upload details:", response)
+        //console.log("Upload details:", response)
         this.setState({ mongoID: response.data.post._id })
       })
   }

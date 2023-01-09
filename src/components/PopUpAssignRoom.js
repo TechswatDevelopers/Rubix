@@ -51,7 +51,7 @@ componentDidMount() {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        console.log("Room response: ", response)
+       // console.log("Room response: ", response)
       })
     }
     postData().then(()=>{
@@ -81,11 +81,11 @@ componentDidMount() {
         body: data
       };
   
-      console.log("Posted Vetting Data: ", data)
+     // console.log("Posted Vetting Data: ", data)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
-          console.log("DB response: ", response)
+          //console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
@@ -111,11 +111,11 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({
             done: true
           })
@@ -158,10 +158,10 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log(" mY Posted Data:", data)
+      //console.log(" mY Posted Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          console.log("Signature upload details:", response)
+          //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -233,7 +233,7 @@ componentDidMount() {
                   //window.location.reload()
                       this.props.onPresPopUpAssign()
                       setTimeout(() => {
-                        console.log("this is it: ", this.state.done)
+                        //console.log("this is it: ", this.state.done)
                         if(this.state.done){
                     
                           this.props.updateLoadingController(false);

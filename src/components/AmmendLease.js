@@ -46,11 +46,11 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        ////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("Upload details:", response)
+          ////console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -85,7 +85,7 @@ getUserWitnessData() {
       //Fetch IP Address
       const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
-        //console.log("my IP", res.data);
+        ////console.log("my IP", res.data);
         this.setState({userIPAddress: res.data.IPv4 })
       }
       getData()
@@ -117,17 +117,17 @@ const requestOptions = {
   headers: { 'Content-Type': 'application/json' },
   body: data
 }
-//console.log("Data: ", data)
+////console.log("Data: ", data)
 
 //Http Post Request
 const postData = async () => {
   await axios.post('https://jjppdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
   .then(response => {
-    console.log("Post Response: ", response)
+    //console.log("Post Response: ", response)
     if(response.data != null && response.data != undefined){
       const dataUrl = 'data:application/pdf;base64,' + response.data.Base
       const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-      //console.log("temp file:", temp)
+      ////console.log("temp file:", temp)
       this.onPressUpload(temp, 'lease-agreement', 'signing',userID)
     } else {
      
@@ -155,7 +155,7 @@ postData().then(()=>{
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+          ////console.log("documents data:", data)
           //Get Lease Documented stdents
            tempList = data.post.filter(doc => doc.FileType == 'lease-agreement')
 
@@ -181,7 +181,7 @@ postData().then(()=>{
       const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
       const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
       const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
-      //console.log('Date', myTime)
+      ////console.log('Date', myTime)
       if (timeVar == 'start'){
           this.setState({
               leaseStart: myDate + ' ' + myTime

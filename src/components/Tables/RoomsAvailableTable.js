@@ -8,13 +8,14 @@ import {
   onPresRooms,
   onPresPopUpAssign,
   onPresPopUpRemove,
-  onToggleLeaseAmmend} from "../../actions";
+  onToggleLeaseAmmend
+} from "../../actions";
 import PopUpAssign from "../../components/PopUpAssignRoom"
 import PopUpRemove from "../../components/PopUpRemoveFromRoom"
 import AmmendLease from "../../components/AmmendLease"
 import axios from "axios";
 
-class RoomsTable extends React.Component {
+class RoomsAvailableTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,6 +34,7 @@ class RoomsTable extends React.Component {
   const myTime = new Date().toLocaleTimeString('en-ZA')
   this.setState({ dateAndTime: myDate + myTime })
   }
+  
    //Send Auditted status
    sendAuttingStatus(studentID){
     const data = {
@@ -65,7 +67,7 @@ class RoomsTable extends React.Component {
     })
   }
 
-  ///Tobe deleted
+  ///To be deleted
     //Post File Using Mongo
     onPressUpload(image, filetype, studentiD) {
       //this.props.updateLoadingMessage("Uploading Lease Document...");
@@ -128,7 +130,7 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        //console.log("Posted Data:", data)
+       // console.log("Posted Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
           .then(response => {
             //console.log("Signature upload details:", response)
@@ -221,7 +223,6 @@ class RoomsTable extends React.Component {
                   <th>Floor Number</th>
                   <th>Room Number</th>
                   <th>Bed Number</th>
-                  <th>QUICK ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -250,51 +251,7 @@ class RoomsTable extends React.Component {
                     <>
                   
                   
-                  { RoomList.length == 1 && room.RubixRegisterUserID != 0
-                    ? <>
-                    
-                    <button className="btn btn-sm btn-outline-danger" 
-                    onClick={(e)=>{
-                      e.preventDefault()
-                      //this.props.onPresRooms(e)
-                      this.props.onPresPopUpRemove()
-                      
-                      }}>
-                      <span>
-                        <i className=" icon-logout"></i> 
-                           Remove from Room
-                        </span>
-                      </button>
 
-                    <button className="btn btn-sm btn-outline-primary ml-2" 
-                    onClick={(e)=>{
-                      e.preventDefault()
-                      //this.props.onPresRooms(e)
-                      this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', Student, 0)
-                      
-                      }}>
-                      <span>
-                        <i className=" icon-refresh"></i> 
-                           Regenerate Lease
-                        </span>
-                      </button>
-                      
-                      </>
-
-
-                    : <button className="btn btn-sm btn-outline-success" 
-                  onClick={(e)=>{
-                    e.preventDefault()
-                    //this.props.onPresRooms(e)
-                    this.props.onPresPopUpAssign()
-                    
-                    }}>
-                    <span>
-                      <i className=" icon-key"></i> 
-                         Assign to Room
-                      </span>
-                    </button>
-                    }
                   </></td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
@@ -330,4 +287,4 @@ export default connect(mapStateToProps, {
   onPresPopUpAssign,
   onPresPopUpRemove,
   onToggleLeaseAmmend
-})(RoomsTable);
+})(RoomsAvailableTable);

@@ -22,7 +22,7 @@ componentDidMount() {
 
   //Get Events Type Data
   this.getEventsData()
-  //console.log('userCode', localStorage.getItem('userCode'))
+  ////console.log('userCode', localStorage.getItem('userCode'))
 }
 
 //Get Events Types List
@@ -31,7 +31,7 @@ getEventsData() {
     await fetch('https://jjprest.rubix.mobi:88/api/RubixEventTypess')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            ////console.log("data is ", data.data)
             this.setState({eventTypes: data.data})
             });
   }
@@ -43,7 +43,7 @@ getEventsData() {
     const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
     const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
     const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
-    console.log('Date', myTime)
+    //console.log('Date', myTime)
     this.setState({startDate: myDate + ' ' + myTime})
   }
   //On Date Select
@@ -51,7 +51,7 @@ getEventsData() {
     const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
     const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
     const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
-    console.log('Date', myTime)
+    //console.log('Date', myTime)
     this.setState({endDate: myDate + ' ' + myTime})
   }
 
@@ -73,7 +73,7 @@ getEventsData() {
     const startDate = document.getElementById('start').value
     //const endDate = document.getElementById('end').value.toLocaleDateString('en-ZA', DATE_OPTIONS)
 
-    console.log('Start Date', startDate)
+    //console.log('Start Date', startDate)
 
     //Populate form data
     const form = document.getElementById('add-event');
@@ -99,13 +99,13 @@ getEventsData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    console.log("Post info", data)
+    //console.log("Post info", data)
 
     //Make Post
     const postData = async()=>{
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixResidenceEventsAddData', data, requestOptions)
       .then(response => {
-        console.log("Add Event Response", response)
+        //console.log("Add Event Response", response)
       })
     }
     postData()
@@ -126,7 +126,7 @@ getEventsData() {
     const startDate = document.getElementById('start').value
     //const endDate = document.getElementById('end').value.toLocaleDateString('en-ZA', DATE_OPTIONS)
 
-    console.log('Start Date', startDate)
+    //console.log('Start Date', startDate)
 
     //Populate form data
     const form = document.getElementById('add-event');
@@ -148,13 +148,13 @@ getEventsData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    console.log("Post info", data)
+    //console.log("Post info", data)
 
     //Make Post
     const postData = async()=>{
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentEventsAddData', data, requestOptions)
       .then(response => {
-        console.log("Add Student Event Response: ", response)
+        //console.log("Add Student Event Response: ", response)
       })
     }
     if(this.state.eventType == null || this.state.startDate == null || this.state.startDate == '' || this.state.endDate == '' || this.state.endDate == null  || document.getElementById('title').value == '' || document.getElementById('title').value == null  || document.getElementById('desc').value == '' ||document.getElementById('desc').value == null){

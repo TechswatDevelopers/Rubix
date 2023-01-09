@@ -119,7 +119,7 @@ class ProfileV1Setting extends React.Component {
     })
   }
   getResAndPayment(resID){
-    console.log("this: ", this.state.payment)
+    //console.log("this: ", this.state.payment)
     this.setState({
       isLoad: true
     })
@@ -137,7 +137,7 @@ class ProfileV1Setting extends React.Component {
     const getData = async() => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        console.log("My response: ", response.data.PostRubixUserData)
+        //console.log("My response: ", response.data.PostRubixUserData)
         
         this.setState({
           //isLoad: false,
@@ -198,9 +198,9 @@ class ProfileV1Setting extends React.Component {
         myTempAddress: this.state.location['value']['structured_formatting']['main_text']
       })
       
-      console.log("I am called", street_address)
+      //console.log("I am called", street_address)
     } else {
-      console.log("I am called 222")
+      //console.log("I am called 222")
       street_address = document.getElementById('streetAddress').value
       this.setState({
         myTempAddress: this.state.myProfile.RegisterUserStreetNameAndNumer
@@ -216,10 +216,10 @@ class ProfileV1Setting extends React.Component {
       'RegisterUserProvince': this.state.myProfile.Province/*  this.state.prov */,
       'RegisterUserCountry':''/*  this.state.country */,
     };
-    console.log("Data 1", data)
+    //console.log("Data 1", data)
     for (let i = 0; i < form.elements.length; i++) {
       if(form.elements[i].name == 'RegisterUserStreetNameAndNumer'){
-console.log("down")
+//console.log("down")
       } else {
 
         const elem = form.elements[i];
@@ -242,7 +242,7 @@ console.log("down")
           } else {
             //console.log("never")
           }
-          console.log(response)
+          //console.log(response)
           //alert(response.data[0].ResponceMessage)
           //window.location.reload()
         })
@@ -272,11 +272,11 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log(data)
+   // console.log(data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
-          console.log(response)
+          //console.log(response)
           if(response.data.PostRubixUserData[0].Response == 'PasswordUpdated'){
             this.props.onPresPopConfirmInfo()
           } else {
@@ -545,7 +545,7 @@ console.log("down")
       //console.log("This is the img:", this.state.imgUpload)
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
+      //console.log('Error: ', error);
     }
   }
 
@@ -580,11 +580,11 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('Posted student data:', data)
+   // console.log('Posted student data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response.data.PostRubixUserData[0])
+        //  console.log("All Student data", response.data.PostRubixUserData[0])
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -647,7 +647,7 @@ this.props.updateStudentName(
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          console.log("All profile data", response.data.PostRubixUserData)
+          //console.log("All profile data", response.data.PostRubixUserData)
           this.setState({ myProfile: response.data.PostRubixUserData[0],
           uni: response.data.PostRubixUserData[0].RubixUniversityID,
           year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,

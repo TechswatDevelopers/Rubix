@@ -113,7 +113,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  console.log('Posted data: ', data)
+  //console.log('Posted data: ', data)
     const getData = async () => {
       const res = await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
       //console.log("Messages data", res.data.PostRubixUserData);

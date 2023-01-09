@@ -142,7 +142,7 @@ class NextOfKin extends React.Component {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              console.log(response)
+              //console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
                 this.props.history.push("/relatives")
               }
@@ -168,7 +168,7 @@ class NextOfKin extends React.Component {
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
-  console.log("called")
+ // console.log("called")
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
 };
@@ -239,7 +239,7 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('User data:', data)
+    //console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
         .then(response => {

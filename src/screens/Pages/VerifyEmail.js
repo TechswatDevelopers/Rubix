@@ -32,13 +32,13 @@ constructor(props) {
     })
   }, 2000);
 
-  //console.log("client ID:", localStorage.getItem('clientID'))
+  ////console.log("client ID:", localStorage.getItem('clientID'))
   //Send verification
   const verify = async() => {
     await fetch('https://jjprest.rubix.mobi:88/api/RubixVerifyEmails/'  + this.props.match.params.activeCode)
       .then(response => response.json())
       .then(data => {
-        //console.log("response data:", data)
+        ////console.log("response data:", data)
         this.setState({userData: data.PostEmailVerification})
           alert("Account verified successfully!")
           });
@@ -83,7 +83,7 @@ constructor(props) {
       localStorage.setItem('clientTheme', 'purple')
     }
     }
-    //console.log('client:', this.state.backImage)
+    ////console.log('client:', this.state.backImage)
   }
   
   render() {

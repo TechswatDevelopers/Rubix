@@ -2,13 +2,20 @@ import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import axios from "axios";
+import {
+    updateStudentID, onPresShowProfile,
+    onPresRooms, onPresPopUpAssign, 
+    updateResidenceID, updateLoadingMessage,
+    updateLoadingController,} from "../../actions"
 import PageHeader from "../../components/PageHeader";
-import RoomsTable from "../../components/Tables/RoomsTables";
+import RoomsOccupiedTable from "../../components/Tables/RoomsOccupiedTable";
+import RoomsAvailableTable from "../../components/Tables/RoomsAvailableTable";
 import PopUpAssign from "../../components/PopUpAssignRoom";
 import PopUpRemove from "../../components/PopUpRemoveFromRoom";
 import {Grid, Row, Col, Button} from "react-bootstrap";
 
-class RoomAllocation extends React.Component {
+class EmptyRooms extends React.Component {
+
   //Initial State
   constructor(props) {
     super(props)
@@ -28,9 +35,14 @@ class RoomAllocation extends React.Component {
 
       genderRoomList: ['Female', 'Male'],
       roomGender: '',
-
       
     roomedstudents: [],
+
+    resList: [],
+    isShow: false,
+    available: false,
+    options: [ 'Rooms Occupied', 'Rooms Available'],
+    option: "Rooms Occupied",
 
     index: 0,
     
@@ -43,26 +55,62 @@ class RoomAllocation extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
 
-    this.getStudentRoomDetails(this.props.currentStudentiD)
+    if(localStorage.getItem('adminLevel') ==    1 || localStorage.getItem('adminLevel') == '1' ){
+        this.getStudentRoomDetails()
+    }
     const scrollToElement = () => this.testRef.current.scrollIntoView();
     scrollToElement()
 
-    
   const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
   const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
   const myTime = new Date().toLocaleTimeString('en-ZA')
   this.setState({ dateAndTime: myDate + myTime })
+
+  const fetchData = async() =>{
+    //Populate Residence list
+    await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/'/*  + localStorage.getItem('clientID') */)
+    .then(response => response.json())
+    .then(data => {
+        //console.log("data is ", data)
+        this.setState({resList: data.data})
+        });
+    } 
+    fetchData();
   }
 
-  //Fetch User Res Data
-  getStudentRoomDetails(studentID){
+  updateRoomsFilters(e){
+
+    if(e.target.value  == "Rooms Occupied"){
+        //console.log("This is the value:", e.target.value)
+        this.setState({
+            available: false,
+            option: "Rooms Occupied"
+        })
+        this.getStudentRoomDetails()
+
+    } else {
+        //console.log("This is the :", e.target.value)
+        this.setState({
+            available: true,
+            option: "Rooms Available"
+        })
+        this.getStudentRoomAvailableDetails(' ')
+    }
+
+  }
+
+
+        //Fetch User Res Data
+  getStudentRoomAvailableDetails(studentID){
+    //console.log("This is called")
+    this.setState({
+        availableRooms: []
+    })
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
         'ResidenceName': "",
-        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
-        ? this.props.currentRES
-        : localStorage.getItem('resID'),
+        'RubixResidenceID': localStorage.getItem('resID'),
         'BuildingNumber': "",
         'FloorNumber': "",
         'RoomNumber': "",
@@ -94,7 +142,55 @@ class RoomAllocation extends React.Component {
 
           } else {
             //Show Room Details
-            this.getStudentRoomDetails(' ')
+            //this.getStudentRoomDetails(' ')
+          }
+          
+        })
+      }
+      postData()
+  }
+
+
+  //Fetch User Res Data
+  getStudentRoomDetails(){
+    this.setState({
+        availableRooms: []
+    })
+    const pingData = {
+        'UserCode': localStorage.getItem('userCode'),
+        'ResidenceName': "",
+        'RubixResidenceID':localStorage.getItem('resID'),
+        'BuildingNumber': "",
+        'FloorNumber': "",
+        'RoomNumber': "",
+
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Get Students Room Allocation Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+     // console.log('Posted:', pingData)
+      const postData = async () => {
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomOccupied', pingData, requestOptions)
+        .then(response => {
+         // console.log("Students Rooms List:", response.data.PostRubixUserData)
+          if (response.data.PostRubixUserData){
+            //Show available rooms
+            this.setState({
+              availableRooms: response.data.PostRubixUserData
+            })
+            this.setState({
+              buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
+              floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
+              roomNumberList: this.populate('RoomNumber', response.data.PostRubixUserData)
+            })
+
+          } else {
+            //Show Room Details
+            //this.getStudentRoomDetails(' ')
           }
           
         })
@@ -113,7 +209,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].BuildingNumber)){
-              ////console.log('found', roomList[i].BuildingNumber)
+              //console.log('found', roomList[i].BuildingNumber)
               
             } else {
               newList.push(roomList[i].BuildingNumber)
@@ -126,7 +222,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].FloorNumber)){
-              ////console.log('found')
+              //console.log('found')
             } else {
               newList.push(roomList[i].FloorNumber)
             }
@@ -138,7 +234,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].RoomNumber)){
-              ////console.log('found')
+              //console.log('found')
             } else {
               newList.push(roomList[i].RoomNumber)
             }
@@ -170,11 +266,11 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      ////console.log('Posted:', pingData)
+      //console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          ////console.log("Students Rooms Dropdown:", response)
+          //console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -189,14 +285,9 @@ class RoomAllocation extends React.Component {
 
             })
           } else {
-            //Show Room Details
-            //this.getStudentRoomDetails(' ')
-            /* this.setState({
-              studentRoomDetails: response.data.PostRubixUserData
-            }) */
+            
           }
           
-
         })
       }
       postData()
@@ -213,7 +304,6 @@ class RoomAllocation extends React.Component {
       this.postSignature('https://github.com/TechSwat/CGES-Rubix-ClientPDF/raw/main/Frame%201%20(1).png', this.props.Students[this.state.index].RubixRegisterUserID, 0)
 
     }
-  
   }
 
   
@@ -240,16 +330,15 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      ////console.log('Posted:', pingData)
+      //console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms List:", response)
+         //console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             inRoom =  true;
             this.state.roomedstudents.push(response.data.PostRubixUserData)
             
-
           } else {
             inRoom =  false;
           }
@@ -260,10 +349,8 @@ class RoomAllocation extends React.Component {
 
 
   ///Tobe deleted
-    //Post File Using Mongo
     onPressUpload(image, filetype, currentActiveKey) {
       //this.props.updateLoadingMessage("Uploading Lease Document...");
-      
       const postDocument = async () => {
         const data = new FormData()
         data.append('image', image)
@@ -276,11 +363,11 @@ class RoomAllocation extends React.Component {
           body: data
         };
         for (var pair of data.entries()) {
-          ////console.log(pair[0], ', ', pair[1]);
+          //console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
-            ////console.log("Upload details:", response)
+            //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -314,7 +401,7 @@ class RoomAllocation extends React.Component {
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
-      ////console.log("I am called incorrectly")
+      //console.log("I am called incorrectly")
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
@@ -329,37 +416,37 @@ class RoomAllocation extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        ////console.log("Posted Data:", data)
+        //console.log("Posted Data:", data)
         await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
           .then(response => {
-            ////console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', 'signing')
             } else if (tryval === 0) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', 'signing')
             }
           })
       }
       postDocument()
     }
+
       //Coleect User Signing Info
       getUserWitnessData() {
         //Fetch IP Address
         const getData = async () => {
           const res = await axios.get('https://geolocation-db.com/json/')
-          ////console.log("my IP", res.data);
+          //console.log("my IP", res.data);
           this.setState({userIPAddress: res.data.IPv4 })
         }
         getData()
       }
-  
 
   render() {
     const { Student, Students, Function } = this.props;
@@ -376,12 +463,11 @@ class RoomAllocation extends React.Component {
         Title= "Confirm Room Assigning"
         Body = {"You are about to assign " + localStorage.getItem('userName') + " to a room " /* + this.state.currentRoom.RoomNumber */}
         Function = {()=>{
-          ////console.log("Testst: ", this.props.currentStudentiD)
+          //console.log("Testst: ", this.props.currentStudentiD)
           ///Reload Room List
           this.getStudentRoomDetails(localStorage.getItem("userID"))
           Function()
         }
-          
         }
         />
         <PopUpRemove 
@@ -390,13 +476,11 @@ class RoomAllocation extends React.Component {
         Body = {"You are about to remove " + localStorage.getItem('userName') + " from a room: " /* + this.state.currentRoom.RoomNumber */}
         Function = {()=>{
           ///Reload Room List
-          this.getStudentRoomDetails(localStorage.getItem("userID"))
+          this.getStudentRoomDetails()
           Function()
         }
-          
         } 
         />
-
 <div
           className="page-loader-wrapper"
           style={{ display: this.props.MyloadingController ? "block" : "none" }}
@@ -416,12 +500,138 @@ class RoomAllocation extends React.Component {
         
         <div>
           <div className="container-fluid">
-           <div><strong>Student:</strong> {this.props.currentStudentName}</div>
+          <PageHeader
+              HeaderText="Rubix User Profile"
+              Breadcrumb={[
+                { name: "Rooms", navigate: "" },
+              ]}
+            />
             <div className="row clearfix">
               <div className="col-lg-12 col-md-12">
                 <div className="card planned_task">
                   <div className="body">
-                    <RoomsTable
+                  
+                  { localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
+            ? <>
+            <p> <strong>Please Select a Residence to view: </strong></p>
+            {  
+        <select className="form-control" onChange={(e)=>{
+          this.setState({res: e.target.value,
+          isShow: true
+          })
+         // this.getStudents('', e.target.value)
+          this.props.updateResidenceID(e.target.value)
+          //console.log('ResID1: ', e.target.value)
+          localStorage.setItem('resID', e.target.value)
+          this.getStudentRoomDetails()
+          this.setState({res: e.target.value,
+            isShow: true
+            })
+          }} value={this.state.res}>
+        {
+            
+            this.state.resList.map((res, index)=> (
+            <option key={index} name='ResidenceID' value = {res.RubixResidenceID }>{res.ResidenceName}</option>
+        ))   
+        }
+    </select> }
+            </>
+              
+              : null}
+              {
+                this.state.isShow
+                ? <>
+                <p> <strong>Filter Rooms: </strong></p>
+                {  
+            <select className="form-control" onChange={(e)=>{
+             ///Update Rooms Filter
+             this.updateRoomsFilters(e)
+              }} value={this.state.option}>
+            {
+                
+                this.state.options.map((res, index)=> (
+                <option key={index}  value = {res }>{res}</option>
+            ))   
+            }
+        </select> }
+                </>
+                :null
+              }
+                    {
+                        this.state.isShow 
+
+                        ? this.state.available
+
+                        ? <RoomsAvailableTable
+                        Student = {this.props.currentStudentiD}
+                  RoomList= {this.state.availableRooms}
+                  Body = {
+                    this.state.availableRooms.length === 1 || this.state.showFilters
+                    ? null
+                  :
+                  <>
+                  <Row>
+                  {  <>
+                  <label>Buiding Number</label>
+            <select className="form-control" onChange={(e)=>{
+              this.getRoomsFilters(e.target.value, '', '', this.props.currentStudentiD)
+              this.setState({buildingNumber: e.target.value})}} value={this.state.buildingNumber}>
+            {
+                
+             this.state.buildingNumberList.map((buidling, index)=> (
+                <option key={index} name='BuildingNumber' value = {buidling}>{buidling}</option>
+            ))   
+            }
+        </select> 
+        </>}
+    
+        { <> 
+                  <label>Floor Number</label>
+            <select className="form-control" onChange={(e)=>{
+              this.getRoomsFilters('', e.target.value, '', this.props.currentStudentiD)
+              this.setState({floorNumber: e.target.value})}} value={this.state.floorNumberList}>
+            {
+                
+             this.state.floorNumberList.map((floor, index)=> (
+                <option key={index} name='FloorNumber' value = {floor}>{floor}</option>
+            ))   
+            }
+        </select>
+        
+        </> }
+    
+        {   <> 
+                  <label>Room Number</label>
+            <select className="form-control" onChange={(e)=>{
+              this.getRoomsFilters('', '', e.target.value, this.props.currentStudentiD)
+              this.setState({roomNumber: e.target.value})}} value={this.state.roomNumberList}>
+            {
+                
+             this.state.roomNumberList.map((room, index)=> (
+                <option key={index} name='RoomNumber' value = {room}>{room}</option>
+            ))   
+            }
+        </select> </>}
+    
+        {   <> 
+                  <label>Room Gender</label>
+            <select className="form-control" onChange={(e)=>{
+              this.getRoomsFilters('', '', '', this.props.currentStudentiD, e.target.value == 'Female' ? 'F' : 'M')
+              this.setState({ roomGender: e.target.value == 'Female' ? 'F' : 'M'})}} value={this.state.roomNumberList}>
+            {
+                
+             this.state.genderRoomList.map((gender, index)=> (
+                <option key={index} name='RoomGender' value = {gender}>{gender}</option>
+            ))   
+            }
+        </select> </>}
+        
+                  <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '', this.props.currentStudentiD)}>Reset</button>
+                  </Row>
+                  </>}
+                  />
+                        :
+                        <RoomsOccupiedTable
                     Student = {this.props.currentStudentiD}
               RoomList= {this.state.availableRooms}
               Body = {
@@ -489,6 +699,8 @@ class RoomAllocation extends React.Component {
               </Row>
               </>}
               />
+            : null
+            }
                   </div>
                 </div>
               </div>
@@ -513,4 +725,4 @@ const mapStateToProps = ({ ioTReducer, navigationReducer }) => ({
   currentStudentName: navigationReducer.studentName,
 });
 
-export default connect(mapStateToProps, {})(RoomAllocation);
+export default connect(mapStateToProps, {updateResidenceID })(EmptyRooms);

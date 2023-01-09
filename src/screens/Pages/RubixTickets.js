@@ -50,11 +50,11 @@ class RubixTickets extends React.Component {
         body: data
       }
 
-      console.log("Posted Data: ", data)
+      //console.log("Posted Data: ", data)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGetSupportData', data, requestOptions)
         .then(response => {
-          console.log("Response Data:", response)
+          //console.log("Response Data:", response)
           this.setState({
             tickets: response.data.PostRubixUserData
           })
@@ -107,12 +107,12 @@ class RubixTickets extends React.Component {
       body: data
   };
 
-  console.log("Posted Data:", data)
+  //console.log("Posted Data:", data)
 
   const postData = async()=>{
     await axios.post('https://jjprest.rubix.mobi:88/api/RubixSupportUpdate', data, requestOptions)
     .then(response => {
-      //console.log('done', response)
+      ////console.log('done', response)
       
     })
   }

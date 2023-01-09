@@ -153,10 +153,10 @@ class Login extends React.Component {
             }
           });
       } else {
-        console.log(
+        /* console.log(
           "checkValidity ",
           document.getElementById("login").checkValidity()
-        );
+        ); */
       }
     };
     postData();
@@ -235,10 +235,10 @@ class Login extends React.Component {
             }
           });
       } else {
-        console.log(
+        /* console.log(
           "checkValidity ",
           document.getElementById("login").checkValidity()
-        );
+        ); */
       }
     };
     postData();

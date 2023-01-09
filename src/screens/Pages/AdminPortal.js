@@ -93,7 +93,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
-        console.log("Response: ", response)
+        //console.log("Response: ", response)
 
         //Load data
         let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
@@ -533,7 +533,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminReportAll', data, requestOptions)
       .then( response =>{
-        console.log('Stats Data: ', response.data.PostRubixUserData)
+        //console.log('Stats Data: ', response.data.PostRubixUserData)
         var list = response.data.PostRubixUserData
 
         list.forEach(res =>{
@@ -627,7 +627,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
-          console.log("look at this DB response: ", response)
+          //console.log("look at this DB response: ", response)
 
           if(response != null || response != undefined){
 

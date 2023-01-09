@@ -229,10 +229,10 @@ const mergePDFHandler = async () => {
   
   })
   
-  console.log("MergedPDF: ", this.state.myDocs)
+  //console.log("MergedPDF: ", this.state.myDocs)
   // Merging The PDF Files to A PDFDocument
   const mergedPDFDocument = await mergePDF(this.state.myDocs)
-  console.log("MergedPDF: ", mergedPDFDocument)
+  //console.log("MergedPDF: ", mergedPDFDocument)
   this.getBase64(mergedPDFDocument)
   
   //const blob = new Blob([mergedPDFDocument], {type: 'application/pdf'});
@@ -269,7 +269,7 @@ mergePDFHandler()
         var byteArray = Base64Binary.decodeArrayBuffer(dataUrl); 
 
         merger.add(blob)
-        console.log("This is this document: ", merger)
+        //console.log("This is this document: ", merger)
 
       }
       
@@ -292,13 +292,13 @@ mergePDFHandler()
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
-    console.log("Loading Student Documents...");
+    //console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -509,6 +509,7 @@ mergePDFHandler()
     }
   }
 
+
   //convert to base64
   getBase64(e) {
     var file = e.target.files[0]
@@ -518,10 +519,9 @@ mergePDFHandler()
       this.setState({
         base64Pdf: reader.result
       })
-      //console.log("This is the img:", this.state.imgUpload)
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
+      //console.log('Error: ', error);
     }
   }
 
@@ -579,6 +579,7 @@ mergePDFHandler()
     })
       
   }
+
   //Post File Using Mongo
   onPressUpload2(image, filetype, currentActiveKey) {
     let userID
@@ -662,6 +663,7 @@ mergePDFHandler()
   }
 
   resetProgressBars(){
+
     //Reset Progress Bar
     this.props.onUpdateIDProgress(0)
     this.props.onUpdateRESProgress(0)
@@ -683,8 +685,8 @@ mergePDFHandler()
     this.props.onUpdateProofOfPayMessage(this.setMessage(0))
     this.props.onUpdateRulesMessage(this.setMessage(0))
     this.props.onUpdateStudenCMessage(this.setMessage(0))
-  }
 
+  }
   
   //Get user document progress
   setDocumentProgress() {
@@ -712,7 +714,7 @@ mergePDFHandler()
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
-          console.log("The returned data: ", response)
+          //console.log("The returned data: ", response)
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
@@ -831,7 +833,6 @@ mergePDFHandler()
     return progress
   }
 
-
   //Get Progress
   getMessage(doc){
     let message;
@@ -883,7 +884,6 @@ mergePDFHandler()
     }
     return message
   }
-
 
   //When User Presses Cancel on Document Uploading
   onPressCancel() {
@@ -941,7 +941,6 @@ mergePDFHandler()
       alert("Please provide a signature")
     } 
   }
-
   
   //Update Profile Picture
   onPressSignatureUpload(file) {
@@ -1001,7 +1000,7 @@ mergePDFHandler()
       //console.log("Posted Data1:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          console.log("Signature upload details:", response)
+         // console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -1034,10 +1033,10 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted 3rd Data:", data)
+      //console.log("Posted 3rd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateRulesPDF', data, requestOptions)
         .then(response => {
-          console.log("Rules Doc response: ", response)
+          //console.log("Rules Doc response: ", response)
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Rules Doc') //this.convertBase64ToBlob(response.data.Base)
           //console.log("temp file:", temp)
@@ -1069,7 +1068,7 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted 2nd Data:", data)
+      //console.log("Posted 2nd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
         .then(response => {
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -1097,7 +1096,7 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted 2nd Data:", data)
+      //console.log("Posted 2nd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixDeedofSuretyEmail', data, requestOptions)
         .then(response => {
           //console.log("This is the response: ", response)

@@ -74,7 +74,7 @@ class Residence extends React.Component {
       //Ping email address
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentResDetails', pingData, requestOptions)
         .then(response => {
-          console.log("Student Res Details", response)
+          //console.log("Student Res Details", response)
           const temp = response.data.PostRubixUserData;
           this.setState({
             resDetails: response.data.PostRubixUserData[0],
@@ -128,7 +128,7 @@ class Residence extends React.Component {
         }
       }
      
-      console.log('In the gallery: ', this.state.gallery)
+     // console.log('In the gallery: ', this.state.gallery)
     })
   }
   fetchData()

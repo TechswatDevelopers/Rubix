@@ -14,7 +14,7 @@ import PopUpRemove from "../../components/PopUpRemoveFromRoom"
 import AmmendLease from "../../components/AmmendLease"
 import axios from "axios";
 
-class RoomsTable extends React.Component {
+class RoomsOccupiedTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -53,11 +53,11 @@ class RoomsTable extends React.Component {
       body: data
     };
 
-    //console.log("Posted Vetting Data: ", data)
+   // //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        //console.log("DB response: ", response)
+        ////console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
@@ -82,11 +82,11 @@ class RoomsTable extends React.Component {
           body: data
         };
         for (var pair of data.entries()) {
-          //console.log(pair[0], ', ', pair[1]);
+          ////console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
-            //console.log("Upload details:", response)
+            ////console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -114,7 +114,7 @@ class RoomsTable extends React.Component {
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
-      //console.log("I am called incorrectly")
+      ////console.log("I am called incorrectly")
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
@@ -128,20 +128,20 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        //console.log("Posted Data:", data)
+        ////console.log("Posted Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
           .then(response => {
-            //console.log("Signature upload details:", response)
+           // //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
+              ////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
             } else if (tryval === 0) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
+              ////console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
             }
           })
@@ -153,7 +153,7 @@ class RoomsTable extends React.Component {
         //Fetch IP Address
         const getData = async () => {
           const res = await axios.get('https://geolocation-db.com/json/')
-          //console.log("my IP", res.data);
+          ////console.log("my IP", res.data);
           this.setState({userIPAddress: res.data.IPv4 })
         }
         getData()
@@ -177,10 +177,10 @@ class RoomsTable extends React.Component {
 
       await axios.post('https://jjppdf.rubix.mobi:94/PDFRoomAmend', data, requestOptions)
       .then(response => {
-        //console.log('Response: ', response)
+        ////console.log('Response: ', response)
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
+              ////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
       })
     }
@@ -205,9 +205,9 @@ class RoomsTable extends React.Component {
         />
           <div className="header">
             <h2>
-              Available Room{" "}
+              Occupied Rooms{" "}
               <small>
-               List of all Rooms Available
+               List of all occupied Rooms
               </small>
             </h2>
             {Body}
@@ -221,7 +221,6 @@ class RoomsTable extends React.Component {
                   <th>Floor Number</th>
                   <th>Room Number</th>
                   <th>Bed Number</th>
-                  <th>QUICK ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -249,8 +248,7 @@ class RoomsTable extends React.Component {
                   <td>
                     <>
                   
-                  
-                  { RoomList.length == 1 && room.RubixRegisterUserID != 0
+                 {/*  { RoomList.length == 1 && room.RubixRegisterUserID != 0
                     ? <>
                     
                     <button className="btn btn-sm btn-outline-danger" 
@@ -294,14 +292,13 @@ class RoomsTable extends React.Component {
                          Assign to Room
                       </span>
                     </button>
-                    }
+                    } */}
                   </></td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
                       <th scope="row"> </th>
-                    
                       <td><span><strong>Room Capacity: </strong>{room.Capacity} </span></td>
-                      <td><span><strong>Occupancy: </strong>{room.AvaibaleBeds}</span></td>
+                      <td><span><strong>Occupancy: </strong>{room.Name}  {room.Surname}</span></td>
                       </tr>
               </>
                 ))}
@@ -330,4 +327,4 @@ export default connect(mapStateToProps, {
   onPresPopUpAssign,
   onPresPopUpRemove,
   onToggleLeaseAmmend
-})(RoomsTable);
+})(RoomsOccupiedTable);

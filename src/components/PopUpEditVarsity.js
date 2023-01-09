@@ -35,14 +35,14 @@ async componentDidMount(){
   const userID = localStorage.getItem('userID');
   this.setState({myUserID: userID});
 
-  console.log("Testing: ", this.props.isPopUpModal)
+  //console.log("Testing: ", this.props.isPopUpModal)
 
   const fetchData = async() =>{
       //Populate university list
       await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixUniversities/' + localStorage.getItem('clientID'))
       .then(response => response.json())
       .then(data => {
-          console.log("data is ", data.data)
+          //console.log("data is ", data.data)
           this.setState({uniList: data.data})
           });
 
@@ -50,7 +50,7 @@ async componentDidMount(){
           await fetch('https://rubixapi.cjstudents.co.za:88/api/RubixResidences/' + localStorage.getItem('clientID'))
       .then(response => response.json())
       .then(data => {
-          console.log("data is ", data)
+          //console.log("data is ", data)
           this.setState({resList: data.data})
           });
 
@@ -92,7 +92,7 @@ async componentDidMount(){
    this.props.updateLoadingController(true);
    this.props.updateLoadingMessage("Submitting Information...");
       const form = document.getElementById('uniDetails');
-      console.log('Uni ID: ', this.state.uni)
+      //console.log('Uni ID: ', this.state.uni)
       const data = {
           'RubixRegisterUserID': studentid,
           //'ProvinceID': this.state.prov,
@@ -114,12 +114,12 @@ async componentDidMount(){
           headers: { 'Content-Type': 'application/json' },
           body: data
       };
-      console.log(data)
+      //console.log(data)
       const postData = async()=>{
           if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
               await axios.post('https://rubixapi.cjstudents.co.za:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
               .then(response => {
-                  console.log("Response: ", response)
+                  //console.log("Response: ", response)
                   //Set timer for loading screen
   setTimeout(() => {
     this.props.updateLoadingController(false);
@@ -135,7 +135,7 @@ async componentDidMount(){
     this.props.updateLoadingController(false);
   }, 1000);
             alert("Please ensure that you entered all required information")
-              console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
+             // console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
           }
       }
       postData()

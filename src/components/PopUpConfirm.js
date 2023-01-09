@@ -52,7 +52,7 @@ componentDidMount() {
       } */
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Upload details:", response)
+          //console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -149,7 +149,7 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('My lease data: ', data)
+   // console.log('My lease data: ', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
@@ -312,7 +312,7 @@ getUserWitnessData() {
               <button
                 type="button"
                 onClick={(e) => {
-                  console.log('pressed')
+                  //console.log('pressed')
                   this.props.onPresPopUpConfirm();
                 }}
                 className="btn btn-danger"

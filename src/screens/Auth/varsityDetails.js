@@ -97,7 +97,7 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        console.log(data)
+        //console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
@@ -165,7 +165,7 @@ async componentDidMount(){
         await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
-            console.log("data is ", data.data)
+            //console.log("data is ", data.data)
             this.setState({
               uniList: data.data,
               //uni: data.data[0]['RubixUniversityID']
@@ -218,7 +218,7 @@ async componentDidMount(){
 
   //Fetch Residences
   getRes(uniID){
-    console.log("Location ", this.state.durations)
+    //console.log("Location ", this.state.durations)
     //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list

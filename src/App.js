@@ -10,6 +10,7 @@ import NavbarMenu from "./components/NavbarMenu";
 import appInbox from "./screens/App/Inbox";
 import appChat from "./screens/App/Chat";
 import appCalendar from "./screens/App/Calendar";
+import EmptyRooms from "./screens/Pages/emptyrooms";
 import appContact from "./screens/App/Contact";
 import appTaskbar from "./screens/App/Taskbar";
 import filemanagerdashboard from "./screens/FileManager/Dashboard";
@@ -279,11 +280,11 @@ class App extends React.Component {
                     path={`${process.env.PUBLIC_URL}/demographic`}
                     component={demographic}
                   />
-                  {/* <Route
+                  <Route
                     exact
-                    path={`${process.env.PUBLIC_URL}/ioT`}
-                    component={ioT}
-                  /> */}
+                    path={`${process.env.PUBLIC_URL}/rooms`}
+                    component={EmptyRooms}
+                  />
                  {/*  <Route
                     exact
                     path={`${process.env.PUBLIC_URL}/appinbox`}

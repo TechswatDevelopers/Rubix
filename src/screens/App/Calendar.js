@@ -78,11 +78,11 @@ class AppCalendar extends React.Component {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixResidenceEventsGetData', data, requestOptions)
       .then(response => {
-console.log("Events :", response)
+//console.log("Events :", response)
         if(response.data.PostRubixUserData == null || response.data.PostRubixUserData.length == 0 || response.data.PostRubixUserData == false){
 
         } else {
-          //console.log("Res Events: ", response.data.PostRubixUserData)
+          ////console.log("Res Events: ", response.data.PostRubixUserData)
           //Popolate Events List
           this.populateEvents(response.data.PostRubixUserData)
           this.setState({
@@ -132,7 +132,7 @@ console.log("Events :", response)
             this.props.updateLoadingController(false);
           }, 4000);
         } else {
-          console.log("Student Events: ", response.data.PostRubixUserData)
+          //console.log("Student Events: ", response.data.PostRubixUserData)
           //Popolate Events List
           this.populateStudentEvents(response.data.PostRubixUserData)
           
@@ -165,7 +165,7 @@ console.log("Events :", response)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentResDetails', pingData, requestOptions)
       .then(response => {
-        console.log("Res Data:", response.data.PostRubixUserData[0])
+        //console.log("Res Data:", response.data.PostRubixUserData[0])
         this.setState({
           resDetails: response.data.PostRubixUserData[0]
         })
@@ -193,11 +193,11 @@ console.log("Events :", response)
       headers: { 'Content-Type': 'application/json' },
       body: pingData
     };
-    console.log('Posted Data: ', pingData)
+    //console.log('Posted Data: ', pingData)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminResDetails', pingData, requestOptions)
       .then(response => {
-        console.log("Res Admin Data:", response)
+        //console.log("Res Admin Data:", response)
         this.setState({
           resDetails: response.data.PostRubixUserData[0]
         })
@@ -216,7 +216,7 @@ console.log("Events :", response)
     await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + resID)
     .then(response => response.json())
     .then(data => {
-      console.log("Images:", data.post)
+      //console.log("Images:", data.post)
       for(let i = 0; i <= data.post.length - 1; ++i){
 
        if(data.post[i].FileType == "ResManager"){ 
@@ -241,12 +241,12 @@ console.log("Events :", response)
         date: myDate,
         time: myTime
       }
-      //console.log("date", date)
+      ////console.log("date", date)
       return newdate
     }
   //View Event Information
   viewEvent = (event) => {
-    console.log("I am called", event.event._instance.range.start)
+    //console.log("I am called", event.event._instance.range.start)
     //Get date and time
     let start = this.getDateFormated(event.event._instance.range.start)
     let end = this.getDateFormated(event.event._instance.range.end)
@@ -297,7 +297,7 @@ console.log("Events :", response)
 
     }
     const temp2 = this.state.resEvents.concat(tempEvents)
-    console.log('Joint string', temp2)
+    //console.log('Joint string', temp2)
     this.setState({
       resEvents: temp2
     })

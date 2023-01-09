@@ -135,12 +135,12 @@ class PersonalInformation extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log("Sent: ", data)
+    //console.log("Sent: ", data)
     const postData = async()=>{
         if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
             await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                console.log("Response: ",response)
+                //console.log("Response: ",response)
                 this.props.updateStudentID(idNumber)
                 localStorage.setItem('studentIDNo', idNumber)
                 //localStorage.setItem('idNumber', " ")

@@ -168,5 +168,5 @@ export const onPressAddContact = () => (dispatch) => {
 };
 
 export const onLeave = (data) => (dispatch) => {
-  console.error(data);
+  //console.error(data);
 };
