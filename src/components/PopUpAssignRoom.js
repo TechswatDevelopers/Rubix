@@ -27,7 +27,7 @@ componentDidMount() {
     this.setState({ dateAndTime: myDate + myTime })
 }
 
-//Send Vetted status
+//Assign Room
   assignRoom(roomID){
     
     this.props.updateLoadingController(true);
@@ -37,7 +37,7 @@ componentDidMount() {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
       'RubixClientID': localStorage.getItem('clientID'),
-      'RubixResidenceRoomsID': roomID,
+      'RubixResidenceRoomsID': localStorage.getItem('roomID'),
     }
     
     const requestOptions = {
@@ -47,11 +47,11 @@ componentDidMount() {
       body: data
     };
 
-   //console.log("Posted Vetting Data: ", data)
+   console.log("Posted Room Assign Data: ", data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-       // console.log("Room response: ", response)
+       console.log("Room Assign response: ", response)
       })
     }
     postData().then(()=>{
@@ -81,11 +81,11 @@ componentDidMount() {
         body: data
       };
   
-     // console.log("Posted Vetting Data: ", data)
+     console.log("Posted Vetting Data: ", data)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
-          //console.log("DB response: ", response)
+          console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
@@ -158,10 +158,10 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log(" mY Posted Data:", data)
+      console.log("Lease Uploading:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          //console.log("Signature upload details:", response)
+          console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData

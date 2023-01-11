@@ -285,6 +285,11 @@ class RoomsTable extends React.Component {
                     : <button className="btn btn-sm btn-outline-success" 
                   onClick={(e)=>{
                     e.preventDefault()
+                    this.setState({
+                    currentRoom: room
+                  })
+                    console.log("The selcted room: ", room.RubixResidenceRoomsID)
+                    localStorage.setItem('roomID', room.RubixResidenceRoomsID)
                     //this.props.onPresRooms(e)
                     this.props.onPresPopUpAssign()
                     

@@ -56,6 +56,7 @@ class RoomAllocation extends React.Component {
 
   //Fetch User Res Data
   getStudentRoomDetails(studentID){
+    localStorage.setItem('roomID', '')
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
@@ -67,7 +68,6 @@ class RoomAllocation extends React.Component {
         'FloorNumber': "",
         'RoomNumber': "",
         'RubixRegisterUserID': studentID
-
       };
       //Ping Request Headers
       const requestOptions = {
@@ -76,21 +76,22 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      //console.log('Posted:', pingData)
+      console.log('Romms Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms List:", response.data.PostRubixUserData)
+          console.log("Students Rooms List:", response.data)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
-              availableRooms: response.data.PostRubixUserData
-            })
-            this.setState({
+              availableRooms: response.data.PostRubixUserData,
               buildingNumberList:  this.populate('BuildingNumber', response.data.PostRubixUserData),
               floorNumberList: this.populate('FloorNumber', response.data.PostRubixUserData),
               roomNumberList: this.populate('RoomNumber', response.data.PostRubixUserData)
             })
+            if(response.data.PostRubixUserData.length == 1){
+              localStorage.setItem('roomID', response.data.PostRubixUserData.RubixResidenceRoomsID)
+            }
 
           } else {
             //Show Room Details
