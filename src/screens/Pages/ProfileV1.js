@@ -298,7 +298,7 @@ mergePDFHandler()
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("documents data:", data)
+          console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 

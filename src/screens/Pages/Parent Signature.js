@@ -78,7 +78,7 @@ constructor(props) {
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
-      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 1)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 0)
     } else {
       alert("Please provide a signature")
     } 
