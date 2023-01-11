@@ -634,10 +634,7 @@ class NavbarMenu extends React.Component {
                         className={
                           activeKey === "residence" ? "active" : ""
                         }
-                        /* onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("AppContainer");
-                        }} */
+                       
                       >
                         <i className= {localStorage.getItem('role') == 'admin' ? 'icon-bubbles' : "icon-home"}></i> <span> {localStorage.getItem('role') == 'admin' ? 'Communication' :"Residence Information"}</span>
                       </a>

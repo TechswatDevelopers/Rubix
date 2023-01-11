@@ -145,6 +145,28 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-red mb-0",
   },
+  localStorage.getItem('check') == 'yes'
+  ?
+  {
+    UsedSize: "Proof of Payment",
+    Type: "Documents",
+    status: localStorage.getItem('leaseProgressMsg'),
+    FileType: "proof-of-pay",
+    TotalSize: "1tb",
+    UsedPer: localStorage.getItem('leaseProgress'),
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-red mb-0",
+  }
+  : {
+    UsedSize: "Proof of Payment",
+    Type: "Documents",
+    status: "",
+    FileType: "proof-of-pay",
+    TotalSize: "1tb",
+    UsedPer: 0,
+    ProgressBarClass:
+      "progress progress-xs progress-transparent custom-color-red mb-0",
+  }
 ];
 
 export const areaChartFileReport = {

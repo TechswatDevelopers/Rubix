@@ -206,7 +206,6 @@ class ProfileV1Page extends React.Component {
 
   //Merge Documents
 mergePDF(){
-
   // Async Function To Merge PDF Files Uploaded Using The Input Tag in HTML
 const mergePDFHandler = async () => {
   
@@ -270,7 +269,7 @@ mergePDFHandler()
         var byteArray = Base64Binary.decodeArrayBuffer(dataUrl); 
 
         merger.add(blob)
-        console.log("This is this document: ", merger)
+        //console.log("This is this document: ", merger)
 
       }
       
@@ -328,6 +327,13 @@ mergePDFHandler()
 
           //Check the lease
           const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
+          if(temp != undefined && temp.length != 0 && temp != null){
+            console.log("this is it: ", temp)
+            ///set show proof of pay tile
+            localStorage.setItem("check", 'yes')
+          } else {
+            console.log("this is it: ", temp)
+          }
           const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
           
         });
@@ -469,6 +475,16 @@ mergePDFHandler()
           case 'proof-of-income':
             {
               this.setState({ docType: "My Proof of Income",
+              topBarData: <>
+              
+              <br></br>
+              </> 
+               })
+            }
+          break
+          case 'proof-of-pay':
+            {
+              this.setState({ docType: "My Proof of Payment",
               topBarData: <>
               
               <br></br>
@@ -831,6 +847,11 @@ mergePDFHandler()
         {
           progress = this.props.myKeyFormProgress
         }
+        break;
+      case "proof-of-pay":
+        {
+          progress = 0
+        }
     }
     return progress
   }
@@ -887,6 +908,11 @@ mergePDFHandler()
       case "key-form":
         {
           message = this.props.myKeyFormMessage
+        }
+        break;
+      case "proof-of-pay":
+        {
+          message = "Please sign lease first"
         }
     }
     return message
@@ -1090,11 +1116,11 @@ mergePDFHandler()
       headers: { 'Content-Type': 'application/json' },
       body: pingData
     };
-    console.log("The information sent: ", pingData)
+    //console.log("The information sent: ", pingData)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixDeedofSuretyEmail', pingData, requestOptions)
       .then(response => {
-        console.log("The response = ", response)
+        //console.log("The response = ", response)
         alert("Email sent out.")
       })
     }
@@ -1137,7 +1163,7 @@ mergePDFHandler()
         <input style={{ display: 'none' }} id='upload-button' type="file" onChange={(e) => this.changeHandler(e)} />
         {
           this.getProgress(this.state.doc.FileType) != 100 || localStorage.getItem('role') == 'admin'
-          ?this.state.keyString != 'lease-agreement'
+          ?this.state.keyString != 'lease-agreement' 
           ?<button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
           : null
           : null
@@ -1147,7 +1173,7 @@ mergePDFHandler()
     </iframe>
         </>
         : <>
-          {this.state.keyString != 'lease-agreement'
+          {this.state.keyString != 'lease-agreement'/* || this.state.keyString != 'proof-of-pay' */
           ? <>
           {
             this.state.keyString == 'key-form'

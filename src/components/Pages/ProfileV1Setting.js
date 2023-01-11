@@ -1202,7 +1202,7 @@ this.props.updateStudentName(
         </div>
 
         <div className="body"> <h3>Personal Information</h3>
-            {
+            {/* {
               localStorage.getItem('role') == 'admin'
              ?
               <Row>
@@ -1223,7 +1223,7 @@ this.props.updateStudentName(
                     </Row>
                     
                   :null
-                  }
+                  } */}
 
           <form id="personalInfo">
             <div className="row clearfix">

@@ -25,7 +25,7 @@ class NextOfKin extends React.Component {
         dateAndTime: null,
         isLoad: false,
         showSearch: false,
-        consent: false,
+        consent: '0',
         value: 0
 
     };
@@ -142,12 +142,12 @@ class NextOfKin extends React.Component {
       body: data
   };
   
-  console.log("I am empty",data)
+  //console.log("I am empty",data)
   const postData = async() => {
       if (studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              console.log(response)
+              //console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
                 this.props.history.push("/relatives")
               }
@@ -169,7 +169,7 @@ class NextOfKin extends React.Component {
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
-  console.log("called", )
+  //console.log("called", )
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
     'RubixNextOfKiniConsent': this.state.consent,
@@ -186,12 +186,12 @@ const requestOptions = {
     body: data
 };
 
-console.log("I am empty",data)
+//console.log("I am empty",data)
 const postData = async() => {
   if (studentEmail != nextofKinEmail){
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          console.log("Data returned: ", response)
+          //console.log("Data returned: ", response)
             setTimeout(() => {
               this.props.updateLoadingController(false);
             }, 1000);
@@ -202,7 +202,13 @@ const postData = async() => {
           }, 2000);
       })
           
-  } else{
+  } else if(this.state.consent == '0'){
+    alert("Please approve Credit Check Consent to continue")
+    this.setState({
+      isLoad: false
+    })
+  } 
+  else{
     alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
     this.setState({
       isLoad: false
@@ -241,7 +247,7 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('User data:', data)
+    //console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
