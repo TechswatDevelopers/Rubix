@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign,
-   onPresRooms, onPresPopUpRemove, updateLoadingController, updateLoadingMessage } from "../actions";
+import { 
+  onPresAddEvent, onPresPopUpEvent, onPresPopUpAssign,
+  onPresRooms, onPresPopUpRemove, updateLoadingController, updateLoadingMessage } from "../actions";
 import { Form } from 'react-bootstrap';
 import axios from "axios";
 
@@ -17,7 +18,7 @@ constructor(props) {
 
   //Send Vetted status
   assignRoom(roomID){
-   
+  
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
@@ -36,7 +37,7 @@ constructor(props) {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
       })
     }
     postData()
@@ -63,7 +64,7 @@ constructor(props) {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminRemoveRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
