@@ -20,6 +20,7 @@ class RoomsTable extends React.Component {
     this.state = {
       currentRoom: {},
       dateAndTime: '',
+      blank: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII='
     }
   }
 
@@ -61,9 +62,48 @@ class RoomsTable extends React.Component {
       })
     }
     postData().then(()=>{
-      window.location.reload()
+      //window.location.reload()
     })
   }
+
+    //Post File Using Mongo
+    onPressUpload2(image, filetype, currentActiveKey) {
+      let userID
+      if(localStorage.getItem('role') == 'admin'){
+        userID = this.props.currentStudentiD
+      } else {
+        userID = this.state.myUserID
+      }
+      this.setState({ isLoad: true, })
+      const postDocument = async () => {
+        const data = new FormData()
+        data.append('image', image)
+        data.append('FileType', filetype)
+        data.append('RubixRegisterUserID', userID)
+        const requestOptions = {
+          title: 'Student Document Upload',
+          method: 'POST',
+          headers: { 'Content-Type': 'multipart/form-data', },
+          body: data
+        };
+        for (var pair of data.entries()) {
+          //console.log(pair[0], ', ', pair[1]);
+        }
+        await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+          .then(response => {
+            //console.log("The Upload reponse: ", response)
+            this.setState({ mongoID: response.data.post._id })
+            //this.onPressSignatureUpload(this.state.trimmedDataURL)
+          })
+      }
+      postDocument().then(() => {
+        localStorage.setItem('tab', currentActiveKey)
+        
+             /* //Populate Pop Up Event
+             this.props.onPresPopUpEvent() */
+      })
+        
+    }
 
   ///Tobe deleted
     //Post File Using Mongo
@@ -74,7 +114,7 @@ class RoomsTable extends React.Component {
         const data = new FormData()
         data.append('image', image)
         data.append('FileType', filetype)
-        data.append('RubixRegisterUserID', studentiD)
+        data.append('RubixRegisterUserID', localStorage.getItem('userID'))
         const requestOptions = {
           title: 'Student Document Upload',
           method: 'POST',
@@ -110,6 +150,41 @@ class RoomsTable extends React.Component {
   
     return new File([u8arr], filename, { type: mime });
   }
+
+    //Populate Booking Form
+    postBookingForm(signature, userid) {
+      const postDocument = async () => {
+        const data = {
+          'RubixRegisterUserID': userid,
+          'ClientId': localStorage.getItem('clientID'),
+          'Time_and_Date': this.state.dateAndTime,
+          'Signature': signature
+        }
+  
+        const requestOptions = {
+          title: 'Student Signature Upload',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: data
+        };
+        console.log("Posted 2nd Data:", data)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
+          .then(response => {
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+            const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+            //console.log("temp file:", temp)
+            this.onPressUpload(temp, 'booking-doc', 'signing')
+            //console.log("Signature upload details:", response)
+            this.setState({ docUrl: response.data.PostRubixUserData })
+            this.setState({
+              isLoad: false
+            })
+            alert("Documents created successfully")
+            
+          })
+      }
+      postDocument()
+    }
   
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
@@ -134,12 +209,12 @@ class RoomsTable extends React.Component {
             //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
-              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
               //console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
             } else if (tryval === 0) {
-              const dataUrl = 'data:application/pdf;base64,' + response.data.Base
+              const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
               //console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
@@ -270,7 +345,11 @@ class RoomsTable extends React.Component {
                     onClick={(e)=>{
                       e.preventDefault()
                       //this.props.onPresRooms(e)
-                      this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', Student, 0)
+                      this.postSignature(this.state.blank, Student, 0)
+                      setTimeout(() => {
+      
+                        this.postBookingForm(this.state.blank, localStorage.getItem('userID'),)
+                  }, 3000);
                       
                       }}>
                       <span>
@@ -292,6 +371,7 @@ class RoomsTable extends React.Component {
                     localStorage.setItem('roomID', room.RubixResidenceRoomsID)
                     //this.props.onPresRooms(e)
                     this.props.onPresPopUpAssign()
+                   
                     
                     }}>
                     <span>
