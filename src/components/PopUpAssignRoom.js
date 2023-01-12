@@ -171,7 +171,7 @@ componentDidMount() {
         this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', this.props.currentStudentiD, 0)
         setTimeout(() => {
       
-          this.postBookingForm(this.state.blank, localStorage.getItem('userID'),)
+          this.postBookingForm('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', localStorage.getItem('userID'),)
     }, 3000);
         
         //window.location.reload()
