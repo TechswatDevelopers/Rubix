@@ -66,44 +66,6 @@ class RoomsTable extends React.Component {
     })
   }
 
-    //Post File Using Mongo
-    onPressUpload2(image, filetype, currentActiveKey) {
-      let userID
-      if(localStorage.getItem('role') == 'admin'){
-        userID = this.props.currentStudentiD
-      } else {
-        userID = this.state.myUserID
-      }
-      this.setState({ isLoad: true, })
-      const postDocument = async () => {
-        const data = new FormData()
-        data.append('image', image)
-        data.append('FileType', filetype)
-        data.append('RubixRegisterUserID', userID)
-        const requestOptions = {
-          title: 'Student Document Upload',
-          method: 'POST',
-          headers: { 'Content-Type': 'multipart/form-data', },
-          body: data
-        };
-        for (var pair of data.entries()) {
-          //console.log(pair[0], ', ', pair[1]);
-        }
-        await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
-          .then(response => {
-            //console.log("The Upload reponse: ", response)
-            this.setState({ mongoID: response.data.post._id })
-            //this.onPressSignatureUpload(this.state.trimmedDataURL)
-          })
-      }
-      postDocument().then(() => {
-        localStorage.setItem('tab', currentActiveKey)
-        
-             /* //Populate Pop Up Event
-             this.props.onPresPopUpEvent() */
-      })
-        
-    }
 
   ///Tobe deleted
     //Post File Using Mongo
@@ -190,7 +152,7 @@ class RoomsTable extends React.Component {
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
-      //console.log("I am called incorrectly")
+      console.log("I am called incorrectly")
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
