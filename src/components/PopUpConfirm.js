@@ -139,7 +139,7 @@ getUserWitnessData() {
     this.props.updateLoadingMessage("Generating Lease...");
     //Request Data
     const data = {
-   "ImageUrl" : "https://jjpimages.rubix.mobi:449/" + filename,
+   "ImageUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
     }
 
@@ -149,11 +149,11 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-   // console.log('My lease data: ', data)
+   console.log('My lease data: ', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
-        //console.log("Final Lease Response: ", response)
+        console.log("Final Lease Response: ", response)
         
         //Send documents API
         const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
