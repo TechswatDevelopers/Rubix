@@ -226,8 +226,6 @@ const mergePDFHandler = async () => {
     }
     test()
     //console.log("New File: ", file)
-    
-  
   })
   
   //console.log("MergedPDF: ", this.state.myDocs)
@@ -1173,14 +1171,15 @@ mergePDFHandler()
     </iframe>
         </>
         : <>
-          {this.state.keyString != 'lease-agreement'/* || this.state.keyString != 'proof-of-pay' */
+          {this.state.keyString != 'lease-agreement' && this.state.keyString != 'proof-of-pay'/* || this.state.keyString != 'proof-of-pay' */
           ? <>
           {
             this.state.keyString == 'key-form'
             ?<>
             <iframe src={"https://adowaimages.rubix.mobi:449/2a32ee9c-d6fb-4f2c-9665-0c78e119385e.pdf"}width="100%" height="800px"></iframe>
             </>
-            :<>
+            : 
+            <>
             {
               this.state.keyString == 'surety-doc'
               ?<>
@@ -1199,6 +1198,7 @@ mergePDFHandler()
             </>
           }
           </>
+          
         
           : <p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not Any active lease, please make sure all documents are uploaded and you are assigned to a room.</p>
           
