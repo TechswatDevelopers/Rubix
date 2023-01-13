@@ -139,7 +139,7 @@ getUserWitnessData() {
     this.props.updateLoadingMessage("Generating Lease...");
     //Request Data
     const data = {
-   "ImageUrl" : "https://jjpimages.rubix.mobi:449/491_lease-agreement_Samkelo_Zondi_212.pdf" /* filename */,
+   "ImageUrl" : "https://jjpimages.rubix.mobi:449/" + filename,
    "UserCode" : localStorage.getItem('userCode'),
     }
 
