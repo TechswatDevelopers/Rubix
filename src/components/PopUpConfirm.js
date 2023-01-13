@@ -176,6 +176,7 @@ getUserWitnessData() {
     } else {
       vettedStatus = 0
     }
+    
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
@@ -332,7 +333,6 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer }) => ({
   isEventModal: mailInboxReducer.isEventModal,
   isPopUpConfirm: mailInboxReducer.isPopUpConfirm,
   currentStudentiD: navigationReducer.studentID,
-
   MyloadingController: navigationReducer.loadingController,
   loadingMessage: navigationReducer.loadingMessage,
 });
