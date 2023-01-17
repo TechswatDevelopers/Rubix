@@ -239,7 +239,6 @@ class Registration extends React.Component {
           }
       }
 
-
   componentDidMount(){
     document.body.classList.remove("theme-cyan");
     document.body.classList.remove("theme-purple");
