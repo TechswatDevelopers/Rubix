@@ -230,7 +230,7 @@ async componentDidMount(){
     //console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
-      await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + uniID)
+      await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + 1)
       .then(response => response.json())
       .then(data => {
           console.log("This data is for viewing: ", data)
