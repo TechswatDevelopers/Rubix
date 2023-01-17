@@ -216,7 +216,6 @@ const postData = async() => {
   }
 }
 postData().then(() => {
-
  
 //this.props.onPresPopUpEvent()
 //this.props.history.push("/login/" + localStorage.getItem('clientID'))
