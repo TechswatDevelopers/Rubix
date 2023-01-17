@@ -214,7 +214,7 @@ class Registration extends React.Component {
         //Ping email address
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixEmailCheck', pingData, requestOptions)
             .then(response => {
-                ////console.log(response.data.EmailResult )
+                ///console.log("Check out my weird ...:",response)
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
@@ -223,7 +223,7 @@ class Registration extends React.Component {
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
                 }, 3000);
-                 this.props.history.push("/logInformation")
+                 //this.props.history.push("/logInformation")
                  } else{
                   this.setState({
                     title: "Email validation failed",
