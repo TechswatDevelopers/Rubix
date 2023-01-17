@@ -56,12 +56,12 @@ class VarsityDetails extends React.Component {
         } else {
           if(this.state.uni == 1 || this.state.uni == 2){
             this.setState({
-              durations: [0, 5, 12]
+              durations: [0, 12]
             })
           } else {
             //console.log("Sila ")
             this.setState({
-              durations: [0,5,10]
+              durations: [0,10]
             })
           }
           //this.state.durations.pop(1)
