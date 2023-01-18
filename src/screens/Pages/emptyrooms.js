@@ -57,6 +57,9 @@ class EmptyRooms extends React.Component {
 
     if(localStorage.getItem('adminLevel') ==    1 || localStorage.getItem('adminLevel') == '1' ){
         this.getStudentRoomDetails()
+        this.setState({
+          isShow: true
+        })
     }
     const scrollToElement = () => this.testRef.current.scrollIntoView();
     scrollToElement()

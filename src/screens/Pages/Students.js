@@ -305,7 +305,7 @@ postData().then(()=>{
           }, 2000);
           } else {
             this.setState({
-              students: response.data.PostRubixUserData
+              students: response.data.PostRubixUserData,
             })
           
           }
