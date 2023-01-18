@@ -32,7 +32,7 @@ class Students extends React.Component {
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
           studentLeaseAmmend: [],
           listIndex: 0,
-          occups: ['New', 'Existing'],
+          occups: ['New', 'Returning'],
           occupancy: '',
         }
       }
