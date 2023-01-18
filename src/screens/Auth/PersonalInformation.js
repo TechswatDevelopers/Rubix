@@ -27,6 +27,8 @@ class PersonalInformation extends React.Component {
       yearOfRes: '2022',
       errorMessage: '',
       countryList: [],
+      genterList: ['Please select your Gender', 'Male', 'Female'],
+      myGender: '',
       value: 0,
       MarketingConsent: "0"
 
@@ -136,7 +138,7 @@ class PersonalInformation extends React.Component {
         'RubixUserPlatformID': localStorage.getItem('userplatformID') == null ? " " : localStorage.getItem('userplatformID'),
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
-        'Gender': this.state.userGender,
+        'Gender': this.state.myGender,
         'Nationality': this.state.country,
         'RegistrationYear': "2023",
         'MarketingConcent': this.state.MarketingConsent,
@@ -153,7 +155,7 @@ class PersonalInformation extends React.Component {
     };
     console.log("Sent: ", data)
     const postData = async()=>{
-        if (/* this.Validate() && this.state.userGender != null  &&  */document.getElementById('register').checkValidity() == true){
+        if (/* this.Validate() && this.state.userGender != null  &&  */document.getElementById('register').checkValidity() == true && this.state.myGender != '' && this.state.myGender != 'Please select your Gender' ){
             await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 //console.log("Response: ",response)
@@ -185,6 +187,7 @@ class PersonalInformation extends React.Component {
           alert("Please ensure that you entered all required information")
         }
     }
+
     postData()
   }
 
@@ -329,12 +332,24 @@ class PersonalInformation extends React.Component {
                           required
                         />
                       </div>
+                      <div className="form-group">
+                        <label className="control-label" >
+                          Gender
+                        </label>
+                        <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.myGender}>
+                          {
+                            this.state.genterList.map((gender, index) => (
+                              <option key={index} name='Nationality ' value={gender}>{gender}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
 
                       <div className="form-group">
                         <label className="control-label" >
                           Country
                         </label>
-                        <select className="form-control" onChange={(e) => this.setState({ country: e.target.value })} value={this.state.country}>
+                        <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.country}>
                           {
                             this.state.countryList.map((country, index) => (
                               <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>

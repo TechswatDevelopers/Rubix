@@ -519,7 +519,7 @@ class Login extends React.Component {
                             }}
                           >
                             Don't have an account?{" "}
-                            <a href="registration">Register</a>
+                            <a href="registration">Apply / Register</a>
                           </span>
                           <span
                             style={{

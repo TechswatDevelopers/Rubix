@@ -1214,9 +1214,14 @@ mergePDFHandler()
           <div className="w-auto p-3">
             { !this.state.myLease
               ? <>
+              
               <p>Loading document...</p>
             </>
-            :<><iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
+            :<>
+            <div className="bg-danger p-1">
+                <p className="text-white">Please Note that there is a <strong>R700</strong> fee applicable after signing the below lease.</p>
+              </div>
+            <iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
            </iframe>
            <input type="email" placeholder="Please enter surety email" onChange={(e) => {this.setState({suretyEmail: e.target.value})}}></input>
            <button className="btn btn-primary" onClick={(e) => {this.nextOfKinEmail()}}>Send Surety Sign Email</button>
@@ -1330,7 +1335,7 @@ mergePDFHandler()
             localStorage.getItem('role') == 'admin'
             ? null
             : <PageHeader
-              HeaderText="Rubix User Profile"
+              HeaderText="Adowa Living User Profile"
               Breadcrumb={[
                 { name: "Page", navigate: "" },
                 { name: "My Profile", navigate: "" },
