@@ -178,7 +178,6 @@ class PersonalInformation extends React.Component {
                   }, 1000)
                   alert("There was an error in submitting your information, please try again")
                 }
-                
             })
                 
         } else{
