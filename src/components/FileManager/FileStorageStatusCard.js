@@ -13,13 +13,12 @@ class FileStorageStatusCard extends React.Component {
           <p className="mb-0">
             {Type}{" "}
             &nbsp;&nbsp;
-            
-            {/* <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button> */}
+          {/* <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button> */}
           {
-            localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 
-            
-            ?
-            <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
+            localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 && Type != "booking-doc"
+          ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
+          : Type == "booking-doc" 
+          ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
           : null
           }
           </p>

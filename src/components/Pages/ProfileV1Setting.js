@@ -151,7 +151,6 @@ class ProfileV1Setting extends React.Component {
   
   //Selecting Varsity
   onVarsitySelect(e){
-    
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
         durations: [0, 5, 12]
@@ -584,7 +583,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-        //  console.log("All Student data", response.data.PostRubixUserData[0])
+          console.log("All Student data", response.data.PostRubixUserData[0])
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -594,16 +593,7 @@ class ProfileV1Setting extends React.Component {
             payment:response.data.PostRubixUserData[0].PaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
           })
-          /*  //Set Payment Method
-           for (let i = 0; i < this.state.payMethods.length; i++){
-            //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
-            if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
-              this.setState({
-                payment: i,
-              })
-            }
-          } */
-
+          
 
           //Get Residence Name 
           this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)

@@ -997,6 +997,7 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
+      
       //console.log("Posted Data1:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
