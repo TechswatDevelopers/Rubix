@@ -223,7 +223,7 @@ class Registration extends React.Component {
                 setTimeout(() => {
                   this.props.updateLoadingController(false);
                 }, 3000);
-                 //this.props.history.push("/logInformation")
+                 this.props.history.push("/logInformation")
                  } else{
                   this.setState({
                     title: "Email validation failed",

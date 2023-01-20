@@ -10,6 +10,8 @@ import { Form } from 'react-bootstrap';
 import axios from "axios";
 
 class PopUpConfirm extends React.Component {
+
+
     //Initial State
 constructor(props) {
   super(props)
@@ -20,6 +22,9 @@ constructor(props) {
     
   }
 }
+
+
+
 componentDidMount() {
   window.scrollTo(0, 0);
  
@@ -29,6 +34,7 @@ componentDidMount() {
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate + myTime })
 }
+
 
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
@@ -67,6 +73,7 @@ componentDidMount() {
     })
   }
 
+
    //Converts base64 to file
  dataURLtoFile(dataurl, filename) {
   var arr = dataurl.split(','),
@@ -81,6 +88,8 @@ componentDidMount() {
 
   return new File([u8arr], filename, { type: mime });
 }
+
+
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
     this.props.updateLoadingMessage("Generating Lease...");
@@ -121,6 +130,8 @@ componentDidMount() {
     postDocument()
   }
 
+  
+
 //Coleect User Signing Info
 getUserWitnessData() {
   //Fetch IP Address
@@ -131,6 +142,8 @@ getUserWitnessData() {
   }
   getData()
 }
+
+
 
   //Send Lease for Signing
   sendFinalLease(filename){
@@ -165,6 +178,37 @@ getUserWitnessData() {
     }
     postData()
   }
+
+
+    ///Verify Booking form 
+    verifyBookingForm() {
+      const postDocument = async () => {
+        const data = {
+          'RubixDocumentID':"1384",
+          'RubixBookingShowValue':  '1'
+        }
+        const requestOptions = {
+          title: 'Booking Form Show Update',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: data
+        };
+        console.log("Posted booking form verify Data:", data)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixBookingShowAdd', data, requestOptions)
+          .then(response => {
+            console.log("This is the booking form response: ", response)
+         //this.convertBase64ToBlob(response.data.Base)
+            //console.log("temp file:", temp)
+            //Populate Pop Up Event
+            alert("Booking form verified")
+             //this.props.onPresPopUpEvent()
+            //window.location.reload()
+            
+          })
+      }
+      postDocument()
+    }
+  
 
 
   //Send Vetted status
@@ -260,10 +304,23 @@ getUserWitnessData() {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="title" id="defaultModalLabel">
-               {Title}
+               { FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '0' 
+               ? 'Verify Booking Form'
+               :
+               
+               Title}
               </h4>
             </div>
-            <div className="modal-body">
+
+            {
+              FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '0' 
+              ? <>
+              <div className="modal-body">
+              <p>I confirm that all the information on the Booking Form is correct and form should be open for student to sign.</p>
+              </div>
+              </>
+              :
+              <div className="modal-body">
               {Body}
               <label className="control-label sr-only" >
                           Vet Comment
@@ -274,24 +331,38 @@ getUserWitnessData() {
                           placeholder="Vetting comment..."
                           type="email"
                         />
-            </div>
+            </div>}
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
+
             Function()
-                  this.sendVettingStatus(FileType, DocID, 'correct')
                   if(FileType == 'lease-agreement'){
-                    
+                    this.sendVettingStatus(FileType, DocID, 'correct')
                     setTimeout(() => {
                       this.sendFinalLease(Filename)
                     }, 3000);
+                  } 
+                  else if(FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '0' ){
+                    this.verifyBookingForm()
+                  } else {
+                    this.sendVettingStatus(FileType, DocID, 'correct')
                   }
                   this.props.onPresPopUpConfirm();
-
                 }
                 }>
-                Vet as Correct
+                  {
+                    FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '0' 
+                    ? "Yes, verify"
+                    :
+                'Vet as Correct'}
               </button>
-              <button
+
+              
+              {
+                FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '0' 
+                ? null:
+                
+                <button
                 type="button"
                 onClick={(e) => {
                   Function()
@@ -309,7 +380,9 @@ getUserWitnessData() {
                 data-dismiss="modal"
               >
                 Vet as Incorrect
-              </button>
+              </button>}
+
+
               <button
                 type="button"
                 onClick={(e) => {

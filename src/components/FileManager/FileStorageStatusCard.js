@@ -4,8 +4,20 @@ import PropTypes from "prop-types";
 import { ProgressBar } from "react-bootstrap";
 
 class FileStorageStatusCard extends React.Component {
+
+  //Render the correct button
+
+
+
   render() {
-    const { TotalSize, UsedSize, Type, UsedPer, ProgressBarClass, MyFunction } = this.props;
+    const { TotalSize, UsedSize, Type, UsedPer, ProgressBarClass, MyFunction, Key } = this.props;
+
+    let myButton;
+    if(localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 && Type != "booking-doc"){
+
+    } else if (localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 && Type == "booking-doc"){
+
+    }
     return (
       <div className="card modal-open m-b-5">
         <div className="body">
@@ -14,12 +26,19 @@ class FileStorageStatusCard extends React.Component {
             {Type}{" "}
             &nbsp;&nbsp;
           {/* <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button> */}
+          
           {
-            localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 && Type != "booking-doc"
+           ( localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 && Key != "booking-doc")
           ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
-          : Type == "booking-doc" 
-          ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
-          : null
+                : <>
+                {
+                localStorage.getItem('role') == 'admin'  && Key == "booking-doc" && localStorage.getItem('bookingShow') == '0'
+                  ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Verify</button>
+                  : null
+                  }
+                  </>
+                
+                
           }
           </p>
         </div>

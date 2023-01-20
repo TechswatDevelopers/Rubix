@@ -323,6 +323,7 @@ mergePDFHandler()
           else {
             this.setState({doc: null})
           }
+          const tempBooking = data.post.filter(doc => doc.FileType == 'booking-doc')[0]
 
           //Check the lease
           const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
@@ -391,8 +392,6 @@ mergePDFHandler()
     this.changeHeading(file)
     this.props.updateLoadingController(false);
   }, 1000);
-
-    
     
     if (temp.length != 0) {
       this.setState({ doc: temp[0] })
@@ -1113,6 +1112,7 @@ mergePDFHandler()
     postDocument()
   }
 
+
   //On Press loading data
   setLoadingPage(time,) {
     this.setState({ isLoad: true, })
@@ -1407,6 +1407,7 @@ mergePDFHandler()
                                           UsedPer={this.getProgress(data.FileType)}
                                           ProgressBarClass={`${data.ProgressBarClass}`}
                                           MyFunction = {()=>{this.props.onPresPopUpConfirm()}}
+                                         Key = {data.FileType}
                                         />
                                       </div>
                                     );

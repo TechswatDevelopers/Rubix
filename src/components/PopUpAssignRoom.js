@@ -30,7 +30,6 @@ componentDidMount() {
 
 //Assign Room
   assignRoom(roomID){
-    
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Assigning to room...");
    
@@ -59,7 +58,7 @@ componentDidMount() {
       this.sendAuttingStatus(roomID)
     })
   }
-
+  
   
     //Populate Booking Form
     postBookingForm(signature, userid) {
@@ -70,7 +69,6 @@ componentDidMount() {
           'Time_and_Date': this.state.dateAndTime,
           'Signature': signature
         }
-  
         const requestOptions = {
           title: 'Student Signature Upload',
           method: 'POST',
@@ -96,7 +94,9 @@ componentDidMount() {
       postDocument()
     }
 
-      //Post File Using Mongo
+
+
+//Post File Using Mongo
   onPressUpload2(image, filetype, currentActiveKey) {
     let userID
     if(localStorage.getItem('role') == 'admin'){
@@ -117,11 +117,11 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("The Upload reponse: ", response)
+          console.log("The Upload reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
           //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
@@ -134,11 +134,12 @@ componentDidMount() {
            /* //Populate Pop Up Event
            this.props.onPresPopUpEvent() */
     })
-      
   }
 
-    //Send Auditted status
-    sendAuttingStatus(roomID){
+
+
+//Send Auditted status
+  sendAuttingStatus(roomID){
       this.props.updateLoadingMessage("Sending Audit Data..");
       const data = {
         'UserCode':  localStorage.getItem('userCode'),
@@ -158,12 +159,11 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json' },
         body: data
       };
-  
-     console.log("Posted Vetting Data: ", data)
+     //console.log("Posted Vetting Data: ", data)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
-          console.log("DB response: ", response)
+          //console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
@@ -173,15 +173,14 @@ componentDidMount() {
       
           this.postBookingForm('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', localStorage.getItem('userID'),)
     }, 5000);
-        
         //window.location.reload()
       })
     }
 
+
   //Post File Using Mongo
   onPressUpload(image, filetype, currentActiveKey) {
     this.props.updateLoadingMessage("Uploading Lease Document...");
-    
     const postDocument = async () => {
       const data = new FormData()
       data.append('image', image)
@@ -206,21 +205,21 @@ componentDidMount() {
     postDocument()
   }
 
+
+
  //Converts base64 to file
  dataURLtoFile(dataurl, filename) {
-
   var arr = dataurl.split(','),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
     u8arr = new Uint8Array(n);
-
   while (n--) {
     u8arr[n] = bstr.charCodeAt(n);
   }
-
   return new File([u8arr], filename, { type: mime });
 }
+
 
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
@@ -259,6 +258,8 @@ componentDidMount() {
     }
     postDocument()
   }
+
+
     //Coleect User Signing Info
     getUserWitnessData() {
       //Fetch IP Address

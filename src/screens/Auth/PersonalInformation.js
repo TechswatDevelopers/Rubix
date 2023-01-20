@@ -198,7 +198,6 @@ class PersonalInformation extends React.Component {
   }
 
   onValueChange(e){
-
     this.setState({
       yearOfRes: e.target.value
     })
@@ -206,7 +205,7 @@ class PersonalInformation extends React.Component {
   
   render() {
     return (
-      <div className={ "theme-grey"/* this.props.rubixThemeColor */}>
+      <div className={ "theme-grey"}>
         <Helmet>
                 <meta charSet="utf-8" />
                 <title>Personal Information</title>

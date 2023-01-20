@@ -565,9 +565,11 @@ class ProfileV1Setting extends React.Component {
 
   };
 
+
   //Get Specific User Data
   getStudentData(userID){
     //console.log('Current Student Rubix ID: ', userID)
+    localStorage.setItem('bookingShow', '')
     const data = {
       'RubixRegisterUserID': userID,
       "RubixClientID" : localStorage.getItem('clientID'),
@@ -593,6 +595,10 @@ class ProfileV1Setting extends React.Component {
             payment:response.data.PostRubixUserData[0].PaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
           })
+          if(response.data.PostRubixUserData[0].RubixBookingShowValue != undefined){
+            localStorage.setItem('bookingShow', (response.data.PostRubixUserData[0].RubixBookingShowValue).toString())
+          }
+          //console.log("This:     ", localStorage.getItem('bookingShow').toString())
           
 
           //Get Residence Name 
@@ -620,8 +626,11 @@ this.props.updateStudentName(
     postData()
   }
 
+
+
   //Get All User Data
   getAllUserData(userId) {
+    localStorage.setItem('bookingShow', '')
 
     const data = {
       'RubixRegisterUserID': userId,
@@ -643,6 +652,9 @@ this.props.updateStudentName(
           year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
           duration: response.data.PostRubixUserData[0].Duration
           })
+          if(response.data.PostRubixUserData[0].RubixBookingShowValue != undefined){
+            localStorage.setItem('bookingShow', (response.data.PostRubixUserData[0].RubixBookingShowValue).toString())
+          }
 
           //Set Payment Method
           for (let i = 0; i < this.state.payMethods.length; i++){
@@ -676,8 +688,9 @@ this.props.updateStudentName(
         })
     }
     postData()
-
   }
+
+
 
   //Set Message according to percentage
   setMessage(percent) {
@@ -694,6 +707,8 @@ this.props.updateStudentName(
     }
     return message
   }
+
+
 
   //Get user document progress
   setDocumentProgress() {
