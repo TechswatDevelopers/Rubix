@@ -109,7 +109,7 @@ class Residence extends React.Component {
     await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + resID)
     .then(response => response.json())
     .then(data => {
-      //console.log("Images:", data.post)
+      console.log("Images:", data.post)
       for(let i = 0; i <= data.post.length - 1; ++i){
 
        if(data.post[i].FileType != "ResManager"){ 
@@ -121,6 +121,7 @@ class Residence extends React.Component {
         )
         }
         else {
+          console.log("Images:", data.post)
           this.setState({
             resManagerPic: 'https://adowaimages.rubix.mobi:449/' +  data.post[i].filename
           })
@@ -128,7 +129,7 @@ class Residence extends React.Component {
         }
       }
      
-      console.log('In the gallery: ', this.state.gallery)
+      console.log('In the gallery: ', this.state.resManagerPic)
     })
   }
   fetchData()
