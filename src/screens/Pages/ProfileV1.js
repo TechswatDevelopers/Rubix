@@ -289,6 +289,7 @@ mergePDFHandler()
   loadDocuments(userID) {
     //Set Loading Screen ON
     localStorage.setItem('nationality', '')
+    localStorage.setItem("check", 'no')
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
     console.log("Loading Student Documents...");
@@ -1204,7 +1205,15 @@ mergePDFHandler()
           </>
           
         
-          : <p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not Any active lease, please make sure all documents are uploaded and you are assigned to a room.</p>
+          : <><p style={{ textAlign: 'center' }} className="lead">Oops, it seems that you have not Any active lease, please make sure all documents are uploaded and you are assigned to a room.</p>
+
+
+          {
+            this.state.keyString == 'proof-of-pay' && localStorage.getItem('check') == 'yes'
+            ? <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A File</button>
+            : null
+          }
+          </>
           
           
            }

@@ -83,7 +83,7 @@ class Residence extends React.Component {
           });
 
           //Load amenities
-          for(let i = 4; i <= temp.length - 1; ++i){
+          for(let i = 6; i <= temp.length - 1; ++i){
             this.state.amenities.push(temp[i])
           }
 
