@@ -26,6 +26,7 @@ class Registration extends React.Component {
       idType: '',
       errorMessage: '',
       userGender: 'Male',
+      countryList: [],
     }
   }
 
@@ -264,10 +265,14 @@ class Registration extends React.Component {
 
       ///On Change ID Type
       onChangeValue(event) {
+        if(event.target.value == 'SA ID')
+          {
+            localStorage.setItem('country', "South Africa, Republic of")
+        }
         this.setState({
           idType: event.target.value,
         })
-        console.log(event.target.value);
+       // console.log(event.target.value);
       }
 
 
@@ -281,6 +286,27 @@ class Registration extends React.Component {
 
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     //console.log("client logo", this.props.clientBG)
+
+    const fetchData = async () => {
+      //Set Loading Screen ON
+   this.props.updateLoadingController(true);
+   this.props.updateLoadingMessage("Loading Countries List...");
+     //Fetch Countries List
+     await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
+     .then(response => response.json())
+     .then(data => {
+         //console.log("data is ", data.data)
+         this.setState({ countryList: data.data })
+         console.log("this is the countryList:", this.state.countryList)
+         //setCountryList(data.data)
+       });
+   }
+   fetchData().then(()=>{
+    //Set timer for loading screen
+  setTimeout(() => {
+    this.props.updateLoadingController(false);
+  }, 1000);
+  })
   }
   render() {
     //const user = useContext(MyProvider);
@@ -377,6 +403,21 @@ class Registration extends React.Component {
                         <input type='text' name="passportNumber" className="form-control" id='passportNumber'
                           required='' placeholder='Enter your valid Passport Number' ></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
+
+                        <div className="form-group">
+                        <label className="control-label" >
+                          Country
+                        </label>
+                        <select className="form-control" onChange={(e) => {
+                          localStorage.setItem('country', e.target.value)
+                          this.setState({ country: e.target.value })}} value={this.state.country}>
+                          {
+                            this.state.countryList.map((country, index) => (
+                              <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
                       </div>
                       : null
                       

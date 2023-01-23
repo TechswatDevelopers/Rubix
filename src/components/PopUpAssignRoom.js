@@ -37,7 +37,7 @@ componentDidMount() {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
       'RubixClientID': localStorage.getItem('clientID'),
-      'RubixResidenceRoomsID': roomID,
+      'RubixResidenceRoomsID': localStorage.getItem('roomID'),
     }
     
     const requestOptions = {
@@ -47,11 +47,11 @@ componentDidMount() {
       body: data
     };
 
-   //console.log("Room assign Data: ", data)
+   console.log("Room assign Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        //console.log("Room response: ", response)
+        console.log("Room response: ", response)
       })
     }
     postData().then(()=>{

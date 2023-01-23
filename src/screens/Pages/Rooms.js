@@ -60,6 +60,7 @@ class RoomAllocation extends React.Component {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
         'ResidenceName': "",
+        'Gender': '',
         'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' 
         ? this.props.currentRES
         : localStorage.getItem('resID'),
@@ -152,6 +153,7 @@ class RoomAllocation extends React.Component {
 
   //Get Romms Filters
   getRoomsFilters(buildingNumber, floorNumber, roomNumber, studentID, gender){
+    //console.log("Im called npow now")
     const pingData = {
         'UserCode': localStorage.getItem('userCode'),
         'RubixClientID': localStorage.getItem('clientID'),
@@ -173,16 +175,16 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      //console.log('Posted:', pingData)
+      console.log('Posted for now now:', pingData)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms Dropdown:", response)
+          console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
               availableRooms: response.data.PostRubixUserData,
-              showFilters: true
+              //showFilters: true
             })
 
             this.setState({
@@ -433,7 +435,7 @@ class RoomAllocation extends React.Component {
               {  <>
               <label>Buiding Number</label>
         <select className="form-control" onChange={(e)=>{
-          this.getRoomsFilters(e.target.value, '', '', this.props.currentStudentiD)
+          this.getRoomsFilters(e.target.value, '', '', this.props.currentStudentiD, '' )
           this.setState({buildingNumber: e.target.value})}} value={this.state.buildingNumber}>
         {
             
@@ -446,7 +448,7 @@ class RoomAllocation extends React.Component {
     { <> 
               <label>Floor Number</label>
         <select className="form-control" onChange={(e)=>{
-          this.getRoomsFilters('', e.target.value, '', this.props.currentStudentiD)
+          this.getRoomsFilters('', e.target.value, '', this.props.currentStudentiD, '')
           this.setState({floorNumber: e.target.value})}} value={this.state.floorNumberList}>
         {
             
@@ -461,7 +463,7 @@ class RoomAllocation extends React.Component {
     {   <> 
               <label>Room Number</label>
         <select className="form-control" onChange={(e)=>{
-          this.getRoomsFilters('', '', e.target.value, this.props.currentStudentiD)
+          this.getRoomsFilters('', '', e.target.value, this.props.currentStudentiD, '')
           this.setState({roomNumber: e.target.value})}} value={this.state.roomNumberList}>
         {
             
@@ -471,20 +473,20 @@ class RoomAllocation extends React.Component {
         }
     </select> </>}
 
-    {   <> 
+{/*     {   <> 
               <label>Room Gender</label>
         <select className="form-control" onChange={(e)=>{
           this.getRoomsFilters('', '', '', this.props.currentStudentiD, e.target.value == 'Female' ? 'F' : 'M')
-          this.setState({ roomGender: e.target.value == 'Female' ? 'F' : 'M'})}} value={this.state.roomNumberList}>
+          this.setState({ roomGender: e.target.value == 'Female' ? 'F' : 'M'})}} value={this.state.gender}>
         {
             
          this.state.genderRoomList.map((gender, index)=> (
             <option key={index} name='RoomGender' value = {gender}>{gender}</option>
         ))   
         }
-    </select> </>}
+    </select> </>} */}
     
-              <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '', this.props.currentStudentiD)}>Reset</button>
+              <button className="btn btn-primary" onClick={(e)=>this.getRoomsFilters('', '', '', this.props.currentStudentiD, '')}>Reset</button>
               </Row>
               </>}
               />

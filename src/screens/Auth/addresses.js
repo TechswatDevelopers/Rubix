@@ -40,7 +40,7 @@ class Addresses extends React.Component {
         'RubixRegisterUserID': this.state.myUserID,
         'RegisterUserStreetNameAndNumer': street_address,
         'RegisterUserProvince': this.state.prov,
-        'RegisterUserCountry': this.state.country,
+        'RegisterUserCountry': localStorage.getItem('country'),
       };
       for (let i = 0; i < form.elements.length; i++) {
         const elem = form.elements[i];
@@ -53,10 +53,10 @@ class Addresses extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
       };
-      //console.log(data)
+      console.log("Check:",data)
       const postData = async () => {
 
-        if (this.state.location != null && this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
+        if (this.state.location != null && this.state.prov != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
               //console.log(response)
@@ -81,7 +81,7 @@ class Addresses extends React.Component {
       const data = {
         'RubixRegisterUserID': this.state.myUserID,
         'RegisterUserProvince': this.state.prov,
-        'RegisterUserCountry': this.state.country,
+        'RegisterUserCountry': localStorage.getItem('country'),
       };
 
       for (let i = 0; i < form.elements.length; i++) {
@@ -89,7 +89,7 @@ class Addresses extends React.Component {
         data[elem.name] = elem.value
       }
 
-      //console.log("posted Data: ", data)
+      console.log("posted Data: ", data)
       const requestOptions = {
         title: 'Address Form',
         method: 'POST',
@@ -98,7 +98,7 @@ class Addresses extends React.Component {
       };
 
       const postData = async () => {
-        if ( this.state.prov != null && this.state.country != null /* && document.getElementById('addresses').checkValidity() == true */) {
+        if ( this.state.prov != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
               //console.log("The response: ",response)
@@ -314,11 +314,11 @@ class Addresses extends React.Component {
                           </select>}
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group d-none">
                         <label className="control-label" >
                           Country
                         </label>
-                        <select className="form-control" onChange={(e) => this.setState({ country: e.target.value })} value={this.state.country}>
+                        <select className="form-control" onChange={(e) => this.setState({ country: e.target.value })} value={localStorage.getItem('country')}>
                           {
                             this.state.countryList.map((country, index) => (
                               <option key={index} name='RegisterUserCountry' value={country.Country_Name}>{country.Country_Name}</option>

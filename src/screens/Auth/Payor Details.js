@@ -160,7 +160,7 @@ class PayorDetails extends React.Component {
   
   //console.log("I am empty",data)
   const postData = async() => {
-      if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
+      if ( idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
           .then(response => {
               console.log(response)
@@ -601,7 +601,7 @@ else{
                       
                       <div className="form-group">
                         <label className="control-label" >
-                        ID/Reg Number
+                        ID/Reg. Number
                             </label>
                             <input type='number' name="PayorID" className='form-control' id='IDNumber' 
                     required='' /* maxLength = '13' minLength='13' */ placeholder='Enter ID/Reg Number'></input>

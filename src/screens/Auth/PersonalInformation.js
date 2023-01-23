@@ -139,7 +139,7 @@ class PersonalInformation extends React.Component {
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.myGender,
-        'Nationality': this.state.country,
+        'Nationality': localStorage.getItem('country'),
         'RegistrationYear': "2023",
         'MarketingConcent': this.state.MarketingConsent,
     };
@@ -158,10 +158,10 @@ class PersonalInformation extends React.Component {
         if (/* this.Validate() && this.state.userGender != null  &&  */document.getElementById('register').checkValidity() == true && this.state.myGender != '' && this.state.myGender != 'Please select your Gender' ){
             await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                //console.log("Response: ",response)
+                console.log("Response: ",response)
 
                 //Check if successful 
-                if(response.data.PostRubixUserData[0].ResponceMessage != undefined && response.data.PostRubixUserData[0].ResponceMessage != null && response.data.PostRubixUserData[0].ResponceMessage == "Record successfully inserted"){
+                if(response.data.PostRubixUserData[0].ResponceMessage != undefined && response.data.PostRubixUserData[0].ResponceMessage != null && response.data.PostRubixUserData[0].ResponceMessage == "Record successfully inserted"  || response.data.PostRubixUserData[0].ResponceMessage == "Record successfully Updated"){
 
                   this.props.updateStudentID(idNumber)
                   localStorage.setItem('studentIDNo', idNumber)
@@ -339,17 +339,17 @@ class PersonalInformation extends React.Component {
                         <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.myGender}>
                           {
                             this.state.genterList.map((gender, index) => (
-                              <option key={index} name='Nationality ' value={gender}>{gender}</option>
+                              <option key={index} name='Gender ' value={gender}>{gender}</option>
                             ))
                           }
                         </select>
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label" >
+                        <label className="control-label d-none" >
                           Country
                         </label>
-                        <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.country}>
+                        <select className="form-control d-none" onChange={(e) => this.setState({ country: e.target.value })} value={this.state.country}>
                           {
                             this.state.countryList.map((country, index) => (
                               <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>

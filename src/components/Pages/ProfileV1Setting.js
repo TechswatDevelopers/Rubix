@@ -42,6 +42,7 @@ class ProfileV1Setting extends React.Component {
       courseList: [],
       yearList: [],
       countryList: [],
+      country: '',
       fundingSources: ["Please select funding source"],
       bankTypes: ['Please select account type', 'Savings', 'Cheque'],
       payment: '',
@@ -84,7 +85,8 @@ class ProfileV1Setting extends React.Component {
       prov: null,
       showSearch: false,
       myTempAddress: '',
-      funding: '',
+      funding: '',  genterList: ['Please select your Gender', 'Male', 'Female'],
+      myGender: '',
     };
   }
 
@@ -602,6 +604,8 @@ console.log("down")
             payment:response.data.PostRubixUserData[0].PaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
             funding: response.data.PostRubixUserData[0].FundingSource,
+            myGender: response.data.PostRubixUserData[0].Gender,
+            country: response.data.PostRubixUserData[0].Nationality,
           })
 
            //Set Temp Local Storage
@@ -665,6 +669,8 @@ this.props.updateStudentName(
           payment:response.data.PostRubixUserData[0].PaymentMethod,
           hearAbout: response.data.PostRubixUserData[0].HearAbout,
           funding: response.data.PostRubixUserData[0].FundingSource,
+          myGender: response.data.PostRubixUserData[0].Gender,
+          country: response.data.PostRubixUserData[0].Nationality,
           })
 
           //Set Temp Local Storage
@@ -865,6 +871,8 @@ this.props.updateStudentName(
       this.getStudentData(this.props.currentStudentiD)
       fetchDropDownData()
     } 
+
+    this.fetchCountriesData()
   }
 
   fetchUserUniversityData = async () => {
@@ -929,7 +937,7 @@ this.props.updateStudentName(
       .then(response => response.json())
       .then(data => {
         if (data.data != null || data.data != undefined) {
-          //console.log('countries', data)
+          console.log('countries', data)
           this.setState({ countryList: data.data })
         } else {
           alert("Error loading countries list: " + data.message)
@@ -998,52 +1006,131 @@ this.props.updateStudentName(
     })
   }
 
-  SubmitRelatives(e){
-    //console.log("called")
-    //Set timer for loading screen
-   this.setState({
-     isLoad: true
-   })
-   e.preventDefault();
-   const form = document.getElementById('nextOfKin1');
-   const form2 = document.getElementById('nextOfKin2');
- 
-   const data = {
-     'RubixRegisterUserID': this.state.myUserID,
-   };
-   for (let i=0; i < form.elements.length; i++) {
-       const elem = form.elements[i];
-       data[elem.name] = elem.value
-   }
+//final submit check
+UpdatePayorInfo(e){
+  //Set timer for loading screen
+ this.setState({
+   isLoad: true
+ })
+ e.preventDefault();
 
-   for (let i=0; i < form2.elements.length; i++) {
-       const elem = form2.elements[i];
-       data[elem.name] = elem.value
-   }
+ const form = document.getElementById('payor');
+ var idNumber = document.getElementById("payorID").value;
+ var nextofKinEmail = document.getElementById("PayorEmail").value;
+ const studentID =  localStorage.getItem('studentIDNo')
+ const studentEmail =  localStorage.getItem('email')
+
+ if(this.state.location !=null){
+   const locations = document.getElementById('location');
+   const postCode = document.getElementById('post-code').value;
+   const street_address = this.state.location['value']['structured_formatting']['main_text'] + ', ' + postCode
  
-   const requestOptions = {
-       title: 'Relatives Form',
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: data
-   };
-   //console.log(data)
-   const postData = async() => {
-     await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
-     .then(response => {
-         //console.log(response)
-         
-         this.setState({
-           isLoad: false
+ const data = {
+     'RubixRegisterUserID': this.state.myUserID,
+     'PayorAdrress': street_address,
+     'ClientID': 1,
+     'PaymentMethod': this.state.payment,
+     'FundingSource': this.state.funding,
+     'PayorConcent': this.state.consent,
+     'PayorMarketingConcent': this.state.MarketingConsent,
+     'PayorAccountHolderName': '',
+     'PayorBankName': '',
+     'PayorBranchCode': '',
+     'PayorAccountNumber': '',
+     'PayorRef': '',
+     'PayorBranchName': '',
+ };
+
+ for (let i=0; i < form.elements.length; i++) {
+     const elem = form.elements[i];
+     data[elem.name] = elem.value
+ }
+
+ const requestOptions = {
+     title: 'Payor Form',
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: data
+ };
+ 
+ console.log("I am empty",data)
+ const postData = async() => {
+     if (idNumber != studentID && studentEmail != nextofKinEmail){
+         await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
+         .then(response => {
+             console.log(response)
+             if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
+               
+          this.props.onPresPopConfirmInfo()
+             }
+             this.setState({
+               isLoad: false
+             })
          })
-     })
-   }
-   postData().then(() => {
+             
+     } else{
+       alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
+       this.setState({
+         isLoad: false
+       })
+     }
+ }
+ postData().then(() => {
+   //this.props.onPresPopUpEvent()
+   //this.props.history.push("/login/" + localStorage.getItem('clientID'))
+ })
+} else if(document.getElementById('streetAddress') != null)  {
  
-    this.props.onPresPopConfirmInfo()
-     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
-   })
-  }
+ const data = {
+   'RubixRegisterUserID': this.state.myUserID,
+   'PayorAdrress': document.getElementById('streetAddress').value,
+   'ClientID': 1,
+   'PaymentMethod': this.state.payment,
+   'FundingSource': this.state.funding,
+   'PayorConcent': this.state.consent,
+   'PayorMarketingConcent': this.state.MarketingConsent,
+   'PayorAccountHolderName': '',
+   'PayorBankName': '',
+   'PayorBranchCode': '',
+   'PayorAccountNumber': '',
+   'PayorRef': '',
+   'PayorBranchName': '',
+};
+for (let i=0; i < form.elements.length; i++) {
+   const elem = form.elements[i];
+   data[elem.name] = elem.value
+}
+
+const requestOptions = {
+   title: 'Payor Details Form',
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json' },
+   body: data
+};
+console.log("called", data)
+const postData = async() => {
+ await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
+ .then(response => {
+     console.log("2nd Response: ", response)
+       setTimeout(() => {
+         this.props.updateLoadingController(false);
+       }, 1000);
+ })
+
+}
+postData().then(() => {
+
+})
+}
+
+else{
+ alert("Please a valid home address")
+ this.setState({
+   isLoad: false
+ })
+}
+}
+
 
   onValueHasCarChange(e){
     this.setState({
@@ -1265,6 +1352,18 @@ this.props.updateStudentName(
                   />
                 </div>
                 <div className="form-group">
+                        <label className="control-label" >
+                          Gender
+                        </label>
+                        <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.myGender}>
+                          {
+                            this.state.genterList.map((gender, index) => (
+                              <option key={index} name='Gender ' value={gender}>{gender}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+                <div className="form-group">
                 </div>
                 <div className="form-group">
                   <label>
@@ -1296,6 +1395,20 @@ this.props.updateStudentName(
                     type="text"
                   />
                 </div>
+                <div className="form-group">
+                        <label className="control-label" >
+                          Country:  ( {this.state.country})
+                        </label>
+                        <select className="form-control" onChange={(e) => {
+                          localStorage.setItem('country', e.target.value)
+                          this.setState({ country: e.target.value })}} value={this.state.country}>
+                          {
+                            this.state.countryList.map((country, index) => (
+                              <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
                 <div className="form-group">
                   <label>
                     Phone Number:
@@ -1753,7 +1866,7 @@ this.props.updateStudentName(
         }
 
 <div className="body">
-  <form id='nextOfKin1' onSubmit={(e) => this.updateNextOfKin(e)}>
+  <form id='payor' onSubmit={(e) => this.UpdatePayorInfo(e)}>
     <div className="row clearfix">
       <div className="col-lg-6 col-md-12">
         <h3>Payor Details</h3>
@@ -1826,19 +1939,29 @@ this.props.updateStudentName(
             Phone Number:
           </label>
           <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-            defaultValue={this.state.myProfile.PayorHomeTell} name="NextOfKinPhoneNumber1" required=''
+            defaultValue={this.state.myProfile.PayorHomeTell} name="PayorCellPhone" required=''
             value={this.state.myProfile.PayorHomeTell}
             onChange={() => this.setState({ value: this.state.value })} />
         </div>
+        <div className="form-group">
+                        <label className="control-label" >
+                        Home Phone Number
+                            </label>
+                            <PhoneInput placeholder="Home Phone Number" name="PayorHomeTell" className='PayorHomeTell' required='' 
+                    value={this.state.value}
+                    onChange={()=> this.setState({value: this.state.value})}/>
+                      </div>
+
         <div className="form-group">
           <label>
             Work Number:
           </label>
           <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-            defaultValue={this.state.myProfile.PayorWorkTell} name="NextOfKinPhoneNumber1" required=''
+            defaultValue={this.state.myProfile.PayorWorkTell} name="Payorworktel" required=''
             value={this.state.myProfile.PayorWorkTell}
             onChange={() => this.setState({ value: this.state.value })} />
         </div>
+
 
       <div className="form-group">
                   <label>
@@ -1847,14 +1970,30 @@ this.props.updateStudentName(
                   <input
                     className="form-control"
                     placeholder="ID Number"
-                    id='PayorID'
+                    id='payorID'
                     name="PayorID"
                     defaultValue={this.state.myProfile.PayorID}
                     type="text"
                   />
                 </div>
+                <div className="form-group">
+                        <label className="control-label" >
+                        Vat Number
+                            </label>
+                        <input
+                          className="form-control"
+                          id="PayorVat"
+                          name='PayorVat'
+                          placeholder="Enter VAT number (optional)"
+                          type="number"
+                        />
+                      </div>
       </div>
-    </div>
+    </div><button className="btn btn-primary" type="button" onClick={(e) => this.UpdatePayorInfo(e)}>
+              Update
+            </button>{" "}
+            &nbsp;&nbsp;
+            <button className="btn btn-default">Cancel</button>
   </form>
 </div>
 

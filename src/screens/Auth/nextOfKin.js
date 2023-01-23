@@ -404,10 +404,10 @@ else{
                       </div>
                       <div className="form-group">
                         <label className="control-label" >
-                        ID Number
+                        ID/Passport Number
                             </label>
                             <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
-                    required='' maxLength = '13' minLength='13' placeholder='Enter your ID Number'></input>
+                    required=''  placeholder='Enter your ID Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
                       <div className="form-group">
