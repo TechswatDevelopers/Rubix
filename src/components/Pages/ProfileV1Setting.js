@@ -77,7 +77,7 @@ class ProfileV1Setting extends React.Component {
       yearOfRes: '',
       uni: 0,
       year: 0,
-      durations: [],
+      durations: [0, 5, 10, 12],
       duration: 0,
       hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
       hearAbout: '',
@@ -464,7 +464,8 @@ console.log("down")
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
       'UserProfileImage': this.state.imgUpload !== null || this.state.imgUpload !== undefined ? ' ' : this.state.imgUpload,
-      'ClientID': localStorage.getItem('clientID')
+      'ClientID': localStorage.getItem('clientID'),
+      'Gender': this.state.myGender
     };
     
     for (let i = 0; i < form.elements.length; i++) {
@@ -600,7 +601,7 @@ console.log("down")
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
             year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
-            duration: response.data.PostRubixUserData[0].Duration,  
+            duration: parseInt(response.data.PostRubixUserData[0].Duration),  
             yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
             payment:response.data.PostRubixUserData[0].PaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
