@@ -1168,7 +1168,10 @@ mergePDFHandler()
         {
           this.getProgress(this.state.doc.FileType) != 100 || localStorage.getItem('role') == 'admin'
           ?this.state.keyString != 'lease-agreement'
-          ?<button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
+          ?<>
+          <p> Check: {localStorage.getItem('bookingShow')}</p>
+          <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
+          </>
           : null
           : null
         }
@@ -1176,12 +1179,11 @@ mergePDFHandler()
           <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
     </iframe>
         </>
-
         : <>
           {this.state.keyString != 'lease-agreement'
           ? <>
           {
-            this.state.keyString == 'booking-doc'
+            this.state.keyString == 'booking-doc' && localStorage.getItem('bookingShow') == '0'
             ?<>
             <iframe src={"https://jjpimages.rubix.mobi:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px"></iframe>
             </>
