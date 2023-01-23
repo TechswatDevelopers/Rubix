@@ -288,6 +288,7 @@ mergePDFHandler()
 //Fetch All documents from DB
   loadDocuments(userID) {
     //Set Loading Screen ON
+    localStorage.setItem('nationality', '')
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
     console.log("Loading Student Documents...");
@@ -697,6 +698,9 @@ mergePDFHandler()
     this.props.onUpdateRulesMessage(this.setMessage(0))
     this.props.onUpdateStudenCMessage(this.setMessage(0))
     this.props.onUpdateKeyMessage(this.setMessage(0))
+
+    //Reset Nationality
+    localStorage.getItem('nationality', '')
   }
 
   

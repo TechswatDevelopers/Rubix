@@ -33,6 +33,7 @@ export const UPDATE_STUDENT_UNIVERRSITY = "navigationReducer/UPDATE_STUDENT_UNIV
 export const UPDATE_STUDENT_COURSE = "navigationReducer/UPDATE_STUDENT_COURSE";
 export const UPDATE_STUDENT_YEAR_OF_STUDY = "navigationReducer/UPDATE_STUDENT_YEAR_OF_STUDY";
 export const UPDATE_STUDENT_STUDENT_NO = "navigationReducer/UPDATE_STUDENT_STUDENT_NO";
+export const UPDATE_STUDENT_STUDENT_NATION = "navigationReducer/UPDATE_STUDENT_STUDENT_NATION";
 
 export const UPDATE_DOC_ID = "navigationReducer/UPDATE_DOC_ID";
 export const UPDATE_RES_ID = "navigationReducer/UPDATE_RES_ID";
@@ -389,6 +390,14 @@ export const updateStudentUniversity = (val)=>(disptch) =>{
 export const updateStudentStudentNo = (val)=>(disptch) =>{
   disptch({
     type:UPDATE_STUDENT_STUDENT_NO,
+    payload: val,
+  })
+};
+
+//Update Student's University
+export const updateStudentStudentNation = (val)=>(disptch) =>{
+  disptch({
+    type:UPDATE_STUDENT_STUDENT_NATION,
     payload: val,
   })
 };

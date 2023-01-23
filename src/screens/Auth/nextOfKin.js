@@ -149,7 +149,9 @@ class NextOfKin extends React.Component {
           .then(response => {
               //console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
-                this.props.history.push("/relatives")
+                
+                this.props.onPresPopUpEvent()
+                this.props.history.push("/login")
               }
               this.setState({
                 isLoad: false

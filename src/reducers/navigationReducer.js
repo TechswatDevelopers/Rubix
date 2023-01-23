@@ -53,6 +53,7 @@ import {
   UPDATE_LOADING_MSG,
   UPDATE_LOADING_CONTROLLER,
   UPDATE_CLIENTBG,
+  UPDATE_STUDENT_STUDENT_NATION,
 } from "../actions/NavigationAction";
 
 const initialState = {
@@ -71,6 +72,7 @@ const initialState = {
   studentUniversity: '',
   studentCourse: '',
   studentStudentNo: '',
+  studentStudentNation: '',
   studentYearOfStudy: '',
   studentResID: '',
 
@@ -817,6 +819,14 @@ export default (state = initialState, action) => {
       return{
         ...state,
         studentStudentNo: action.payload,
+      }
+    }
+
+//Update Student's Student Number
+    case UPDATE_STUDENT_STUDENT_NATION: {
+      return{
+        ...state,
+        studentStudentNation: action.payload,
       }
     }
 

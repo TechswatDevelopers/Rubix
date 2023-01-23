@@ -14,6 +14,7 @@ import {
   updateStudentCourse,
   updateStudentUniversity,
   updateStudentStudentNo,
+  updateStudentStudentNation,
   updateStudentYear,
   } from '../../actions/NavigationAction';
   import {
@@ -477,12 +478,12 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log("my Posted Data: ", data)
+    console.log("my Posted Data: ", data)
     const postData = async () => {
       if (this.Validate) {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            //console.log("My DB Response",response)
+            console.log("My DB Response",response)
 
             if(response.data.PostRubixUserData[0].ResponceMessage == "Record successfully Updated"){
               this.props.onPresPopConfirmInfo()
@@ -607,6 +608,7 @@ console.log("down")
             myGender: response.data.PostRubixUserData[0].Gender,
             country: response.data.PostRubixUserData[0].Nationality,
           })
+      
 
            //Set Temp Local Storage
            localStorage.setItem('paymentMethod', response.data.PostRubixUserData[0].PaymentMethod)
@@ -634,6 +636,7 @@ this.props.updateStudentName(
    this.props.updateStudentCourse(response.data.PostRubixUserData[0].RubixCourse)
    this.props.updateStudentYear(response.data.PostRubixUserData[0].YearofStudy)
    this.props.updateStudentStudentNo(response.data.PostRubixUserData[0].StudentNumber)
+   this.props.updateStudentStudentNation(response.data.PostRubixUserData[0].Nationality)
          
 
         })
@@ -672,6 +675,8 @@ this.props.updateStudentName(
           myGender: response.data.PostRubixUserData[0].Gender,
           country: response.data.PostRubixUserData[0].Nationality,
           })
+    
+          localStorage.setItem('nationality', response.data.PostRubixUserData[0].Nationality)
 
           //Set Temp Local Storage
           localStorage.setItem('paymentMethod', response.data.PostRubixUserData[0].PaymentMethod)
@@ -792,7 +797,9 @@ this.props.updateStudentName(
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
-    console.log('My role is: ', userID)
+    //console.log('My role is: ', userID)
+
+    localStorage.setItem('nationality', '')
 
     //Get User Profile Picture
     const fetchData = async () => {
@@ -1358,7 +1365,7 @@ else{
                         <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.myGender}>
                           {
                             this.state.genterList.map((gender, index) => (
-                              <option key={index} name='Gender ' value={gender}>{gender}</option>
+                              <option key={index} name='Gender' value={gender}>{gender}</option>
                             ))
                           }
                         </select>
@@ -2034,6 +2041,7 @@ export default connect(mapStateToProps, {
   updateStudentUniversity,
   updateStudentAddress,
   updateStudentStudentNo,
+  updateStudentStudentNation,
   updateStudentYear,
   onPresLease,
   

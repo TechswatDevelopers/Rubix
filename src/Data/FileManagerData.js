@@ -35,13 +35,14 @@ export const fileFolderCardData = [
 const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
   rubixUserID: navigationReducer.userID,
   studentProgress: navigationReducer.progressBar,
-  currentStudentiD: navigationReducer.studentID
+  currentStudentiD: navigationReducer.studentID,
+  studentStudentNationality: navigationReducer.studentStudentNation
 })
 
 export const fileStorageStatusCardData = [
   {
     UsedSize: localStorage.getItem('nationality') == 
-"South Africa, Republic of" ?  "ID Document" : "Passport",
+    "South Africa, Republic of" ?  "ID Document" : "Passport",
     Type: "Documents",
     status: localStorage.getItem('idProgressMsg'),
     FileType: "id-document",

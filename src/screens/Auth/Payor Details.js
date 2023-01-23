@@ -163,8 +163,9 @@ class PayorDetails extends React.Component {
       if ( idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
           .then(response => {
-              console.log(response)
+              //console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
+                this.props.onPresPopUpEvent()
                 this.props.history.push("/nextofkin")
               }
               this.setState({
@@ -219,6 +220,7 @@ const postData = async() => {
         setTimeout(() => {
           this.props.updateLoadingController(false);
         }, 1000);
+        this.props.onPresPopUpEvent()
        this.props.history.push("/nextofkin")
   })
 
