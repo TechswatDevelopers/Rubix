@@ -1169,7 +1169,6 @@ mergePDFHandler()
           this.getProgress(this.state.doc.FileType) != 100 || localStorage.getItem('role') == 'admin'
           ?this.state.keyString != 'lease-agreement'
           ?<>
-          <p> Check: {localStorage.getItem('bookingShow')}</p>
           <button className="btn btn-primary" variant="contained" color="primary" component="span" onClick={(e) => this.handleUpdate(e)}>Upload A New File</button>
           </>
           : null
