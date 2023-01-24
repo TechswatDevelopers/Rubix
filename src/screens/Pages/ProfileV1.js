@@ -285,6 +285,7 @@ mergePDFHandler()
 
   }
 
+
 //Fetch All documents from DB
   loadDocuments(userID) {
     //Set Loading Screen ON
@@ -303,6 +304,8 @@ mergePDFHandler()
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
+          ///Check if docs are uploaded
+          this.checkDocs(data.post)
           //Load initial PDF
           let tempList, currentDoc
           if(localStorage.getItem('docType') == null){
@@ -328,11 +331,11 @@ mergePDFHandler()
           //Check the lease
           const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
           if(temp != undefined && temp.length != 0 && temp != null){
-            console.log("this is it: ", temp)
+            //console.log("this is it: ", temp)
             ///set show proof of pay tile
             localStorage.setItem("check", 'yes')
           } else {
-            console.log("this is it: ", temp)
+            //console.log("this is it: ", temp)
           }
           const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
           
@@ -1131,8 +1134,6 @@ mergePDFHandler()
       this.props.updateLoadingController(false);
     })
   }
-
-
 
   //Set Key
   setKey(e){

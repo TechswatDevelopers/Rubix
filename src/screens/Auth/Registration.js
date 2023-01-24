@@ -170,7 +170,7 @@ class Registration extends React.Component {
         //Send email to DB
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                //console.log("The response: ",response.data)
+                console.log("The response: ",response.data)
 
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
