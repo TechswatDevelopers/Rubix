@@ -51,7 +51,7 @@ componentDidMount() {
    
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("Check me ...", response)
+          //console.log("Check me ...", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -150,7 +150,7 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('My data: ', data)
+    console.log('My lease data: ', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
