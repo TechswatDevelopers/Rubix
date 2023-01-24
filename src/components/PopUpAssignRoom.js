@@ -47,11 +47,11 @@ componentDidMount() {
       body: data
     };
 
-   console.log("Posted Room Assign Data: ", data)
+   //console.log("Posted Room Assign Data: ", data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-       console.log("Room Assign response: ", response)
+       //console.log("Room Assign response: ", response)
       })
     }
     postData().then(()=>{
@@ -75,19 +75,17 @@ componentDidMount() {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted 2nd Data:", data)
+        //console.log("Posted 2nd Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
           .then(response => {
-            console.log("The rspinse you wanyt: ", response.data)
+            //console.log("The response you want: ", response.data)
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
+            ////console.log("temp file:", temp)
             this.onPressUpload2(temp, 'booking-doc', 'signing')
-            //console.log("Signature upload details:", response)
+            ////console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
-            this.setState({
-              done: true
-            })
+            
             
           })
       }
@@ -96,6 +94,46 @@ componentDidMount() {
 
 
 
+//Post File Using Mongo
+  onPressUpload1(image, filetype, currentActiveKey) {
+    let userID
+    if(localStorage.getItem('role') == 'admin'){
+      userID = this.props.currentStudentiD
+    } else {
+      userID = this.state.myUserID
+    }
+    this.setState({ isLoad: true, })
+    const postDocument = async () => {
+      const data = new FormData()
+      data.append('image', image)
+      data.append('FileType', filetype)
+      data.append('RubixRegisterUserID', userID)
+      const requestOptions = {
+        title: 'Student Document Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data', },
+        body: data
+      };
+      for (var pair of data.entries()) {
+        //console.log(pair[0], ', ', pair[1]);
+      }
+      await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
+        .then(response => {
+          //console.log("The Lease Upload reponse: ", response)
+          this.setState({ mongoID: response.data.post._id })
+          //this.onPressSignatureUpload(this.state.trimmedDataURL)
+        })
+    }
+    postDocument().then(() => {
+      /* localStorage.setItem('tab', currentActiveKey)
+      this.setState({
+        isLoad: false
+      })
+      this.props.updateLoadingController(false); */
+           /* //Populate Pop Up Event
+           this.props.onPresPopUpEvent() */
+    })
+  }
 //Post File Using Mongo
   onPressUpload2(image, filetype, currentActiveKey) {
     let userID
@@ -117,20 +155,24 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        console.log(pair[0], ', ', pair[1]);
+        //console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          console.log("The Upload reponse: ", response)
+          //console.log("The 2nd Upload reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
           //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
     }
     postDocument().then(() => {
-      localStorage.setItem('tab', currentActiveKey)
       this.setState({
-        isLoad: false
+        done: true
       })
+      //localStorage.setItem('tab', currentActiveKey)
+     /*  this.setState({
+        isLoad: false
+      }) */
+      //this.props.updateLoadingController(false);
            /* //Populate Pop Up Event
            this.props.onPresPopUpEvent() */
     })
@@ -159,20 +201,17 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json' },
         body: data
       };
-     //console.log("Posted Vetting Data: ", data)
+     ////console.log("Posted Vetting Data: ", data)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
-          //console.log("DB response: ", response)
+          ////console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
         //this.props.updateLoadingController(false);
         this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', this.props.currentStudentiD, 0)
-        setTimeout(() => {
-      
-          this.postBookingForm('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', localStorage.getItem('userID'),)
-    }, 5000);
+        
         //window.location.reload()
       })
     }
@@ -193,11 +232,11 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        ////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("Upload details:", response)
+          ////console.log("Upload details:", response)
          
           //this.setState({ mongoID: response.data.post._id })
         })
@@ -224,7 +263,7 @@ componentDidMount() {
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
     this.props.updateLoadingMessage("Generating Lease...");
-    //console.log("I am called incorrectly")
+    ////console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': localStorage.getItem('userID'),
@@ -238,34 +277,37 @@ componentDidMount() {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Lease Uploading:", data)
+      ////console.log("Lease Uploading:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          //console.log("Signature upload details:", response)
+          //console.log("Lease upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'lease-agreement', 'signing')
+            ////console.log("temp file:", temp)
+            this.onPressUpload1(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
-            this.onPressUpload(temp, 'unsigned-agreement', 'signing')
+            ////console.log("temp file:", temp)
+            this.onPressUpload1(temp, 'unsigned-agreement', 'signing')
           }
         })
     }
-    postDocument()
+    postDocument().then(()=>{
+      setTimeout(() => {
+        this.postBookingForm('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', localStorage.getItem('userID'),)
+  }, 2000);
+    })
   }
-
 
     //Coleect User Signing Info
     getUserWitnessData() {
       //Fetch IP Address
       const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
-        //console.log("my IP", res.data);
+        ////console.log("my IP", res.data);
         this.setState({userIPAddress: res.data.IPv4 })
       }
       getData()
@@ -315,13 +357,11 @@ componentDidMount() {
                   //window.location.reload()
                       this.props.onPresPopUpAssign()
                       setTimeout(() => {
-                        //console.log("this is it: ", this.state.done)
-                        if(this.state.done){
-                    
+                        ////console.log("this is it: ", this.state.done)
+                          ////console.log("fuckkkk!")
                           this.props.updateLoadingController(false);
                           Function()
-                        }
-                      }, 5000);
+                      }, 4000);
                   
                 }}>
                 Assign

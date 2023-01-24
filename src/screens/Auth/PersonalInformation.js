@@ -61,7 +61,7 @@ class PersonalInformation extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    //console.log(id_date, id_month, id_year)
+    ////console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -112,7 +112,7 @@ class PersonalInformation extends React.Component {
     //Set Loading Screen ON
  this.props.updateLoadingController(true);
  this.props.updateLoadingMessage("Submitting Information..."); 
-    //console.log("User email:", this.props.email)
+    ////console.log("User email:", this.props.email)
     var idNumber = document.getElementById("IDNumber").value;
     var email = document.getElementById("email").value;
     //var year = document.getElementById("email").value;
@@ -137,12 +137,12 @@ class PersonalInformation extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log("Sent: ", data)
+    ////console.log("Sent: ", data)
     const postData = async()=>{
         if (this.state.myGender != 'Please select your gender'  && document.getElementById('register').checkValidity() == true){
             await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
-                //console.log("Response: ",response)
+                ////console.log("Response: ",response)
                 this.props.updateStudentID(idNumber)
                 localStorage.setItem('studentIDNo', idNumber)
                 //localStorage.setItem('idNumber', " ")
@@ -175,7 +175,7 @@ class PersonalInformation extends React.Component {
     document.body.classList.remove("theme-blush");
 
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
-    //console.log('platform ID', localStorage.getItem('platformID'))
+    ////console.log('platform ID', localStorage.getItem('platformID'))
     //Fetch Data
     const fetchData = async () => {
        //Set Loading Screen ON
@@ -185,9 +185,9 @@ class PersonalInformation extends React.Component {
       await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
       .then(response => response.json())
       .then(data => {
-          //console.log("data is ", data.data)
+          ////console.log("data is ", data.data)
           this.setState({ countryList: data.data })
-          //console.log("this is the countryList:", this.state.countryList)
+          ////console.log("this is the countryList:", this.state.countryList)
           //setCountryList(data.data)
         });
     }

@@ -33,6 +33,8 @@ componentDidMount() {
     const myDate = new Date().toLocaleDateString('en-ZA', DATE_OPTIONS)
     const myTime = new Date().toLocaleTimeString('en-ZA')
     this.setState({ dateAndTime: myDate + myTime })
+
+   
 }
 
 
@@ -162,7 +164,7 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-   console.log('My lease data: ', data)
+   //console.log('My lease data: ', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
@@ -181,10 +183,10 @@ getUserWitnessData() {
 
 
     ///Verify Booking form 
-    verifyBookingForm() {
+    verifyBookingForm(docID) {
       const postDocument = async () => {
         const data = {
-          'RubixDocumentID':"1384",
+          'RubixDocumentID': docID,
           'RubixBookingShowValue':  '1'
         }
         const requestOptions = {
@@ -193,14 +195,46 @@ getUserWitnessData() {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted booking form verify Data:", data)
+        //console.log("Posted booking form verify Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixBookingShowAdd', data, requestOptions)
           .then(response => {
-            console.log("This is the booking form response: ", response)
+            //console.log("This is the booking form response: ", response)
          //this.convertBase64ToBlob(response.data.Base)
             //console.log("temp file:", temp)
             //Populate Pop Up Event
             alert("Booking form verified")
+             //this.props.onPresPopUpEvent()
+            //window.location.reload()
+            
+          })
+      }
+      postDocument()
+    }
+    ///Verify Booking form 
+    flattenBookingForm(url) {
+      const postDocument = async () => {
+        const data = {
+          'RubixRegisterUserID': localStorage.getItem('userID'),
+          'ImageUrl': url,
+        }
+        const requestOptions = {
+          title: 'Booking Form Show Update',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: data
+        };
+       // console.log("Posted booking form flaten Data:", data)
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFExtract', data, requestOptions)
+          .then(response => {
+            //console.log("This is the booking form flaten response: ", response)
+            //Send documents API
+        const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+        const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement')
+            this.onPressUpload(temp, 'booking-doc', 'signing')
+         //this.convertBase64ToBlob(response.data.Base)
+            //console.log("temp file:", temp)
+            //Populate Pop Up Event
+            //alert("Booking form verified")
              //this.props.onPresPopUpEvent()
             //window.location.reload()
             
@@ -339,12 +373,20 @@ getUserWitnessData() {
                   if(FileType == 'lease-agreement'){
                     this.sendVettingStatus(FileType, DocID, 'correct')
                     setTimeout(() => {
-                      this.sendFinalLease(Filename)
+                      this.sendFinalLease('https://jjpimages.rubix.mobi:449/' + Filename.filename)
                     }, 3000);
                   } 
                   else if(FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '0' ){
-                    this.verifyBookingForm()
-                  } else {
+                    this.verifyBookingForm(DocID)
+                  } else if(FileType == 'booking-doc' && localStorage.getItem('bookingShow') == '1' ){
+                    //console.log("This is the doc: ", Filename)
+                    this.sendVettingStatus(FileType, DocID, 'correct')
+                    setTimeout(() => {
+                      this.flattenBookingForm('https://jjpimages.rubix.mobi:449/' + Filename.filename)
+                    }, 3000);
+                  }
+                  
+                  else {
                     this.sendVettingStatus(FileType, DocID, 'correct')
                   }
                   this.props.onPresPopUpConfirm();

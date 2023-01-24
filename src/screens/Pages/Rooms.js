@@ -76,11 +76,11 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      console.log('Romms Posted:', pingData)
+      //console.log('Romms Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          console.log("Students Rooms List:", response.data)
+          //console.log("Students Rooms List:", response.data)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -114,7 +114,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].BuildingNumber)){
-              ////console.log('found', roomList[i].BuildingNumber)
+              //////console.log('found', roomList[i].BuildingNumber)
               
             } else {
               newList.push(roomList[i].BuildingNumber)
@@ -127,7 +127,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].FloorNumber)){
-              ////console.log('found')
+              //////console.log('found')
             } else {
               newList.push(roomList[i].FloorNumber)
             }
@@ -139,7 +139,7 @@ class RoomAllocation extends React.Component {
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].RoomNumber)){
-              ////console.log('found')
+              //////console.log('found')
             } else {
               newList.push(roomList[i].RoomNumber)
             }
@@ -171,11 +171,11 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      ////console.log('Posted:', pingData)
+      //////console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          ////console.log("Students Rooms Dropdown:", response)
+          //////console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -241,11 +241,11 @@ class RoomAllocation extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      ////console.log('Posted:', pingData)
+      //////console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms List:", response)
+          ////console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             inRoom =  true;
             this.state.roomedstudents.push(response.data.PostRubixUserData)
@@ -277,11 +277,11 @@ class RoomAllocation extends React.Component {
           body: data
         };
         for (var pair of data.entries()) {
-          ////console.log(pair[0], ', ', pair[1]);
+          //////console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
-            ////console.log("Upload details:", response)
+            //////console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -315,7 +315,7 @@ class RoomAllocation extends React.Component {
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
-      ////console.log("I am called incorrectly")
+      //////console.log("I am called incorrectly")
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
@@ -330,20 +330,20 @@ class RoomAllocation extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        ////console.log("Posted Data:", data)
+        //////console.log("Posted Data:", data)
         await axios.post('https://jjppdf.rubix.mobi:94/PDFSignature', data, requestOptions)
           .then(response => {
-            ////console.log("Signature upload details:", response)
+            //////console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', 'signing')
             } else if (tryval === 0) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //////console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', 'signing')
             }
           })
@@ -355,7 +355,7 @@ class RoomAllocation extends React.Component {
         //Fetch IP Address
         const getData = async () => {
           const res = await axios.get('https://geolocation-db.com/json/')
-          ////console.log("my IP", res.data);
+          //////console.log("my IP", res.data);
           this.setState({userIPAddress: res.data.IPv4 })
         }
         getData()
@@ -377,7 +377,7 @@ class RoomAllocation extends React.Component {
         Title= "Confirm Room Assigning"
         Body = {"You are about to assign " + localStorage.getItem('userName') + " to a room " /* + this.state.currentRoom.RoomNumber */}
         Function = {()=>{
-          ////console.log("Testst: ", this.props.currentStudentiD)
+          //////console.log("Testst: ", this.props.currentStudentiD)
           ///Reload Room List
           this.getStudentRoomDetails(localStorage.getItem("userID"))
           Function()

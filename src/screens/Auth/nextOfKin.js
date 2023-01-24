@@ -49,7 +49,7 @@ class NextOfKin extends React.Component {
   var year = idNumber.substring(0, 2);
   var month = idNumber.substring(2, 4);
   var day = idNumber.substring(4, 6);
-  //console.log(year, month, day)
+  //////////////console.log(year, month, day)
 
   // get first 6 digits as a valid date
   var tempDate = new Date(year, month - 1, day);
@@ -58,7 +58,7 @@ class NextOfKin extends React.Component {
   var id_month = tempDate.getMonth();
   var id_year = tempDate.getFullYear();
   var right_month = id_month + 1;
-  //console.log(id_date, id_month, id_year)
+  //////////////console.log(id_date, id_month, id_year)
 
   var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -137,12 +137,12 @@ class NextOfKin extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log("I am empty",data)
+  //////////////console.log("I am empty",data)
   const postData = async() => {
       if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              //console.log(response)
+              //////////////console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
                 this.props.history.push("/relatives")
               }
@@ -168,7 +168,7 @@ class NextOfKin extends React.Component {
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
- // console.log("called")
+ // ////////////console.log("called")
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
 };
@@ -188,7 +188,7 @@ const postData = async() => {
   if ( idNumber != studentID && studentEmail != nextofKinEmail){
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          //console.log()
+          //////////////console.log()
             setTimeout(() => {
               this.props.updateLoadingController(false);
             }, 1000);
@@ -239,7 +239,7 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log('User data:', data)
+    //////////////console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
         .then(response => {
@@ -251,7 +251,7 @@ else{
       });
     }, 1000);
           }
-          //console.log("Verify email status", response)
+          //////////////console.log("Verify email status", response)
           this.props.history.push("/relatives")
         })
     }

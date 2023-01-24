@@ -21,7 +21,7 @@ class FileStorageStatusCard extends React.Component {
     return (
       <div className="card modal-open m-b-5">
         <div className="body">
-          <h6>{UsedSize}</h6>
+          <h6>{UsedSize } </h6>
           <p className="mb-0">
             {Type}{" "}
             &nbsp;&nbsp;
@@ -34,7 +34,9 @@ class FileStorageStatusCard extends React.Component {
                 {
                 localStorage.getItem('role') == 'admin'  && Key == "booking-doc" && localStorage.getItem('bookingShow') == '0'
                   ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Verify</button>
-                  : null
+                  : localStorage.getItem('role') == 'admin'  && Key == "booking-doc" && localStorage.getItem('bookingShow') == '1'
+                  ? <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
+                  :null
                   }
                   </>
                 

@@ -155,6 +155,7 @@ class ProfileV1Page extends React.Component {
       mergedFile: null,
       myDocs: [],
       email: '',
+      showNote: false,
     }
   }
 
@@ -163,14 +164,14 @@ class ProfileV1Page extends React.Component {
     const userID = localStorage.getItem('userID');
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
-    //console.log("Student Progress: ", this.props.studentProgress)
+    ////console.log("Student Progress: ", this.props.studentProgress)
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
-      //console.log('I am called')
+      ////console.log('I am called')
       this.loadDocuments(this.props.currentStudentiD)
     } else {
-      //console.log('I am called here')
+      ////console.log('I am called here')
       this.loadDocuments(userID)
     }
     //this.setState({ progress: userProgress });
@@ -224,15 +225,15 @@ const mergePDFHandler = async () => {
       await createPDF.PDFDocumentFromFile(file)
     }
     test()
-    //console.log("New File: ", file)
+    ////console.log("New File: ", file)
     
   
   })
   
-  //console.log("MergedPDF: ", this.state.myDocs)
+  ////console.log("MergedPDF: ", this.state.myDocs)
   // Merging The PDF Files to A PDFDocument
   const mergedPDFDocument = await mergePDF(this.state.myDocs)
-  //console.log("MergedPDF: ", mergedPDFDocument)
+  ////console.log("MergedPDF: ", mergedPDFDocument)
   this.getBase64(mergedPDFDocument)
   
   //const blob = new Blob([mergedPDFDocument], {type: 'application/pdf'});
@@ -245,7 +246,7 @@ mergePDFHandler()
   mergeFiles(){
     const merger = new PDFMerger();
     let myBlob;
-    //console.log('these are the documents: ', this.state.docs)
+    ////console.log('these are the documents: ', this.state.docs)
     const mergeTime = async () =>{
         //Run through docs list
     this.state.docs.forEach((doc) =>{
@@ -269,7 +270,7 @@ mergePDFHandler()
         var byteArray = Base64Binary.decodeArrayBuffer(dataUrl); 
 
         merger.add(blob)
-        //console.log("This is this document: ", merger)
+        ////console.log("This is this document: ", merger)
 
       }
       
@@ -287,20 +288,43 @@ mergePDFHandler()
 
   }
 
+  ///Check if all docs have been submitted
+  checkDocs(docs){
+    localStorage.setItem('showNote', '0')
+   const idList = docs.filter(doc => doc.FileType == 'id-document')
+   const poresList = docs.filter(doc => doc.FileType == 'proof-of-res')
+   const poregList = docs.filter(doc => doc.FileType == 'proof-of-reg')
+   const studentcList = docs.filter(doc => doc.FileType == 'student-card')
+   const nokList = docs.filter(doc => doc.FileType == 'next-of-kin')
+   const popayList = docs.filter(doc => doc.FileType == 'proof-of-pay')
+
+   if(idList.length == 0 || poresList.length == 0 || poregList.length == 0 || studentcList.length == 0 || nokList.length == 0 || popayList.length == 0)
+   {
+    this.setState({
+      showLease: true
+    })
+   } else {
+    this.setState({
+      showLease: false
+    })
+   }
+  }
+
 //Fetch All documents from DB
   loadDocuments(userID) {
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
-    //console.log("Loading Student Documents...");
+    ////console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          console.log("documents data:", data)
+          //console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
+          this.checkDocs(data.post)
 
           //Load initial PDF
           let tempList, currentDoc
@@ -520,7 +544,7 @@ mergePDFHandler()
       })
     };
     reader.onerror = function (error) {
-      //console.log('Error: ', error);
+      ////console.log('Error: ', error);
     }
   }
 
@@ -559,11 +583,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        ////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("The Upload reponse: ", response)
+          ////console.log("The Upload reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
           //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
@@ -600,11 +624,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        ////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("The Upload reponse: ", response)
+          ////console.log("The Upload reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
           //this.onPressSignatureUpload(this.state.trimmedDataURL)
         })
@@ -713,7 +737,7 @@ mergePDFHandler()
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
-          //console.log("The returned data: ", response)
+          ////console.log("The returned data: ", response)
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
@@ -893,7 +917,7 @@ mergePDFHandler()
   //Handle File Selection input
   changeHandler(event) {
     this.setState({ selectedFile: event.target.files[0] })
-    //console.log("selcted file1", event.target.files[0].type)
+    ////console.log("selcted file1", event.target.files[0].type)
     if(event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg' || event.target.files[0].type == 'application/pdf'){
       this.onPressUpload(event.target.files[0], this.state.keyString, 'documents')
       this.setState({ isSelected: true })
@@ -921,12 +945,12 @@ mergePDFHandler()
     //var myBlob = this.sigPad.getTrimmedCanvas().toBlob
     //var myFile = new File([myBlob], 'mySignature', { type: "image/png", })
     var my2ndFile = this.dataURLtoFile(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'Student signature')
-    //console.log('The file: ', my2ndFile)
+    ////console.log('The file: ', my2ndFile)
     this.onPressSignatureUpload(my2ndFile)
     this.setLoadingPage(3000)
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      //console.log("IP Address:", this.state.userIPAddress)
+      ////console.log("IP Address:", this.state.userIPAddress)
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
         setTimeout(() => {
       
@@ -957,11 +981,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        ////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("Upload details:", response)
+          ////console.log("Upload details:", response)
           //this.setState({ mongoID: response.data.post._id })
           //window.location.reload()
         })
@@ -974,7 +998,7 @@ mergePDFHandler()
     //Fetch IP Address
     const getData = async () => {
       const res = await axios.get('https://geolocation-db.com/json/')
-      //console.log("my IP", res.data);
+      ////console.log("my IP", res.data);
       this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
@@ -997,20 +1021,20 @@ mergePDFHandler()
         body: data
       };
       
-      //console.log("Posted Data1:", data)
+      ////console.log("Posted Data1:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-         // console.log("Signature upload details:", response)
+         // //console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
+            ////console.log("temp file:", temp)
             this.onPressUpload2(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //console.log("temp file:", temp)
+            ////console.log("temp file:", temp)
             this.onPressUpload2(temp, 'unsigned-agreement', 'signing')
           }
         })
@@ -1033,15 +1057,15 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted 3rd Data:", data)
+      ////console.log("Posted 3rd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateRulesPDF', data, requestOptions)
         .then(response => {
-          //console.log("Rules Doc response: ", response)
+          ////console.log("Rules Doc response: ", response)
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Rules Doc') //this.convertBase64ToBlob(response.data.Base)
-          //console.log("temp file:", temp)
+          ////console.log("temp file:", temp)
           this.onPressUpload2(temp, 'rules-doc', 'signing')
-          //console.log("Signature upload details:", response)
+          ////console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           
         })
@@ -1068,14 +1092,14 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted 2nd Data:", data)
+      ////console.log("Posted 2nd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
         .then(response => {
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
-          //console.log("temp file:", temp)
+          ////console.log("temp file:", temp)
           this.onPressUpload2(temp, 'booking-doc', 'signing')
-          //console.log("Signature upload details:", response)
+          ////console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           
         })
@@ -1096,12 +1120,12 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted 2nd Data:", data)
+      ////console.log("Posted 2nd Data:", data)
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixDeedofSuretyEmail', data, requestOptions)
         .then(response => {
-          //console.log("This is the response: ", response)
+          ////console.log("This is the response: ", response)
        //this.convertBase64ToBlob(response.data.Base)
-          //console.log("temp file:", temp)
+          ////console.log("temp file:", temp)
           //Populate Pop Up Event
           alert("Email sent out successfully")
            //this.props.onPresPopUpEvent()
@@ -1175,7 +1199,7 @@ mergePDFHandler()
           : null
         }
           
-          <iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
+          <iframe style=  {localStorage.getItem('role') == 'admin'?{} :{pointerEvents: 'none'}} src={'https://jjpimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px" >
     </iframe>
         </>
         : <>
@@ -1184,13 +1208,13 @@ mergePDFHandler()
           {
             this.state.keyString == 'booking-doc' && localStorage.getItem('bookingShow') == '0'
             ?<>
-            <iframe src={"https://jjpimages.rubix.mobi:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px"></iframe>
+            <iframe style=  {localStorage.getItem('role') == 'admin'?{} :{pointerEvents: 'none'}} src={"https://jjpimages.rubix.mobi:449/General%20Bookings%20FormV1.pdf"}width="100%" height="500px" sandbox></iframe>
             </>
             :<>
             {
               this.state.keyString == 'rules-doc'
               ?<>
-              <iframe src={'https://jjpimages.rubix.mobi:449/General%20Rules%20and%20Regulations.pdf'}width="100%" height="500px"></iframe>
+              <iframe style=  {localStorage.getItem('role') == 'admin'?{} :{pointerEvents: 'none'}} src={'https://jjpimages.rubix.mobi:449/General%20Rules%20and%20Regulations.pdf'}width="100%" height="500px" sandbox></iframe>
               </>
               :<>
               <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
@@ -1222,7 +1246,7 @@ mergePDFHandler()
               ? <>
               <p>Loading document...</p>
             </>
-            :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px">
+            :<><iframe src={'https://jjpimages.rubix.mobi:449/' + this.state.myLease} width="100%" height="800px" sandbox>
            </iframe>
            <input type= 'text' placeholder="Please enter next of kin email..." onChange={(e) => {this.setState({
             email: e.target.value
@@ -1302,19 +1326,19 @@ mergePDFHandler()
         </div>
 
 
-        <PopUpVarsity
+       {/*  <PopUpVarsity
         StudentID = {this.state.myUserID}
-        />
+        /> */}
         <PopUpModal 
         Title= "Upload Complete!"
         Body = "Your document has been uploaded successfully."
         Function ={()=>{
            //Load Documents
     if (localStorage.getItem('role') == 'admin'){
-      //console.log('I am called')
+      ////console.log('I am called')
       this.loadDocuments(this.props.currentStudentiD)
     } else {
-      //console.log('I am called here')
+      ////console.log('I am called here')
       this.loadDocuments(this.state.myUserID)
     }
           //window.location.reload()
@@ -1326,14 +1350,14 @@ mergePDFHandler()
         Body = "You are confirming that the document and information are in line."
         FileType = {this.state.keyString} 
         DocID = {this.state.currentDocID}
-        Filename = {'https://jjpimages.rubix.mobi:449/' + this.state.myLease}
+        Filename = {this.state.docs.filter(doc => doc.FileType == this.state.keyString)[0]}
         Function = {()=>{
           //Load Documents
    if (localStorage.getItem('role') == 'admin'){
-     //console.log('I am called')
+     ////console.log('I am called')
      this.loadDocuments(this.props.currentStudentiD)
    } else {
-     //console.log('I am called here')
+     ////console.log('I am called here')
      this.loadDocuments(this.state.myUserID)
    }
          //window.location.reload()
@@ -1389,6 +1413,13 @@ mergePDFHandler()
                             <div className="container-fluid">
                               <div className="row clearfix">
                                 <div className="col-lg-3 col-md-5 col-sm-12">
+                                  <div  className={this.state.showNote ? "bg-primary text-light px-2" : "bg-warning text-light px-2"}>
+                                  {
+                                    this.state.showNote
+                                    ?<p>You have successfully uploaded all the required documents, you will be assigned a room shortly.</p>
+                                    : <p>Please upload any outstanding documents from the list below</p>
+                                    }
+                                    </div>
                                   {/* <FileStorageCard TotalSize="Storage Used" UsedSize={90} /> */}
                                   {fileStorageStatusCardData.map((data, index) => {
                                     
