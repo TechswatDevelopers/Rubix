@@ -82,6 +82,9 @@ class ProfileV1Setting extends React.Component {
       prov: null,
       showSearch: false,
       myTempAddress: '',
+      genders: ['Please select your gender', 'Male', 'Female'],
+      myGender: '',
+      country: [],
     };
   }
    //Show Search
@@ -594,6 +597,8 @@ class ProfileV1Setting extends React.Component {
             yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
             payment:response.data.PostRubixUserData[0].PaymentMethod,
             hearAbout: response.data.PostRubixUserData[0].HearAbout,
+            myGender: response.data.PostRubixUserData[0].Gender,
+            country: response.data.PostRubixUserData[0].Nationality,
           })
           if(response.data.PostRubixUserData[0].RubixBookingShowValue != undefined){
             localStorage.setItem('bookingShow', (response.data.PostRubixUserData[0].RubixBookingShowValue).toString())
@@ -646,11 +651,17 @@ this.props.updateStudentName(
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          //console.log("All profile data", response.data.PostRubixUserData)
-          this.setState({ myProfile: response.data.PostRubixUserData[0],
+          console.log("All profile data", response.data.PostRubixUserData)
+          this.setState({ 
+            myProfile: response.data.PostRubixUserData[0],
           uni: response.data.PostRubixUserData[0].RubixUniversityID,
           year: response.data.PostRubixUserData[0].RubixStudentYearofStudyID,
-          duration: response.data.PostRubixUserData[0].Duration
+          duration: response.data.PostRubixUserData[0].Duration,  
+          yearOfRes: response.data.PostRubixUserData[0].RegistrationYear,
+          payment:response.data.PostRubixUserData[0].PaymentMethod,
+          hearAbout: response.data.PostRubixUserData[0].HearAbout,
+          myGender: response.data.PostRubixUserData[0].Gender,
+          country: response.data.PostRubixUserData[0].Nationality,
           })
           if(response.data.PostRubixUserData[0].RubixBookingShowValue != undefined){
             localStorage.setItem('bookingShow', (response.data.PostRubixUserData[0].RubixBookingShowValue).toString())
@@ -812,7 +823,6 @@ this.props.updateStudentName(
             //console.log("data is ", data.data)
             this.setState({yearList: data.data})
             });
-
     };
 
     //Admin side Dropdowns
@@ -849,6 +859,28 @@ this.props.updateStudentName(
             });
 
     };
+
+    const fetchMyData = async () => {
+      //Set Loading Screen ON
+   //this.props.updateLoadingController(true);
+  // this.props.updateLoadingMessage("Loading Countries List...");
+     //Fetch Countries List
+     await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
+     .then(response => response.json())
+     .then(data => {
+         //console.log("countries is ", data.data)
+         this.setState({ countryList: data.data })
+         //setCountryList(data.data)
+       });
+   }
+   fetchMyData().then(()=>{
+     //Set timer for loading screen
+   setTimeout(() => {
+     //this.props.updateLoadingController(false);
+   }, 1000);
+   })
+
+
     //Get All User Data
     if (localStorage.getItem('role') == 'student'){
       this.getAllUserData(localStorage.getItem('userID'))
@@ -915,19 +947,6 @@ this.props.updateStudentName(
       });
   }
 
-  fetchCountriesData = async () => {
-    //Fetch Countries List
-    await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
-      .then(response => response.json())
-      .then(data => {
-        if (data.data != null || data.data != undefined) {
-          //console.log('countries', data)
-          this.setState({ countryList: data.data })
-        } else {
-          alert("Error loading countries list: " + data.message)
-        }
-      });
-  }
 
   fetchUniversitiesData = async () => {
     //Populate university list
@@ -1243,6 +1262,18 @@ this.props.updateStudentName(
                   />
                 </div>
                 <div className="form-group">
+                        <label className="control-label" >
+                          Gender:
+                        </label>
+                        <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.myGender}>
+                          {
+                            this.state.genders.map((gender, index) => (
+                              <option key={index} name='Gender ' value={gender}>{gender}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+                <div className="form-group">
                 </div>
                 <div className="form-group">
                   <label>
@@ -1264,6 +1295,22 @@ this.props.updateStudentName(
                 </div>
               </div>
               <div className="col-lg-6 col-md-12">
+
+              <div className="form-group">
+                        <label className="control-label" >
+                          Country: {this.state.country}
+                        </label>
+                        <select className="form-control" onChange={(e) => {
+                          localStorage.setItem('country', e.target.value)
+                          this.setState({ country: e.target.value })}} value={this.state.country}>
+                          {
+                            this.state.countryList.map((country, index) => (
+                              <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+
                 <label>
                   Email Address:
                 </label>

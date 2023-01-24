@@ -185,7 +185,7 @@ const requestOptions = {
 };
 
 const postData = async() => {
-  if (this.Validate() && idNumber != studentID && studentEmail != nextofKinEmail){
+  if ( idNumber != studentID && studentEmail != nextofKinEmail){
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
           //console.log()

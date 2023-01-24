@@ -27,7 +27,9 @@ class PersonalInformation extends React.Component {
       yearOfRes: '2022',
       errorMessage: '',
       countryList: [],
-      value: 0
+      value: 0,
+      genders: ['Please select your gender', 'Male', 'Female'],
+      myGender: '',
 
     };
   }
@@ -121,7 +123,7 @@ class PersonalInformation extends React.Component {
         'RubixUserPlatformID': localStorage.getItem('userplatformID') == null ? " " : localStorage.getItem('userplatformID'),
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
-        'Gender': this.state.userGender,
+        'Gender': this.state.myGender,
         'Nationality': localStorage.getItem('country'),
         'RegistrationYear': "2023"
     };
@@ -137,7 +139,7 @@ class PersonalInformation extends React.Component {
     };
     //console.log("Sent: ", data)
     const postData = async()=>{
-        if (this.Validate() && this.state.userGender != null  && document.getElementById('register').checkValidity() == true){
+        if (this.state.myGender != 'Please select your gender'  && document.getElementById('register').checkValidity() == true){
             await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 //console.log("Response: ",response)
@@ -317,6 +319,18 @@ class PersonalInformation extends React.Component {
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>
 
+                      <div className="form-group">
+                        <label className="control-label d-none" >
+                          Gender
+                        </label>
+                        <select className="form-control" onChange={(e) => this.setState({ myGender: e.target.value })} value={this.state.myGender}>
+                          {
+                            this.state.genders.map((gender, index) => (
+                              <option key={index} name='Gender ' value={gender}>{gender}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
 
                       <div className="form-group d-none">
                         <label className="control-label sr-only" >
@@ -331,6 +345,8 @@ class PersonalInformation extends React.Component {
                           placeholder="Enter your email"
                           type="email" />
                       </div>
+
+                      
 
                       <div className="form-group">
                         <label className="control-label sr-only" >

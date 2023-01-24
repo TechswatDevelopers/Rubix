@@ -59,8 +59,9 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-purple mb-0",
   },
+
    {
-    UsedSize: "Proof of Registration",
+    UsedSize: "Proof of Registration/Bursary Letter",
     Type: "Documents",
     status: localStorage.getItem('proofOfRegProgressMsg'),
     FileType: "proof-of-reg",
@@ -69,6 +70,7 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
+  
   {
     UsedSize: "Student Card",
     Type: "Documents",
