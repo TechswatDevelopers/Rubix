@@ -290,7 +290,7 @@ mergePDFHandler()
 
   ///Check if all docs have been submitted
   checkDocs(docs){
-    localStorage.setItem('showNote', '0')
+   // localStorage.setItem('showNote', '0')
    const idList = docs.filter(doc => doc.FileType == 'id-document')
    const poresList = docs.filter(doc => doc.FileType == 'proof-of-res')
    const poregList = docs.filter(doc => doc.FileType == 'proof-of-reg')
@@ -300,12 +300,14 @@ mergePDFHandler()
 
    if(idList.length == 0 || poresList.length == 0 || poregList.length == 0 || studentcList.length == 0 || nokList.length == 0 || popayList.length == 0)
    {
+   // console.log("Failed for: ")
     this.setState({
-      showLease: true
+      showNote: false
     })
    } else {
+    //console.log("Failed for: ")
     this.setState({
-      showLease: false
+      showNote: true
     })
    }
   }
