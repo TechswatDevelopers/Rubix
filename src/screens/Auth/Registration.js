@@ -321,6 +321,43 @@ class Registration extends React.Component {
                           required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' ></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>
+
+                      <div className="form-group" onChange={(e) => this.onChangeValue(e)}>
+                      <label className="control-label sr-only" >
+                          Identification Type
+                        </label>
+                        <input type="radio" value="SA ID" name="idType"/> SA ID Number
+                        <p>   </p>
+                        <input type="radio" value="Passport" name="idType" /> Passport Number
+                      </div>
+
+                      {
+                        <div className="form-group">
+                        <label className="control-label sr-only" >
+                          Passport Number
+                        </label>
+                        <input type='text' name="passportNumber" className="form-control" id='passportNumber'
+                          required='' placeholder='Enter your valid Passport Number' ></input>
+                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
+
+                        <div className="form-group">
+                        <label className="control-label" >
+                          Country
+                        </label>
+                        <select className="form-control" onChange={(e) => {
+                          localStorage.setItem('country', e.target.value)
+                          this.setState({ country: e.target.value })}} value={this.state.country}>
+                          {
+                            this.state.countryList.map((country, index) => (
+                              <option key={index} name='Nationality ' value={country.Country_Name}>{country.Country_Name}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+                      </div>
+
+                      }
+
                       
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue
