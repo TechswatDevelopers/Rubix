@@ -143,7 +143,6 @@ class VarsityDetails extends React.Component {
           postData()
         }
     }
-  
 
 async componentDidMount(){
     document.body.classList.remove("theme-cyan");
@@ -159,7 +158,6 @@ async componentDidMount(){
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
     
-
     const fetchData = async() =>{
         //Populate university list
         await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
@@ -171,7 +169,6 @@ async componentDidMount(){
               //uni: data.data[0]['RubixUniversityID']
             })
             });
-
 
             //Populate Provinces list
         await fetch('https://jjprest.rubix.mobi:88/api/RubixProvinces')
