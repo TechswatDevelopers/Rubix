@@ -25,6 +25,8 @@ class Registration extends React.Component {
       myFunction: null,
       errorMessage: '',
       userGender: 'Male',
+      countryList: [],
+      idType: '',
     }
   }
 
@@ -54,6 +56,18 @@ class Registration extends React.Component {
   this.props.updateUserID(response['id'])
   this.props.history.push("/logInformation")
 }
+
+      ///On Change ID Type
+      onChangeValue(event) {
+        if(event.target.value == 'SA ID')
+          {
+            localStorage.setItem('country', "South Africa, Republic of")
+        }
+        this.setState({
+          idType: event.target.value,
+        })
+       // console.log(event.target.value);
+      }
 
 
 
@@ -136,7 +150,7 @@ class Registration extends React.Component {
      localStorage.setItem('userplatformID', ' ')
      this.props.updateLoadingMessage("Submitting Information...");
         const email = document.getElementById('email').value;
-        const idNumber = document.getElementById('idNumber').value;
+        const idNumber = this.state.idType == 'SA ID' ? document.getElementById('idNumber').value : document.getElementById('passportNumber').value;
         localStorage.setItem('idNumber', idNumber)
         localStorage.setItem('studentEmail', email)
         ////console.log(email)
@@ -247,8 +261,31 @@ class Registration extends React.Component {
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
 
+    localStorage.setItem('contry', '')
+
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     ////console.log("client logo", this.props.clientBG)
+
+    const fetchData = async () => {
+      //Set Loading Screen ON
+   this.props.updateLoadingController(true);
+   this.props.updateLoadingMessage("Loading Countries List...");
+     //Fetch Countries List
+     await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
+     .then(response => response.json())
+     .then(data => {
+         //console.log("data is ", data.data)
+         this.setState({ countryList: data.data })
+         //console.log("this is the countryList:", this.state.countryList)
+         //setCountryList(data.data)
+       });
+   }
+   fetchData().then(()=>{
+    //Set timer for loading screen
+  setTimeout(() => {
+    this.props.updateLoadingController(false);
+  }, 1000);
+  })
   }
   render() {
     //const user = useContext(MyProvider);
@@ -313,14 +350,6 @@ class Registration extends React.Component {
                           type="email"
                         />
                       </div>
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                          ID Number
-                        </label>
-                        <input type='number' name="idNumber" className="form-control" id='idNumber'
-                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' ></input>
-                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
-                      </div>
 
                       <div className="form-group" onChange={(e) => this.onChangeValue(e)}>
                       <label className="control-label sr-only" >
@@ -332,6 +361,22 @@ class Registration extends React.Component {
                       </div>
 
                       {
+                        this.state.idType == "SA ID"
+
+                        ? <>
+                        <div className="form-group">
+                        <label className="control-label sr-only" >
+                          ID Number
+                        </label>
+                        <input type='number' name="idNumber" className="form-control" id='idNumber'
+                          required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' ></input>
+                        <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
+                      </div>
+                        </>
+
+                        : this.state.idType == "Passport"
+                        ?
+                        <>
                         <div className="form-group">
                         <label className="control-label sr-only" >
                           Passport Number
@@ -355,10 +400,13 @@ class Registration extends React.Component {
                         </select>
                       </div>
                       </div>
-
+                        </>
+                        :
+                        <>
+                        
+                        </>
                       }
-
-                      
+                     
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
                         Continue
                         </button>

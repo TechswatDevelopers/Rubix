@@ -122,7 +122,7 @@ class PersonalInformation extends React.Component {
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
         'Gender': this.state.userGender,
-        'Nationality': this.state.country,
+        'Nationality': localStorage.getItem('country'),
         'RegistrationYear': "2023"
     };
     for (let i = 0; i < form.elements.length; i++) {
@@ -295,7 +295,7 @@ class PersonalInformation extends React.Component {
                         />
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group d-none">
                         <label className="control-label sr-only" >
                           Country:
                         </label>
@@ -308,7 +308,7 @@ class PersonalInformation extends React.Component {
                         </select>
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group d-none">
                         <label className="control-label sr-only" >
                           ID Number
                         </label>
@@ -316,7 +316,9 @@ class PersonalInformation extends React.Component {
                           required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
                       </div>
-                      <div className="form-group">
+
+
+                      <div className="form-group d-none">
                         <label className="control-label sr-only" >
                           Your Email
                         </label>

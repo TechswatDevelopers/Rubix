@@ -39,7 +39,7 @@ class Addresses extends React.Component {
         'RubixRegisterUserID': this.state.myUserID,
         'RegisterUserStreetNameAndNumer': street_address,
         'RegisterUserProvince': this.state.prov,
-        'RegisterUserCountry': this.state.country,
+        'RegisterUserCountry': localStorage.getItem('country'),
       };
       for (let i = 0; i < form.elements.length; i++) {
         const elem = form.elements[i];
@@ -312,7 +312,7 @@ class Addresses extends React.Component {
                           </select>}
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group d-none">
                         <label className="control-label sr-only" >
                           Country:
                         </label>

@@ -40,7 +40,7 @@ class VarsityDetails extends React.Component {
             payMethods: [],
             hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
-            durations: [],
+            durations: [0],
             value: 0
 
         };
@@ -264,12 +264,12 @@ async componentDidMount(){
     
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
-        durations: [0, 5, 12]
+        durations: [0, 12]
       })
     } else {
       //console.log("Sila ")
       this.setState({
-        durations: [0,5,10]
+        durations: [0,10]
       })
     }
 
