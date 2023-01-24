@@ -41,8 +41,7 @@ const mapStateToProps = ({ navigationReducer, mailInboxReducer }) => ({
 
 export const fileStorageStatusCardData = [
   {
-    UsedSize: localStorage.getItem('nationality') == 
-    "South Africa, Republic of" ?  "ID Document" : "Passport",
+    UsedSize:"ID /Passport Document",
     Type: "Documents",
     status: localStorage.getItem('idProgressMsg'),
     FileType: "id-document",
@@ -52,8 +51,7 @@ export const fileStorageStatusCardData = [
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
   {
-    UsedSize: localStorage.getItem('nationality') == 
-    "South Africa, Republic of" ? "Proof of Residence" : "Study Permit",
+    UsedSize: "Proof of Residence/Study Permit",
     Type: "Documents",
     status: localStorage.getItem('proofOfResProgressMsg'),
     FileType: "proof-of-res",
