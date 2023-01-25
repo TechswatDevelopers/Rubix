@@ -194,7 +194,7 @@ const requestOptions = {
     body: data
 };
 
-//console.log("I am empty",data)
+console.log("I am empty",data)
 const postData = async() => {
   if (studentEmail != nextofKinEmail){
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
@@ -225,8 +225,7 @@ const postData = async() => {
 }
 postData().then(() => {
  
-//this.props.onPresPopUpEvent()
-//this.props.history.push("/login/" + localStorage.getItem('clientID'))
+  //this.props.history.push("/login/" + localStorage.getItem('clientID'))
 })
 }
 

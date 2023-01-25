@@ -314,6 +314,7 @@ console.log("down")
     //Request Data
     const data = {
       'RubixRegisterUserID': localStorage.getItem('role') == 'admin' ? this.props.currentStudentiD : localStorage.getItem('userID'),
+      'NextOfKiniConsent':  "1" /* this.state.myProfile.RubixNextOfKiniConsent */
     }
     for (let i = 0; i < form.elements.length; i++) {
       const elem = form.elements[i];
@@ -326,14 +327,14 @@ console.log("down")
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-
+    console.log("This is posted: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
         .then(response => {
           if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
           }
-          //console.log("Next of Kin Post Response", response)
+          console.log("Next of Kin Post Response", response)
           //alert("Information Updated")
           
         })
@@ -1426,6 +1427,7 @@ else{
                     value={this.state.myProfile.PhoneNumber}
                     onChange={() => this.setState({ value: this.state.value })} />
                 </div>
+               
                 <div className="form-group">
                   <label>
                     Student Number:
@@ -1787,7 +1789,7 @@ else{
                     disabled=""
                     placeholder="First Name"
                     id="NextOfKinFirstName"
-                    name='NextOfKinFirstName'
+                    name='RubixUserNextOfKinFirstName'
                     type="text"
                     defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName}
                     onChange={() => { }}
@@ -1802,7 +1804,7 @@ else{
                     className="form-control"
                     placeholder="Last Name"
                     id="NextOfKinLastName"
-                    name='NextOfKinLastName'
+                    name='RubixUserNextOfKinLastName'
                     type="text"
                     defaultValue={this.state.myProfile.RubixUserNextOfKinLastName}
                     onChange={() => { }}
@@ -1817,24 +1819,67 @@ else{
                     disabled=""
                     placeholder="Email"
                     id="NextOfKinEmail"
-                    name='NextOfKinEmail'
+                    name='RubixUserNextOfKinEmail'
                     type="text"
                     defaultValue={this.state.myProfile.RubixUserNextOfKinEmail}
                     onChange={() => { }}
                   />
                 </div>
 
+                <div className="form-group">
+                        <label className="control-label" >
+                        ID/Passport Number
+                            </label>
+                            <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
+                    required=''  placeholder='Enter your ID Number' defaultValue={this.state.myProfile.RubixUserNextOfKinID}></input>
+                    <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Vat Number
+                            </label>
+                        <input
+                          className="form-control"
+                          id="RubixNextOfKinVat"
+                          name='RubixNextOfKinVat'
+                          placeholder="Enter Surety VAT number (optional)"
+                          type="number"
+                          defaultValue={this.state.myProfile.RubixNextOfKinVat}
+                        />
+                      </div>
+
               </div>
               <div className="col-lg-6 col-md-12">
+              
                 <div className="form-group">
                   <label>
-                    Phone Number:
+                    Mobile Number:
                   </label>
                   <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-                    defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber} name="NextOfKinPhoneNumber" required=''
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber} name="RubixUserNextOfKinPhoneNumber" required=''
                     value={this.state.myProfile.RubixUserNextOfKinPhoneNumber}
                     onChange={() => this.setState({ value: this.state.value })} />
                 </div>
+                <div className="form-group">
+                        <label className="control-label">
+                        Home Tellephone Number
+                            </label>
+                            <PhoneInput placeholder="Surety Home Tellephone Number" 
+                            defaultValue={this.state.myProfile.RubixUserNextOfKinHomeTell}
+                            name="RubixUserNextOfKinHomeTell" className='RubixUserNextOfKinHomeTell' required='' 
+                    value={this.state.value}
+                    onChange={()=> this.setState({value: this.state.value})}/>
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Work Number
+                            </label>
+                            <PhoneInput placeholder="Surety Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
+                    value={this.state.value}
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinWorkNumber}
+                    onChange={()=> this.setState({value: this.state.value})}/>
+                      </div>
                 <div className="form-group">
                   <label>
                     Relationship:
@@ -1842,7 +1887,7 @@ else{
                   <input
                     className="form-control"
                     placeholder="Relationship"
-                    name='NextOfKiniRelationship'
+                    name='RubixUserNextOfKiniRelationship'
                     defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship}
                     type="text"
                   />
@@ -1859,6 +1904,19 @@ else{
                     type="text"
                   />
                 </div>
+                <div className="form-group">
+                        <label className="control-label" >
+                        Postal Code
+                            </label>
+                        <input
+                          className="form-control"
+                          name="RubixUserNextOfKinPostalcode"
+                          id="post-code"
+                          placeholder="Post Code"
+                          defaultValue={this.state.myProfile.RubixUserNextOfKinPostalcode}
+                          type="text"
+                          required/>
+                      </div>
               </div>
             </div>
             <button className="btn btn-primary" type="button" onClick={(e) => this.updateNextOfKin(e)}>
