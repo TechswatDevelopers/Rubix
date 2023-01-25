@@ -1171,7 +1171,7 @@ mergePDFHandler()
           : null
         }
           
-          <iframe src={'https://adowaimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
+          <iframe style=  {localStorage.getItem('role') == 'admin'?{} :{pointerEvents: 'none'}} src={'https://adowaimages.rubix.mobi:449/' + this.state.doc.filename}width="100%" height="800px">
     </iframe>
         </>
         : <>
@@ -1180,14 +1180,14 @@ mergePDFHandler()
           {
             this.state.keyString == 'key-form'
             ?<>
-            <iframe src={"https://adowaimages.rubix.mobi:449/2a32ee9c-d6fb-4f2c-9665-0c78e119385e.pdf"}width="100%" height="800px"></iframe>
+            <iframe style=  {localStorage.getItem('role') == 'admin'?{} :{pointerEvents: 'none'}} src={"https://adowaimages.rubix.mobi:449/2a32ee9c-d6fb-4f2c-9665-0c78e119385e.pdf"}width="100%" height="800px"></iframe>
             </>
             : 
             <>
             {
               this.state.keyString == 'surety-doc'
               ?<>
-              <iframe src={'https://adowaimages.rubix.mobi:449/17_surety-doc_Samkelo_Zondi_21458321.pdf'}width="100%" height="800px"></iframe>
+              <iframe style=  {localStorage.getItem('role') == 'admin'?{} :{pointerEvents: 'none'}} src={'https://adowaimages.rubix.mobi:449/17_surety-doc_Samkelo_Zondi_21458321.pdf'}width="100%" height="800px"></iframe>
               </>
               :<>
               <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
