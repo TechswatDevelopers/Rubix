@@ -1284,11 +1284,11 @@ this.props.updateStudentName(
                     id='IDNumber'
                     name="IDNumber"
                     required=''
-                    maxLength='13'
-                    minLength='13'
+                    //maxLength='13'
+                    //minLength='13'
                     placeholder='Enter your ID Number'
                     defaultValue={this.state.myProfile.IDNumber}
-                    type='number'
+                   // type='number'
                   />
                   <br></br>
                   <div id="error">{this.state.errorMessage}</div>
@@ -1298,7 +1298,7 @@ this.props.updateStudentName(
 
               <div className="form-group">
                         <label className="control-label" >
-                          Country: {this.state.country}
+                          Country: {/* {this.state.country} */}
                         </label>
                         <select className="form-control" onChange={(e) => {
                           localStorage.setItem('country', e.target.value)

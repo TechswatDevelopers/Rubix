@@ -113,13 +113,13 @@ class PersonalInformation extends React.Component {
  this.props.updateLoadingController(true);
  this.props.updateLoadingMessage("Submitting Information..."); 
     ////console.log("User email:", this.props.email)
-    var idNumber = document.getElementById("IDNumber").value;
     var email = document.getElementById("email").value;
     //var year = document.getElementById("email").value;
     const form = document.getElementById('register');
     const data = {
         'ClientID': localStorage.getItem('clientID'),
         'PlatformID': localStorage.getItem('platformID'),
+        'IDNumber': localStorage.getItem('idNumber'),
         'RubixUserPlatformID': localStorage.getItem('userplatformID') == null ? " " : localStorage.getItem('userplatformID'),
         'RubixRegisterUserID': '',
         'MedicalConditions': this.state.medicalConditions,
@@ -137,14 +137,14 @@ class PersonalInformation extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    ////console.log("Sent: ", data)
+   console.log("Sent: ", data)
     const postData = async()=>{
         if (this.state.myGender != 'Please select your gender'  && document.getElementById('register').checkValidity() == true){
             await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
             .then(response => {
                 ////console.log("Response: ",response)
-                this.props.updateStudentID(idNumber)
-                localStorage.setItem('studentIDNo', idNumber)
+                
+                localStorage.setItem('studentIDNo', localStorage.getItem('idNumber'))
                 //localStorage.setItem('idNumber', " ")
                 localStorage.setItem('studentEmail', email)
                 localStorage.setItem('userID', response.data.PostRubixUserData[0].RubixRegisterUserID)
@@ -310,14 +310,14 @@ class PersonalInformation extends React.Component {
                         </select>
                       </div>
 
-                      <div className="form-group d-none">
+                      {/* <div className="form-group d-none">
                         <label className="control-label sr-only" >
                           ID Number
                         </label>
                         <input type='number' name="IDNumber" className="form-control" id='IDNumber'
                           required='' maxLength='13' minLength='13' placeholder='Enter your ID Number' value= {localStorage.getItem('idNumber')}></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
-                      </div>
+                      </div> */}
 
                       <div className="form-group">
                         <label className="control-label d-none" >
