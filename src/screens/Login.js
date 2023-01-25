@@ -100,7 +100,7 @@ class Login extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: data,
     };
-    //console.log(data);
+    ////console.log(data);
     const postData = async () => {
       if (document.getElementById("login").checkValidity() == true) {
         await axios
@@ -110,7 +110,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            //console.log(response);
+            ////console.log(response);
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -153,7 +153,7 @@ class Login extends React.Component {
             }
           });
       } else {
-        /* console.log(
+        /* //console.log(
           "checkValidity ",
           document.getElementById("login").checkValidity()
         ); */
@@ -192,7 +192,7 @@ class Login extends React.Component {
             requestOptions
           )
           .then((response) => {
-            //console.log('My login respond: ', response)
+            ////console.log('My login respond: ', response)
             if (response.data.PostRubixUserData["0"]["Response"] == 1) {
               this.props.updateUserID(
                 response.data.PostRubixUserData["0"]["RubixRegisterUserID"]
@@ -235,7 +235,7 @@ class Login extends React.Component {
             }
           });
       } else {
-        /* console.log(
+        /* //console.log(
           "checkValidity ",
           document.getElementById("login").checkValidity()
         ); */
@@ -303,7 +303,7 @@ class Login extends React.Component {
 
   //Google response for testing
   responseGoogle = (response) => {
-    //console.log("I am called")
+    ////console.log("I am called")
     localStorage.setItem("platformID", "2");
     this.props.updateEmail(response.profileObj.email);
     localStorage.setItem("studentEmail", response.profileObj.email);
@@ -364,7 +364,7 @@ class Login extends React.Component {
       }
     }
 
-    //console.log("client:", this.props.clientBG);
+    ////console.log("client:", this.props.clientBG);
   }
 
   //Admin Toggle

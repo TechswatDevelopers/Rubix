@@ -30,7 +30,7 @@ class Relatives extends React.Component {
 
 //final submit check
  Submit(e){
-   //console.log("called")
+   ////console.log("called")
    //Set timer for loading screen
   this.setState({
     isLoad: true
@@ -52,14 +52,14 @@ class Relatives extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log(data)
+  ////console.log(data)
   const postData = async() => {
     await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
     .then(response => {
-        //console.log(response)
+        ////console.log(response)
         setTimeout(() => {
           this.postStatus()
-        }, 2000);
+        }, 6000);
         this.setState({
           isLoad: false
         })
@@ -75,7 +75,7 @@ class Relatives extends React.Component {
 
   //Posting Update status
   postStatus() {
-    console.log("User ID: ", localStorage.getItem('userID'))
+   // //console.log("User ID: ", localStorage.getItem('userID'))
     //Set Loading Screen ON
  this.props.updateLoadingController(true);
  this.props.updateLoadingMessage("Adding Status...");
@@ -89,7 +89,7 @@ class Relatives extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('User data:', data)
+    //console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
@@ -99,13 +99,16 @@ class Relatives extends React.Component {
       this.setState({
         isLoad: false
       });
-    }, 1000);
+    }, 10000);
           }
-          console.log("Verify email status", response)
-          this.props.history.push("/login/" + localStorage.getItem('clientID') )
+          ////console.log("Verify email status", response)
+          
         })
     }
-    postData()
+    postData().then(() => {
+
+      this.props.history.push("/login/" + localStorage.getItem('clientID') )
+    })
   }
 
 

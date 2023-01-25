@@ -59,7 +59,7 @@ class VarsityDetails extends React.Component {
               durations: [0, 12]
             })
           } else {
-            //console.log("Sila ")
+            ////console.log("Sila ")
             this.setState({
               durations: [0,10]
             })
@@ -75,7 +75,7 @@ class VarsityDetails extends React.Component {
      this.props.updateLoadingController(true);
      this.props.updateLoadingMessage("Submitting Information...");
         const form = document.getElementById('uniDetails');
-        //console.log('Uni ID: ', this.state.uni)
+        ////console.log('Uni ID: ', this.state.uni)
         const data = {
             'RubixRegisterUserID': this.state.myUserID,
             //'ProvinceID': this.state.prov,
@@ -97,12 +97,12 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        //console.log(data)
+        ////console.log(data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && this.state.payment != this.state.payMethods[0] && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    //console.log("The Response: ",response)
+                    ////console.log("The Response: ",response)
                     //Set timer for loading screen
                     
     setTimeout(() => {
@@ -117,7 +117,7 @@ class VarsityDetails extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
               alert("Please ensure that you entered all required information")
-                //console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
+                ////console.log("checkValidity ", document.getElementById('uniDetails').checkValidity())
             }
         }
         if(this.state.duration == 0){
@@ -163,7 +163,7 @@ async componentDidMount(){
         await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            ////console.log("data is ", data.data)
             this.setState({
               uniList: data.data,
               //uni: data.data[0]['RubixUniversityID']
@@ -174,10 +174,10 @@ async componentDidMount(){
         await fetch('https://jjprest.rubix.mobi:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            ////console.log("data is ", data.data)
             //this.state.provList = data.data
             this.setState({provList: data.data})
-            //console.log("this is the provList:", this.state.provList)
+            ////console.log("this is the provList:", this.state.provList)
             //setProvList(data.data)
             });
 
@@ -185,7 +185,7 @@ async componentDidMount(){
             await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            ////console.log("data is ", data.data)
             this.setState({yearList: data.data})
             });
     
@@ -204,7 +204,7 @@ async componentDidMount(){
   }
   changeHandler = (event) => {
     this.setState({selectedFile: event.target.files[0]})
-    //console.log("selcted file", event.target.files[0])
+    ////console.log("selcted file", event.target.files[0])
     this.setState({isSelected: true})
     this.getBase64(event)
   }
@@ -215,14 +215,14 @@ async componentDidMount(){
 
   //Fetch Residences
   getRes(uniID){
-    //console.log("Location ", this.state.durations)
-    //console.log("Uni ID: ", uniID)
+    ////console.log("Location ", this.state.durations)
+    ////console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
       await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
-          //console.log("data is ", data)
+          ////console.log("data is ", data)
           this.setState({resList: data.data})
           });
     }
@@ -230,7 +230,7 @@ async componentDidMount(){
   }
 
   getResAndPayment(resID){
-    //console.log("this: ", resID)
+    ////console.log("this: ", resID)
     this.setState({
       isLoad: true
     })
@@ -244,11 +244,11 @@ async componentDidMount(){
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log("My Data: ", data)
+  ////console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        console.log("My response: ", response.data.PostRubixUserData)
+        //console.log("My response: ", response.data.PostRubixUserData)
         
         this.setState({
           isLoad: false,
@@ -260,14 +260,14 @@ async componentDidMount(){
   }
 
   onVarsitySelect(e){
-    //console.log("qala la: ", e.target.value)
+    ////console.log("qala la: ", e.target.value)
     
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
         durations: [0, 12]
       })
     } else {
-      //console.log("Sila ")
+      ////console.log("Sila ")
       this.setState({
         durations: [0,10]
       })
@@ -280,7 +280,7 @@ async componentDidMount(){
     })
   }
   onValueChange(e){
-    //console.log(e.target.value)
+    ////console.log(e.target.value)
 
     if(e.target.value == 'no'){
       this.setState({
@@ -461,7 +461,7 @@ async componentDidMount(){
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>{
-          //console.log("see: ", e.target.value)
+          ////console.log("see: ", e.target.value)
           if(e.target.value != "Please Select Residence"){
             this.getResAndPayment(e.target.value)
           } else {
@@ -508,7 +508,7 @@ async componentDidMount(){
                         Duration: 
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>{/* console.log("Value: ", e.target.value); */ this.setState({duration: e.target.value})}} value={this.state.duration}>
+        <select className="form-control" onChange={(e)=>{/* //console.log("Value: ", e.target.value); */ this.setState({duration: e.target.value})}} value={this.state.duration}>
         {
             
             this.state.durations.map((duration, index)=> (

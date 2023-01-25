@@ -29,7 +29,7 @@ const images = [
 ];
 /* function useIsMobile() {
   const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
-  console.log("Is Mobile: ", isMobile)
+  //console.log("Is Mobile: ", isMobile)
   return isMobile
 } */
 class Residence extends React.Component {
@@ -69,12 +69,12 @@ class Residence extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: pingData
     };
-    //console.log("The request: ", pingData)
+    ////console.log("The request: ", pingData)
     const postData = async () => {
       //Ping email address
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixStudentResDetails', pingData, requestOptions)
         .then(response => {
-          //console.log("Student Res Details", response)
+          ////console.log("Student Res Details", response)
           const temp = response.data.PostRubixUserData;
           this.setState({
             resDetails: response.data.PostRubixUserData[0],
@@ -99,7 +99,7 @@ class Residence extends React.Component {
     setTimeout(() => {
     postData()
     }, 2000);
-    //console.log('amenities', this.state.amenities)
+    ////console.log('amenities', this.state.amenities)
   }
 
 
@@ -109,7 +109,7 @@ class Residence extends React.Component {
     await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + resID)
     .then(response => response.json())
     .then(data => {
-      //console.log("Images:", data.post)
+      ////console.log("Images:", data.post)
       for(let i = 0; i <= data.post.length - 1; ++i){
 
        if(data.post[i].FileType != "ResManager"){ 
@@ -128,7 +128,7 @@ class Residence extends React.Component {
         }
       }
      
-     // console.log('In the gallery: ', this.state.gallery)
+     // //console.log('In the gallery: ', this.state.gallery)
     })
   }
   fetchData()
