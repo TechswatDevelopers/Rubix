@@ -99,7 +99,7 @@ class NavbarMenu extends React.Component {
   }, 4000);
         
       } else {
-        fetchUserData();
+       // fetchUserData();
         //fetchData()
       }
   }
