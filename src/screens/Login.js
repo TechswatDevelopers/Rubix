@@ -480,6 +480,7 @@ class Login extends React.Component {
                         <div
                           style={{
                             display: this.state.isAdmin ? "none" : "block",
+                            fontSize: 15
                           }}
                         >
                           
@@ -497,6 +498,7 @@ class Login extends React.Component {
                           className="bottom"
                           style={{
                             display: this.state.isAdmin ? " block" : "none",
+                            fontSize: 15
                           }}
                         >
                           For Student Login Click{" "}
@@ -516,14 +518,15 @@ class Login extends React.Component {
                           <span
                             style={{
                               display: this.state.isAdmin ? "none" : "block",
+                              fontSize: 30
                             }}
                           >
-                            Don't have an account?{" "}
-                            <a href="registration">Apply / Register</a>
+                           <a class="display-5" href="registration">Apply Now / Register</a>
                           </span>
                           <span
                             style={{
                               display: this.state.isAdmin ? "none" : "block",
+                              fontSize: 15
                             }}
                           >
                             For Admins, please log in{" "}
