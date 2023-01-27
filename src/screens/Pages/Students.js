@@ -323,7 +323,6 @@ postData().then(()=>{
       })
   }
 
-
   exportToCSV(resID){
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
