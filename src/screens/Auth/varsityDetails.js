@@ -276,7 +276,7 @@ async componentDidMount(){
       this.setState({
         uni: e.target.value,
         showResInput: true,
-        durations: [0, 5, 12],
+        durations: [0,10],
         isShowOtherDetails: true
       })
       this.getRes(e.target.value)
@@ -294,7 +294,7 @@ async componentDidMount(){
       this.setState({
         uni: e.target.value,
         showResInput: true,
-        durations: [0,5,10],
+        durations: [0,10],
         isShowOtherDetails: true
       })
       this.getRes(e.target.value)
