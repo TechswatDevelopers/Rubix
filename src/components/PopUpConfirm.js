@@ -171,6 +171,43 @@ getUserWitnessData() {
     }
   }
 
+  //Send Key Form for Signing
+  sendFinalForm(filename){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Generating Lease...");
+
+    //Request Data
+    const data = {
+   "ImageUrl" : filename,
+   "UserCode" : localStorage.getItem('userCode'),
+   "RubixRegisterUserID" : localStorage.getItem('userID')
+    }
+
+    const requestOptions = {
+      title: 'Sending Final Signature Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+    console.log('My form data: ', data)
+    const postData = async () => {
+      await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateKeyReceiptFormPDFFinal', data, requestOptions)
+      .then(response=>{
+        console.log("Final Key form Response: ", response)
+        
+        //Send documents API
+        const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+        const temp = this.dataURLtoFile(dataUrl, 'Key Form')
+        //Set Loading Screen OFF
+        this.props.updateLoadingController(false);
+        this.onPressUpload(temp, 'key-form', 'signing')
+      })
+    }
+    
+      postData()
+  }
+
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
     this.props.updateLoadingController(true);
@@ -303,6 +340,8 @@ getUserWitnessData() {
                     setTimeout(() => {
                       this.sendFinalLease(Filename)
                     }, 3000);
+                  } else if (FileType == 'key-form'){
+                    this.sendFinalForm(Filename)
                   }
                   this.props.onPresPopUpConfirm();
 

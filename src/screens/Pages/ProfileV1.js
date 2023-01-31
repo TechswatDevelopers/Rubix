@@ -1049,7 +1049,7 @@ mergePDFHandler()
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
           ////console.log("Signature upload details:", response)
-          this.setState({ docUrl: response.data.Base })
+          this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
