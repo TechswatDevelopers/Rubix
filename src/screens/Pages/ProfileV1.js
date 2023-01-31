@@ -1354,7 +1354,7 @@ mergePDFHandler()
         Body = "You are confirming that the document and information are in line."
         FileType = {this.state.keyString} 
         DocID = {this.state.currentDocID}
-        Filename = {'https://adowaimages.rubix.mobi:449/' + this.state.myLease}
+        Filename = {this.state.docs.filter(doc => doc.FileType == this.state.keyString)[0]}
         Function = {()=>{
           //Load Documents
    if (localStorage.getItem('role') == 'admin'){

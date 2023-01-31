@@ -338,7 +338,7 @@ getUserWitnessData() {
                   if(FileType == 'lease-agreement'){
                     
                     setTimeout(() => {
-                      this.sendFinalLease(Filename)
+                      this.sendFinalLease("'https://adowaimages.rubix.mobi:449/'" + Filename)
                     }, 3000);
                   } else if (FileType == 'key-form'){
                     this.sendFinalForm(Filename)
