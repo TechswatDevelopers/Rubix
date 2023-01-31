@@ -32,7 +32,7 @@ class Students extends React.Component {
           isShow: localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == 2 ? false : true,
           studentLeaseAmmend: [],
           listIndex: 0,
-          occups: ['New', 'Returning'],
+          occups: ['New', 'Returning', 'Unverified'],
           occupancy: '',
         }
       }
@@ -323,6 +323,67 @@ postData().then(()=>{
       })
   }
 
+    //Fetch all students Data
+    getUnverifiedStudents(search, resID){
+      //Set Loading Screen ON
+      this.props.updateLoadingController(true);
+      this.props.updateLoadingMessage("Loading Student Details, Please wait...");
+      this.setState({
+        isEmpty: false,
+      })
+      if(localStorage.getItem('role') == 'admin'){
+  
+      } else {
+        document.getElementById('search').value = search
+      }
+      const pingData = {
+          'UserCode': localStorage.getItem('userCode'),
+          'RubixClientID':  localStorage.getItem('clientID'),
+          'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' ? resID : localStorage.getItem('resID'),
+          'Search': search
+        };
+        //Ping Request Headers
+        const requestOptions = {
+          title: 'Get All Students Details',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: pingData
+        };
+        //console.log('Posted data: ', pingData)
+        const postData = async () => {
+          await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentListInactive', pingData, requestOptions)
+          .then(response => {
+            console.log("Students: ", response.data.PostRubixUserData)
+            if(!response.data.PostRubixUserData){
+              this.setState({
+                isEmpty: true,
+                students: []
+              })
+              //Set timer for loading screen
+            setTimeout(() => {
+              this.props.updateLoadingController(false);
+            }, 2000);
+            } else {
+              this.setState({
+                students: response.data.PostRubixUserData
+              })
+            
+            }
+            
+  
+          })
+        }
+        postData().then(() =>{
+          
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+            this.getColors()
+            //this.exportToCSV(resID)
+          }, 7000);
+        })
+    }
+  
+
   exportToCSV(resID){
     //Set Loading Screen ON
     this.props.updateLoadingController(true);
@@ -479,6 +540,7 @@ postData().then(()=>{
           this.setState({res: e.target.value,
           isShow: true
           })
+          
           this.getStudents('', e.target.value)
           this.props.updateResidenceID(e.target.value)
           //console.log('ResID1: ', e.target.value)
@@ -552,7 +614,13 @@ postData().then(()=>{
   Download Report
 </button>
 {  
-        <select className="form-control" onChange={(e)=>{this.getStudents(e.target.value, this.state.res); this.setState({occupancy: e.target.value})}} value={this.state.occupancy}>
+        <select className="form-control" onChange={(e)=>{
+          if(e.target.value == 'Unverified'){
+            this.getUnverifiedStudents('', this.state.res)
+          } else {
+            this.getStudents(e.target.value, this.state.res);
+          }
+           this.setState({occupancy: e.target.value})}} value={this.state.occupancy}>
         {
          this.state.occups.map((banktype, index)=> (
             <option key={index} name='AccountType' value = {banktype}>{banktype} Student</option>
