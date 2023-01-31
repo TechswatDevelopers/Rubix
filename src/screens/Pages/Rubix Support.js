@@ -60,11 +60,11 @@ class RubixSurport extends React.Component {
         body: data
       }
 
-      console.log("Posted Data: ", data)
+      //console.log("Posted Data: ", data)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixGetSupportData', data, requestOptions)
         .then(response => {
-          console.log("Response Data:", response)
+          //console.log("Response Data:", response)
           this.setState({
             tickets: response.data.PostRubixUserData
           })
@@ -105,11 +105,11 @@ class RubixSurport extends React.Component {
           headers: { 'Content-Type': 'application/json' },
           body: pingData
         };
-        //console.log('Posted data: ', pingData)
+        ////console.log('Posted data: ', pingData)
         const postData = async () => {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentList', pingData, requestOptions)
           .then(response => {
-            //console.log("All Students: ", response)
+            ////console.log("All Students: ", response)
             if(!response.data.PostRubixUserData){
               this.setState({
                 isEmpty: true,
@@ -206,12 +206,12 @@ class RubixSurport extends React.Component {
       body: data
   };
 
-  //console.log("Posted Data:", data)
+  ////console.log("Posted Data:", data)
 
   const postData = async()=>{
     await axios.post('https://adowarest.rubix.mobi:88/api/RubixSupportAdd', data, requestOptions)
     .then(response => {
-      //console.log('done', response)
+      ////console.log('done', response)
       if(response.data.PostRubixUserData[0].Response == 1){
         
       }
@@ -240,7 +240,7 @@ class RubixSurport extends React.Component {
       await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/')
       .then(response => response.json())
       .then(data => {
-          //console.log("data is ", data)
+          ////console.log("data is ", data)
           this.setState({resList: data.data})
           });
       } 
@@ -294,7 +294,7 @@ class RubixSurport extends React.Component {
           })
           this.getStudents('', e.target.value)
           this.props.updateResidenceID(e.target.value)
-          //console.log('ResID1: ', e.target.value)
+          ////console.log('ResID1: ', e.target.value)
           localStorage.setItem('resID', e.target.value)
           }} value={this.state.res}>
         {

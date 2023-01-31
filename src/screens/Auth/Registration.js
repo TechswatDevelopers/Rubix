@@ -86,7 +86,7 @@ class Registration extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    //console.log(id_date, id_month, id_year)
+    ////console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -143,7 +143,7 @@ class Registration extends React.Component {
         const idNumber = this.state.idType == "SA ID" ? document.getElementById('idNumber').value : document.getElementById('passportNumber').value ;
         localStorage.setItem('idNumber', idNumber)
         localStorage.setItem('studentEmail', email)
-        //console.log(email)
+        ////console.log(email)
 
         // PingRequest data
         const pingData = {
@@ -163,14 +163,14 @@ class Registration extends React.Component {
           'IDNumber': idNumber,
           'RubixClientID': localStorage.getItem('clientID'),
       };
-      console.log("The Call: ", userExistsData)
+      //console.log("The Call: ", userExistsData)
 
       //Check user exists
       const checkUser = async()=>{
         //Send email to DB
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserExists', userExistsData, requestOptions)
             .then(response => {
-                console.log("The response: ",response.data)
+                //console.log("The response: ",response.data)
 
                 /*If User exists on DB:
                 1. If Response is equal to Zero and Rubix User ID is null, then the user does not exist on DB
@@ -235,8 +235,8 @@ class Registration extends React.Component {
         //Ping email address
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixEmailCheck', pingData, requestOptions)
             .then(response => {
-                console.log(response.data.EmailResult )
-                console.log("Chek it out here: ", idNumber )
+                //console.log(response.data.EmailResult )
+                //console.log("Chek it out here: ", idNumber )
                 if(response.data.EmailResult){
                   this.props.updateEmail(email);
                   this.props.updatePlatformID("1");
@@ -272,7 +272,7 @@ class Registration extends React.Component {
         this.setState({
           idType: event.target.value,
         })
-       // console.log(event.target.value);
+       // //console.log(event.target.value);
       }
 
 
@@ -285,7 +285,7 @@ class Registration extends React.Component {
     document.body.classList.remove("theme-blush");
 
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
-    //console.log("client logo", this.props.clientBG)
+    ////console.log("client logo", this.props.clientBG)
 
     const fetchData = async () => {
       //Set Loading Screen ON
@@ -295,9 +295,9 @@ class Registration extends React.Component {
      await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
      .then(response => response.json())
      .then(data => {
-         //console.log("data is ", data.data)
+         ////console.log("data is ", data.data)
          this.setState({ countryList: data.data })
-         console.log("this is the countryList:", this.state.countryList)
+         //console.log("this is the countryList:", this.state.countryList)
          //setCountryList(data.data)
        });
    }

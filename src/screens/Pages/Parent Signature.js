@@ -43,7 +43,7 @@ constructor(props) {
       await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + this.state.userID)
       .then(response => response.json())
       .then(data => {
-        console.log("check: ", data)
+        //console.log("check: ", data)
         if(data.post.length != 0 && data.post != null){
           this.setState({
            bookingDoc: '17_surety-doc_Samkelo_Zondi_21458321.pdf',
@@ -104,12 +104,12 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      //console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDFNEKSign', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease agreement')
@@ -133,12 +133,12 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      //console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateDeedofSuretyPDF', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
@@ -162,12 +162,12 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      console.log("Posted Data:", data)
+      //console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateKeyReceiptFormPDF', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
@@ -212,11 +212,11 @@ constructor(props) {
     };
     
     for (var pair of data.entries()) {
-      console.log(pair[0], ', ', pair[1]);
+      //console.log(pair[0], ', ', pair[1]);
     }
     await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
       .then(response => {
-        console.log("Upload details:", response)
+        //console.log("Upload details:", response)
         this.setState({ mongoID: response.data.post._id })
       })
   }
@@ -265,7 +265,7 @@ constructor(props) {
       localStorage.setItem('clientTheme', 'purple')
     }
     }
-    //console.log('client:', this.state.backImage)
+    ////console.log('client:', this.state.backImage)
   }
 
   //Change Doc

@@ -53,13 +53,13 @@ class Addresses extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
       };
-      console.log("Check:",data)
+      //console.log("Check:",data)
       const postData = async () => {
 
         if (this.state.location != null && this.state.prov != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
-              //console.log(response)
+              ////console.log(response)
               //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
@@ -73,7 +73,7 @@ class Addresses extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
           alert("Please ensure that you entered all required information")
-          //console.log("checkValidity ", document.getElementById('addresses').checkValidity())
+          ////console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
       }
       postData()
@@ -89,7 +89,7 @@ class Addresses extends React.Component {
         data[elem.name] = elem.value
       }
 
-      console.log("posted Data: ", data)
+      //console.log("posted Data: ", data)
       const requestOptions = {
         title: 'Address Form',
         method: 'POST',
@@ -101,7 +101,7 @@ class Addresses extends React.Component {
         if ( this.state.prov != null /* && document.getElementById('addresses').checkValidity() == true */) {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
-              //console.log("The response: ",response)
+              ////console.log("The response: ",response)
               //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
@@ -115,7 +115,7 @@ class Addresses extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
           alert("Please ensure that you entered all required information")
-          //console.log("checkValidity ", document.getElementById('addresses').checkValidity())
+          ////console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
       }
       postData()
@@ -146,14 +146,14 @@ class Addresses extends React.Component {
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Details...");
 
-    //console.log("This is the ID: ", localStorage.getItem('userID'))
+    ////console.log("This is the ID: ", localStorage.getItem('userID'))
 
     const fetchData = async () => {
       await fetch('https://adowarest.rubix.mobi:88/api/RubixProvinces')
         .then(response => response.json())
         .then(data => {
           this.setState({ provList: data.data })
-          //console.log("this is the provList:", this.state.provList)
+          ////console.log("this is the provList:", this.state.provList)
           //setProvList(data.data)
         });
 
@@ -161,9 +161,9 @@ class Addresses extends React.Component {
       await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
         .then(response => response.json())
         .then(data => {
-          //console.log("data is ", data.data)
+          ////console.log("data is ", data.data)
           this.setState({ countryList: data.data })
-          //console.log("this is the countryList:", this.state.countryList)
+          ////console.log("this is the countryList:", this.state.countryList)
           //setCountryList(data.data)
         });
 

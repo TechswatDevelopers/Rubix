@@ -81,7 +81,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     date: myDate,
     time: myTime
   }
-  ////console.log("date", date)
+  //////console.log("date", date)
   return newdate
 }
 
@@ -113,10 +113,10 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log('Posted data: ', data)
+  ////console.log('Posted data: ', data)
     const getData = async () => {
       const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserCommentsAndLikes', data, requestOptions)
-      ////console.log("Messages data", res.data.PostRubixUserData);
+      //////console.log("Messages data", res.data.PostRubixUserData);
       this.setState({ notices: res.data.PostRubixUserData })
       this.loadComments(res.data.PostRubixUserData[0].RubixRegisterUserMessageID)
     }
@@ -149,10 +149,10 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    ////console.log("Data: ", data)
+    //////console.log("Data: ", data)
     const getData = async () => {
       const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserComments', data, requestOptions)
-      ////console.log("Comment Respinse",res.data);
+      //////console.log("Comment Respinse",res.data);
     }
     getData()
    window.location.reload()
@@ -178,10 +178,10 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    ////console.log('message: ', postID)
+    //////console.log('message: ', postID)
     const getData = async () => {
       const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserCommentsGet', data, requestOptions)
-      ////console.log("List of Comments data", res.data.PostRubixUserData)
+      //////console.log("List of Comments data", res.data.PostRubixUserData)
       const tempComments = res.data.PostRubixUserData
 
       if(tempComments == null || tempComments.length == 0){
@@ -211,7 +211,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
     };
     const getData = async () => {
       const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserLikesGet', data, requestOptions)
-      ////console.log("List of likes data",res.data);
+      //////console.log("List of likes data",res.data);
       const tempLikes = res.data.PostRubixUserData
       if (tempLikes.length == 0 || tempLikes == undefined || tempLikes == false) {
 
@@ -232,7 +232,7 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
           }
         }
         
-        ////console.log("Liked: ", liked)
+        //////console.log("Liked: ", liked)
       }
 
     }
@@ -267,10 +267,10 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    ////console.log('message: ', postID)
+    //////console.log('message: ', postID)
     const getData = async () => {
       const res = await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserLikes', data, requestOptions)
-      ////console.log("My likes Response", res.data);
+      //////console.log("My likes Response", res.data);
     }
 
     getData().then(data => {

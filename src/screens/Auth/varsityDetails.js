@@ -72,7 +72,7 @@ class VarsityDetails extends React.Component {
               durations: [0, 5, 12]
             })
           } else {
-            //console.log("Sila ")
+            ////console.log("Sila ")
             this.setState({
               durations: [0,5,10]
             })
@@ -88,7 +88,7 @@ class VarsityDetails extends React.Component {
      this.props.updateLoadingController(true);
      this.props.updateLoadingMessage("Submitting Information...");
         const form = document.getElementById('uniDetails');
-        //console.log('Uni ID: ', this.state.uni)
+        ////console.log('Uni ID: ', this.state.uni)
         const data = {
             'RubixRegisterUserID': this.state.myUserID,
             'UniversityID': this.state.uni,
@@ -109,12 +109,12 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        console.log("Sent Data: ",data)
+        //console.log("Sent Data: ",data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    console.log("The Response: ",response)
+                    //console.log("The Response: ",response)
                     //Set timer for loading screen
                     
     setTimeout(() => {
@@ -158,7 +158,7 @@ async componentDidMount(){
     document.body.classList.remove("theme-orange");
     document.body.classList.remove("theme-blush");
     const userID = localStorage.getItem('userID');
-    console.log("My UID: ",userID )
+    //console.log("My UID: ",userID )
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({myUserID: userID});
     this.getStudentRoomDetails(userID)
@@ -175,7 +175,7 @@ async componentDidMount(){
         await fetch('https://adowarest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
-            console.log("data is ", data.data)
+            //console.log("data is ", data.data)
             this.setState({
               uniList: data.data,
               //uni: data.data[0]['RubixUniversityID']
@@ -194,7 +194,7 @@ async componentDidMount(){
             await fetch('https://adowarest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            ////console.log("data is ", data.data)
             this.setState({yearList: data.data})
             });
     
@@ -214,7 +214,7 @@ async componentDidMount(){
 
   changeHandler = (event) => {
     this.setState({selectedFile: event.target.files[0]})
-    //console.log("selcted file", event.target.files[0])
+    ////console.log("selcted file", event.target.files[0])
     this.setState({isSelected: true})
     this.getBase64(event)
   }
@@ -226,14 +226,14 @@ async componentDidMount(){
 
   //Fetch Residences
   getRes(uniID){
-    //1console.log("Location ", this.state.durations)
-    //console.log("Uni ID: ", uniID)
+    //1//console.log("Location ", this.state.durations)
+    ////console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
       await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + 1)
       .then(response => response.json())
       .then(data => {
-          console.log("This data is for viewing: ", data)
+          //console.log("This data is for viewing: ", data)
           this.setState({resList: data.data})
           });
     }
@@ -241,7 +241,7 @@ async componentDidMount(){
   }
 
   getResAndPayment(resID){
-    //console.log("this: ", resID)
+    ////console.log("this: ", resID)
     this.setState({
       isLoad: true
     })
@@ -255,11 +255,11 @@ async componentDidMount(){
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log("My Data: ", data)
+  ////console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        console.log("My response: ", response.data.PostRubixUserData)
+        //console.log("My response: ", response.data.PostRubixUserData)
         
         this.setState({
           isLoad: false,
@@ -271,7 +271,7 @@ async componentDidMount(){
   }
 
   onVarsitySelect(e){
-    //console.log("this is coming through as: ", e.target.value)
+    ////console.log("this is coming through as: ", e.target.value)
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
         uni: e.target.value,
@@ -290,7 +290,7 @@ async componentDidMount(){
       })
     }
     else {
-      //console.log("Sila ")
+      ////console.log("Sila ")
       this.setState({
         uni: e.target.value,
         showResInput: true,
@@ -302,7 +302,7 @@ async componentDidMount(){
   }
 
   onValueChange(e){
-    //console.log(e.target.value)
+    ////console.log(e.target.value)
     if(e.target.value == 'no'){
       this.setState({
         hasCar: false
@@ -334,12 +334,12 @@ async componentDidMount(){
           body: pingData
         };
 
-        console.log('Posted:', pingData)
+        //console.log('Posted:', pingData)
 
         const postData = async () => {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailablePref', pingData, requestOptions)
           .then(response => {
-            console.log("Students Rooms List:", response.data.PostRubixUserData)
+            //console.log("Students Rooms List:", response.data.PostRubixUserData)
             if (response.data.PostRubixUserData){
               //Show available rooms
               this.setState({
@@ -383,11 +383,11 @@ async componentDidMount(){
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      //console.log('Posted:', pingData)
+      ////console.log('Posted:', pingData)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          //console.log("Students Rooms Dropdown:", response)
+          ////console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -422,7 +422,7 @@ async componentDidMount(){
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].BuildingNumber)){
-              //console.log('found', roomList[i].BuildingNumber)
+              ////console.log('found', roomList[i].BuildingNumber)
               
             } else {
               newList.push(roomList[i].BuildingNumber)
@@ -435,7 +435,7 @@ async componentDidMount(){
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].FloorNumber)){
-              //console.log('found', roomList[i].FloorNumber)
+              ////console.log('found', roomList[i].FloorNumber)
             } else {
               newList.push(roomList[i].FloorNumber)
             }
@@ -447,7 +447,7 @@ async componentDidMount(){
           for(let i = 0; i<= roomList.length - 1; i++ ){
             
             if(newList.includes(roomList[i].RoomNumber)){
-              //console.log('found')
+              ////console.log('found')
             } else {
               newList.push(roomList[i].RoomNumber)
             }
@@ -616,7 +616,7 @@ async componentDidMount(){
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>{
-          //console.log("see: ", e.target.value)
+          ////console.log("see: ", e.target.value)
           if(e.target.value != "Please Select Residence"){
             this.getResAndPayment(e.target.value)
           } else {
@@ -643,7 +643,7 @@ async componentDidMount(){
                         Duration
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>{/* console.log("Value: ", e.target.value); */ this.setState({duration: e.target.value})}} value={this.state.duration}>
+        <select className="form-control" onChange={(e)=>{/* //console.log("Value: ", e.target.value); */ this.setState({duration: e.target.value})}} value={this.state.duration}>
         {
             
             this.state.durations.map((duration, index)=> (

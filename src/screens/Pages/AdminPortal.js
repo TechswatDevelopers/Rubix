@@ -43,7 +43,7 @@ class AdminDashboard extends React.Component {
       await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' /* + localStorage.getItem('clientID') */)
       .then(response => response.json())
       .then(data => {
-          //console.log("data is ", data)
+          ////console.log("data is ", data)
           this.setState({resList: data.data})
           });
       } 
@@ -88,22 +88,22 @@ class AdminDashboard extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    //console.log("Posted Data: ", data)
+    ////console.log("Posted Data: ", data)
 
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminReport', data, requestOptions)
       .then(response =>{
-        console.log("Response: ", response)
+        //console.log("Response: ", response)
 
         //Load data
         let registrationPerYear = response.data.PostRubixUserData.filter(doc => doc.TotalRegistrationsPerDay !== undefined)
         
         //Load Students Registered
-        //console.log("Registration per year: ", registrationPerYear)
+        ////console.log("Registration per year: ", registrationPerYear)
         let registrationLegend = [], regMonth = [], registrationChartData = [], dataset = []
 
         let statsID = response.data.PostRubixUserData.filter(doc => doc.FileType === "id-document")
-        //console.log("Id stats", statsID)
+        ////console.log("Id stats", statsID)
         let statsLease = response.data.PostRubixUserData.filter(doc => doc.FileType === "lease-agreement")
         let statsNOK = response.data.PostRubixUserData.filter(doc => doc.FileType === "next-of-kin")
         let statsREG = response.data.PostRubixUserData.filter(doc => doc.FileType === "proof-of-reg")
@@ -121,7 +121,7 @@ class AdminDashboard extends React.Component {
         var tempdate = [];
 
         var diff =Math.ceil(Math.abs( new Date() - base2)/oneDay)
-        //console.log('Difference: ', diff)
+        ////console.log('Difference: ', diff)
         
 
         for (var i = 1; i <= diff; i++) {
@@ -136,10 +136,10 @@ class AdminDashboard extends React.Component {
           //Load Registration Stats
           let tempStudents = registrationPerYear.filter(doc => doc.daydate == currentDate)
           if(tempStudents != null && tempStudents != undefined && tempStudents.length != 0){
-            //console.log("It's a match!", tempStudents)
+            ////console.log("It's a match!", tempStudents)
             dataset.push(tempStudents[0].TotalRegistrationsPerDay)
           } else {
-            //console.log("It's NOT a match!", tempStudents)
+            ////console.log("It's NOT a match!", tempStudents)
             dataset.push(0)
           }
 
@@ -147,50 +147,50 @@ class AdminDashboard extends React.Component {
           //Load ID Documents
           let tempID = statsID.filter(doc => doc.Documnetdaydate == currentDate)
           if(tempID != null && tempID != undefined && tempID.length != 0){
-            //console.log("It's a match!", tempID)
+            ////console.log("It's a match!", tempID)
             IdDataSets.push(tempID[0].DocumentCountPerDayPerTypePerDay)
           } else {
-            //console.log("It's NOT a match!", tempID)
+            ////console.log("It's NOT a match!", tempID)
             IdDataSets.push(0)
           }
 
           //Load Lease Documents
           let tempLease = statsLease.filter(doc => doc.Documnetdaydate == currentDate)
           if(tempLease != null && tempLease != undefined && tempLease.length != 0){
-            //console.log("It's a match!", tempID)
+            ////console.log("It's a match!", tempID)
             leaseDataSet.push(tempLease[0].DocumentCountPerDayPerTypePerDay)
           } else {
-            //console.log("It's NOT a match!", tempID)
+            ////console.log("It's NOT a match!", tempID)
             leaseDataSet.push(0)
           }
 
           //Load Next of Kin ID Documents
           let tempNOK = statsNOK.filter(doc => doc.Documnetdaydate == currentDate)
           if(tempNOK != null && tempNOK != undefined && tempNOK.length != 0){
-            //console.log("It's a match!", tempID)
+            ////console.log("It's a match!", tempID)
             nokDataSet.push(tempNOK[0].DocumentCountPerDayPerTypePerDay)
           } else {
-            //console.log("It's NOT a match!", tempID)
+            ////console.log("It's NOT a match!", tempID)
             nokDataSet.push(0)
           }
 
           //Load Proof of Registration Documents
           let tempREG = statsREG.filter(doc => doc.Documnetdaydate == currentDate)
           if(tempREG != null && tempREG != undefined && tempREG.length != 0){
-            //console.log("It's a match!", tempID)
+            ////console.log("It's a match!", tempID)
             regDataSet.push(tempREG[0].DocumentCountPerDayPerTypePerDay)
           } else {
-            //console.log("It's NOT a match!", tempID)
+            ////console.log("It's NOT a match!", tempID)
             regDataSet.push(0)
           }
 
           //Load Proof of Residence Documents
           let tempRES = statsRES.filter(doc => doc.Documnetdaydate == currentDate)
           if(tempRES != null && tempRES != undefined && tempRES.length != 0){
-            //console.log("It's a match!", tempID)
+            ////console.log("It's a match!", tempID)
             resDataSet.push(tempRES[0].DocumentCountPerDayPerTypePerDay)
           } else {
-            //console.log("It's NOT a match!", tempID)
+            ////console.log("It's NOT a match!", tempID)
             resDataSet.push(0)
           }
         })
@@ -497,7 +497,7 @@ class AdminDashboard extends React.Component {
   //Get All Reports
   getAllReports(){
     let newList = this.state.resList.filter(doc => doc.RubixResidenceID !== null && doc.RubixResidenceID !== 99)
-    //console.log('cliked', newList)
+    ////console.log('cliked', newList)
     if (this.state.resIndex <= newList.length - 1){
         this.getResInfo(
           newList[this.state.resIndex].RubixResidenceID, 
@@ -533,11 +533,11 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminReportAll', data, requestOptions)
       .then( response =>{
-        console.log('Stats Data: ', response.data.PostRubixUserData)
+        //console.log('Stats Data: ', response.data.PostRubixUserData)
         var list = response.data.PostRubixUserData
 
         list.forEach(res =>{
-          //console.log('Current res: ', res)
+          ////console.log('Current res: ', res)
           this.state.resInfoList.push(
             {
               'name': res.ResidenceName,
@@ -572,11 +572,11 @@ class AdminDashboard extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-//console.log('Posted Data: ', data)
+////console.log('Posted Data: ', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminResidneceReports', data, requestOptions)
       .then(response => {
-        //console.log('current response: ', response)
+        ////console.log('current response: ', response)
         if(response != null && response != undefined){
         let totalCapList = response.data.PostRubixUserData.filter(doc => doc.TotalCapacityPerRes !== undefined)
         let bedsTakenList = response.data.PostRubixUserData.filter(doc => doc.TotalbedsTaken !== undefined)
@@ -622,11 +622,11 @@ class AdminDashboard extends React.Component {
       body: data
     };
 
-    //console.log("Posted:", data)
+    ////console.log("Posted:", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
-          console.log("look at this DB response: ", response)
+          //console.log("look at this DB response: ", response)
 
           if(response != null || response != undefined){
 
@@ -1644,7 +1644,7 @@ this.createMultipleSeriesGraph(response.data.PostRubixUserData[0].TotalRegistrat
           
         this.getReport(e.target.value)
           this.props.updateResidenceID(e.target.value)
-         // console.log('ResID1: ', e.target.value)
+         // //console.log('ResID1: ', e.target.value)
           }} value={this.state.res}>
         {
             

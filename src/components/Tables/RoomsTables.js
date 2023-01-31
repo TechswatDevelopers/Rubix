@@ -33,7 +33,7 @@ class RoomsTable extends React.Component {
   const myTime = new Date().toLocaleTimeString('en-ZA')
   this.setState({ dateAndTime: myDate + myTime })
 
-console.log("I am called with: ", this.props.RoomList )
+//console.log("I am called with: ", this.props.RoomList )
   }
    //Send Auditted status
    sendAuttingStatus(studentID){
@@ -55,11 +55,11 @@ console.log("I am called with: ", this.props.RoomList )
       body: data
     };
 
-    console.log("Posted Vetting Data: ", data)
+    //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        //console.log("DB response: ", response)
+        ////console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
@@ -84,11 +84,11 @@ console.log("I am called with: ", this.props.RoomList )
           body: data
         };
         for (var pair of data.entries()) {
-          console.log(pair[0], ', ', pair[1]);
+          //console.log(pair[0], ', ', pair[1]);
         }
         await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
-            console.log("Upload details:", response)
+            //console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -116,7 +116,7 @@ console.log("I am called with: ", this.props.RoomList )
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
-      //console.log("I am called incorrectly")
+      ////console.log("I am called incorrectly")
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
@@ -130,20 +130,20 @@ console.log("I am called with: ", this.props.RoomList )
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted Data:", data)
+        //console.log("Posted Data:", data)
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
+              ////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
             } else if (tryval === 0) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
+              ////console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
             }
           })
@@ -155,7 +155,7 @@ console.log("I am called with: ", this.props.RoomList )
         //Fetch IP Address
         const getData = async () => {
           const res = await axios.get('https://geolocation-db.com/json/')
-          //console.log("my IP", res.data);
+          ////console.log("my IP", res.data);
           this.setState({userIPAddress: res.data.IPv4 })
         }
         getData()
@@ -180,10 +180,10 @@ console.log("I am called with: ", this.props.RoomList )
 
       await axios.post('https://adowapdf.rubix.mobi:94/PDFRoomAmend', data, requestOptions)
       .then(response => {
-        console.log('Response: ', response)
+        //console.log('Response: ', response)
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              //console.log("temp file:", temp)
+              ////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
       })
     }

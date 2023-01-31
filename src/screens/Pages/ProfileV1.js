@@ -165,14 +165,14 @@ class ProfileV1Page extends React.Component {
     const userID = localStorage.getItem('userID');
     const userProgress = localStorage.getItem('progress');
     this.setState({ myUserID: userID });
-    //////console.log("Student Progress: ", this.props.studentProgress)
+    ////////console.log("Student Progress: ", this.props.studentProgress)
 
     //Load Documents
     if (localStorage.getItem('role') == 'admin'){
-      //////console.log('I am called')
+      ////////console.log('I am called')
       this.loadDocuments(this.props.currentStudentiD)
     } else {
-      //////console.log('I am called here')
+      ////////console.log('I am called here')
       this.loadDocuments(userID)
     }
     //this.setState({ progress: userProgress });
@@ -225,13 +225,13 @@ const mergePDFHandler = async () => {
       await createPDF.PDFDocumentFromFile(file)
     }
     test()
-    //////console.log("New File: ", file)
+    ////////console.log("New File: ", file)
   })
   
-  //////console.log("MergedPDF: ", this.state.myDocs)
+  ////////console.log("MergedPDF: ", this.state.myDocs)
   // Merging The PDF Files to A PDFDocument
   const mergedPDFDocument = await mergePDF(this.state.myDocs)
-  ////console.log("MergedPDF: ", mergedPDFDocument)
+  //////console.log("MergedPDF: ", mergedPDFDocument)
   this.getBase64(mergedPDFDocument)
   
   //const blob = new Blob([mergedPDFDocument], {type: 'application/pdf'});
@@ -243,7 +243,7 @@ mergePDFHandler()
   mergeFiles(){
     const merger = new PDFMerger();
     let myBlob;
-    //////console.log('these are the documents: ', this.state.docs)
+    ////////console.log('these are the documents: ', this.state.docs)
     const mergeTime = async () =>{
         //Run through docs list
     this.state.docs.forEach((doc) =>{
@@ -267,7 +267,7 @@ mergePDFHandler()
         var byteArray = Base64Binary.decodeArrayBuffer(dataUrl); 
 
         merger.add(blob)
-        //////console.log("This is this document: ", merger)
+        ////////console.log("This is this document: ", merger)
 
       }
       
@@ -293,14 +293,14 @@ mergePDFHandler()
     localStorage.setItem("check", 'no')
     this.props.updateLoadingController(true);
     this.props.updateLoadingMessage("Loading Student Documents...");
-    ////console.log("Loading Student Documents...");
+    //////console.log("Loading Student Documents...");
     const fetchData = async () => {
       //Get documents from DB
 
       await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //////console.log("documents data:", data)
+          ////////console.log("documents data:", data)
           //Set Documents list to 'docs'
           this.setState({ docs: data.post })
 
@@ -329,11 +329,11 @@ mergePDFHandler()
           //Check the lease
           const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
           if(temp != undefined && temp.length != 0 && temp != null){
-            //////console.log("this is it: ", temp)
+            ////////console.log("this is it: ", temp)
             ///set show proof of pay tile
             localStorage.setItem("check", 'yes')
           } else {
-            //////console.log("this is it: ", temp)
+            ////////console.log("this is it: ", temp)
           }
           const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
           
@@ -533,10 +533,10 @@ mergePDFHandler()
       this.setState({
         base64Pdf: reader.result
       })
-      //////console.log("This is the img:", this.state.imgUpload)
+      ////////console.log("This is the img:", this.state.imgUpload)
     };
     reader.onerror = function (error) {
-      //////console.log('Error: ', error);
+      ////////console.log('Error: ', error);
     }
   }
 
@@ -548,10 +548,10 @@ mergePDFHandler()
     reader.readAsDataURL(file)
     reader.onload = () => {
       myBase = reader.result
-      //////console.log("This is the img:", this.state.imgUpload)
+      ////////console.log("This is the img:", this.state.imgUpload)
     };
     reader.onerror = function (error) {
-      //////console.log('Error: ', error);
+      ////////console.log('Error: ', error);
     }
   }
   
@@ -591,11 +591,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        ////console.log(pair[0], ', ', pair[1]);
+        //////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          ////console.log("The reponse: ", response)
+          //////console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -632,11 +632,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        ////console.log(pair[0], ', ', pair[1]);
+        //////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          ////console.log("The reponse: ", response)
+          //////console.log("The reponse: ", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -748,7 +748,7 @@ mergePDFHandler()
         .then(response => {
           const temp = response.data.PostRubixUserData
           this.resetProgressBars()
-          ////console.log("The returned data: ", response)
+          //////console.log("The returned data: ", response)
          
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
@@ -947,7 +947,7 @@ mergePDFHandler()
   //Handle File Selection input
   changeHandler(event) {
     this.setState({ selectedFile: event.target.files[0] })
-    //////console.log("selcted file1", event.target.files[0].type)
+    ////////console.log("selcted file1", event.target.files[0].type)
     if(event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg' || event.target.files[0].type == 'application/pdf'){
       this.onPressUpload(event.target.files[0], this.state.keyString, 'documents')
       this.setState({ isSelected: true })
@@ -974,12 +974,12 @@ mergePDFHandler()
     //var myBlob = this.sigPad.getTrimmedCanvas().toBlob
     //var myFile = new File([myBlob], 'mySignature', { type: "image/png", })
     var my2ndFile = this.dataURLtoFile(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 'Student signature')
-    //////console.log('The file: ', my2ndFile)
+    ////////console.log('The file: ', my2ndFile)
     this.onPressSignatureUpload(my2ndFile)
     this.setLoadingPage(3000)
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
-      //////console.log("IP Address:", this.state.userIPAddress)
+      ////////console.log("IP Address:", this.state.userIPAddress)
       this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID, 1)
       setTimeout(() => {
         this.postKeyForm(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), this.state.myUserID)
@@ -1007,11 +1007,11 @@ mergePDFHandler()
         body: data
       };
       for (var pair of data.entries()) {
-        //////console.log(pair[0], ', ', pair[1]);
+        ////////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //////console.log("Upload details:", response)
+          ////////console.log("Upload details:", response)
           //this.setState({ mongoID: response.data.post._id })
           //window.location.reload()
         })
@@ -1024,7 +1024,7 @@ mergePDFHandler()
     //Fetch IP Address
     const getData = async () => {
       const res = await axios.get('https://geolocation-db.com/json/')
-      //////console.log("my IP", res.data);
+      ////////console.log("my IP", res.data);
       this.setState({userIPAddress: res.data.IPv4 })
     }
     getData()
@@ -1045,20 +1045,20 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      ////console.log("Posted Data:", data)
+      //////console.log("Posted Data:", data)
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          ////console.log("Signature upload details:", response)
+          //////console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.PostRubixUserData })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //////console.log("temp file:", temp)
+            ////////console.log("temp file:", temp)
             this.onPressUpload2(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            //////console.log("temp file:", temp)
+            ////////console.log("temp file:", temp)
             this.onPressUpload2(temp, 'unsigned-agreement', 'signing')
           }
         })
@@ -1081,13 +1081,13 @@ mergePDFHandler()
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      ////console.log("Posted Data:", data)
+      //////console.log("Posted Data:", data)
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateKeyReceiptFormPDF', data, requestOptions)
         .then(response => {
-          ////console.log("Signature upload details:", response)
+          //////console.log("Signature upload details:", response)
           const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
           const temp = this.dataURLtoFile(dataUrl, 'Key Form') //this.convertBase64ToBlob(response.data.Base)
-          //////console.log("temp file:", temp)
+          ////////console.log("temp file:", temp)
           this.onPressUpload2(temp, 'key-form', 'signing')
         })
     }
@@ -1146,11 +1146,11 @@ mergePDFHandler()
       headers: { 'Content-Type': 'application/json' },
       body: pingData
     };
-    //////console.log("The information sent: ", pingData)
+    ////////console.log("The information sent: ", pingData)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixDeedofSuretyEmail', pingData, requestOptions)
       .then(response => {
-        //////console.log("The response = ", response)
+        ////////console.log("The response = ", response)
         alert("Email sent out.")
       })
     }
@@ -1339,10 +1339,10 @@ mergePDFHandler()
         Function ={()=>{
            //Load Documents
     if (localStorage.getItem('role') == 'admin'){
-      //////console.log('I am called')
+      ////////console.log('I am called')
       this.loadDocuments(this.props.currentStudentiD)
     } else {
-      //////console.log('I am called here')
+      ////////console.log('I am called here')
       this.loadDocuments(this.state.myUserID)
     }
           //window.location.reload()
@@ -1358,10 +1358,10 @@ mergePDFHandler()
         Function = {()=>{
           //Load Documents
    if (localStorage.getItem('role') == 'admin'){
-     //////console.log('I am called')
+     ////////console.log('I am called')
      this.loadDocuments(this.props.currentStudentiD)
    } else {
-     //////console.log('I am called here')
+     ////////console.log('I am called here')
      this.loadDocuments(this.state.myUserID)
    }
          //window.location.reload()

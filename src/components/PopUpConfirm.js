@@ -51,7 +51,7 @@ componentDidMount() {
    
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          ////console.log("Check me ...", response)
+          //////console.log("Check me ...", response)
           this.setState({ mongoID: response.data.post._id })
         })
     }
@@ -81,7 +81,7 @@ componentDidMount() {
   postSignature(signature, userid, tryval) {
 
     this.props.updateLoadingMessage("Generating Lease...");
-    ////console.log("I am called incorrectly")
+    //////console.log("I am called incorrectly")
 
     const postDocument = async () => {
       const data = {
@@ -98,20 +98,20 @@ componentDidMount() {
         body: data
       };
 
-      ////console.log(" Lease Posted Data:", data)
+      //////console.log(" Lease Posted Data:", data)
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
         .then(response => {
-          ////console.log("Signature upload details:", response)
+          //////console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            ////console.log("temp file:", temp)
+            //////console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.Base
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            ////console.log("temp file:", temp)
+            //////console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
           }
         })
@@ -124,7 +124,7 @@ getUserWitnessData() {
   //Fetch IP Address
   const getData = async () => {
     const res = await axios.get('https://geolocation-db.com/json/')
-    ////console.log("my IP", res.data);
+    //////console.log("my IP", res.data);
     this.setState({userIPAddress: res.data.IPv4 })
   }
   getData()
@@ -150,11 +150,11 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log('My lease data: ', data)
+    ////console.log('My lease data: ', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{
-        //console.log("Final Lease Response: ", response)
+        ////console.log("Final Lease Response: ", response)
         
         //Send documents API
         const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -190,11 +190,11 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('My form data: ', data)
+    //console.log('My form data: ', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateKeyReceiptFormPDFFinal', data, requestOptions)
       .then(response=>{
-        console.log("Final Key form Response: ", response)
+        //console.log("Final Key form Response: ", response)
         
         //Send documents API
         const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -234,11 +234,11 @@ getUserWitnessData() {
       body: data
     };
 
-    ////console.log("Posted Vetting Data: ", data)
+    //////console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminVettings', data, requestOptions)
       .then(response=>{
-        ////console.log("DB response: ", response)
+        //////console.log("DB response: ", response)
         setTimeout(() => {
           this.sendAuttingStatus(filetype, docID, vet)
         }, 2000);
@@ -276,11 +276,11 @@ getUserWitnessData() {
       body: data
     };
 
-    ////console.log("Posted Vetting Data: ", data)
+    //////console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        ////console.log("DB response: ", response)
+        //////console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
@@ -338,10 +338,10 @@ getUserWitnessData() {
                   if(FileType == 'lease-agreement'){
                     
                     setTimeout(() => {
-                      this.sendFinalLease("'https://adowaimages.rubix.mobi:449/'" + Filename)
+                      this.sendFinalLease("https://adowaimages.rubix.mobi:449/" + Filename.filename)
                     }, 3000);
                   } else if (FileType == 'key-form'){
-                    this.sendFinalForm(Filename)
+                    this.sendFinalForm("https://adowaimages.rubix.mobi:449/" + Filename.filename)
                   }
                   this.props.onPresPopUpConfirm();
 

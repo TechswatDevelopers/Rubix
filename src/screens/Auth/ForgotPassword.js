@@ -30,7 +30,7 @@ class ForgotPassword extends React.Component {
   }
 
   componentDidMount(){
-    console.log("Theme Color:", this.props.rubixThemeColor)
+    //console.log("Theme Color:", this.props.rubixThemeColor)
     this.props.updateClientBackG(localStorage.getItem('clientBG'))
     this.setState({currentLogo: localStorage.getItem('clientLogo')})
     this.setState({clientName: localStorage.getItem('clientName')})
@@ -58,11 +58,11 @@ class ForgotPassword extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
     };
-    //console.log(data)
+    ////console.log(data)
     const postData = async() => {
               await axios.post('https://adowarest.rubix.mobi:88/api/RubixForgetPasswordEmail', data, requestOptions)
             .then(response => {
-                //console.log(response.data.PostRubixUserData[0].Response)
+                ////console.log(response.data.PostRubixUserData[0].Response)
                 if(response.data.PostRubixUserData[0].Response === "Redirected"){
                   this.setState({
                     title: "Request Received",

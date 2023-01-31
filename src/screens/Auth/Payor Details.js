@@ -58,7 +58,7 @@ class PayorDetails extends React.Component {
   var year = idNumber.substring(0, 2);
   var month = idNumber.substring(2, 4);
   var day = idNumber.substring(4, 6);
-  //console.log(year, month, day)
+  //////console.log(year, month, day)
 
   // get first 6 digits as a valid date
   var tempDate = new Date(year, month - 1, day);
@@ -67,7 +67,7 @@ class PayorDetails extends React.Component {
   var id_month = tempDate.getMonth();
   var id_year = tempDate.getFullYear();
   var right_month = id_month + 1;
-  //console.log(id_date, id_month, id_year)
+  //////console.log(id_date, id_month, id_year)
 
   var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -158,12 +158,12 @@ class PayorDetails extends React.Component {
       body: data
   };
   
-  //console.log("I am empty",data)
+  //////console.log("I am empty",data)
   const postData = async() => {
       if ( idNumber != studentID && studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
           .then(response => {
-              //console.log(response)
+              //////console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
                 this.props.onPresPopUpEvent()
                 this.props.history.push("/nextofkin")
@@ -212,11 +212,11 @@ const requestOptions = {
     headers: { 'Content-Type': 'application/json' },
     body: data
 };
-console.log("called", data)
+////console.log("called", data)
 const postData = async() => {
   await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
   .then(response => {
-      console.log("2nd Response: ", response)
+      ////console.log("2nd Response: ", response)
         setTimeout(() => {
           this.props.updateLoadingController(false);
         }, 1000);
@@ -253,7 +253,7 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('User data:', data)
+    ////console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/RubixUpdateStatus', data, requestOptions)
         .then(response => {
@@ -265,7 +265,7 @@ else{
       });
     }, 1000);
           }
-          //console.log("Verify email status", response)
+          //////console.log("Verify email status", response)
           this.props.history.push("/relatives")
         })
     }
@@ -273,7 +273,7 @@ else{
   }
 
   getResAndPayment(resID, uni){
-    //console.log("this: ", resID)
+    //////console.log("this: ", resID)
     this.setState({
       isLoad: true
     })
@@ -287,11 +287,11 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log("My Data: ", data)
+  //////console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        //console.log("My response: ", response.data.PostRubixUserData)
+        //////console.log("My response: ", response.data.PostRubixUserData)
 
         this.setState({
           isLoad: false,
@@ -360,7 +360,7 @@ else{
 
   //Change Credit Check Consent
   changeConsent(e){
-    //console.log("My consent: ", e.target.value)
+    //////console.log("My consent: ", e.target.value)
     if (e.target.value == 'on'){
       this.setState({
         consent: "1"
@@ -374,7 +374,7 @@ else{
 
   //Change Marketing Consent
   changeMarketingConsent(e){
-    //console.log("My consent: ", e.target.value)
+    //////console.log("My consent: ", e.target.value)
     if (e.target.value == 'on'){
       this.setState({
         MarketingConsent: "1"

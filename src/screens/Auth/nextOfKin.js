@@ -51,7 +51,7 @@ class NextOfKin extends React.Component {
   var year = idNumber.substring(0, 2);
   var month = idNumber.substring(2, 4);
   var day = idNumber.substring(4, 6);
-  //console.log(year, month, day)
+  ////console.log(year, month, day)
 
   // get first 6 digits as a valid date
   var tempDate = new Date(year, month - 1, day);
@@ -60,7 +60,7 @@ class NextOfKin extends React.Component {
   var id_month = tempDate.getMonth();
   var id_year = tempDate.getFullYear();
   var right_month = id_month + 1;
-  //console.log(id_date, id_month, id_year)
+  ////console.log(id_date, id_month, id_year)
 
   var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -142,12 +142,12 @@ class NextOfKin extends React.Component {
       body: data
   };
   
-  //console.log("I am empty",data)
+  ////console.log("I am empty",data)
   const postData = async() => {
       if (studentEmail != nextofKinEmail){
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
           .then(response => {
-              //console.log(response)
+              ////console.log(response)
               if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
                 
                 setTimeout(() => {
@@ -177,7 +177,7 @@ class NextOfKin extends React.Component {
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
   })
 } else if(document.getElementById('streetAddress') != null)  {
-  //console.log("called", )
+  ////console.log("called", )
   const data = {
     'RubixRegisterUserID': this.state.myUserID,
     'RubixNextOfKiniConsent': this.state.consent,
@@ -194,12 +194,12 @@ const requestOptions = {
     body: data
 };
 
-console.log("I am empty",data)
+//console.log("I am empty",data)
 const postData = async() => {
   if (studentEmail != nextofKinEmail){
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
       .then(response => {
-          //console.log("Data returned: ", response)
+          ////console.log("Data returned: ", response)
             setTimeout(() => {
               this.props.updateLoadingController(false);
             }, 1000);
@@ -253,7 +253,7 @@ else{
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log('User data:', data)
+    ////console.log('User data:', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixUpdateStatus', data, requestOptions)
         .then(response => {
@@ -311,7 +311,7 @@ else{
   }
   //Change Consent
   changeConsent(e){
-    //console.log("My consent: ", e.target.value)
+    ////console.log("My consent: ", e.target.value)
     if (e.target.value == 'on'){
       this.setState({
         consent: "1"
