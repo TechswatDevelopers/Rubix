@@ -145,7 +145,25 @@ class SudentsTable extends React.Component {
                   <td>{student.Surname}</td>
                   <td>{student.IDNumber}</td>
                   <td>
-                    <>
+                   { 
+                   !student.IsEmailVerified
+                   ?<>
+                   <button className="btn btn-sm btn-outline-primary" 
+                   onClick={(e)=>{
+                     localStorage.setItem('tab', 'documents')
+                     this.setState({
+                       currentStudent: student,
+                       currentStudentCode: student.ActivationCode,
+                       currentStudentName: student.Name + " " + student.Surname,
+                       currentStudentEmail: student.UserEmail
+                     })
+                     this.selectStudent(student)
+                     this.props.onPresPopVerify()}}
+                   >Verify User</button>
+                   </>
+                   
+                   :
+                   <>
                   <button className="btn btn-sm btn-outline-primary" 
                   onClick={(e)=>{
                     e.preventDefault()
@@ -213,7 +231,10 @@ class SudentsTable extends React.Component {
                   }
 
 
-                  </></td>
+                  </>
+                  }
+                  
+                  </td>
                 </tr>
                 <tr className="collapse multi-collapse m-t-10" id={"collapseComment" + index} >
                       <th scope="row"> </th>
