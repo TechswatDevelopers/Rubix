@@ -371,11 +371,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    //////////console.log("Posted: ", data)
+    console.log("Posted: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
-        
+        console.log("this is the response: ", response)
           this.props.onPresPopConfirmInfo()
         })
     }
