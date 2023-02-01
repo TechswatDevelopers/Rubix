@@ -77,7 +77,7 @@ class ProfileV1Setting extends React.Component {
       yearOfRes: '',
       uni: 0,
       year: 0,
-      durations: [0, 5, 10, 12],
+      durations: [0, 10],
       duration: 0,
       hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
       hearAbout: '',
@@ -97,6 +97,7 @@ class ProfileV1Setting extends React.Component {
     e.preventDefault() 
     this.setState({showSearch: !this.state.showSearch})
   }
+
   //Fetch Residences
   getRes(uniID, key){
     //////////console.log("Uni ID: ", uniID)
@@ -126,7 +127,6 @@ class ProfileV1Setting extends React.Component {
       
     })
   }
-
 
   getResAndPayment(resID){
     ////////console.log("this: ", this.state.payment)
@@ -171,11 +171,11 @@ class ProfileV1Setting extends React.Component {
   onVarsitySelect(e){
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
-        durations: [0, 5, 12]
+        durations: [0, 10]
       })
     } else {
       this.setState({
-        durations: [5,10]
+        durations: [0, 10]
       })
     }
     this.getRes(e.target.value, 1)
@@ -189,11 +189,11 @@ class ProfileV1Setting extends React.Component {
     //////////console.log("The uni is: ", uniID, this.state.duration)
     if(uniID == 1 || uniID == 2){
       this.setState({
-        durations: [0, 5, 12]
+        durations: [0, 10]
       })
     } else {
       this.setState({
-        durations: [0, 5 ,10]
+        durations: [0, 10]
       })
     }
     this.setState({
@@ -598,7 +598,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          //////console.log("All Student data", response.data)
+          console.log("All Student data", response.data)
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -1652,8 +1652,7 @@ else{
                             </label>
                             {  
         <select className="form-control" onChange={(e)=>this.setState({duration: e.target.value})} value={this.state.duration}>
-        {
-            
+        { 
             this.state.durations.map((duration, index)=> (
             <option key={index} name='Duration' value={duration}>{duration == 0 ? "Please select contract duration in " : duration} {duration == 1 ? "Once off Payment" : "months"}</option>
         ))   

@@ -207,7 +207,7 @@ class SudentsTable extends React.Component {
                     </button>{" "}
                 &nbsp;&nbsp;
 
-                { student.Color == "Green" || student.Color == "Grey" || student.Color == "Blue" || student.Color == "Black"
+                { student.Color == "Green" || student.Color == "Grey" || student.Color == "Black"
                 
                 ? <button className="btn btn-sm btn-outline-info" 
                   onClick={(e)=>{

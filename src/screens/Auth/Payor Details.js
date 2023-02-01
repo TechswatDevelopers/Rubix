@@ -212,7 +212,7 @@ const requestOptions = {
     headers: { 'Content-Type': 'application/json' },
     body: data
 };
-////console.log("called", data)
+console.log("called", data)
 const postData = async() => {
   await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
   .then(response => {
@@ -225,9 +225,9 @@ const postData = async() => {
   })
 
 }
-postData().then(() => {
+/* postData().then(() => {
 
-})
+}) */
 }
 
 else{
