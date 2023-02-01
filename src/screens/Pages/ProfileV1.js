@@ -835,11 +835,7 @@ mergePDFHandler()
           progress = this.props.myBookingFProgress
         }
         break;
-      case "proof-of-pay":
-        {
-          progress = this.props.myProofOfPayProgress
-        }
-        break;
+     
       case "proof-of-pay":
         {
           progress = this.props.myProofOfPayProgress
