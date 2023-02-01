@@ -355,14 +355,15 @@ class ProfileV1Setting extends React.Component {
     //Request Data
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
-      'UniversityID': this.state.uni,
+      'UniversityID': this.state.uni.toString(),
       'CourseID': this.state.course == null ? this.state.myProfile.RubixCourse : this.state.course,
-      'ResidenceID': this.state.res,
-      'StudentYearofStudyID': this.state.year,
+      'ResidenceID': this.state.res.toString(),
+      'StudentYearofStudyID': this.state.year.toString(),
       'PaymentMethod': this.state.payment,
-      'Duration': this.state.duration,
+      'Duration': this.state.duration.toString(),
       'HearAbout': this.state.hearAbout,
-      'CarReg' :  document.getElementById('CarReg').value
+      'CarReg' :  document.getElementById('CarReg').value,
+      'PrefRoomID' : this.state.myProfile.PrefRoomID
     }
     
     const requestOptions = {
