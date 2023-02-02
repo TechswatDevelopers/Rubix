@@ -44,7 +44,7 @@ class ProfileV1Setting extends React.Component {
       yearList: [],
       countryList: [],
       country: '',
-      fundingSources: ["Please select funding source"],
+      fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship", "NSFAS"],
       bankTypes: ['Please select account type', 'Savings', 'Cheque'],
       payment: '',
       paymentID: 0,
@@ -86,7 +86,8 @@ class ProfileV1Setting extends React.Component {
       prov: null,
       showSearch: false,
       myTempAddress: '',
-      funding: '',  genterList: ['Please select your Gender', 'Male', 'Female'],
+      funding: '', 
+      genterList: ['Please select your Gender', 'Male', 'Female'],
       myGender: '',
     };
   }
@@ -599,7 +600,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          //console.log("All Student data", response.data)
+          console.log("All Student data", response.data)
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -1069,11 +1070,9 @@ UpdatePayorInfo(e){
      if (idNumber != studentID && studentEmail != nextofKinEmail){
          await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
          .then(response => {
-             //////////console.log(response)
-             if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
-               
           this.props.onPresPopConfirmInfo()
-             }
+             //////////console.log(response)
+             
              this.setState({
                isLoad: false
              })
@@ -1122,9 +1121,11 @@ const requestOptions = {
 const postData = async() => {
  await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
  .then(response => {
-     //////////console.log("2nd Response: ", response)
+    console.log("2nd Response: ", response)
        setTimeout(() => {
-         this.props.updateLoadingController(false);
+        this.props.onPresPopConfirmInfo()
+        
+         //this.props.updateLoadingController(false);
        }, 1000);
  })
 
@@ -1866,10 +1867,10 @@ else{
                         <label className="control-label">
                         Home Tellephone Number
                             </label>
-                            <PhoneInput placeholder="Surety Home Tellephone Number" 
+                            <PhoneInput id='register-page-phone-number' placeholder="Surety Home Tellephone Number" 
                             defaultValue={this.state.myProfile.RubixUserNextOfKinHomeTell}
+                            value={this.state.myProfile.RubixUserNextOfKinHomeTell}
                             name="RubixUserNextOfKinHomeTell" className='RubixUserNextOfKinHomeTell' required='' 
-                    value={this.state.value}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
                       <div className="form-group">
@@ -1877,7 +1878,7 @@ else{
                         Work Number
                             </label>
                             <PhoneInput placeholder="Surety Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
-                    value={this.state.value}
+                   value={this.state.myProfile.RubixUserNextOfKinHomeTell}
                     defaultValue={this.state.myProfile.RubixUserNextOfKinWorkNumber}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
@@ -2006,8 +2007,8 @@ else{
             Phone Number:
           </label>
           <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-            defaultValue={this.state.myProfile.PayorHomeTell} name="PayorCellPhone" required=''
-            value={this.state.myProfile.PayorHomeTell}
+            defaultValue={this.state.myProfile.PayorCellPhone} name="PayorCellPhone" required=''
+            value={this.state.myProfile.PayorCellPhone}
             onChange={() => this.setState({ value: this.state.value })} />
         </div>
         <div className="form-group">
@@ -2015,7 +2016,8 @@ else{
                         Home Phone Number
                             </label>
                             <PhoneInput placeholder="Home Phone Number" name="PayorHomeTell" className='PayorHomeTell' required='' 
-                    value={this.state.value}
+                   defaultValue={this.state.myProfile.PayorHomeTell}
+                   value={this.state.myProfile.PayorHomeTell}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
 
@@ -2024,8 +2026,9 @@ else{
             Work Number:
           </label>
           <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
-            defaultValue={this.state.myProfile.PayorWorkTell} name="Payorworktel" required=''
-            value={this.state.myProfile.PayorWorkTell}
+            defaultValue={this.state.myProfile.Payorworktel}
+            value={this.state.myProfile.Payorworktel}
+            name="Payorworktel" required=''
             onChange={() => this.setState({ value: this.state.value })} />
         </div>
 
@@ -2052,6 +2055,7 @@ else{
                           id="PayorVat"
                           name='PayorVat'
                           placeholder="Enter VAT number (optional)"
+                          defaultValue={this.state.myProfile.PayorVat}
                           type="number"
                         />
                       </div>
