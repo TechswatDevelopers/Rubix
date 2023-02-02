@@ -600,7 +600,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response.data)
+          //console.log("All Student data", response.data)
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -1072,7 +1072,6 @@ UpdatePayorInfo(e){
          .then(response => {
           this.props.onPresPopConfirmInfo()
              //////////console.log(response)
-             
              this.setState({
                isLoad: false
              })
@@ -1121,7 +1120,7 @@ const requestOptions = {
 const postData = async() => {
  await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
  .then(response => {
-    console.log("2nd Response: ", response)
+    //console.log("2nd Response: ", response)
        setTimeout(() => {
         this.props.onPresPopConfirmInfo()
         
@@ -1379,7 +1378,7 @@ else{
                 </div>
                 <div className="form-group">
                   <label>
-                  {this.state.myProfile.IDNumber == "South Africa, Republic of" ? "ID Number:" : "Passport Number:"}
+                  ID/Passport Number:
                   </label>
                   <input
                     className="form-control"
