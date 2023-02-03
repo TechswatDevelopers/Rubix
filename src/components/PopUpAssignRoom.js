@@ -91,6 +91,9 @@ componentDidMount() {
       postData().then(()=>{
         //this.props.updateLoadingController(false);
         this.postSignature('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', this.props.currentStudentiD, 0)
+        setTimeout(() => {
+          this.postDeed('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=')
+        }, 3000)
         //window.location.reload()
       })
     }
@@ -139,6 +142,34 @@ componentDidMount() {
   }
 
   return new File([u8arr], filename, { type: mime });
+}
+postDeed(signature) {
+  const data = {
+    'RubixRegisterUserID': this.state.userID,
+    'ClientId': 1,
+    'Time_and_Date': this.state.dateAndTime,
+    'Signature': signature,
+  }
+  const requestOptions = {
+    title: 'Parent Signature Upload',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: data
+  };
+  //console.log("Posted Data:", data)
+  const postDocument = async () => {
+    
+    await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateDeedofSuretyPDF', data, requestOptions)
+      .then(response => {
+        //console.log("Signature upload details:", response)
+        this.setState({ docUrl: response.data.PostRubixUserData })
+        const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+        const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
+        this.onPressUpload(temp, 'surety-doc', 'signing')
+       
+      })
+  }
+  postDocument()
 }
 
   //Function to post signature to API
