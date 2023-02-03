@@ -611,7 +611,14 @@ postData().then(()=>{
   Download Report
 </button>
 {  
-        <select className="form-control" onChange={(e)=>{this.getStudents(e.target.value, this.state.res); this.setState({occupancy: e.target.value})}} value={this.state.occupancy}>
+        <select className="form-control" onChange={(e)=>{
+          e.target.value == "Status Filter" 
+          ? this.getStudents('', this.state.res) 
+          : e.target.value == "Unverified" 
+          ? this.getUnverifiedStudents('', this.state.res)
+          :
+          this.getStudents(e.target.value, this.state.res); 
+          this.setState({occupancy: e.target.value})}} value={this.state.occupancy}>
         {
          this.state.occups.map((banktype, index)=> (
             <option key={index} name='AccountType' value = {banktype}>{banktype} Student</option>
