@@ -395,6 +395,65 @@ postData().then(()=>{
       })
   }
 
+  //Fetch all students Data
+  getUnverifiedStudents(search, resID){
+    //Set Loading Screen ON
+    this.props.updateLoadingController(true);
+    this.props.updateLoadingMessage("Loading Student Details, Please wait...");
+    this.setState({
+      isEmpty: false,
+    })
+    if(localStorage.getItem('role') == 'admin'){
+
+    } else {
+      document.getElementById('search').value = search
+    }
+    const pingData = {
+        'UserCode': localStorage.getItem('userCode'),
+        'RubixClientID':  localStorage.getItem('clientID'),
+        'RubixResidenceID': localStorage.getItem('adminLevel') == 2 || localStorage.getItem('adminLevel') == '2' ? resID : localStorage.getItem('resID'),
+        'Search': search
+      };
+      //Ping Request Headers
+      const requestOptions = {
+        title: 'Get All Students Details',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: pingData
+      };
+      //console.log('Posted data: ', pingData)
+      const postData = async () => {
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminStudentListInactive', pingData, requestOptions)
+        .then(response => {
+          //console.log("Students: ", response.data.PostRubixUserData)
+          if(!response.data.PostRubixUserData){
+            this.setState({
+              isEmpty: true,
+              students: []
+            })
+            //Set timer for loading screen
+          setTimeout(() => {
+            this.props.updateLoadingController(false);
+          }, 2000);
+          } else {
+            this.setState({
+              students: response.data.PostRubixUserData
+            })
+          
+          }
+          
+
+        })
+      }
+      postData().then(() =>{
+        
+        setTimeout(() => {
+          this.props.updateLoadingController(false);
+          this.getColors()
+          //this.exportToCSV(resID)
+        }, 7000);
+      })
+  }
   
   //Get rubix color codes
   getColors(){
