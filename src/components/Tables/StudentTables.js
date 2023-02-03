@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
 import {Grid, Row, Col, Button} from "react-bootstrap";
-import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, updateStudentName} from "../../actions";
+import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, updateStudentName, onPresPopVerify} from "../../actions";
 import PopUpVerifyUser from "../../components/PopUpVerifyUser";
 class SudentsTable extends React.Component {
   constructor(props) {
@@ -278,6 +278,7 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer, }) => ({
 export default connect(mapStateToProps, {
   updateStudentID,
   onUpdateStudentRubixID,
+  onPresPopVerify,
   onPresShowProfile,
   onPresRooms,
   updateStudentName
