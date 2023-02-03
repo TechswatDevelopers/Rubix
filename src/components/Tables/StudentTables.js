@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
 import {Grid, Row, Col, Button} from "react-bootstrap";
 import {updateStudentID,onUpdateStudentRubixID, onPresShowProfile, onPresRooms, updateStudentName} from "../../actions";
-
+import PopUpVerifyUser from "../../components/PopUpVerifyUser";
 class SudentsTable extends React.Component {
   constructor(props) {
     super(props)
@@ -87,6 +87,11 @@ class SudentsTable extends React.Component {
     return (
       <div className="col-lg-12">
         <div className="card">
+        <PopUpVerifyUser 
+        userActiveCode = {this.state.currentStudentCode}
+        Title= "Confirm Verify User"
+        Body = {"You are about to verify " + this.state.currentStudentName + " 's account as Email/Username as" + this.state.currentStudentEmail /* + this.state.currentRoom.RoomNumber */}
+        />
           <div className="header">
             <Row>
             <h2>
