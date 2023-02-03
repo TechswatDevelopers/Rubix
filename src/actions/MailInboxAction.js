@@ -17,6 +17,7 @@ export const ON_PRESS_POP_CONFIRM_INFO = "mailInboxReducer/ON_PRESS_POP_CONFIRM_
 export const ON_PRESS_POP_REQUEST = "mailInboxReducer/ON_PRESS_POP_REQUEST";
 export const UPDATE_VARSITY_INFO = "mailInboxReducer/UPDATE_VARSITY_INFO";
 export const ON_PRESS_POP_UP_REMOVE_ROOM = "mailInboxReducer/ON_PRESS_POP_UP_REMOVE_ROOM";
+export const ON_PRESS_POP_UP_VERIFY_USER = "mailInboxReducer/ON_PRESS_POP_UP_VERIFY_USER";
 
 export const ON_PRESS_POP_UP_NOTICE = "mailInboxReducer/ON_PRESS_POP_UP_NOTICE";
 export const ON_CHANGE_LOADER = "mailInboxReducer/ON_CHANGE_LOADER";
@@ -80,6 +81,14 @@ export const onPresPopUpConfirmSupport = () => (dispatch) => {
     type: ON_PRESS_POP_UP_CONFIRMATION_SUPPORT,
   });
 };
+
+//Toggle Pop Up Verify Student
+export const onPresPopVerify = () => (dispatch) => {
+  dispatch({
+    type: ON_PRESS_POP_UP_VERIFY_USER,
+  });
+};
+
 
 //Toggle Pop Up Confirm Modal
 export const onPresPopUpConfirmMassLeaseUpdate = () => (dispatch) => {

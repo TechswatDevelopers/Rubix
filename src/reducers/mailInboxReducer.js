@@ -13,6 +13,7 @@ import {
   ON_PRESS_POP_UP_CONFIRMATION_MASS_LEASE_UPDATE,
   ON_PRESS_SHOW_ROOMS,
   ON_PRESS_SHOW_LEASE,
+  ON_PRESS_POP_UP_VERIFY_USER,
   SHOW_LEASE,
   ON_PRESS_POP_UP_ASSIGN_ROOM,
   ON_PRESS_POP_CONFIRM_INFO,
@@ -44,6 +45,7 @@ const initialState = {
   isPopUpNewNotice: false,
   isShowLease: false,
   isShowLoader: false,
+  isShowVerifyModal: false,
 };
 
 export default (state = initialState, action) => {
@@ -172,6 +174,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isShowAssignModal: !state.isShowAssignModal,
+      };
+    }
+
+    //Toggle Verify User Modal
+    case ON_PRESS_POP_UP_VERIFY_USER: {
+      return {
+        ...state,
+        isShowVerifyModal: !state.isShowVerifyModal,
       };
     }
 
