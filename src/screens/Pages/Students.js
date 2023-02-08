@@ -482,6 +482,10 @@ postData().then(()=>{
     })
 
     //Do post
+    this.state.occupancy = 'Unverified'
+    ?
+    this.getUnverifiedStudents(document.getElementById('search').value, this.state.res)
+    :
     this.getStudents(document.getElementById('search').value, this.state.res)
   }
 
@@ -576,7 +580,11 @@ postData().then(()=>{
               this.state.colors.map((color, index) =>(
                 <>
                 
-                <Row onClick={()=> this.getStudents(color.Color, this.state.res)} className="collapse multi-collapse m-t-10" id={"colors"}>
+                <Row onClick={()=> {
+                  this.state.occupancy == 'Unverified'
+                  ?this.getUnverifiedStudents(color.Color, this.state.res)
+                  :
+                  this.getStudents(color.Color, this.state.res)}} className="collapse multi-collapse m-t-10" id={"colors"}>
                 <div style={{
                       height: '20px',
                       width: '20px',
