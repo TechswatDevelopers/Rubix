@@ -5,7 +5,7 @@ import { ProgressBar } from "react-bootstrap";
 
 class FileStorageStatusCard extends React.Component {
   render() {
-    const { TotalSize, UsedSize, Type, UsedPer, ProgressBarClass, MyFunction } = this.props;
+    const { TotalSize, UsedSize, Type, UsedPer, ProgressBarClass, MyFunction, Key } = this.props;
     return (
       <div className="card modal-open m-b-5">
         <div className="body">
@@ -13,10 +13,10 @@ class FileStorageStatusCard extends React.Component {
           <p className="mb-0">
             {Type}{" "}
             &nbsp;&nbsp;
-            <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
+            {/* <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button> */}
             
           {
-            localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0             
+            localStorage.getItem('role') == 'admin' && UsedPer != 100 && UsedPer != 0 || Key == 'lease-agreement'            
             ?
             <button onClick={()=>{MyFunction()}} className="btn btn-primary btn-sm">Vet</button>
           : null

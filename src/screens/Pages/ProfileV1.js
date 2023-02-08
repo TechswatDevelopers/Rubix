@@ -1445,6 +1445,7 @@ mergePDFHandler()
                                           UsedPer={this.getProgress(data.FileType)}
                                           ProgressBarClass={`${data.ProgressBarClass}`}
                                           MyFunction = {()=>{this.props.onPresPopUpConfirm()}}
+                                          Key = {data.FileType}
                                         />
                                       </div>
                                     );
