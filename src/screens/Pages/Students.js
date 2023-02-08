@@ -33,7 +33,7 @@ class Students extends React.Component {
           studentLeaseAmmend: [],
           listIndex: 0,
           occups: ['New', 'Returning', 'Unverified'],
-          occupancy: '',
+          occupancy: 'New',
         }
       }
 
@@ -353,7 +353,7 @@ postData().then(()=>{
         const postData = async () => {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentListInactive', pingData, requestOptions)
           .then(response => {
-            console.log("Students: ", response.data.PostRubixUserData)
+            //console.log("Students: ", response.data.PostRubixUserData)
             if(!response.data.PostRubixUserData){
               this.setState({
                 isEmpty: true,
@@ -488,7 +488,7 @@ postData().then(()=>{
   //Post Search Student
   searchStudent(e){
     e.preventDefault();
-    ////console.log('I am called for: ', document.getElementById('search').value)
+   // console.log('I am called for: ', this.state.occupancy)
     
     //Set Search key state
     this.setState({
@@ -496,10 +496,9 @@ postData().then(()=>{
     })
 
     //Do post
-    this.state.occupancy = 'Unverified'
-    ?
-    this.getUnverifiedStudents(document.getElementById('search').value, this.state.res)
-    :
+    if(this.state.occupancy == 'Unverified'){
+      this.getUnverifiedStudents(document.getElementById('search').value, this.state.res)
+    } else if (this.state.occupancy == 'New' || this.state.occupancy )
     this.getStudents(document.getElementById('search').value, this.state.res)
   }
 
