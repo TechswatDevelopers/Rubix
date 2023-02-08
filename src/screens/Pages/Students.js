@@ -439,13 +439,27 @@ postData().then(()=>{
     'RegisterUserDateAdded': 'RegisterUserDateAdded',
     'RegistrationYear': 'RegistrationYear',
     'RegistrationYearDateAdded': 'RegistrationYearDateAdded',
-    'PhoneNumber': 'PhoneNumber', 'RubixResidenceID': 'RubixResidenceID', 'ResidenceName': 'ResidenceName' , 'BuildingNumber': 'BuildingNumber',
+    'PhoneNumber': 'PhoneNumber', 
+    'RubixResidenceID': 'RubixResidenceID', 
+    'ResidenceName': 'ResidenceName' , 
+    'BuildingNumber': 'BuildingNumber',
      'FloorNumber': 'FloorNumber', 
-    'RoomNumber': 'RoomNumber', 'Capacity': 'Capacity', 'FileType': 'FileType',
-     'FileType1': 'FileType1', 'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
-      'lease-agreement_Link': 'lease-agreement_Link', 'ContractAmount': 'ContractAmount', 'ContractEnd': 'ContractEnd', 'ContractStart': 'ContractStart',
-    'PaymentMethod': 'PaymentMethod',  'RubixVetted': 'RubixVetted', 'RubixCourseID': 'RubixCourseID', 'UniversityName': 'UniversityName', 'RegisterStatus': 'RegisterStatus',
-  'IsEmailVerified': 'IsEmailVerified'
+    'RoomNumber': 'RoomNumber', 
+    'Capacity': 'Capacity', 
+    'FileType': 'FileType',
+     'FileType1': 'FileType1', 
+     'Unsigned-lease-agreement_Link': 'Unsigned-lease-agreement_Link',
+      'lease-agreement_Link': 'lease-agreement_Link', 
+      'ContractAmount': 'ContractAmount', 
+      'ContractEnd': 'ContractEnd', 
+      'ContractStart': 'ContractStart',
+    'PaymentMethod': 'PaymentMethod',  
+    'RubixVetted': 'RubixVetted', 
+    'RubixCourseID': 'RubixCourseID',
+    'UniversityName': 'UniversityName', 
+    'RegisterStatus': 'RegisterStatus',
+  'IsEmailVerified': 'IsEmailVerified',
+  'Returning': 'Returning'
   }
         const data = this.state.newList
         const filename = 'Rubix Extract - ' + this.state.dateAndTime
