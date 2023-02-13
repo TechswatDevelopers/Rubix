@@ -30,13 +30,13 @@ componentDidMount() {
 
 //Send Verification
 sendVerifyEmail(code){
-  console.log("Look at me", code)
+  //console.log("Look at me", code)
     //Send verification
     const verify = async() => {
       await fetch('https://adowarest.rubix.mobi:88/api/RubixVerifyEmails/'  + code)
         .then(response => response.json())
         .then(data => {
-          console.log("response data:", data)
+          //console.log("response data:", data)
           //this.setState({userData: data.PostEmailVerification})
             alert("Account verified successfully!")
             window.location.reload()
@@ -59,11 +59,11 @@ sendVerifyEmail(code){
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log('Posted student data:', data)
+   // console.log('Posted student data:', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response.data)
+          //console.log("All Student data", response.data)
           
 
          

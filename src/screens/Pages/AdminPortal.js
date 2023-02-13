@@ -626,7 +626,7 @@ class AdminDashboard extends React.Component {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminResidneceReports', data, requestOptions)
         .then(response => {
-          //console.log("look at this DB response: ", response)
+          console.log("look at this DB response: ", response)
 
           if(response != null || response != undefined){
 

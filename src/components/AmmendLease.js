@@ -123,7 +123,7 @@ const requestOptions = {
 const postData = async () => {
   await axios.post('https://adowapdf.rubix.mobi:94/PDFLeaseAdd', data, requestOptions)
   .then(response => {
-    console.log("Post Response: ", response)
+    //console.log("Post Response: ", response)
     if(response.data != null && response.data != undefined){
       const dataUrl = 'data:application/pdf;base64,' + response.data.Base
       const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)

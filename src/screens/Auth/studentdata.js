@@ -41,7 +41,7 @@ class StudentInformation extends React.Component {
     var year = idNumber.substring(0, 2);
     var month = idNumber.substring(2, 4);
     var day = idNumber.substring(4, 6);
-    console.log(year, month, day)
+    //console.log(year, month, day)
 
     // get first 6 digits as a valid date
     var tempDate = new Date(year, month - 1, day);

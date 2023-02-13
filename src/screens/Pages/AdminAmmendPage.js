@@ -263,7 +263,7 @@ class AdminAmmendPage extends React.Component {
   updatePricesVarsity(mySchool){
     this.state.allData.forEach(entry => {
         if (entry.UniversityName == mySchool){
-            console.log("I am called with: ", this.state.allData)
+            //console.log("I am called with: ", this.state.allData)
             this.setState({
                 singlePrice: entry.RatesSingleRoom,
                 sharingPrice: entry.RatesSharingRoom,

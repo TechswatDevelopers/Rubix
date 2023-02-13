@@ -94,11 +94,11 @@ constructor(props) {
           body: data
         };
     
-        console.log("Posted Vetting Data: ", data)
+        //console.log("Posted Vetting Data: ", data)
         const postData = async () => {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
           .then(response=>{
-            console.log("DB response: ", response)
+            //console.log("DB response: ", response)
           })
         }
         postData().then(()=>{

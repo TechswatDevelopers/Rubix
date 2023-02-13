@@ -212,7 +212,7 @@ const requestOptions = {
     headers: { 'Content-Type': 'application/json' },
     body: data
 };
-console.log("called", data)
+//console.log("called", data)
 const postData = async() => {
   await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
   .then(response => {
@@ -291,7 +291,7 @@ else{
     const getData = async() => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        //////console.log("My response: ", response.data.PostRubixUserData)
+        //console.log("My response for P.Methods: ", response.data.PostRubixUserData)
 
         this.setState({
           isLoad: false,
@@ -304,14 +304,18 @@ else{
 
   ///Set funding source
   setFundingSource(value){
-    if(value == 'BankDeposit' || value == 'EFT'){
+    if(value == 'Cash Student'){
       this.setState({
-        fundingSources: ["Please select funding source", "Private", "Bursary/Scholarship"]
+        fundingSources: ["Please select funding source", "Private", "Bursary / Scholarship"]
       })
 
     } else if(value == 'NSFAS') {
       this.setState({
         fundingSources: ["Please select funding source", "NSFAS"]
+      })
+    } else if(value == "Bursary / Scholarship") {
+      this.setState({
+        fundingSources: ["Please select funding source", "Bursary / Scholarship"]
       })
     }
   }
