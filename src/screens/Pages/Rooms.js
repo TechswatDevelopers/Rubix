@@ -81,7 +81,7 @@ class RoomAllocation extends React.Component {
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailable', pingData, requestOptions)
         .then(response => {
-          ////console.log("Students Rooms List:", response)
+          console.log("Students Rooms List:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
@@ -179,7 +179,7 @@ class RoomAllocation extends React.Component {
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminStudentRoomAvailableDropdown', pingData, requestOptions)
         .then(response => {
-          ////console.log("Students Rooms Dropdown:", response)
+          console.log("Students Rooms Dropdown:", response)
           if (response.data.PostRubixUserData){
             //Show available rooms
             this.setState({
