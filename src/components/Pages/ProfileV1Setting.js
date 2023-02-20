@@ -1142,7 +1142,6 @@ else{
 }
 }
 
-
   onValueHasCarChange(e){
     if(e.target.value == 'no'){
       this.setState({

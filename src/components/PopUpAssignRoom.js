@@ -175,6 +175,10 @@ postDeed(signature) {
   //Function to post signature to API
   postSignature(signature, userid, tryval) {
     this.props.updateLoadingMessage("Generating Lease...");
+    let url
+    if (localStorage.getItem('resID') == 2 || localStorage.getItem('resID') == '2'){
+      
+    }
     ////console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
