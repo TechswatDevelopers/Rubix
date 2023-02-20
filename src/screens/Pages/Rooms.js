@@ -42,10 +42,10 @@ class RoomAllocation extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-
     this.getStudentRoomDetails(localStorage.getItem('userID'))
     const scrollToElement = () => this.testRef.current.scrollIntoView();
     scrollToElement()
+    console.log("Look at me now: ", localStorage.getItem('userID'))
 
     
   const DATE_OPTIONS = { year: 'numeric', month: 'long', day: 'numeric', time: 'long' };

@@ -150,7 +150,7 @@ getUserWitnessData() {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    ////console.log('My lease data: ', data)
+    console.log('My lease data: ', data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDFFinalSign', data, requestOptions)
       .then(response=>{

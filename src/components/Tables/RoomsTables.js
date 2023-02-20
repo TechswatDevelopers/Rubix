@@ -117,6 +117,12 @@ class RoomsTable extends React.Component {
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
       ////console.log("I am called incorrectly")
+      let url
+      if (localStorage.getItem('resID') == 2 || localStorage.getItem('resID') == '2'){
+        url = 'RubixGeneratePDFFrederick'
+      } else {
+        url = 'RubixGeneratePDF'
+      }
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
@@ -131,7 +137,7 @@ class RoomsTable extends React.Component {
           body: data
         };
         //console.log("Posted Data:", data)
-        await axios.post('https://adowarest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
+        await axios.post('https://adowarest.rubix.mobi:88/api/'+url, data, requestOptions)
           .then(response => {
             //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
