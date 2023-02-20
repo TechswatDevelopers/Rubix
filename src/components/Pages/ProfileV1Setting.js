@@ -105,7 +105,7 @@ class ProfileV1Setting extends React.Component {
     var varsID = uniID.toString()
     const fetchResses = async() => {
       //Populate Residence list
-      await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/' + varsID)
+      await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/1' /* + varsID */)
       .then(response => response.json())
       .then(data => {
       //console.log("Res list data is ", data)
@@ -972,7 +972,7 @@ this.props.updateStudentName(
 
   fetchResidencesData = async () => {
     //Populate Residence list
-    await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences')
+    await fetch('https://adowarest.rubix.mobi:88/api/RubixResidences/1')
       .then(response => response.json())
       .then(data => {
         if (data.data === null || data.data === undefined) {
@@ -1144,9 +1144,15 @@ else{
 
 
   onValueHasCarChange(e){
-    this.setState({
-      hasCar: !this.state.hasCar
-    })
+    if(e.target.value == 'no'){
+      this.setState({
+        hasCar: false
+      })
+    } else if (e.target.value == 'yes'){
+      this.setState({
+        hasCar: true
+      })
+    }
   }
       ///Set funding source
       setFundingSource(value){
