@@ -356,7 +356,7 @@ class ProfileV1Setting extends React.Component {
     //Request Data
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
-      'UniversityID': this.state.uni.toString(),
+      'UniversityID': '3',
       'CourseID': this.state.course == null ? this.state.myProfile.RubixCourse : this.state.course,
       'ResidenceID': this.state.res.toString(),
       'StudentYearofStudyID': this.state.year.toString(),
