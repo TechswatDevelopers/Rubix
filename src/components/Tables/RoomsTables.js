@@ -36,9 +36,9 @@ class RoomsTable extends React.Component {
   const myTime = new Date().toLocaleTimeString('en-ZA')
   this.setState({ dateAndTime: myDate + myTime })
   this.loadDocuments(localStorage.getItem('userID'))
-  //console.log("This is it:  ", localStorage.getItem('userID'))
+  ////console.log("This is it:  ", localStorage.getItem('userID'))
 
-//console.log("I am called with: ", this.props.RoomList )
+////console.log("I am called with: ", this.props.RoomList )
   }
 
        //Fetch All documents from DB
@@ -48,18 +48,18 @@ class RoomsTable extends React.Component {
           await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + userID)
             .then(response => response.json())
             .then(data => {
-             console.log("documents data:", data)
+             //console.log("documents data:", data)
               //Set Documents list to 'docs'
               this.setState({ docs: data.post })
     
               ///Set signature
               var myList = data.post.filter(doc => doc.FileType == "signature")
-              ////console.log("My signature: ", myList)
+              //////console.log("My signature: ", myList)
                 if (myList.length != 0){
                   //Convert signature to base 64
                   var dataUrl =  'data:image/png;base64,' + data.post.filter(doc => doc.FileType == "signature")[0].image
                   const temp = this.dataURLtoFile(dataUrl, 'signature') 
-                  //console.log("My signature: ", temp)
+                  ////console.log("My signature: ", temp)
                   this.setState({
                     signature: dataUrl
                     })
@@ -105,15 +105,15 @@ class RoomsTable extends React.Component {
       body: data
     };
 
-    //console.log("Posted Vetting Data: ", data)
+    ////console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
       .then(response=>{
-        ////console.log("DB response: ", response)
+        //////console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
-      window.location.reload()
+      //window.location.reload()
     })
   }
 
@@ -166,11 +166,11 @@ class RoomsTable extends React.Component {
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
-      ////console.log("I am called incorrectly")
+      //////console.log("I am called incorrectly")
 
       let mySignature
     if(this.state.signature != null){
-      console.log("This is it: ", this.state.signature)
+      //console.log("This is it: ", this.state.signature)
       mySignature = this.state.signature
     } else {
       mySignature = signature
@@ -200,15 +200,15 @@ class RoomsTable extends React.Component {
           .then(response => {
             //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
-            if (tryval === 1) {
+            if (this.state.signature != null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
-            } else if (tryval === 0) {
+            } else if (this.state.signature == null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //////console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
             }
           })
@@ -220,7 +220,7 @@ class RoomsTable extends React.Component {
         //Fetch IP Address
         const getData = async () => {
           const res = await axios.get('https://geolocation-db.com/json/')
-          ////console.log("my IP", res.data);
+          //////console.log("my IP", res.data);
           this.setState({userIPAddress: res.data.IPv4 })
         }
         getData()
@@ -245,10 +245,10 @@ class RoomsTable extends React.Component {
 
       await axios.post('https://adowapdf.rubix.mobi:94/PDFRoomAmend', data, requestOptions)
       .then(response => {
-        //console.log('Response: ', response)
+        ////console.log('Response: ', response)
         const dataUrl = 'data:application/pdf;base64,' + response.data.Base
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              //////console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
       })
     }
