@@ -81,11 +81,11 @@ componentDidMount() {
         body: data
       };
   
-      ////console.log("Posted Vetting Data: ", data)
+      //////console.log("Posted Vetting Data: ", data)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
         .then(response=>{
-          ////console.log("DB response: ", response)
+          //////console.log("DB response: ", response)
         })
       }
       postData().then(()=>{
@@ -114,11 +114,11 @@ componentDidMount() {
         body: data
       };
       for (var pair of data.entries()) {
-        ////console.log(pair[0], ', ', pair[1]);
+        //////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          ////console.log("Upload details:", response)
+          //////console.log("Upload details:", response)
           this.setState({
             done: true
           })
@@ -156,12 +156,12 @@ postDeed(signature) {
     headers: { 'Content-Type': 'application/json', },
     body: data
   };
-  //console.log("Posted Data:", data)
+  ////console.log("Posted Data:", data)
   const postDocument = async () => {
     
     await axios.post('https://adowarest.rubix.mobi:88/api/RubixGenerateDeedofSuretyPDF', data, requestOptions)
       .then(response => {
-        //console.log("Signature upload details:", response)
+        ////console.log("Signature upload details:", response)
         this.setState({ docUrl: response.data.PostRubixUserData })
         const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
         const temp = this.dataURLtoFile(dataUrl, 'Deed of Surety')
@@ -181,7 +181,7 @@ postDeed(signature) {
     } else {
       url = 'RubixGeneratePDF'
     }
-    ////console.log("I am called incorrectly")
+    //////console.log("I am called incorrectly")
     const postDocument = async () => {
       const data = {
         'RubixRegisterUserID': parseInt(userid),
@@ -195,20 +195,20 @@ postDeed(signature) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      ////console.log(" mY Posted Data:", data)
+      //////console.log(" mY Posted Data:", data)
       await axios.post('https://adowarest.rubix.mobi:88/api/'+url, data, requestOptions)
         .then(response => {
-          ////console.log("Signature upload details:", response)
+          //////console.log("Signature upload details:", response)
           this.setState({ docUrl: response.data.Base })
           if (tryval === 1) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-            ////console.log("temp file:", temp)
+            //////console.log("temp file:", temp)
             this.onPressUpload(temp, 'lease-agreement', 'signing')
           } else if (tryval === 0) {
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-            ////console.log("temp file:", temp)
+            //////console.log("temp file:", temp)
             this.onPressUpload(temp, 'unsigned-agreement', 'signing')
           }
         })
@@ -220,7 +220,7 @@ postDeed(signature) {
       //Fetch IP Address
       const getData = async () => {
         const res = await axios.get('https://geolocation-db.com/json/')
-        ////console.log("my IP", res.data);
+        //////console.log("my IP", res.data);
         this.setState({userIPAddress: res.data.IPv4 })
       }
       getData()
@@ -270,7 +270,7 @@ postDeed(signature) {
                   //window.location.reload()
                       this.props.onPresPopUpAssign()
                       setTimeout(() => {
-                        ////console.log("this is it: ", this.state.done)
+                        //////console.log("this is it: ", this.state.done)
                         if(this.state.done){
                     
                           this.props.updateLoadingController(false);

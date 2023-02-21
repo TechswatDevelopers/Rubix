@@ -352,7 +352,7 @@ class ProfileV1Setting extends React.Component {
     e.preventDefault();
     //////////////console.log("I am def called", this.state.course)
     const form = document.getElementById('uniDetails');
-
+//console.log("loooook:  ", document.getElementById('CarReg'))
     //Request Data
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
@@ -363,8 +363,8 @@ class ProfileV1Setting extends React.Component {
       'PaymentMethod': this.state.payment,
       'Duration': this.state.duration.toString(),
       'HearAbout': this.state.hearAbout,
-      'CarReg' :  document.getElementById('CarReg').value,
-      'PrefRoomID' : this.state.myProfile.PrefRoomID
+      'CarReg':  document.getElementById('CarReg') == null ? this.state.myProfile.CarReg : document.getElementById('CarReg').value,
+      'PrefRoomID': this.state.myProfile.PrefRoomID
     }
     
     const requestOptions = {
@@ -1678,7 +1678,6 @@ else{
                         placeholder="Enter your car Registration Number"
                         type="text"
                         value={this.state.myProfile.CarReg}
-                        required
                       />
                     </div></>
 
