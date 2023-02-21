@@ -356,7 +356,7 @@ class ProfileV1Setting extends React.Component {
     //Request Data
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
-      'UniversityID': '3',
+      'UniversityID': this.state.uni,
       'CourseID': this.state.course == null ? this.state.myProfile.RubixCourse : this.state.course,
       'ResidenceID': this.state.res.toString(),
       'StudentYearofStudyID': this.state.year.toString(),
@@ -373,11 +373,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    ////console.log("Posted: ", data)
+    console.log("Posted: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
-        ////console.log("this is the response: ", response)
+        console.log("this is the response: ", response)
           this.props.onPresPopConfirmInfo()
         })
     }
@@ -600,7 +600,7 @@ class ProfileV1Setting extends React.Component {
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          ////console.log("All Student data", response.data)
+          console.log("All Student data", response.data)
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -1636,8 +1636,6 @@ else{
         }
     </select> }
                       </div>
-
-
                       <><div className="form-group">
                         <label>
                         Residence:
