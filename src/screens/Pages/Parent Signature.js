@@ -96,7 +96,6 @@ constructor(props) {
         'Signature': signature,
         'ImageUrl': "https://jjpimages.rubix.mobi:449/"  +  this.state.leaseDoc
       }
-
       const requestOptions = {
         title: 'Parent Signature Upload',
         method: 'POST',
