@@ -78,7 +78,10 @@ constructor(props) {
      if (this.sigPad.getTrimmedCanvas().toDataURL('image/png') != null) {
       this.setState({ trimmedDataURL: this.sigPad.getTrimmedCanvas().toDataURL('image/png') })
       //console.log("IP Address:", this.state.userIPAddress)
-      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 0)
+      this.postSignature(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 1)
+      setTimeout(() => {
+        this.postBooking(this.sigPad.getTrimmedCanvas().toDataURL('image/png'), 0);
+      }, 3000)
     } else {
       alert("Please provide a signature")
     } 
@@ -100,12 +103,12 @@ constructor(props) {
         headers: { 'Content-Type': 'application/json', },
         body: data
       };
-      //console.log("Posted Data:", data)
+      console.log("Posted Data:", data)
       const postDocument = async () => {
         
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDFNEKSign', data, requestOptions)
           .then(response => {
-           // console.log("Signature upload details:", response)
+            console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -118,6 +121,43 @@ constructor(props) {
               //console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', 'signing')
             }
+          })
+      }
+      if( document.getElementById('RubixPlace').value =='' ||  document.getElementById('NameSurname').value == ''){
+
+      } else {
+        postDocument()
+      }
+    }
+    //Function to post signature to API
+    postBooking(signature, tryval) {
+      const data = {
+        'NameSurname': document.getElementById('NameSurname').value,
+        'ClientId': this.state.userID,
+        'RubixPlace': document.getElementById('RubixPlace').value,
+        'Time_and_Date': this.state.dateAndTime,
+        'Signature': signature,
+        'ImageUrl': "https://jjpimages.rubix.mobi:449/"  +  this.state.bookingDoc
+      }
+
+      const requestOptions = {
+        title: 'Parent Signature Upload',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: data
+      };
+      console.log("Posted Data:", data)
+      const postDocument = async () => {
+        
+        await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingNEKSign', data, requestOptions)
+          .then(response => {
+            console.log("Signature upload details:", response)
+            this.setState({ docUrl: response.data.PostRubixUserData })
+            const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
+              const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
+              //console.log("temp file:", temp)
+              this.onPressUpload(temp, 'booking-doc', 'signing')
+
           })
       }
       if( document.getElementById('RubixPlace').value =='' ||  document.getElementById('NameSurname').value == ''){
@@ -162,11 +202,11 @@ constructor(props) {
     };
     
     for (var pair of data.entries()) {
-      //console.log(pair[0], ', ', pair[1]);
+      console.log(pair[0], ', ', pair[1]);
     }
     await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
       .then(response => {
-        //console.log("Upload details:", response)
+        console.log("Upload details:", response)
         this.setState({ mongoID: response.data.post._id })
       })
   }
@@ -174,10 +214,10 @@ constructor(props) {
     //alert("Document uploaded successfully")
     //Set timer for loading screen
   setTimeout(() => {
-    this.props.updateLoadingController(false);
+    //this.props.updateLoadingController(false);
     this.props.onPresPopUpEvent()
   }, 3000);
-    window.location.reload()
+    //window.location.reload()
     
     
     /* setTimeout(() => {
@@ -363,7 +403,7 @@ const mapStateToProps = ({ ioTReducer }) => ({
 });
 
 export default connect(mapStateToProps, {
-  
+  onPresPopUpEvent,
   updateUserID,
   updateClientID,
   onPressThemeColor,
