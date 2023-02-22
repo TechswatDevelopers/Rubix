@@ -73,8 +73,7 @@ export const fileStorageStatusCardData = [
   localStorage.getItem('paymentMethod') == "NSFAS"
   ?
   {
-    UsedSize: localStorage.getItem('yearOfStudy') == 
-    "First Year" && localStorage.getItem('paymentMethod') == "NSFAS" ? "NSFAS Approval Document" : "Previous Year Results",
+    UsedSize: "NSFAS Approval Document / Previous Year Results",
     Type: "Documents",
     status: localStorage.getItem('studentProgress'),
     FileType: "nsfas-doc",
