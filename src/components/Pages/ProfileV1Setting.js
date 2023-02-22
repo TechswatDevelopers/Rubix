@@ -215,7 +215,7 @@ class ProfileV1Setting extends React.Component {
         myTempAddress: this.state.location['value']['structured_formatting']['main_text']
       })
       
-      ////////////console.log("I am called", street_address)
+    ///console.log("I am called", street_address)
     } else {
       ////////////console.log("I am called 222")
       street_address = document.getElementById('streetAddress').value
@@ -236,7 +236,6 @@ class ProfileV1Setting extends React.Component {
     ////////////console.log("Data 1", data)
     for (let i = 0; i < form.elements.length; i++) {
       if(form.elements[i].name == 'RegisterUserStreetNameAndNumer'){
-////////////console.log("down")
       } else {
 
         const elem = form.elements[i];
@@ -257,7 +256,7 @@ class ProfileV1Setting extends React.Component {
           if(response.status == 200){
             this.props.onPresPopConfirmInfo()
           } else {
-            //////////////console.log("never")
+            console.log("This is it: ", response)
           }
           ////////////console.log(response)
           //alert(response.data[0].ResponceMessage)
@@ -913,6 +912,7 @@ this.props.updateStudentName(
     await fetch('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
       .then(response => response.json())
       .then(data => {
+        console.log("this here: ", data)
         if (data === null || data === undefined) {
           alert('Error loading Address data' + data.message)
         } else {
