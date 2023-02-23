@@ -2,7 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import "bootstrap/dist/js/bootstrap.min.js";
 import {
+  updateLoadingController,
   updateStudentID,
+  updateLoadingMessage,
   onUpdateStudentRubixID,
   onPresShowProfile,
   onPresRooms,
@@ -87,6 +89,7 @@ class RoomsTable extends React.Component {
     
    //Send Auditted status
    sendAuttingStatus(studentID){
+    this.props.updateLoadingMessage("Sending Audit Status Document...");
     const data = {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': studentID,
@@ -113,6 +116,7 @@ class RoomsTable extends React.Component {
       })
     }
     postData().then(()=>{
+      this.props.updateLoadingController(false);
       //window.location.reload()
     })
   }
@@ -120,7 +124,8 @@ class RoomsTable extends React.Component {
   ///Tobe deleted
     //Post File Using Mongo
     onPressUpload(image, filetype, studentiD) {
-      //this.props.updateLoadingMessage("Uploading Lease Document...");
+      this.props.updateLoadingController(true);
+      this.props.updateLoadingMessage("Uploading Document...");
       
       const postDocument = async () => {
         const data = new FormData()
@@ -165,7 +170,8 @@ class RoomsTable extends React.Component {
   
     //Function to post signature to API
     postSignature(signature, userid, tryval) {
-     // this.props.updateLoadingMessage("Generating Lease...");
+      this.props.updateLoadingController(true);
+     this.props.updateLoadingMessage("Regenerating Lease...");
       //////console.log("I am called incorrectly")
 
       let mySignature
@@ -396,11 +402,13 @@ const mapStateToProps = ({ mailInboxReducer, navigationReducer, }) => ({
 });
 
 export default connect(mapStateToProps, {
+  updateLoadingMessage,
   updateStudentID,
   onUpdateStudentRubixID,
   onPresShowProfile,
   onPresRooms,
   onPresPopUpAssign,
   onPresPopUpRemove,
-  onToggleLeaseAmmend
+  onToggleLeaseAmmend,
+  updateLoadingController
 })(RoomsTable);
