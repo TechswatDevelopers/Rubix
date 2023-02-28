@@ -40,10 +40,12 @@ class VarsityDetails extends React.Component {
             duration: 0,
             hasCar: false,
             payMethods: [],
-            hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'Other'],
+            hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'REFERAL', 'Other'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             durations: [],
             value: 0,
+            isRef: false,
+            referee: '',
             availableRooms: [],
             buildingNumberList: [],
             buildingNumber: '',
@@ -96,7 +98,7 @@ class VarsityDetails extends React.Component {
             'ResidenceID': this.state.res,
             'StudentYearofStudyID': this.state.year,
             'Duration': this.state.duration,
-            'HearAbout': this.state.hearAbout,
+            'HearAbout': this.state.hearAbout + " " + this.state.referee,
             'PrefRoomID': localStorage.getItem('roomID')
         };
         for (let i=0; i < form.elements.length; i++) {
@@ -712,7 +714,21 @@ async componentDidMount(){
                         Hear About Us
                             </label>
                             {  
-        <select className="form-control" onChange={(e)=>this.setState({hearAbout: e.target.value})} value={this.state.hearAbout}>
+        <select className="form-control" onChange={(e)=>{
+          if(e.target.value == 'REFERAL')
+         { if(this.state.isRef){
+          this.setState({
+            isRef: false
+          })
+         } else {
+          this.setState({
+            isRef: true
+          })
+         }
+      
+        }
+
+          this.setState({hearAbout: e.target.value})}} value={this.state.hearAbout}>
         {
             
             this.state.hearAboutUs.map((options, index)=> (
@@ -721,6 +737,28 @@ async componentDidMount(){
         }
     </select> }
                       </div>
+                      {
+                        this.state.isRef
+                        ? <div>
+                          <div className="form-group">
+                      <label className="control-label" >
+                      Refered by
+                          </label>
+                          <input
+                          onChange={(e)=> this.setState({
+                            referee: e.target.value
+                          })}
+                        className="form-control"
+                        id="ref"
+                        //name='CarReg'
+                        placeholder="Enter your car the name of the person who reffered you"
+                        type="text"
+                        required
+                      />
+                    </div>
+                        </div>
+                        : null
+                      }
 
                       {
                         this.props.roomChoice != ''
