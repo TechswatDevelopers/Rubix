@@ -717,7 +717,7 @@ async componentDidMount(){
         <select className="form-control" onChange={(e)=>{
           if(e.target.value == 'REFERAL')
          { if(this.state.isRef){
-          this.setState({
+          this.setState({  
             isRef: false
           })
          } else {
