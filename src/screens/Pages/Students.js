@@ -459,7 +459,9 @@ postData().then(()=>{
     'UniversityName': 'UniversityName', 
     'RegisterStatus': 'RegisterStatus',
   'IsEmailVerified': 'IsEmailVerified',
-  'Returning': 'Returning'
+  'Returning': 'Returning',
+  'HearAbout': 'HearAbout',
+  'YearofStudy': 'YearofStudy'
   }
         const data = this.state.newList
         const filename = 'Rubix Extract - ' + this.state.dateAndTime
