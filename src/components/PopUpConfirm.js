@@ -19,6 +19,9 @@ constructor(props) {
     userIPAddress: '',
     runFunc: null,
     tenentCode: null,
+    leaseStart: null,
+    leaseEnd: null
+
     
   }
 }
@@ -181,7 +184,11 @@ getUserWitnessData() {
     const data = {
    "ImageUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
-   "RubixRegisterUserID" : localStorage.getItem('userID')
+   "RubixRegisterUserID" : localStorage.getItem('userID'),
+   "RentalPeriodLeaseStartDate": this.state.leaseStart,
+   "RentalPeriodLeaseEndDate": this.state.leaseEnd,
+   "MontlyRentalAmount": document.getElementById('amount').value,
+   "duration": document.getElementById('duration').value,
     }
 
     const requestOptions = {
@@ -206,6 +213,26 @@ getUserWitnessData() {
     }
       postData()
   }
+
+
+    //On Date Select
+    handleChange(e, timeVar){
+      const DATE_OPTIONS = { year: 'numeric', month: 'numeric', day: 'numeric', time: 'long' };
+      const myDate = new Date(e.target.value).toISOString().replace(/T.*/,'').split('-').join('-')
+      const myTime = new Date(e.target.value).toLocaleTimeString('en-ZA')
+      ////console.log('Date', myTime)
+      if (timeVar == 'start'){
+          this.setState({
+              leaseStart: myDate + ' ' + myTime
+          })
+      } else if (timeVar == 'end'){
+          this.setState({
+              leaseEnd: myDate + ' ' + myTime
+          })
+      }
+      return myDate + ' ' + myTime
+    }
+   
 
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
