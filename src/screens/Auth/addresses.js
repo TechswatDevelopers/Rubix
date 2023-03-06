@@ -246,7 +246,7 @@ class Addresses extends React.Component {
                       className="form-control"
                       name= "RegisterUserStreetNameAndNumer"
                       id="streetAddress"
-                      placeholder="Enetr your Physical Address"
+                      placeholder="Enter your Physical Address"
                       type="text"
                     />
                       }

@@ -514,7 +514,7 @@ class Login extends React.Component {
                           </a>
                         </span>
 
-                        <div className="bottom">
+                        <div className="bottom pb-5">
                           <span
                             style={{
                               display: this.state.isAdmin ? "none" : "block",
