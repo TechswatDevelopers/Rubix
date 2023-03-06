@@ -306,6 +306,63 @@ getUserWitnessData() {
             </div>
             <div className="modal-body">
               {Body}
+              {
+                FileType == 'lease-agreement'
+                ? <>
+                <div className="form-group">
+                <div className="form-line">
+                  <label>Lease Start Date</label>
+                  <input
+                    required
+                    id="start"
+                    type="datetime-local"
+                    className="form-control"
+                    //name= "ResidenceEventStartDate"
+                    onChange={(e) => this.handleChange(e, 'start')}
+                  />
+                </div>
+              <div className="form-group">
+                <div className="form-line">
+                  <label>Lease End Date</label>
+                  <input
+                    required
+                    id="end"
+                    type="datetime-local"
+                    className="form-control"
+                    placeholder="Lease Date"
+                    //name= "ResidenceEventStartDate"
+                    onChange={(e) => this.handleChange(e, 'end')}
+                  />
+                </div>
+              </div>
+                      <div className="form-group">
+                <div className="form-line">
+                  <label>Amount</label>
+                  <input
+                    required
+                    id="amount"
+                    type="number"
+                    className="form-control"
+                    placeholder="Monthly Amount"
+                  />
+                </div>
+              </div>
+                      <div className="form-group">
+                <div className="form-line">
+                  <label>Duration</label>
+                  <input
+                    required
+                    id="duration"
+                    type="duration"
+                    className="form-control"
+                    placeholder="Monthly Amount"
+                  />
+                </div>
+              </div>
+              </div>
+                </>
+                : null
+              }
               <label className="control-label" >
                           Vet Comment
                             </label>
