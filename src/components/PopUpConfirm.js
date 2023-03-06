@@ -144,7 +144,11 @@ getUserWitnessData() {
    "ImageUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
    "TenantCode" : this.state.tenentCode,
-   "RubixRegisterUserID" : localStorage.getItem('userID')
+   "RubixRegisterUserID" : localStorage.getItem('userID'),
+   "RentalPeriodLeaseStartDate": this.state.leaseStart,
+   "RentalPeriodLeaseEndDate": this.state.leaseEnd,
+   "MontlyRentalAmount": document.getElementById('amount').value,
+   "duration": document.getElementById('duration').value,
     }
 
     const requestOptions = {
@@ -185,10 +189,6 @@ getUserWitnessData() {
    "ImageUrl" : filename,
    "UserCode" : localStorage.getItem('userCode'),
    "RubixRegisterUserID" : localStorage.getItem('userID'),
-   "RentalPeriodLeaseStartDate": this.state.leaseStart,
-   "RentalPeriodLeaseEndDate": this.state.leaseEnd,
-   "MontlyRentalAmount": document.getElementById('amount').value,
-   "duration": document.getElementById('duration').value,
     }
 
     const requestOptions = {
