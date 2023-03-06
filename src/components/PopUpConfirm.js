@@ -204,7 +204,6 @@ getUserWitnessData() {
         this.onPressUpload(temp, 'key-form', 'signing')
       })
     }
-    
       postData()
   }
 
