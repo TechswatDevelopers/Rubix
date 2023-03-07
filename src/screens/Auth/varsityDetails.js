@@ -654,7 +654,6 @@ async componentDidMount(){
         }
     </select> }
                       </div>}
-
                       <label>Do you have car?</label>
                     <Row>
                     <Col >
