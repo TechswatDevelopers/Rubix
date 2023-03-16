@@ -94,19 +94,19 @@ class ProfileV1Setting extends React.Component {
   }
   //Fetch Residences
   getRes(uniID, key){
-    //console.log("Uni ID: ", uniID)
+    //////console.log("Uni ID: ", uniID)
     const fetchResses = async() => {
       //Populate Residence list
       await fetch('https://jjprest.rubix.mobi:88/api/RubixResidences/' + uniID)
       .then(response => response.json())
       .then(data => {
-          //console.log("Res list data is ", data)
+          //////console.log("Res list data is ", data)
           this.setState({resList: data.data})
 
           //If first call initialize res, else show selected
           if(key == 0){
             for(let i = 0; i < data.data.length; i ++){
-              //console.log("I am called: ", data.data[i].RubixResidenceID)
+              //////console.log("I am called: ", data.data[i].RubixResidenceID)
               if(data.data[i].RubixResidenceID == this.state.myProfile.RubixResidenceID){
                 this.setState({
                   res: this.state.resList[i].RubixResidenceID
@@ -122,7 +122,7 @@ class ProfileV1Setting extends React.Component {
     })
   }
   getResAndPayment(resID){
-    //console.log("this: ", this.state.payment)
+    //////console.log("this: ", this.state.payment)
     this.setState({
       isLoad: true
     })
@@ -136,11 +136,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
   };
-  //console.log("My Data: ", data)
+  //////console.log("My Data: ", data)
     const getData = async() => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixPaymentMethodDD', data, requestOptions)
       .then(response => {
-        //console.log("My response: ", response.data.PostRubixUserData)
+        //////console.log("My response: ", response.data.PostRubixUserData)
         
         this.setState({
           //isLoad: false,
@@ -172,7 +172,7 @@ class ProfileV1Setting extends React.Component {
 
   ///Set Varsity durations
   defaultDuration(uniID){
-    //console.log("The uni is: ", uniID, this.state.duration)
+    //////console.log("The uni is: ", uniID, this.state.duration)
     if(uniID == 1 || uniID == 2){
       this.setState({
         durations: [0, 5, 12]
@@ -192,7 +192,7 @@ class ProfileV1Setting extends React.Component {
   updateAddressInformation(e) {
     const locations = document.getElementById('location');
     let id;
-    //console.log("location:", this.state.location)
+    //////console.log("location:", this.state.location)
    let street_address
     if (this.state.location != null) {
       street_address = this.state.location['value']['structured_formatting']['main_text']
@@ -200,9 +200,9 @@ class ProfileV1Setting extends React.Component {
         myTempAddress: this.state.location['value']['structured_formatting']['main_text']
       })
       
-      //console.log("I am called", street_address)
+      //////console.log("I am called", street_address)
     } else {
-      //console.log("I am called 222")
+      //////console.log("I am called 222")
       street_address = document.getElementById('streetAddress').value
       this.setState({
         myTempAddress: this.state.myProfile.RegisterUserStreetNameAndNumer
@@ -218,10 +218,10 @@ class ProfileV1Setting extends React.Component {
       'RegisterUserProvince': this.state.myProfile.Province/*  this.state.prov */,
       'RegisterUserCountry':''/*  this.state.country */,
     };
-    //console.log("Data 1", data)
+    //////console.log("Data 1", data)
     for (let i = 0; i < form.elements.length; i++) {
       if(form.elements[i].name == 'RegisterUserStreetNameAndNumer'){
-//console.log("down")
+//////console.log("down")
       } else {
 
         const elem = form.elements[i];
@@ -235,16 +235,16 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log(data)
+    //////console.log(data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
         .then(response => {
           if(response.status == 200){
             this.props.onPresPopConfirmInfo()
           } else {
-            //console.log("never")
+            //////console.log("never")
           }
-          //console.log(response)
+          //////console.log(response)
           //alert(response.data[0].ResponceMessage)
           //window.location.reload()
         })
@@ -274,11 +274,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-   // console.log(data)
+   // ////console.log(data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixResetPassword', data, requestOptions)
         .then(response => {
-          //console.log(response)
+          //////console.log(response)
           if(response.data.PostRubixUserData[0].Response == 'PasswordUpdated'){
             this.props.onPresPopConfirmInfo()
           } else {
@@ -319,7 +319,7 @@ class ProfileV1Setting extends React.Component {
           if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
           }
-          //console.log("Next of Kin Post Response", response)
+          //////console.log("Next of Kin Post Response", response)
           //alert("Information Updated")
           
         })
@@ -333,7 +333,7 @@ class ProfileV1Setting extends React.Component {
   //Update Varsity details
   updateVarsityDetails(e) {
     e.preventDefault();
-    //console.log("I am def called", this.state.course)
+    //////console.log("I am def called", this.state.course)
     const form = document.getElementById('uniDetails');
 
     //Request Data
@@ -355,14 +355,14 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    //console.log("Posted: ", data)
+    //////console.log("Posted: ", data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
           /* if(response.data[0].ResponceMessage == 'Successfully Update Record'){
             this.props.onPresPopConfirmInfo()
           } */
-          //console.log("Update Varsity information Response: ", response)
+          //////console.log("Update Varsity information Response: ", response)
           //alert("Information Updated")
           //window.location.reload()
           this.props.onPresPopConfirmInfo()
@@ -378,7 +378,7 @@ class ProfileV1Setting extends React.Component {
 
     // store the error div, to save typing
     var error = document.getElementById('error');
-    //console.log("ID number is ",idNumber);
+    //////console.log("ID number is ",idNumber);
 
     // assume everything is correct and if it later turns out not to be, just set this to false
     var correct = true;
@@ -394,7 +394,7 @@ class ProfileV1Setting extends React.Component {
     var year = idNumber.substring(0, 2);
     var month = idNumber.substring(2, 4);
     var day = idNumber.substring(4, 6);
-    //console.log(year, month, day)
+    //////console.log(year, month, day)
 
     // get first 6 digits as a valid date
     var tempDate = new Date(year, month - 1, day);
@@ -403,7 +403,7 @@ class ProfileV1Setting extends React.Component {
     var id_month = tempDate.getMonth();
     var id_year = tempDate.getFullYear();
     var right_month = id_month + 1;
-    //console.log(id_date, id_month, id_year)
+    //////console.log(id_date, id_month, id_year)
 
     var fullDate = id_date + "-" + right_month + "-" + id_year;
 
@@ -450,7 +450,7 @@ class ProfileV1Setting extends React.Component {
   //Update personal information
   updateUserInformation(e) {
     e.preventDefault();
-    //console.log(this.state.selectedFile)
+    //////console.log(this.state.selectedFile)
     const form = document.getElementById('personalInfo');
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
@@ -469,12 +469,12 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log("my Posted Data: ", data)
+    //////console.log("my Posted Data: ", data)
     const postData = async () => {
       if (this.Validate) {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            //console.log("My DB Response",response)
+            //////console.log("My DB Response",response)
 
             if(response.data.PostRubixUserData[0].ResponceMessage == "Record successfully Updated"){
               this.props.onPresPopConfirmInfo()
@@ -505,11 +505,11 @@ class ProfileV1Setting extends React.Component {
         body: data
       };
       for (var pair of data.entries()) {
-        //console.log(pair[0], ', ', pair[1]);
+        //////console.log(pair[0], ', ', pair[1]);
       }
       await axios.post('https://jjpdocument.rubix.mobi:86/feed/post?image', data, requestOptions)
         .then(response => {
-          //console.log("Upload details:", response)
+          //////console.log("Upload details:", response)
           this.setState({ mongoID: response.data.post._id })
           window.location.reload()
         })
@@ -525,7 +525,7 @@ class ProfileV1Setting extends React.Component {
   }
   changeImageHandler = (event) => {
     this.setState({ selectedFile: event.target.files[0] })
-    //console.log("selcted file", event.target.files[0])
+    //////console.log("selcted file", event.target.files[0])
     this.setState({ isSelected: true })
     this.getBase64(event)
   }
@@ -535,7 +535,7 @@ class ProfileV1Setting extends React.Component {
   }
 
   getBase64(e) {
-    //console.log("I am called")
+    //////console.log("I am called")
     var file = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(file)
@@ -544,10 +544,10 @@ class ProfileV1Setting extends React.Component {
         base64Image: reader.result,
         imageUrl: reader.result,
       })
-      //console.log("This is the img:", this.state.imgUpload)
+      //////console.log("This is the img:", this.state.imgUpload)
     };
     reader.onerror = function (error) {
-      //console.log('Error: ', error);
+      //////console.log('Error: ', error);
     }
   }
 
@@ -570,7 +570,7 @@ class ProfileV1Setting extends React.Component {
 
   //Get Specific User Data
   getStudentData(userID){
-    //console.log('Current Student Rubix ID: ', userID)
+    //////console.log('Current Student Rubix ID: ', userID)
     localStorage.setItem('bookingShow', '')
     const data = {
       'RubixRegisterUserID': userID,
@@ -583,11 +583,11 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-   // console.log('Posted student data:', data)
+   // ////console.log('Posted student data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminUserData', data, requestOptions)
         .then(response => {
-          console.log("All Student data", response.data.PostRubixUserData[0])
+          ////console.log("All Student data", response.data.PostRubixUserData[0])
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
             uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -602,7 +602,7 @@ class ProfileV1Setting extends React.Component {
           if(response.data.PostRubixUserData[0].RubixBookingShowValue != undefined){
             localStorage.setItem('bookingShow', (response.data.PostRubixUserData[0].RubixBookingShowValue).toString())
           }
-          //console.log("This:     ", localStorage.getItem('bookingShow').toString())
+          //////console.log("This:     ", localStorage.getItem('bookingShow').toString())
           
 
           //Get Residence Name 
@@ -646,11 +646,11 @@ this.props.updateStudentName(
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //console.log('All student data:', data)
+    //////console.log('All student data:', data)
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/GetRegistrationStudentDetailAll', data, requestOptions)
         .then(response => {
-          console.log("All profile data", response.data.PostRubixUserData)
+          ////console.log("All profile data", response.data.PostRubixUserData)
           this.setState({ 
             myProfile: response.data.PostRubixUserData[0],
           uni: response.data.PostRubixUserData[0].RubixUniversityID,
@@ -668,7 +668,7 @@ this.props.updateStudentName(
 
           //Set Payment Method
           for (let i = 0; i < this.state.payMethods.length; i++){
-            //console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
+            //////console.log("I reach here with: ", this.state.payMethods[i], "and ", response.data.PostRubixUserData[0].PaymentMethod)
             if (this.state.payMethods[i] == response.data.PostRubixUserData[0].PaymentMethod){
               this.setState({
                 payment: i,
@@ -677,11 +677,11 @@ this.props.updateStudentName(
           }
           //Get Residence Name 
           this.getRes(response.data.PostRubixUserData[0].RubixUniversityID, 0)
-          //console.log("Heyyyyyyyyyyyyyyyyyyyyy", this.state.resList)
+          //////console.log("Heyyyyyyyyyyyyyyyyyyyyy", this.state.resList)
           
           localStorage.setItem('progress', response.data.PostRubixUserData[1].InfoCount)
           this.props.onUpdateProgressBar(response.data.PostRubixUserData[1].InfoCount)
-          //console.log("Student Progress: ", this.props.studentProgress)
+          //////console.log("Student Progress: ", this.props.studentProgress)
         //isShowLease: !state.isShowLease,
           
           if(response.data.PostRubixUserData[0].LeaseShow == 1){
@@ -736,7 +736,7 @@ this.props.updateStudentName(
     const postData = async () => {
       await axios.post('https://jjprest.rubix.mobi:88/api/RubixDocumentsProgress', data, requestOptions)
         .then(response => {
-          //console.log("document progress", response.data.PostRubixUserData)
+          //////console.log("document progress", response.data.PostRubixUserData)
           const temp = response.data.PostRubixUserData
           //Set local storage to default values
           localStorage.setItem('idProgress', 0)
@@ -753,28 +753,28 @@ this.props.updateStudentName(
           for (let i = 1; i <= temp.length - 1; i++) {
             switch (temp[i].FileType) {
               case 'id-document': {
-                //console.log('its an ID')
+                //////console.log('its an ID')
                 localStorage.setItem('idProgress', temp[i].Percentage)
                 this.props.onUpdateIDProgress(temp[i].Percentage)
                 localStorage.setItem('idProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-res": {
-                //console.log('its a Proof of res')
+                //////console.log('its a Proof of res')
                 localStorage.setItem('proofOfResProgress', temp[i].Percentage)
                 this.props.onUpdateRESProgress(temp[i].Percentage)
                 localStorage.setItem('proofOfResProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "proof-of-reg": {
-                //console.log('its a proof of reg')
+                //////console.log('its a proof of reg')
                 localStorage.setItem('proofOfRegProgress', temp[i].Percentage)
                 this.props.onUpdateREGProgress(temp[i].Percentage)
                 localStorage.setItem('proofOfRegProgressMsg', this.setMessage(temp[i].Percentage))
               }
                 break;
               case "next-of-kin": {
-                //console.log('its a next of kin')
+                //////console.log('its a next of kin')
                 this.props.onUpdateNOKProgress(temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgress', temp[i].Percentage)
                 localStorage.setItem('nextOfKinProgressMsg', this.setMessage(temp[i].Percentage))
@@ -789,16 +789,16 @@ this.props.updateStudentName(
   componentDidMount() {
     const userID = localStorage.getItem('userID');
     this.setState({ myUserID: userID });
-    //console.log('My role is: ', localStorage.getItem('role'))
+    //////console.log('My role is: ', localStorage.getItem('role'))
     //Get User Profile Picture
     const fetchData = async () => {
       //Get documents from DB
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + userID)
         .then(response => response.json())
         .then(data => {
-          //console.log("Profile data:", data)
+          //////console.log("Profile data:", data)
           const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-          //console.log("Profile Picture data:", profilePic)
+          //////console.log("Profile Picture data:", profilePic)
           //If Profile Picture Exists...
           if (profilePic != null && profilePic != undefined) {
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
@@ -809,7 +809,7 @@ this.props.updateStudentName(
         await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            //////console.log("data is ", data.data)
             this.setState({
               uniList: data.data,
               //uni: data.data[0]['RubixUniversityID']
@@ -819,7 +819,7 @@ this.props.updateStudentName(
             await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            //////console.log("data is ", data.data)
             this.setState({yearList: data.data})
             });
     };
@@ -830,9 +830,9 @@ this.props.updateStudentName(
       await fetch('https://jjpdocument.rubix.mobi:86/feed/post/' + this.props.currentStudentiD)
         .then(response => response.json())
         .then(data => {
-          //console.log("Profile data:", data)
+          //////console.log("Profile data:", data)
           const profilePic = data.post.filter(doc => doc.FileType == 'profile-pic')[0]
-          //console.log("Profile Picture data:", profilePic)
+          //////console.log("Profile Picture data:", profilePic)
           //If Profile Picture Exists...
           if (profilePic != null && profilePic != undefined) {
             this.setState({ profilePicture: data.post.filter(doc => doc.FileType == 'profile-pic')[0] })
@@ -843,7 +843,7 @@ this.props.updateStudentName(
         await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            //////console.log("data is ", data.data)
             this.setState({
               uniList: data.data,
               //uni: data.data[0]['RubixUniversityID']
@@ -853,7 +853,7 @@ this.props.updateStudentName(
             await fetch('https://jjprest.rubix.mobi:88/api/RubixStudentYearofStudies')
         .then(response => response.json())
         .then(data => {
-            //console.log("data is ", data.data)
+            //////console.log("data is ", data.data)
             this.setState({yearList: data.data})
             });
 
@@ -867,7 +867,7 @@ this.props.updateStudentName(
      await fetch('https://jjprest.rubix.mobi:88/api/RubixCountries')
      .then(response => response.json())
      .then(data => {
-         //console.log("countries is ", data.data)
+         //////console.log("countries is ", data.data)
          this.setState({ countryList: data.data })
          //setCountryList(data.data)
        });
@@ -898,7 +898,7 @@ this.props.updateStudentName(
         if (data === null || data === undefined) {
           alert('Error loading university data: ' + data.message)
         } else {
-          //console.log("University detail:", data)
+          //////console.log("University detail:", data)
           this.setState({ universityID: data.RubixUniversityID })
           this.setState({ courseID: data.RubixCourseID })
           this.setState({ myresID: data.RubixRegisterUserUniversityDetailsID })
@@ -911,7 +911,7 @@ this.props.updateStudentName(
 
   //Get Rubix User Address Details
   fetchUserAddressData = async () => {
-    //console.log("User ID being used:", localStorage.getItem('userID'))
+    //////console.log("User ID being used:", localStorage.getItem('userID'))
     //Get Rubix User Address Details
     await fetch('https://jjprest.rubix.mobi:88/api/RubixRegisterUserAddesss/' + localStorage.getItem('userID'))
       .then(response => response.json())
@@ -952,7 +952,7 @@ this.props.updateStudentName(
     await fetch('https://jjprest.rubix.mobi:88/api/RubixUniversities/')
     .then(response => response.json())
     .then(data => {
-        //console.log("data is ", data.data)
+        //////console.log("data is ", data.data)
         this.setState({
           uniList: data.data,
           //uni: data.data[0]['RubixUniversityID']
@@ -996,7 +996,7 @@ this.props.updateStudentName(
         if (data === null || data === undefined) {
           alert('Error loading next of kin informaion')
         } else {
-          //console.log("Next of Kin Details:", data)
+          //////console.log("Next of Kin Details:", data)
           this.setState({ nextOfKin: data })
         }
       });
@@ -1008,8 +1008,41 @@ this.props.updateStudentName(
     })
   }
 
+   //Reset Customer Code
+   setCustomerCode(e) {
+    //const history = useHistory();
+    e.preventDefault();
+    //const form = document.getElementById('password');
+    const data = {
+      'CustomerCode': document.getElementById('CustomerCode').value,
+      'RubixClientID': 1,
+      'RubixResidenceID': localStorage.getItem('resID'),
+      'RubixRegisterUserID': this.state.myUserID,
+      'UserCode': localStorage.getItem('userCode')
+    };
+    
+
+    const requestOptions = {
+      title: 'Reset Password Form',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: data
+    };
+    ////////console.log(data)
+    const postData = async () => {
+      await axios.post('https://jjprest.rubix.mobi:88/api/RubixAdminAddCustomerCode', data, requestOptions)
+        .then(response => {
+          ////console.log(response)
+          //alert(response.data.PostRubixUserData[0].Response)
+         // window.location.reload()
+        })
+    }
+    postData()
+  }
+
+
   SubmitRelatives(e){
-    //console.log("called")
+    //////console.log("called")
     //Set timer for loading screen
    this.setState({
      isLoad: true
@@ -1037,11 +1070,11 @@ this.props.updateStudentName(
        headers: { 'Content-Type': 'application/json' },
        body: data
    };
-   //console.log(data)
+   //////console.log(data)
    const postData = async() => {
      await axios.post('https://jjprest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
      .then(response => {
-         //console.log(response)
+         //////console.log(response)
          
          this.setState({
            isLoad: false
@@ -1373,7 +1406,25 @@ this.props.updateStudentName(
 
         { 
         localStorage.getItem('role') == 'admin'
-        ? null
+        ? <div className="body">
+        <h6>Change Customer Code</h6>
+        <div className="form-group">
+                <input
+                id="CustomerCode"
+                  className="form-control"
+                  autoComplete="off"
+                  name="CustomerCode"
+                  placeholder="Customer Code"
+                  defaultValue={this.state.myProfile.CustomerCode}
+                  type="text"
+                />
+              </div>
+              <button className="btn btn-primary" type="button" onClick={(e) => { this.setCustomerCode(e) }}>
+            Update Code
+          </button>{" "}
+          &nbsp;&nbsp;
+          <button className="btn btn-default">Cancel</button>
+      </div>
           : <div className="body">
           <div className="row clearfix">
             <div className="col-lg-6 col-md-12">
@@ -1674,7 +1725,7 @@ this.props.updateStudentName(
             {
               
               //e.preventDefault()
-              //console.log("Clicked", this.props.isPopUpModal)
+              //////console.log("Clicked", this.props.isPopUpModal)
               //this.props.onUpdateVarsity()
               }}>
               Update
