@@ -117,7 +117,7 @@ class ProfileV1Setting extends React.Component {
           });
     }
     fetchResses().then(()=>{
-      this.defaultDuration(uniID)
+      this.defaultDuration(uniID, this.state.myProfile.RubixResidenceID)
       
     })
   }
@@ -156,11 +156,11 @@ class ProfileV1Setting extends React.Component {
   onVarsitySelect(e){
     if(e.target.value == 1 || e.target.value == 2){
       this.setState({
-        durations: [0, 5, 12]
+        durations: [0, 12]
       })
     } else {
       this.setState({
-        durations: [5,10]
+        durations: [0, 10]
       })
     }
     this.getRes(e.target.value, 1)
@@ -171,9 +171,9 @@ class ProfileV1Setting extends React.Component {
   }
 
   ///Set Varsity durations
-  defaultDuration(uniID){
-    //////console.log("The uni is: ", uniID, this.state.duration)
-    if(uniID == 1 || uniID == 2){
+  defaultDuration(uniID, resID){
+    console.log("The uni is: ", uniID, this.state.duration)
+    if(resID == 1 || resID == 2){
       this.setState({
         durations: [0, 5, 12]
       })
