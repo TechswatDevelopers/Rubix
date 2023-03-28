@@ -143,7 +143,7 @@ class RoomsTable extends React.Component {
         }
         await axios.post('https://adowadocuments.rubix.mobi:86/feed/post?image', data, requestOptions)
           .then(response => {
-            ////console.log("Upload details:", response)
+            console.log("Upload details:", response)
             this.setState({ mongoID: response.data.post._id })
           })
       }
@@ -204,17 +204,17 @@ class RoomsTable extends React.Component {
         ////console.log("Posted Data:", data)
         await axios.post('https://adowarest.rubix.mobi:88/api/'+url, data, requestOptions)
           .then(response => {
-            ////console.log("Signature upload details:", response)
+            console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             if (this.state.signature != null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////////console.log("temp file:", temp)
+              console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
             } else if (this.state.signature == null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////////console.log("temp file:", temp)
+              console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
             }
           })
