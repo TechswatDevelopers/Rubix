@@ -33,7 +33,7 @@ class SudentsTable extends React.Component {
       await fetch('https://adowarest.rubix.mobi:88/api/RubixGetColor')
       .then(response => response.json())
       .then(data => {
-        //console.log("colors data: ", data.data)
+        ////console.log("colors data: ", data.data)
         this.setState({
           colors: data.data
         })
@@ -184,6 +184,7 @@ class SudentsTable extends React.Component {
                       currentStudent: student
                     })
                     this.selectStudent(student)
+                    this.props.onPresRooms(e)
                     if(this.props.showProfile && this.state.currentStudent == student){
                       this.props.onPresShowProfile()
                     } else if(this.props.showProfile && this.state.currentStudent != student){
@@ -211,6 +212,7 @@ class SudentsTable extends React.Component {
                       currentStudent: student
                     })
                     this.selectStudent(student)
+                    this.props.onPresRooms(e)
                     this.props.onPresShowProfile()}}>
                     <span>
                       <i className=" icon-magnifier"></i> 
