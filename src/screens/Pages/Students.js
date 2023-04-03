@@ -442,7 +442,7 @@ postData().then(()=>{
     'PhoneNumber': 'PhoneNumber', 
     'RubixResidenceID': 'RubixResidenceID', 
     'ResidenceName': 'ResidenceName' , 
-    'BuildingNumber': 'BuildingNumber',
+    'BuildingNumber': 'BuildingNumber', 
      'FloorNumber': 'FloorNumber', 
     'RoomNumber': 'RoomNumber', 
     'Capacity': 'Capacity', 
