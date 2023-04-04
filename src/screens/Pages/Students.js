@@ -401,11 +401,11 @@ postData().then(()=>{
         headers: { 'Content-Type': 'application/json' },
         body: pingData
       };
-      //////console.log('Posted data: ', pingData)
+      console.log('Posted data: ', pingData)
       const postData = async () => {
         await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminReportExport', pingData, requestOptions)
         .then(response => {
-          //////console.log("Students Data List:", response)
+          console.log("Students Data List:", response)
           const temp = response.data.PostRubixUserData
           if(!response.data.PostRubixUserData){
             //Set timer for loading screen
