@@ -1304,6 +1304,10 @@ else{
         </div>
 
         <div className="body"> <h3>Personal Information</h3>
+        {
+          localStorage.getItem('role') == 'admin'
+          ? null:
+          <p>My Unique Code:  {localStorage.getItem('userID')}</p>}
             {/* {
               localStorage.getItem('role') == 'admin'
              ?
