@@ -158,6 +158,7 @@ class Registration extends React.Component {
       };
 
         // User Exists Request data
+        
         const userExistsData = {
           'UserEmail': email,
           'IDNumber': idNumber,
