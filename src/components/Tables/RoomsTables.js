@@ -228,7 +228,7 @@ class RoomsTable extends React.Component {
           .then(response => {
             //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
-            if (tryval === 1) {
+            if (this.state.signature != null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
               console.log("temp file:", temp)
