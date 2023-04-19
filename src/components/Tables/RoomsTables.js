@@ -202,12 +202,20 @@ class RoomsTable extends React.Component {
     postSignature(signature, userid, tryval) {
      // this.props.updateLoadingMessage("Generating Lease...");
       //console.log("I am called incorrectly")
+
+      let mySignature
+      if(this.state.signature != null){
+        ////console.log("This is it: ", this.state.signature)
+        mySignature = this.state.signature
+      } else {
+        mySignature = signature
+      }
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
           'ClientId': localStorage.getItem('clientID'),
           'Time_and_Date': this.state.dateAndTime,
-          'Signature': signature
+          'Signature': mySignature
         }
         const requestOptions = {
           title: 'Student Signature Upload',
