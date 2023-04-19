@@ -174,12 +174,12 @@ class RoomsTable extends React.Component {
             if (tryval === 1) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
             } else if (tryval === 0) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
+              console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
             }
           })
