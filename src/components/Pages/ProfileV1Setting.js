@@ -455,7 +455,10 @@ class ProfileV1Setting extends React.Component {
     const data = {
       'RubixRegisterUserID': this.state.myUserID,
       'UserProfileImage': this.state.imgUpload !== null || this.state.imgUpload !== undefined ? ' ' : this.state.imgUpload,
-      'ClientID': localStorage.getItem('clientID')
+      'ClientID': localStorage.getItem('clientID'),
+      'Gender': this.state.myGender,
+      'Nationality': localStorage.getItem('country'),
+      'RegistrationYear': "2023"
     };
     
     for (let i = 0; i < form.elements.length; i++) {
@@ -469,12 +472,12 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    //////console.log("my Posted Data: ", data)
+    console.log("my Posted Data: ", data)
     const postData = async () => {
       if (this.Validate) {
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixRegisterUsers', data, requestOptions)
           .then(response => {
-            //////console.log("My DB Response",response)
+            console.log("My DB Response",response)
 
             if(response.data.PostRubixUserData[0].ResponceMessage == "Record successfully Updated"){
               this.props.onPresPopConfirmInfo()

@@ -166,8 +166,8 @@ class RoomsTable extends React.Component {
     postBookingForm(signature, userid) {
       const postDocument = async () => {
         const data = {
-          'RubixRegisterUserID': userid,
-          'ClientId': localStorage.getItem('clientID'),
+          'RubixRegisterUserID': parseInt(userid),
+          'ClientId': parseInt(localStorage.getItem('clientID')),
           'Time_and_Date': this.state.dateAndTime,
           'Signature': signature
         }
@@ -178,15 +178,14 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        //console.log("Posted 2nd Data:", data)
+        console.log("Posted 2nd Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
           .then(response => {
-            //console.log("testing: ", response.data)
+            console.log("booking upload details:", response)
+         
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
-            ////console.log("temp file:", temp)
             this.onPressUpload(temp, 'booking-doc', 'signing')
-            ////console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.PostRubixUserData })
             this.setState({
               isLoad: false
@@ -213,7 +212,7 @@ class RoomsTable extends React.Component {
       const postDocument = async () => {
         const data = {
           'RubixRegisterUserID': userid,
-          'ClientId': localStorage.getItem('clientID'),
+          'ClientId': parseInt(localStorage.getItem('clientID')),
           'Time_and_Date': this.state.dateAndTime,
           'Signature': mySignature
         }
@@ -223,10 +222,10 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        //console.log("Posted Data:", data)
+        console.log("Posted Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
           .then(response => {
-            //console.log("Signature upload details:", response)
+            console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (this.state.signature != null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
@@ -253,34 +252,6 @@ class RoomsTable extends React.Component {
         }
         getData()
       }
-    ///Change room
-    changeRoom(document, roomCode, roomNumber, userid){
-      const data = {
-        'PDFDocumentUrl': document,
-        'RoomCode': roomCode,
-        'RoomNumber': roomNumber,
-      }
-
-      const requestOptions = {
-        title: 'Student Lease Room Update',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: data
-      }
-
-      const postDocument = async () => {
-
-      await axios.post('https://jjppdf.rubix.mobi:94/PDFRoomAmend', data, requestOptions)
-      .then(response => {
-        ////console.log('Response: ', response)
-        const dataUrl = 'data:application/pdf;base64,' + response.data.Base
-              const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              ////console.log("temp file:", temp)
-              this.onPressUpload(temp, 'lease-agreement', userid)
-      })
-    }
-    postDocument()
-  }
   
   
   render() {
@@ -369,7 +340,7 @@ class RoomsTable extends React.Component {
                       setTimeout(() => {
       
                         this.postBookingForm('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+P///38ACfsD/QVDRcoAAAAASUVORK5CYII=', localStorage.getItem('userID'),)
-                  }, 3000);
+                  }, 10000);
                       
                       }}>
                       <span>
