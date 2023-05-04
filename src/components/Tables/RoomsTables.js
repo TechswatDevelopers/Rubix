@@ -178,10 +178,10 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted 2nd Data:", data)
+        //console.log("Posted 2nd Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGenerateBookingFormPDF', data, requestOptions)
           .then(response => {
-            console.log("booking upload details:", response)
+            //console.log("booking upload details:", response)
          
             const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
             const temp = this.dataURLtoFile(dataUrl, 'Booking Form') //this.convertBase64ToBlob(response.data.Base)
@@ -222,20 +222,20 @@ class RoomsTable extends React.Component {
           headers: { 'Content-Type': 'application/json', },
           body: data
         };
-        console.log("Posted Data:", data)
+        //console.log("Posted Data:", data)
         await axios.post('https://jjprest.rubix.mobi:88/api/RubixGeneratePDF', data, requestOptions)
           .then(response => {
-            console.log("Signature upload details:", response)
+            //console.log("Signature upload details:", response)
             this.setState({ docUrl: response.data.Base })
             if (this.state.signature != null) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'Lease Agreement') //this.convertBase64ToBlob(response.data.Base)
-              console.log("temp file:", temp)
+              //console.log("temp file:", temp)
               this.onPressUpload(temp, 'lease-agreement', userid)
             } else if (tryval === 0) {
               const dataUrl = 'data:application/pdf;base64,' + response.data.PostRubixUserData
               const temp = this.dataURLtoFile(dataUrl, 'unsigned Agreement') //this.convertBase64ToBlob(response.data.Base)
-              console.log("temp file:", temp)
+              //console.log("temp file:", temp)
               this.onPressUpload(temp, 'unsigned-agreement', userid)
             }
           })
