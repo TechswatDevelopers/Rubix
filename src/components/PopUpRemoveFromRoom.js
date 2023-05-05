@@ -60,11 +60,11 @@ constructor(props) {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-
+    console.log("We are here: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminRemoveRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        //console.log("DB response: ", response)
+        console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
