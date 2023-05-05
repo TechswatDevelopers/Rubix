@@ -33,11 +33,11 @@ constructor(props) {
       body: data
     };
 
-   // console.log("Posted Vetting Data: ", data)
+   // //console.log("Posted Vetting Data: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAddRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        //console.log("DB response: ", response)
+        ////console.log("DB response: ", response)
       })
     }
     postData()
@@ -51,7 +51,7 @@ constructor(props) {
       'UserCode':  localStorage.getItem('userCode'),
       'RubixRegisterUserID': this.props.currentStudentiD,
       'RubixClientID': localStorage.getItem('clientID'),
-      'RubixResidenceRoomsID': roomID,
+      'RubixResidenceRoomsID': localStorage.getItem('roomID'),
     }
     
     const requestOptions = {
@@ -60,11 +60,11 @@ constructor(props) {
       headers: { 'Content-Type': 'application/json' },
       body: data
     };
-    console.log("We are here: ", data)
+    //console.log("We are here: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminRemoveRubixUserResidencesRoom', data, requestOptions)
       .then(response=>{
-        console.log("DB response: ", response)
+        //console.log("DB response: ", response)
       })
     }
     postData().then(()=>{
@@ -94,11 +94,11 @@ constructor(props) {
           body: data
         };
     
-        //console.log("Posted Vetting Data: ", data)
+        ////console.log("Posted Vetting Data: ", data)
         const postData = async () => {
           await axios.post('https://adowarest.rubix.mobi:88/api/RubixAdminAudits', data, requestOptions)
           .then(response=>{
-            //console.log("DB response: ", response)
+            ////console.log("DB response: ", response)
           })
         }
         postData().then(()=>{
