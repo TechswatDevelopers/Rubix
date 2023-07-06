@@ -654,40 +654,8 @@ async componentDidMount(){
         }
     </select> }
                       </div>}
-                      <label>Do you have car?</label>
-                    <Row>
-                    <Col >
-                        <input 
-                        onChange={(e) => {this.onValueChange(e)}}
-                        //checked={this.state.yearOfRes === "2022"}
-                        type="radio" name="CarReg" value='yes'/>
-                         Yes
-                      </Col>
-                      <Col>
-                      <input 
-                      onChange={(e) => {this.onValueChange(e)}}
-                      //checked={this.state.yearOfRes === "2023"}
-                      type="radio" name="CarReg" value='no'/>
-                         No
-                      </Col>
-                    </Row>
-                    {
-                      this.state.hasCar
-                      ? <div className="form-group">
-                      <label className="control-label" >
-                      Car Number Plate
-                          </label>
-                          <input
-                        className="form-control"
-                        id="CarReg"
-                        name='CarReg'
-                        placeholder="Enter your car Registration Number"
-                        type="text"
-                        required
-                      />
-                    </div>
-                      : null
-                    }
+                    
+                   
                       </>
                       
                     : null  
@@ -765,9 +733,7 @@ async componentDidMount(){
                         <p>{"Your chosen room: " + this.props.roomChoice}</p>
                       : <></>
                       }
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) =>{e.preventDefault(); this.props.onPresRooms()} }>
-                        Choose Preffered Room
-                        </button>
+                      
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         NEXT
                         </button>
