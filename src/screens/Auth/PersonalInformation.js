@@ -309,6 +309,7 @@ class PersonalInformation extends React.Component {
                           Last Name
                         </label>
                         <input
+                        autoComplete="off"
                           className="form-control"
                           name="Surname"
                           id="last-name"

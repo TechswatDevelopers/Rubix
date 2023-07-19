@@ -111,12 +111,12 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        //console.log("Sent Data: ",data)
+        console.log("Sent Data: ",data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    //console.log("The Response: ",response)
+                    console.log("The Response: ",response)
                     //Set timer for loading screen
                     
     setTimeout(() => {

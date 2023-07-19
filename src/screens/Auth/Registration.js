@@ -296,10 +296,7 @@ class Registration extends React.Component {
      await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
      .then(response => response.json())
      .then(data => {
-         ////console.log("data is ", data.data)
          this.setState({ countryList: data.data })
-         //console.log("this is the countryList:", this.state.countryList)
-         //setCountryList(data.data)
        });
    }
    fetchData().then(()=>{
