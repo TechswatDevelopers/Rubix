@@ -418,7 +418,7 @@ getUserWitnessData() {
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
-            Function()
+                  Function()
                   this.sendVettingStatus(FileType, DocID, 'correct')
                   if(FileType == 'lease-agreement'){
                     
@@ -429,7 +429,7 @@ getUserWitnessData() {
                     this.sendFinalForm("https://adowaimages.rubix.mobi:449/" + Filename.filename)
                   }
                   this.props.onPresPopUpConfirm();
-
+                  Function()
                 }
                 }>
                 Vet as Correct
