@@ -1,0 +1,100 @@
+﻿$white: #ffffff;
+$blue-grey-400: #78909c !default;
+$marigold-900: #212121 !default;
+$marigold-400: #DE8B05 !default;
+$marigold-500: #DE8B05 !default;
+$marigold-600: #DE8B05 !default;
+
+
+.theme-marigold{
+
+    ::selection {
+        color: $white;
+        background: $marigold-500;
+    }
+
+    .page-loader-wrapper{
+        background: $marigold-500;
+    }
+
+    #left-sidebar .nav-tabs .nav-link.active{
+        color: $marigold-500;
+    }
+
+    &:before,
+    &:after{
+        background: $marigold-500;
+    }
+
+    #wrapper{
+        &:before,
+        &:after{
+            background: $marigold-500;
+        }
+    }
+
+    .sidebar-nav .metismenu>li.active>a{
+        border-left-color: $marigold-500;
+    }
+
+
+    .navbar-nav ul.menu-icon{
+        background: $marigold-500;
+    }
+
+    .fancy-checkbox {
+        input[type="checkbox"] {
+
+            &:checked + span:before {
+                background: $marigold-500;
+                border-color: $marigold-500;
+            }
+        }
+    }
+
+    .chat-widget {
+        li {
+            &.right {
+
+                .chat-info {
+                    background: $marigold-500;
+                    color: $white;
+
+                    &:before{
+                        border-left: 10px solid $marigold-500;
+                    }
+                }
+            }
+        }
+    }
+
+    .fc .fc-view-container .fc-view.fc-basic-view>table>thead tr th.fc-widget-header , .fc-view.fc-dayGrid-view>table>thead tr th.fc-widget-header{
+        background: $marigold-500;
+        border-color: $marigold-500;
+        color:$white;
+        border: 1px solid #eee;
+        padding: 10px;
+    }
+
+    .blog-page .single_post .footer .stats li a:hover{
+        color: $marigold-500;
+    }
+
+    .auth-main{
+        .btn-primary{
+            background: $marigold-500;
+            border-color: $marigold-500;
+        }
+    }
+
+    .sidebar-nav .metismenu>li i{
+        color: $marigold-500;
+    }
+
+    .right_chat li a:hover{
+        .media-object {
+            border-color: $marigold-500;
+        }
+    }
+
+}

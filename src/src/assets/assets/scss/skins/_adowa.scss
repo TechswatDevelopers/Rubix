@@ -1,0 +1,100 @@
+﻿$white: #ffffff;
+$blue-grey-700: #FF6501 !default;
+$blue-grey-900: #FF6501 !default;
+$grey-900: #FF6501 !default;
+$adowa-400: #FF6501 !default;
+$adowa-500: #FF6501 !default;
+$adowa-600: #FF6501 !default;
+
+.theme-adowa{
+
+    ::selection {
+        color: $white;
+        background: $adowa-500;
+    }
+
+    .page-loader-wrapper{
+        background: $adowa-500;
+    }
+
+    #left-sidebar .nav-tabs .nav-link.active{
+        color: $adowa-500;
+    }
+
+    &:before,
+    &:after{
+        background: $adowa-500;
+    }
+
+    #wrapper{
+        &:before,
+        &:after{
+            background: $adowa-500;
+        }
+    }
+
+    .sidebar-nav .metismenu>li.active>a{
+        border-left-color: $adowa-500;
+    }
+
+
+    .navbar-nav ul.menu-icon{
+        background: $adowa-500;
+    }
+
+    .fancy-checkbox {
+        input[type="checkbox"] {
+
+            &:checked + span:before {
+                background: $adowa-500;
+                border-color: $adowa-500;
+            }
+        }
+    }
+
+    .chat-widget {
+        li {
+            &.right {
+
+                .chat-info {
+                    background: $adowa-500;
+                    color: $white;
+
+                    &:before{
+                        border-left: 10px solid $adowa-500;
+                    }
+                }
+            }
+        }
+    }
+
+    .fc .fc-view-container .fc-view.fc-basic-view>table>thead tr th.fc-widget-header, .fc-view.fc-dayGrid-view>table>thead tr th.fc-widget-header{
+        background: $adowa-500;
+        border-color: $adowa-500;
+        color:$white;
+        border: 1px solid #eee;
+        padding: 10px;
+    }
+
+    .blog-page .single_post .footer .stats li a:hover{
+        color: $adowa-500;
+    }
+
+    .auth-main{
+        .btn-primary{
+            background: $adowa-500;
+            border-color: $adowa-500;
+        }
+    }
+
+    .sidebar-nav .metismenu>li i{
+        color: $adowa-500;
+    }
+
+    .right_chat li a:hover{
+        .media-object {
+            border-color: $adowa-500;
+        }
+    }
+
+}
