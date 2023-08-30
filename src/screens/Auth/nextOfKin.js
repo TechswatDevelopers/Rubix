@@ -417,7 +417,19 @@ else{
                     required=''  placeholder='Enter your ID Number'></input>
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
-                      
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Vat Number
+                            </label>
+                        <input
+                          className="form-control"
+                          id="RubixNextOfKinVat"
+                          name='RubixNextOfKinVat'
+                          placeholder="Enter Surety VAT number (optional)"
+                          type="number"
+                        />
+                      </div>
+
                       <div className="form-group">
                         <label className="control-label" >
                         Email
@@ -506,7 +518,7 @@ placeholder: "Search Address"
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinEmail"
+                          id="RubixUserNextOfKiniRelationship"
                           name='RubixUserNextOfKiniRelationship'
                           placeholder="Enter Surety's relation to you"
                           type="text"

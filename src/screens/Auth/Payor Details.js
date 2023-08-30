@@ -14,6 +14,7 @@ import PopUpModal from "../../components/PopUpModal";
 import { Tabs, Tab, Row, Col } from "react-bootstrap";
 
 class PayorDetails extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -306,7 +307,7 @@ else{
   setFundingSource(value){
     if(value == 'Cash Student'){
       this.setState({
-        fundingSources: ["Please select funding source", "Private", "Bursary / Scholarship"]
+        fundingSources: ["Please select funding source", "Cash", "Bursary / Scholarship"]
       })
 
     } else if(value == 'NSFAS') {
@@ -528,12 +529,14 @@ else{
         Body = "Thank you for registering with Us. We have sent you an email to verify your account, please check your emails."
         Function ={()=>this.props.history.push("/login/" + localStorage.getItem('clientID'))}
         />
-
+          
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="150" height="100" alt="Lucid" /></div>
             <p>Processing informaion please wait...</p>
           </div>
+          
+  
         </div>
         <div >
           <div className="vertical-align-wrap">
@@ -597,7 +600,7 @@ else{
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinFirstName"
+                          id="PayorFullName"
                           name='PayorFullName'
                           placeholder="Enter Payor's Full Name"
                           type="text"
@@ -614,18 +617,6 @@ else{
                     <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
 
-                      <div className="form-group">
-                        <label className="control-label" >
-                        Vat Number
-                            </label>
-                        <input
-                          className="form-control"
-                          id="PayorVat"
-                          name='PayorVat'
-                          placeholder="Enter VAT number (optional)"
-                          type="number"
-                        />
-                      </div>
 
                       <div className="form-group">
                         <label className="control-label" >

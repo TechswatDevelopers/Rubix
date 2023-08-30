@@ -115,6 +115,7 @@ class Addresses extends React.Component {
       this.props.updateLoadingController(false);
     }, 1000);
           alert("Please ensure that you entered all required information")
+          
           ////console.log("checkValidity ", document.getElementById('addresses').checkValidity())
         }
       }
@@ -126,7 +127,8 @@ class Addresses extends React.Component {
     setTimeout(() => {
       this.props.updateLoadingController(false);
     }, 1000);
-      alert("Please enter a valid home address")
+      //alert("Please enter a valid home address")
+      this.props.history.push("/varsityDetails")
     }
 
   }
@@ -235,29 +237,8 @@ class Addresses extends React.Component {
                         <label className="control-label" >
                           Home Address
                         </label>
-                        { this.state.showSearch
-                        ?  <GooglePlacesAutocomplete
-                          apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange={(e) => this.setState({ location: e.target.value })}
-                          selectProps={{
-                            location: this.state.location,
-                            onChange: (e) => this.setState({ location: e }),
-                            placeholder: "Search Address"
-                          }}
-                        />
-                      : <input
-                      className="form-control"
-                      name= "RegisterUserStreetNameAndNumer"
-                      id="streetAddress"
-                      placeholder="Enetr your Physical Address"
-                      type="text"
-                    />
-                      }
-                      <button className="btn btn-primary btn-sm mt-1" onClick={(e)=>this.showSearch(e)}><i className={this.state.showSearch ?"icon-note pr-2" :"icon-magnifier pr-2"}/>
-                      {
-                      this.state.showSearch 
-                      ?'Type Address'
+                     
                       
-                    : 'Search Address'}</button>
                       
                       </div>
 

@@ -296,7 +296,10 @@ class Registration extends React.Component {
      await fetch('https://adowarest.rubix.mobi:88/api/RubixCountries')
      .then(response => response.json())
      .then(data => {
+         ////console.log("data is ", data.data)
          this.setState({ countryList: data.data })
+         //console.log("this is the countryList:", this.state.countryList)
+         //setCountryList(data.data)
        });
    }
    fetchData().then(()=>{
@@ -399,7 +402,7 @@ class Registration extends React.Component {
                           Passport Number
                         </label>
                         <input type='text' name="passportNumber" className="form-control" id='passportNumber'
-                          required='' placeholder='Enter your valid Passport Number' ></input>
+                          required=''placeholder='Enter your valid Passport Number' ></input>
                         <p id="error" style={{ color: 'red' }}>{this.state.errorMessage}</p>
 
                         <div className="form-group">

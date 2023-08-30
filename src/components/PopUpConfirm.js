@@ -234,70 +234,7 @@ getUserWitnessData() {
       return myDate + ' ' + myTime
     }
    
-    loadDocuments(userID) {
-      //Set Loading Screen ON
-      localStorage.setItem('nationality', '')
-      localStorage.setItem("check", 'no')
-      this.props.updateLoadingController(true);
-      this.props.updateLoadingMessage("Loading Student Documents...");
-      //console.log("Loading Student Documents...");
-      const fetchData = async () => {
-        //Get documents from DB
-  
-        await fetch('https://adowadocuments.rubix.mobi:86/feed/post/' + userID)
-          .then(response => response.json())
-          .then(data => {
-         //console.log("documents data:", data)
-            //Set Documents list to 'docs'
-            this.setState({ docs: data.post })
-  
-            //Load initial PDF
-            let tempList, currentDoc
-            if(localStorage.getItem('docType') == null){
-              tempList = data.post.filter(doc => doc.FileType == 'id-document')[0]
-              currentDoc = 'id-document'
-            }else {
-              tempList = data.post.filter(doc => doc.FileType == localStorage.getItem('docType'))[0]
-              currentDoc = localStorage.getItem('docType')
-            }
-            
-  
-            if(tempList != null || tempList != undefined){
-              //Set ID Document to initial Document
-            const string = "data:application/pdf;base64," + data.post.filter(doc => doc.FileType == currentDoc)[0].image
-            this.setState({ doc: data.post.filter(doc => doc.FileType == currentDoc)[0],
-              currentDocID: data.post.filter(doc => doc.FileType == currentDoc)[0].ImageID
-            })
-            }
-            else {
-              this.setState({doc: null})
-            }
-  
-            //Check the lease
-            const temp = data.post.filter(doc => doc.FileType == 'lease-agreement')[0]
-            if(temp != undefined && temp.length != 0 && temp != null){
-              //////////////console.log("this is it: ", temp)
-              ///set show proof of pay tile
-              localStorage.setItem("check", 'yes')
-            } else {
-              //////////////console.log("this is it: ", temp)
-            }
-            const temp2 = data.post.filter(doc => doc.FileType == 'unsigned-agreement')[0]
-            
-          });
-      };
-      fetchData()
-      .then(()=>{
-        setTimeout(() => {
-        this.props.updateLoadingController(false);
-      }, 1000)
-        //this.checkLease(userID)
-       // this.setDocumentProgress();
-      })
-    }
 
-
-    
   //Send Vetted status
   sendVettingStatus(filetype, docID, vet){
     this.props.updateLoadingController(true);
@@ -481,23 +418,18 @@ getUserWitnessData() {
             </div>
             <div className="modal-footer">
             <button type="button" className="btn btn-primary" onClick={(e) => {
-                  Function()
+            Function()
                   this.sendVettingStatus(FileType, DocID, 'correct')
                   if(FileType == 'lease-agreement'){
+                    
                     setTimeout(() => {
                       this.sendFinalLease("https://adowaimages.rubix.mobi:449/" + Filename.filename)
-                      Function()
                     }, 3000);
                   } else if (FileType == 'key-form'){
                     this.sendFinalForm("https://adowaimages.rubix.mobi:449/" + Filename.filename)
-                    Function()
                   }
+                  this.props.onPresPopUpConfirm();
 
-                  setTimeout(() => {
-                    Function()
-                    this.props.onPresPopUpConfirm();
-                  }, 5000)
-                  
                 }
                 }>
                 Vet as Correct

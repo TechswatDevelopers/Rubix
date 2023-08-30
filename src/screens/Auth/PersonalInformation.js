@@ -309,7 +309,6 @@ class PersonalInformation extends React.Component {
                           Last Name
                         </label>
                         <input
-                        autoComplete="off"
                           className="form-control"
                           name="Surname"
                           id="last-name"
@@ -326,8 +325,8 @@ class PersonalInformation extends React.Component {
                         <input
                           className="form-control"
                           name="Password"
-                          id="signup-password"
-                          defaultValue={this.props.password}
+                          id="signup-password"autoComplete="off"
+                         // defaultValue={this.props.password}
                           placeholder="Password"
                           type="password"
                           required
@@ -374,7 +373,7 @@ class PersonalInformation extends React.Component {
                         <input
                           className="form-control"
                           name="UserEmail"
-                          id="email"
+                          id="email"autoComplete="off"
                           required
                           value={localStorage.getItem('studentEmail')}
                           placeholder="Enter your email"
@@ -385,7 +384,7 @@ class PersonalInformation extends React.Component {
                         <label className="control-label" >
                           Phone Number
                         </label>
-                        <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348" name="PhoneNumber" required=''
+                        <PhoneInput id='register-page-phone-number'required='' maxLength='15' minLength='15' placeholder="+27 123 15348" name="PhoneNumber" required=''
                           value={this.state.value}
                           onChange={() => this.setState({ value: this.state.value })} />
                       </div>

@@ -40,7 +40,7 @@ class VarsityDetails extends React.Component {
             duration: 0,
             hasCar: false,
             payMethods: [],
-            hearAboutUs: ['Where did you hear about us?', 'FLYERS', 'FACEBOOK', 'INTERNET', 'WEBSITE', 'WORD OF MOUTH', 'REFERAL', 'Other'],
+            hearAboutUs: ['Where did you hear about us?', 'EPSV TENANT OR STAFF', 'FACEBOOK', 'INSTAGRAM', 'WHATSAPP', 'TWITTER', 'SNAPCHAT', 'FLYER','ROADSHOW','PASSING BY','TICKTOK','UJ STUDENT'],
             bankTypes: ['Please select account type', 'Savings', 'Cheque'],
             durations: [],
             value: 0,
@@ -111,12 +111,12 @@ class VarsityDetails extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: data
         };
-        console.log("Sent Data: ",data)
+        //console.log("Sent Data: ",data)
         const postData = async()=>{
             if (this.state.uni !=null && this.state.res !=null && this.state.year !=null && document.getElementById('uniDetails').checkValidity() == true){
                 await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
                 .then(response => {
-                    console.log("The Response: ",response)
+                    //console.log("The Response: ",response)
                     //Set timer for loading screen
                     
     setTimeout(() => {
@@ -278,7 +278,7 @@ async componentDidMount(){
       this.setState({
         uni: e.target.value,
         showResInput: true,
-        durations: [0,10],
+        durations: [0,10,9,8,7,6,5,4,3,2,1],
         isShowOtherDetails: true
       })
       this.getRes(e.target.value)
@@ -296,7 +296,7 @@ async componentDidMount(){
       this.setState({
         uni: e.target.value,
         showResInput: true,
-        durations: [0,10],
+        durations: [0,10,9,8,7,6,5,4,3,2,1],
         isShowOtherDetails: true
       })
       this.getRes(e.target.value)
@@ -502,6 +502,7 @@ async componentDidMount(){
         ))   
         }
     </select>
+
     
     </> }
 
@@ -654,8 +655,8 @@ async componentDidMount(){
         }
     </select> }
                       </div>}
-                    
                    
+                    
                       </>
                       
                     : null  
@@ -733,7 +734,20 @@ async componentDidMount(){
                         <p>{"Your chosen room: " + this.props.roomChoice}</p>
                       : <></>
                       }
-                      
+                      <div className="form-group">
+                        <label className="control-label" >
+                        Your Referal
+                            </label>
+                            <input
+                          className="form-control"
+                          id="ref"
+                          //name='CourseID'
+                          placeholder="Enter Name & Surname of Your referal"
+                          type="text"
+                          required
+                        />
+                      </div>
+                     
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
                         NEXT
                         </button>

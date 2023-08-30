@@ -23,9 +23,11 @@ import FacebookLogin from "react-facebook-login";
 import InstagramLogin from "react-instagram-login";
 import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 import { Helmet } from "react-helmet";
+import './style.css'
 
 class Login extends React.Component {
   //Initial State
+
   constructor(props) {
     super(props);
     this.state = {
@@ -427,7 +429,11 @@ class Login extends React.Component {
                         }}
                       />
                     </div>
+                    
+                 
                     <div className="header">
+                      
+                  
                       <p className="lead">
                         Login to your {this.props.rubixClientName}{" "}
                         {this.state.isAdmin ? "Admin" : ""} account 
@@ -439,7 +445,8 @@ class Login extends React.Component {
                           <label className="control-label sr-only">Email</label>
                           <input
                             className="form-control"
-                            id="UserEmail"
+                            id="UserEmail"autoComplete="off"
+                            
                             placeholder="UserEmail"
                             type="email"
                             name={
@@ -457,6 +464,7 @@ class Login extends React.Component {
                           <input
                             className="form-control"
                             id="UserPass"
+                            autoComplete="off"
                             placeholder="Password"
                             type="password"
                             name="UserPass"
@@ -480,7 +488,7 @@ class Login extends React.Component {
                         <div
                           style={{
                             display: this.state.isAdmin ? "none" : "block",
-                            fontSize: 15
+                            fontSize: 18
                           }}
                         >
                           
@@ -498,7 +506,7 @@ class Login extends React.Component {
                           className="bottom"
                           style={{
                             display: this.state.isAdmin ? " block" : "none",
-                            fontSize: 15
+                            fontSize: 18
                           }}
                         >
                           For Student Login Click{" "}
@@ -526,7 +534,7 @@ class Login extends React.Component {
                           <span
                             style={{
                               display: this.state.isAdmin ? "none" : "block",
-                              fontSize: 15
+                              fontSize: 18
                             }}
                           >
                             For Admins, please log in{" "}

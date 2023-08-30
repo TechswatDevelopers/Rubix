@@ -376,15 +376,8 @@ const myTime = new Date(date).toLocaleTimeString('en-ZA')
                          : <a onClick={(e) => { this.postLike(message.RubixRegisterUserMessageID, e) }} className="m-r-20">
                           <i className="icon-heart" style={{color: this.state.liked ? 'red' : 'black'}}></i> {this.state.liked ? 'Unlike' : 'Like'}
                         </a>}
-                        <a
-                          role="button"
-                          data-toggle="collapse"
-                          aria-expanded="false"
-                          aria-controls="collapseComment"
-                          href="#collapseComment"
-                        >
-                          <i className="icon-bubbles"></i> Comment
-                        </a>
+                        
+                        
                         <div style={{overflow: 'auto', maxHeight: 400}}>
                           <ReactList
                             itemRenderer={this.renderItem}

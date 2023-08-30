@@ -231,7 +231,7 @@ class StudentInformation extends React.Component {
                           className="form-control"
                           name="UserEmail"
                           defaultValue={this.state.profile.UserEmail}
-                          id="middle-name"
+                          id="UserEmail"
                           placeholder="Enter your email"
                           type="email"/>
                       </div>
@@ -255,7 +255,7 @@ class StudentInformation extends React.Component {
                           className="form-control"
                           name="StudentNumber"
                           defaultValue={this.state.profile.StudentNumber}
-                          id="middle-name"
+                          id="StudentNumber"
                           placeholder="Enter your Student Number"
                           type="text"
                         />
@@ -267,7 +267,7 @@ class StudentInformation extends React.Component {
                         <input
                           className="form-control"
                           name="MedicalConditions"
-                          id="middle-name"
+                          id="MedicalConditions"
                           placeholder="Select your Medical Condition"
                           type="text"
                           defaultValue='none'
