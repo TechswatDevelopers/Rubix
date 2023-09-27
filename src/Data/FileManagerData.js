@@ -70,10 +70,10 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-green mb-0",
   },
-  localStorage.getItem('paymentMethod') == "NSFAS"
+   localStorage.getItem('paymentMethod') == "NSFAS"
   ?
   {
-    UsedSize: "NSFAS Approval Document / Previous Year Results",
+    UsedSize: "Proof Of Funding",
     Type: "Documents",
     status: localStorage.getItem('studentProgress'),
     FileType: "nsfas-doc",
@@ -102,7 +102,6 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-yellow mb-0",
   },
- 
   {
     UsedSize: "Bank Statement",
     Type: "Documents",
@@ -113,7 +112,7 @@ export const fileStorageStatusCardData = [
     ProgressBarClass:
       "progress progress-xs progress-transparent custom-color-blue mb-0",
   },
-  {
+    {
     UsedSize: "Surety Deed Document",
     Type: "Documents",
     status: localStorage.getItem('rulesProgress'),

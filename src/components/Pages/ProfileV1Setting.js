@@ -371,11 +371,12 @@ class ProfileV1Setting extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: data
     }
-    //console.log("Posted: ", data)
+    console.log("Posted: ", data)
     const postData = async () => {
       await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserUniversityDetails', data, requestOptions)
         .then(response => {
-        //console.log("this is the response: ", response)
+        console.log("this is the response: ", response)
+        console.log(data)
           this.props.onPresPopConfirmInfo()
         })
     }
@@ -1070,7 +1071,7 @@ UpdatePayorInfo(e){
          await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
          .then(response => {
           this.props.onPresPopConfirmInfo()
-             //////////////console.log(response)
+             console.log(response)
              this.setState({
                isLoad: false
              })
@@ -1115,11 +1116,11 @@ const requestOptions = {
    headers: { 'Content-Type': 'application/json' },
    body: data
 };
-//////////////console.log("called", data)
+ console.log("called", data)
 const postData = async() => {
  await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
  .then(response => {
-    //////console.log("2nd Response: ", response)
+   console.log("2nd Response: ", response)
        setTimeout(() => {
         this.props.onPresPopConfirmInfo()
         

@@ -33,19 +33,29 @@ class Addresses extends React.Component {
  this.props.updateLoadingController(true);
  this.props.updateLoadingMessage("Submitting Information...");
     const form = document.getElementById('addresses');
-    if (this.state.location != null ) {
+    if (this.state.location === null ) {
+      console.log('1st if in address')
       const locations = document.getElementById('location');
-      const street_address = this.state.location['value']['structured_formatting']['main_text']
+      console.log('line 39')
+
+      //const street_address = ' ' //this.state.location['value']['structured_formatting']['main_text']
+      console.log('line 42')
       const data = {
         'RubixRegisterUserID': this.state.myUserID,
-        'RegisterUserStreetNameAndNumer': street_address,
+       // 'RegisterUserStreetNameAndNumer': street_address,
         'RegisterUserProvince': this.state.prov,
         'RegisterUserCountry': localStorage.getItem('country'),
       };
+      console.log('line 49 '+ form.elements.length)
+
       for (let i = 0; i < form.elements.length; i++) {
         const elem = form.elements[i];
         data[elem.name] = elem.value
+        console.log(elem.name)
+        
       }
+      console.log('line 54')
+      console.log(data)
 
       const requestOptions = {
         title: 'Address Form',
@@ -53,19 +63,24 @@ class Addresses extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: data
       };
+      console.log('line 62')
       //console.log("Check:",data)
       const postData = async () => {
 
-        if (this.state.location != null && this.state.prov != null /* && document.getElementById('addresses').checkValidity() == true */) {
-          await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
+        //if (this.state.location != null && this.state.prov != null /* && document.getElementById('addresses').checkValidity() == true */) {
+          if (this.state.prov != null) {
+
+            console.log('prov not null')
+            await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserAddesss', data, requestOptions)
             .then(response => {
               ////console.log(response)
               //Set timer for loading screen
     setTimeout(() => {
       this.props.updateLoadingController(false);
     }, 1000);
-              this.props.history.push("/varsityDetails")
+              this.props.history.push("/nextofkin")
             })
+            
 
         } else {
           //Set timer for loading screen
@@ -83,12 +98,14 @@ class Addresses extends React.Component {
         'RegisterUserProvince': this.state.prov,
         'RegisterUserCountry': localStorage.getItem('country'),
       };
+      console.log(form.elements.length)
 
       for (let i = 0; i < form.elements.length; i++) {
         const elem = form.elements[i];
         data[elem.name] = elem.value
+        console.log(elem.value)
       }
-
+      
       //console.log("posted Data: ", data)
       const requestOptions = {
         title: 'Address Form',
@@ -124,11 +141,12 @@ class Addresses extends React.Component {
     
     else {
       //Set timer for loading screen
+      console.log('hit else in address')
     setTimeout(() => {
       this.props.updateLoadingController(false);
     }, 1000);
       //alert("Please enter a valid home address")
-      this.props.history.push("/varsityDetails")
+       this.props.history.push("/varsityDetails")
     }
 
   }
@@ -244,6 +262,19 @@ class Addresses extends React.Component {
 
                       <div className="form-group">
                         <label className="control-label" >
+                          Street Name And Number
+                        </label>
+                        <input
+                          className="form-control"
+                          name="RegisterUserStreetNameAndNumer"
+                          id="Street-Name"
+                          placeholder="Enter your Street Name And Number"
+                          type="text"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="control-label" >
                           Complex/Building Name
                         </label>
                         <input
@@ -254,6 +285,8 @@ class Addresses extends React.Component {
                           type="text"
                         />
                       </div>
+
+
 
                       <div className="form-group">
                         <label className="control-label" >

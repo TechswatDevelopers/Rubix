@@ -23,7 +23,8 @@ class Relatives extends React.Component {
         dateAndTime: null,
         isLoad: false,
         showSearch: false,
-        value: 0
+        value: 0,
+        myProfile: {}
 
     };
   }
@@ -54,21 +55,28 @@ class Relatives extends React.Component {
   };
   ////console.log(data)
   const postData = async() => {
-    await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKin2s', data, requestOptions)
+    await axios.post('https://adowarest.rubix.mobi:88/api/RubixUserNextOfKins', data, requestOptions)
     .then(response => {
-        ////console.log(response)
+     
         setTimeout(() => {
           this.postStatus()
+         
         }, 2000);
+        this.props.history.push("/addresses")
         this.setState({
           isLoad: false
+          
+          
         })
+        
     })
   }
   postData().then(() => {
+   
 
     this.props.onPresPopUpEvent()
     //this.props.history.push("/login/" + localStorage.getItem('clientID'))
+       
   })
 
 }
@@ -96,13 +104,15 @@ class Relatives extends React.Component {
           if(response != null || response != undefined){
       //Set timer for loading screen
     setTimeout(() => {
+     
       this.setState({
         isLoad: false
       });
     }, 1000);
           }
+          //this.props.history.push("/addresses")
           ////console.log("Verify email status", response)
-          this.props.history.push("/login/" + localStorage.getItem('clientID') )
+          //this.props.history.push("/login/" + localStorage.getItem('clientID') )
         })
     }
     postData()
@@ -125,6 +135,7 @@ class Relatives extends React.Component {
 
     setTimeout(() => {
       this.props.updateLoadingController(false);
+     
     }, 2000)
 
   }
@@ -133,6 +144,7 @@ class Relatives extends React.Component {
     setTimeout(() => {
       this.setState({
         isLoad: false,
+       
       })
     }, time);
   }
@@ -149,7 +161,7 @@ class Relatives extends React.Component {
       <div className="theme-grey">
       <Helmet>
             <meta charSet="utf-8" />
-            <title>Relatives Details</title>
+            <title>Surety Information</title>
         </Helmet>
 
         <div
@@ -169,16 +181,21 @@ class Relatives extends React.Component {
           </div>
         </div>
         
-        <PopUpModal 
-        Title= "Registration Complete!"
-        Body = "Thank you for registering with Us. We have sent you an email to verify your account, please check your emails."
-        Function ={()=>this.props.history.push("/login/" + localStorage.getItem('clientID'))}
-        />
+      
+
+      
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
-            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="170" height="70" alt="Lucid" /></div>
-            <p>Registering please wait...</p>
+            <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="150" height="150" alt="Lucid" /></div>
+            <p>submitting please wait...</p>
+             
           </div>
+
+          
+         
+
+     
+        
         </div>
         <div >
           <div className="vertical-align-wrap">
@@ -198,117 +215,150 @@ class Relatives extends React.Component {
                   <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
                 </div>
                   <div className="header">
-                    <p className="lead">Relatives Details</p>
+                    <p className="lead">Surerty Information</p>
                   </div>
                   <div className="body">
                     <form id='nof' onSubmit={(e) => this.Submit(e)}>
-                      <p>1st Relative's Details</p>
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        First Name(s):
+                   
+                    <div className="form-group">
+                  <label>
+                    First Name:
+                  </label>
+                  <input
+                    className="form-control"
+                    disabled=""
+                    placeholder="First Name"
+                    id="NextOfKinFirstName"
+                    name='RubixUserNextOfKinFirstName'
+                    type="text"
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinFirstName}
+                    onChange={() => { }}
+                  />
+                </div>
+                     
+                <div className="form-group">
+                  <label>
+                    Last Name:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="Last Name"
+                    id="NextOfKinLastName"
+                    name='RubixUserNextOfKinLastName'
+                    type="text"
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinLastName}
+                    onChange={() => { }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>
+                    Email Address:
+                  </label>
+                  <input
+                    className="form-control"
+                    disabled=""
+                    placeholder="Email"
+                    id="NextOfKinEmail"
+                    name='RubixUserNextOfKinEmail'
+                    type="text"
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinEmail}
+                    onChange={() => { }}
+                  />
+                </div>
+
+                <div className="form-group">
+                        <label className="control-label" >
+                        ID/Passport Number
                             </label>
-                        <input
-                          className="form-control"
-                          id="NextOfKinFirstName1"
-                          name='NextOfKinFirstName1'
-                          placeholder="Name"
-                          type="text"
-                          required
-                        />
+                            <input type='number' name="RubixUserNextOfKinID" className='form-control' id='IDNumber' 
+                    required=''  placeholder='Enter your ID Number' defaultValue={this.state.myProfile.RubixUserNextOfKinID}></input>
+                    <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
                       </div>
-                      
+
+
+                     
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Surname:
+                        <label className="control-label" >
+                        Vat Number
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKinLastName1"
-                          name='NextOfKinLastName1'
-                          placeholder="Enter Next of kin surnme"
-                          type="text"
-                          required
+                          id="RubixNextOfKinVat"
+                          name='RubixNextOfKinVat'
+                          placeholder="Enter Surety VAT number (optional)"
+                          type="number"
+                          defaultValue={this.state.myProfile.RubixNextOfKinVat}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Phone Number:
+                  <label className=" control-label">
+                    Mobile Number:
+                  </label>
+                  <PhoneInput id='register-page-phone-number' placeholder="+27 123 15348"
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinPhoneNumber} name="RubixUserNextOfKinPhoneNumber" required=''
+                    value={this.state.myProfile.RubixUserNextOfKinPhoneNumber}
+                    onChange={() => this.setState({ value: this.state.value })} />
+                </div>
+                <div className="form-group">
+                        <label className="control-label">
+                        Home Tellephone Number
                             </label>
-                            <PhoneInput placeholder="Cell Phone Number" name="NextOfKinPhoneNumber1" className='NextOfKinPhoneNumber1' required='' 
-                    value={this.state.value}
+                            <PhoneInput id='register-page-phone-number' placeholder="Surety Home Tellephone Number" 
+                            defaultValue={this.state.myProfile.RubixUserNextOfKinHomeTell}
+                            value={this.state.myProfile.RubixUserNextOfKinHomeTell}
+                            name="RubixUserNextOfKinHomeTell" className='RubixUserNextOfKinHomeTell' required='' 
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
 
                       <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Relationship:
+                        <label className="control-label" >
+                        Work Number
                             </label>
-                        <input
-                          className="form-control"
-                          id="NextOfKiniRelationship1"
-                          name='NextOfKiniRelationship1'
-                          placeholder="Enter Relative's relation to you"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                      <p>2nd Relative's Details</p>
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        First Name(s):
-                            </label>
-                        <input
-                          className="form-control"
-                          id="NextOfKinFirstName2"
-                          name='NextOfKinFirstName2'
-                          placeholder="Name"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Surname:
-                            </label>
-                        <input
-                          className="form-control"
-                          id="NextOfKinLastName2"
-                          name='NextOfKinLastName2'
-                          placeholder="Enter Next of kin surnme"
-                          type="text"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Phone Number:
-                            </label>
-                            <PhoneInput placeholder="Cell Phone Number" 
-                            name="NextOfKinPhoneNumber2" 
-                            className='NextOfKinPhoneNumber2' required='' 
-                    value={this.state.value}
+                            <PhoneInput placeholder="Surety Work number" name="RubixUserNextOfKinWorkNumber" className='RubixUserNextOfKinWorkNumber' required='' 
+                   value={this.state.myProfile.RubixUserNextOfKinHomeTell}
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinWorkNumber}
                     onChange={()=> this.setState({value: this.state.value})}/>
                       </div>
-
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                        Relationship:
+                <div className="form-group">
+                  <label>
+                    Relationship:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="Relationship"
+                    name='RubixUserNextOfKiniRelationship'
+                    defaultValue={this.state.myProfile.RubixUserNextOfKiniRelationship}
+                    type="text"
+                  />
+                </div>
+                 <div className="form-group">
+                  <label>
+                    Home Address:
+                  </label>
+                  <input
+                    className="form-control"
+                    placeholder="Address"
+                    name='RubixUserNextOfKinAddress'
+                    defaultValue={this.state.myProfile.RubixUserNextOfKinAddress}
+                    type="text"
+                  />
+                </div>
+                <div className="form-group">
+                        <label className="control-label" >
+                        Postal Code
                             </label>
                         <input
                           className="form-control"
-                          id="NextOfKiniRelationship2"
-                          name='NextOfKiniRelationship2'
-                          placeholder="Enter Relative's relation to you"
+                          name="RubixUserNextOfKinPostalcode"
+                          id="post-code"
+                          placeholder="Post Code"
+                          defaultValue={this.state.myProfile.RubixUserNextOfKinPostalcode}
                           type="text"
-                          required
-                        />
+                          required/>
                       </div>
                       <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
-                        REGISTER
+                        Next
                         </button>
                     </form>
                   </div>

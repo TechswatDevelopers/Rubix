@@ -172,7 +172,7 @@ class PersonalInformation extends React.Component {
                   //Set timer for loading screen
                   setTimeout(() => {
                     this.props.updateLoadingController(false);
-                    this.props.history.push("/addresses")
+                    this.props.history.push("/relatives")
                   }, 1000);
                 } else {
                   setTimeout(() => {
@@ -384,7 +384,7 @@ class PersonalInformation extends React.Component {
                         <label className="control-label" >
                           Phone Number
                         </label>
-                        <PhoneInput id='register-page-phone-number'required='' maxLength='15' minLength='15' placeholder="+27 123 15348" name="PhoneNumber" required=''
+                        <PhoneInput id='register-page-phone-number'required='' maxLength='15' minLength='15' placeholder="+27 123 15348" name="PhoneNumber" 
                           value={this.state.value}
                           onChange={() => this.setState({ value: this.state.value })} />
                       </div>

@@ -30,6 +30,7 @@ class VarsityDetails extends React.Component {
             prov: null,
             uni: null,
             course: null,
+            ReferrerFullName: null,
             year: null,
             payment: null,
             hearAbout: null,
@@ -95,6 +96,7 @@ class VarsityDetails extends React.Component {
             'RubixRegisterUserID': this.state.myUserID,
             'UniversityID': this.state.uni,
             'CourseID': this.state.course,
+            'ReferrerFullName': this.state.course,
             'ResidenceID': this.state.res,
             'StudentYearofStudyID': this.state.year,
             'Duration': this.state.duration,
@@ -740,8 +742,8 @@ async componentDidMount(){
                             </label>
                             <input
                           className="form-control"
-                          id="ref"
-                          //name='CourseID'
+                          id="ReferrerFullName"
+                          name='ReferrerFullName'
                           placeholder="Enter Name & Surname of Your referal"
                           type="text"
                           required
@@ -749,7 +751,7 @@ async componentDidMount(){
                       </div>
                      
                       <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={(e) => this.Submit(e) }>
-                        NEXT
+                        Register
                         </button>
 
                       </>

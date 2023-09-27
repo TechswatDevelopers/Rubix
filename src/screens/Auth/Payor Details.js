@@ -34,7 +34,8 @@ class PayorDetails extends React.Component {
         payment: null,
         consent: '0',
         MarketingConsent: '0',
-        value: 0
+        value: 0,
+        myProfile:{}
 
     };
   }
@@ -113,129 +114,80 @@ class PayorDetails extends React.Component {
 }
 
 //final submit check
- Submit(e){
-   //Set timer for loading screen
-  this.setState({
-    isLoad: true
-  })
-  e.preventDefault();
+UpdatePayorInfo(e){
+  //Set timer for loading screen
+  console.log('checking payor update method')
+ this.setState({
+   isLoad: true
+ })
+ e.preventDefault();
 
-  const form = document.getElementById('nof');
-  var idNumber = document.getElementById("IDNumber").value;
-  var nextofKinEmail = document.getElementById("PayorEmail").value;
-  const studentID =  localStorage.getItem('studentIDNo')
-  const studentEmail =  localStorage.getItem('email')
+ const form = document.getElementById('payor');
+ var idNumber = document.getElementById("payorID").value;
+ var nextofKinEmail = document.getElementById("PayorEmail").value;
+ const studentID =  localStorage.getItem('studentIDNo')
+ const studentEmail =  localStorage.getItem('email')
 
-  if(this.state.location !=null){
-    const locations = document.getElementById('location');
-    const postCode = document.getElementById('post-code').value;
-    const street_address = this.state.location['value']['structured_formatting']['main_text'] + ', ' + postCode
-  
+if(this.state.payment != 'iudfhsif')  {
+ 
+  console.log('else if payment not null')
   const data = {
-      'RubixRegisterUserID': this.state.myUserID,
-      'PayorAdrress': street_address,
-      'ClientID': 1,
-      'PaymentMethod': this.state.payment,
-      'FundingSource': this.state.funding,
-      'PayorConcent': this.state.consent,
-      'PayorMarketingConcent': this.state.MarketingConsent,
-      'PayorAccountHolderName': '',
-      'PayorBankName': '',
-      'PayorBranchCode': '',
-      'PayorAccountNumber': '',
-      'PayorRef': '',
-      'PayorBranchName': '',
-  };
-
-  for (let i=0; i < form.elements.length; i++) {
-      const elem = form.elements[i];
-      data[elem.name] = elem.value
-  }
-
-  const requestOptions = {
-      title: 'Payor Form',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: data
-  };
-  
-  //////console.log("I am empty",data)
-  const postData = async() => {
-      if ( idNumber != studentID && studentEmail != nextofKinEmail){
-          await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
-          .then(response => {
-              //////console.log(response)
-              if(response.data[0]['ResponceMessage'] == "Successfully Update Record"){
-                this.props.onPresPopUpEvent()
-                this.props.history.push("/nextofkin")
-              }
-              this.setState({
-                isLoad: false
-              })
-          })
-              
-      } else{
-        alert("Next of kin ID Number/Email cannot be the same as student Id Number/Email")
-        this.setState({
-          isLoad: false
-        })
-      }
-  }
-  postData().then(() => {
-    //this.props.onPresPopUpEvent()
-    //this.props.history.push("/login/" + localStorage.getItem('clientID'))
-  })
-} else if(document.getElementById('streetAddress') != null)  {
-  
-  const data = {
-    'RubixRegisterUserID': this.state.myUserID,
-    'PayorAdrress': document.getElementById('streetAddress').value,
-    'ClientID': 1,
-    'PaymentMethod': this.state.payment,
-    'FundingSource': this.state.funding,
-    'PayorConcent': this.state.consent,
-    'PayorMarketingConcent': this.state.MarketingConsent,
-    'PayorAccountHolderName': '',
-    'PayorBankName': '',
-    'PayorBranchCode': '',
-    'PayorAccountNumber': '',
-    'PayorRef': '',
-    'PayorBranchName': '',
+   'RubixRegisterUserID': this.state.myUserID,
+   //'PayorAdrress': document.getElementById('streetAddress').value,
+   'ClientID': 1,
+   'PaymentMethod': this.state.payment,
+   'FundingSource': this.state.funding,
+   'PayorConcent': this.state.consent,
+   'PayorMarketingConcent': this.state.MarketingConsent,
+   'PayorAccountHolderName': '',
+   'PayorBankName': '',
+   'PayorBranchCode': '',
+   'PayorAccountNumber': '',
+   'PayorRef': '',
+   'PayorBranchName': '',
 };
+console.log('hey')
 for (let i=0; i < form.elements.length; i++) {
-    const elem = form.elements[i];
-    data[elem.name] = elem.value
+   const elem = form.elements[i];
+   data[elem.name] = elem.value
+   console.log("element: ")
 }
 
 const requestOptions = {
-    title: 'Payor Details Form',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: data
+   title: 'Payor Details Form',
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json' },
+   body: data
 };
-//console.log("called", data)
+//////////////console.log("called", data)
 const postData = async() => {
   await axios.post('https://adowarest.rubix.mobi:88/api/RubixRegisterUserPaymentDetails', data, requestOptions)
   .then(response => {
-      ////console.log("2nd Response: ", response)
-        setTimeout(() => {
-          this.props.updateLoadingController(false);
-        }, 1000);
-        this.props.onPresPopUpEvent()
-       this.props.history.push("/nextofkin")
+       console.log("2nd Response: ", response)
+      
+          this.props.onPresPopUpEvent()
+          alert("Thank you for registering with Us. We have sent you an email to verify your account, please check your emails.")
+          this.props.history.push("/nextofkin")
+        // this.props.onPresPopUpEvent()
+
+      
+
+
   })
 
-}
-/* postData().then(() => {
 
-}) */
+}
+postData().then(() => {
+
+})
 }
 
 else{
-  alert("Please a valid home address")
-  this.setState({
-    isLoad: false
-  })
+ console.log('last else')
+ alert("Please select a payment option")
+ this.setState({
+   isLoad: false
+ })
 }
 }
 
@@ -244,6 +196,8 @@ else{
     //Set Loading Screen ON
  this.props.updateLoadingController(true);
  this.props.updateLoadingMessage("Adding Status...");
+ this.props.history.push("/relatives")
+
     const data = {
       'Status': 'Email Verify',
       'RubixRegisterUserID': this.state.myUserID,
@@ -267,7 +221,7 @@ else{
     }, 1000);
           }
           //////console.log("Verify email status", response)
-          this.props.history.push("/relatives")
+        
         })
     }
     postData()
@@ -298,6 +252,7 @@ else{
           isLoad: false,
           payMethods: response.data.PostRubixUserData
         })
+        
     })
     }
     getData()
@@ -344,6 +299,7 @@ else{
 
     setTimeout(() => {
       this.props.updateLoadingController(false);
+      
     }, 2000)
 
   }
@@ -524,18 +480,25 @@ else{
           </div>
         </div>
         
+        
+    
         <PopUpModal 
         Title= "Registration Complete!"
         Body = "Thank you for registering with Us. We have sent you an email to verify your account, please check your emails."
         Function ={()=>this.props.history.push("/login/" + localStorage.getItem('clientID'))}
         />
-          
         <div className="page-loader-wrapper" style={{ display: this.state.isLoad ? 'block' : 'none' }}>
           <div className="loader">
             <div className="m-t-30"><img src={localStorage.getItem('clientLogo')} width="150" height="100" alt="Lucid" /></div>
             <p>Processing informaion please wait...</p>
+              
+
           </div>
-          
+        
+         
+
+
+
   
         </div>
         <div >
@@ -550,186 +513,39 @@ else{
                 height: "100% !important",
               }}
             >
-              <div className="auth-box">
-                <div className="card">
-                <div className="top">
-                  <img src={localStorage.getItem('clientLogo')} alt="" style={{ height: "40%",  width:"44%",  display: "block", margin: "auto" }} />
-                </div>
-                  <div className="header">
-                    <h1 className="lead"><strong>Payor Details</strong></h1>
-                    <p className="text-secondary">Please fill in the following informaion regarding the person/organisation responsoble for rent payment.</p>
-                  </div>
+             
+      
+         
+
+
+
+
+
+
+
                   <div className="body">
-                    <form id='nof' onSubmit={(e) => this.Submit(e)}>
-                    <div className="form-group">
-                        <label className="control-label" >
-                        Payment Method
-                            </label>
-                            {  
-        <select className="form-control" onChange={(e)=>{
-          //this.onChangeDurationViaPayment(e)
-          this.setFundingSource(e.target.value)
-          this.setState({payment: e.target.value})}} value={this.state.payment}>
-        {
-            this.state.payMethods.map((payment, index)=> (
-            <option key={index} name='PaymentMethod' value={payment.PaymentMethod}>{payment.PaymentMethod}</option>
-        ))   
-        }
-    </select> }
-                      </div>
+                  <form id='payor' onSubmit={(e) => this.UpdatePayorInfo(e)}>
+                    
+
                       {body}
-                    <div className="form-group">
-                        <label className="control-label" >
-                        Funding Source
-                            </label>
-                            {  
-        <select 
-        className="form-control" 
-        onChange={(e)=>{this.setState({funding: e.target.value})}} 
-        value={this.state.funding}>
-        {
-         this.state.fundingSources.map((source, index)=> (
-            <option key={index} name='FundingSource' value = {source}>{source}</option>
-        ))  
-        }
-        </select> }
-        </div>
-                      <div className="form-group">
-                        <label className="control-label" >
-                        Full Name(s)
-                            </label>
-                        <input
-                          className="form-control"
-                          id="PayorFullName"
-                          name='PayorFullName'
-                          placeholder="Enter Payor's Full Name"
-                          type="text"
-                          required
-                        />
-                      </div>
+                    
+                     
                       
-                      <div className="form-group">
-                        <label className="control-label" >
-                        ID/Reg. Number
-                            </label>
-                            <input type='number' name="PayorID" className='form-control' id='IDNumber' 
-                    required='' /* maxLength = '13' minLength='13' */ placeholder='Enter ID/Reg Number'></input>
-                    <p id="error" style={{color: 'red'}}>{this.state.errorMessage}</p>
-                      </div>
+        
 
 
-                      <div className="form-group">
-                        <label className="control-label" >
-                        Email
-                            </label>
-                        <input
-                          className="form-control"
-                          id="PayorEmail"
-                          name='PayorEmail'
-                          placeholder="Enter Payor Email"
-                          type="email"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="control-label" >
-                        Home Phone Number
-                            </label>
-                            <PhoneInput placeholder="Home Phone Number" name="PayorHomeTell" className='PayorHomeTell' required='' 
-                    value={this.state.value}
-                    onChange={()=> this.setState({value: this.state.value})}/>
-                      </div>
-                      <div className="form-group">
-                        <label className="control-label" >
-                        Cellphone Number
-                            </label>
-                            <PhoneInput placeholder="Cellphone Number" name="PayorCellPhone" className='PayorCellPhone' required='' 
-                    value={this.state.value}
-                    onChange={()=> this.setState({value: this.state.value})}/>
-                      </div>
-
-                      <div className="form-group">
-                        <label className="control-label" >
-                          Home Address
-                            </label>
-                         {
-                              !this.state.showSearch
-                              ? <input
-                              className="form-control"
-                              name= "PayorAdrress"
-                              id= "streetAddress"
-                              placeholder="Enter Address"
-                              type="text"
-                            />
-                              :<GooglePlacesAutocomplete
-apiKey="AIzaSyBoqU4KAy_r-4XWOvOiqj0o_EiuxLd9rdA" id='location' onChange = {(e)=>this.setState({location: e.target.value})}
-selectProps={{
-location: this.state.location,
-onChange: (e)=>this.setState({location: e}),
-placeholder: "Search Address"
-}}
-/>}
-<button className="btn btn-primary btn-sm m-2" onClick={(e)=>this.showSearch(e)}><i className={this.state.showSearch ?"icon-note pr-2" :"icon-magnifier pr-2"}/>
-{
-                      this.state.showSearch 
-                      ?'Type Address'
+                    
+        
+       
+       
+      
                       
-                    : 'Search Address'}</button>
-                            
-<br/>
-<div className="form-group">
-                        <label className="control-label" >
-                        Postal Code
-                            </label>
-                        <input
-                          className="form-control"
-                          name="PayorPostalCode"
-                          id="post-code"
-                          placeholder="Enter your post code"
-                          type="text"
-                          required/>
-                      </div>
-                      <div className="form-group">
-                        <label className="control-label" >
-                        Work Number
-                            </label>
-                            <PhoneInput placeholder="Work number" name="Payorworktel" className='Payorworktel' required='' 
-                    value={this.state.value}
-                    onChange={()=> this.setState({value: this.state.value})}/>
-                      </div>
-                      </div>
-                      <div className="form-group">
-                        <input
-                        className="form-check"
-                        id="Concent"
-                        //name='Concent'
-                        onChange={(e)=>{this.changeConsent(e)}}
-                        //placeholder="Enter Next of kin relation to you"
-                        type="checkbox"
-                        required
-                      />
-                      <p>I consent to a credit check.</p> 
-                    </div>
-                      <div className="form-group">
-                        <input
-                        className="form-check"
-                        id="Concent"
-                        //name='Concent'
-                        onChange={(e)=>{this.changeMarketingConsent(e)}}
-                        //placeholder="Enter Next of kin relation to you"
-                        type="checkbox"
-                        required
-                      />
-                      <p>I consent to receiving marketing content from Adowa Living.</p> 
-                    </div>
-                      <button className="btn btn-primary btn-lg btn-block" onClick={(e) => this.Submit(e)}>
-                        Next
-                        </button>
+                     
+                      
                     </form>
                   </div>
-                </div>
-
-              </div>
+                
+              
             </div>
           </div>
         </div>

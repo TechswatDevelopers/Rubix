@@ -453,7 +453,7 @@ mergePDFHandler()
              })
           }
           break
-          case 'bank-statement':
+         case 'bank-statement':
             {
               this.setState({ docType: "3 Months Bank Statement",
               topBarData: <>
